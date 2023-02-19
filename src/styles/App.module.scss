@@ -1,3 +1,10 @@
 .App {
   display: flex;
+  flex-direction: column;
+  flex: auto;
+}
+
+.Main {
+  display: flex;
+  flex: auto;
 }

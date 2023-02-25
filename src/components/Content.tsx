@@ -1,22 +1,26 @@
 import { Component } from 'react';
-import { MENU_ITEMS } from 'shared/constants';
-import RightContextMenu from 'shared/components/RightContextMenu';
-import styles from 'styles/Content.module.scss';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import StyledContent from './Content.styles';
 
 class Content extends Component {
-  private get areaId(): string {
-    return 'content';
-  }
-
-  private get menuItems(): string[] {
-    return MENU_ITEMS;
-  }
-
   render() {
     return (
-      <div id={this.areaId} className={styles.Content}>
-        <RightContextMenu areaId={this.areaId} menuItems={this.menuItems} />
-      </div>
+      <StyledContent sx={{ display: 'flex', flex: 'auto' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            '& > :not(style)': {
+              m: 1,
+              width: 300,
+              height: 200,
+            },
+          }}
+        >
+          <Paper elevation={3} />
+        </Box>
+      </StyledContent>
     );
   }
 }

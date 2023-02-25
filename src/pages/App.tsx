@@ -1,19 +1,21 @@
 import { Component } from 'react';
-import Panel from 'components/Panel';
+import { ThemeProvider } from '@mui/material/styles';
 import Header from 'components/Header';
 import Content from 'components/Content';
 import styles from 'styles/App.module.scss';
+import { theme } from 'core/theme.config';
 
 class App extends Component {
   render() {
     return (
-      <div className={styles.App}>
-        <Header />
-        <div className={styles.Main}>
-          <Panel />
-          <Content />
+      <ThemeProvider theme={theme}>
+        <div className={styles.App}>
+          <Header />
+          <div className={styles.Main}>
+            <Content />
+          </div>
         </div>
-      </div>
+      </ThemeProvider>
     );
   }
 }

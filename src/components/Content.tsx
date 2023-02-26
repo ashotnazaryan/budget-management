@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import Container from '@mui/system/Container';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/system/Box';
 import { addIncome, addExpense } from 'store/reducers/summarySlice';
 import { setDefaultCurrency } from 'store/reducers/currencySlice';
 import { Currency } from 'shared/models';
@@ -26,10 +27,16 @@ const Content: React.FC = () => {
   };
 
   return (
-    <Container sx={{ paddingY: 2, paddingX: 4, display: 'flex', flex: 'auto' }} disableGutters={true}>
-      <SummaryManager iso={iso} addIncome={handleAddIncome} addExpense={handleAddExpense} changeCurrency={handleCurrencyChange} />
-      <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} />
-    </Container>
+    <Box sx={{ paddingY: 2, paddingX: 4, flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item md={4} xs={12}>
+          <SummaryManager iso={iso} addIncome={handleAddIncome} addExpense={handleAddExpense} changeCurrency={handleCurrencyChange} />
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} />
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

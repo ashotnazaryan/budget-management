@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import * as React from 'react';
 import styles from 'styles/RightContextMenu.module.scss';
 
 interface RightContextMenuProps {
@@ -12,12 +12,12 @@ interface RightContextMenuState {
   showMenu: boolean;
 }
 
-class RightContextMenu extends Component<RightContextMenuProps, RightContextMenuState> {
+class RightContextMenu extends React.Component<RightContextMenuProps, RightContextMenuState> {
   state = {
     left: '0px',
     top: '0px',
     showMenu: false
-  }
+  };
 
   componentDidMount() {
     document.addEventListener('click', this.handleClick);
@@ -32,8 +32,8 @@ class RightContextMenu extends Component<RightContextMenuProps, RightContextMenu
   handleClick = (): void => {
     if (this.state.showMenu) {
       this.setState({ showMenu: false });
-    };
-  }
+    }
+  };
 
   handleContextMenu = (event: MouseEvent): void => {
     if (this.props.areaId !== (event.target as HTMLElement).id) {
@@ -47,7 +47,7 @@ class RightContextMenu extends Component<RightContextMenuProps, RightContextMenu
       top: `${event.pageY}px`,
       showMenu: true,
     });
-  }
+  };
 
 
   render() {

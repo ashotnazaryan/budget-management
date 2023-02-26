@@ -1,12 +1,12 @@
+import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import { Component } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import StyledHeader from './Header.styles';
 
-class Header extends Component {
+class Header extends React.Component {
   render() {
     return (
       <StyledHeader>
@@ -15,7 +15,7 @@ class Header extends Component {
             <IconButton edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6' color='inherit' component='div'>
+            <Typography variant='h5'>
               Header
             </Typography>
           </Toolbar>
@@ -25,4 +25,4 @@ class Header extends Component {
   }
 }
 
-export default Header; 
+export default Header;

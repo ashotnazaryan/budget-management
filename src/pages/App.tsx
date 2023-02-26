@@ -1,7 +1,7 @@
 import * as React from 'react';
+import Container from '@mui/system/Container';
 import Header from 'components/Header';
 import Content from 'components/Content';
-import Container from '@mui/system/Container';
 
 const App: React.FC = () => {
   return (

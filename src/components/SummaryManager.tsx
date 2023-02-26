@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Container from '@mui/system/Container';
+import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -18,15 +18,24 @@ interface SummaryManagerProps {
 
 const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpense, changeCurrency }) => {
   const currencies = CURRENCIES;
+  const regex = /^[0-9\b]+$/;
   const [income, setIncome] = React.useState<number>(0);
   const [expense, setExpense] = React.useState<number>(0);
 
   const onIncomeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setIncome(Number(event.target.value));
+    const { value } = event.target;
+
+    if (regex.test(value)) {
+      setIncome(Number(value));
+    }
   };
 
   const onExpenseChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setExpense(Number(event.target.value));
+    const { value } = event.target;
+
+    if (regex.test(value)) {
+      setExpense(Number(value));
+    }
   };
 
   const handleAddIncome = (): void => {
@@ -44,32 +53,46 @@ const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpe
   };
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', flex: '300px', flexShrink: 0 }} disableGutters={true} >
-      <FormControl sx={{ marginBottom: 2, width: 200 }}>
-        <InputLabel>Currency</InputLabel>
-        <Select
-          label="Currency"
-          value={iso}
-          onChange={handleCurrencyChange}
-        >
-          {currencies.map(({ iso, name, symbol }) => (
-            <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Container sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }} disableGutters={true} >
-        <FormControl sx={{ marginRight: 1, width: 100 }}>
-          <TextField type="number" label="Amount" value={income} onChange={onIncomeChange} />
+    <Grid container rowSpacing={3}>
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Currency</InputLabel>
+          <Select
+            label="Currency"
+            value={iso}
+            onChange={handleCurrencyChange}
+          >
+            {currencies.map(({ iso, name, symbol }) => (
+              <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+            ))}
+          </Select>
         </FormControl>
-        <Button color='primary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddIncome}>Add Income</Button>
-      </Container>
-      <Container sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }} disableGutters={true} >
-        <FormControl sx={{ marginRight: 1, width: 100 }}>
-          <TextField type="number" label="Amount" value={expense} onChange={onExpenseChange} />
-        </FormControl>
-        <Button color='secondary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddExpense}>Add Expense</Button>
-      </Container>
-    </Container>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container alignItems='center' columnSpacing={2}>
+          <Grid item xs={6}>
+            <FormControl>
+              <TextField type="number" label="Amount" value={income} onChange={onIncomeChange} />
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <Button color='primary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddIncome}>Add Income</Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container alignItems='center' columnSpacing={2}>
+          <Grid item xs={6}>
+            <FormControl>
+              <TextField type="number" label="Amount" value={expense} onChange={onExpenseChange} />
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <Button color='secondary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddExpense}>Add Expense</Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 

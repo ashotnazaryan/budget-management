@@ -1,19 +1,17 @@
 import * as React from 'react';
 import Header from 'components/Header';
 import Content from 'components/Content';
-import styles from 'styles/App.module.scss';
+import Container from '@mui/system/Container';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className={styles.App}>
-        <Header />
-        <div className={styles.Main}>
-          <Content />
-        </div>
-      </div>
-    );
-  }
-}
+const App: React.FC = () => {
+  return (
+    <Container sx={{ display: 'flex', flexDirection: 'column', flex: 'auto' }} disableGutters={true}>
+      <Header />
+      <Container sx={{ display: 'flex', flex: 'auto' }} disableGutters={true}>
+        <Content />
+      </Container>
+    </Container>
+  );
+};
 
 export default App;

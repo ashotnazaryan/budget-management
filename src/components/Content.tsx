@@ -1,61 +1,36 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import Button from '@mui/material/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
 import Container from '@mui/system/Container';
-import { AppDispatch, RootState } from 'store';
 import { addIncome, addExpense } from 'store/reducers/summarySlice';
+import { setDefaultCurrency } from 'store/reducers/currencySlice';
+import { Currency } from 'shared/models';
 import Summary from './Summary';
-import StyledContent from './Content.styles';
+import SummaryManager from './SummaryManager';
 
-interface ContentProps {
-  expenses: number;
-  incomes: number;
-  balance: number;
-  addIncome: (payload: number) => void;
-  addExpense: (payload: number) => void;
-}
+const Content: React.FC = () => {
+  const { incomes, expenses, balance } = useSelector((state: RootState) => state.summary);
+  const { default: { iso, symbol } } = useSelector((state: RootState) => state.currency);
+  const dispatch = useDispatch();
 
-class Content extends React.Component<ContentProps> {
-  private addIncome = (): void => {
-    const { addIncome } = this.props;
-
-    addIncome(100);
+  const handleAddIncome = (value: number): void => {
+    dispatch(addIncome(value));
   };
 
-  private addExpense = (): void => {
-    const { addExpense } = this.props;
-
-    addExpense(100);
+  const handleAddExpense = (value: number): void => {
+    dispatch(addExpense(value));
   };
 
-  render() {
-    const { incomes, expenses, balance } = this.props;
-
-    return (
-      <StyledContent sx={{ paddingY: 1, paddingX: 4, justifyContent: 'center' }}>
-        <Summary incomes={incomes} expenses={expenses} balance={balance} />
-        <Container sx={{ display: 'flex', justifyContent: 'space-between', paddingY: 1 }}>
-          <Button color='primary' variant='contained' sx={{ marginRight: 1 }} onClick={this.addIncome}>Add Income</Button>
-          <Button color='secondary' variant='contained' onClick={this.addExpense}>Add Expense</Button>
-        </Container>
-      </StyledContent>
-    );
-  }
-}
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    expenses: state.summary.expenses,
-    incomes: state.summary.incomes,
-    balance: state.summary.balance
+  const handleCurrencyChange = (value: Currency['iso']): void => {
+    dispatch(setDefaultCurrency(value));
   };
+
+  return (
+    <Container sx={{ paddingY: 2, paddingX: 4, display: 'flex', flex: 'auto' }} disableGutters={true}>
+      <SummaryManager iso={iso} addIncome={handleAddIncome} addExpense={handleAddExpense} changeCurrency={handleCurrencyChange} />
+      <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} />
+    </Container>
+  );
 };
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
-  return {
-    addIncome: (payload: number) => dispatch(addIncome(payload)),
-    addExpense: (payload: number) => dispatch(addExpense(payload))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Content);
+export default Content;

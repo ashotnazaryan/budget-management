@@ -11,11 +11,11 @@ export const summarySlice = createSlice({
   name: 'summary',
   initialState,
   reducers: {
-    addIncome: (state: SummaryState, action: PayloadAction<number>): void => {
+    addIncome: (state, action: PayloadAction<SummaryState['incomes']>): void => {
       state.incomes = state.incomes + action.payload;
       state.balance = state.incomes - state.expenses;
     },
-    addExpense: (state: SummaryState, action: PayloadAction<number>): void => {
+    addExpense: (state, action: PayloadAction<SummaryState['expenses']>): void => {
       state.expenses = state.expenses + action.payload;
       state.balance = state.incomes - state.expenses;
     }

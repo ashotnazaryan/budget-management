@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended"
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-unused-vars": "error",
+    "no-empty": "warn",
+    "no-cond-assign": [
+      "error",
+      "always"
+    ]
+  }
+}

@@ -8,5 +8,9 @@ export const ROUTES: AppRoute = {
   about: {
     name: 'About',
     path: 'about',
+  },
+  login: {
+    name: 'Login',
+    path: '/login',
   }
 };

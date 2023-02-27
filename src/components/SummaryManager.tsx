@@ -75,7 +75,7 @@ const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpe
               <TextField type="number" label="Amount" value={income} onChange={onIncomeChange} />
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button color='primary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddIncome}>Add Income</Button>
           </Grid>
         </Grid>
@@ -87,7 +87,7 @@ const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpe
               <TextField type="number" label="Amount" value={expense} onChange={onExpenseChange} />
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button color='secondary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddExpense}>Add Expense</Button>
           </Grid>
         </Grid>

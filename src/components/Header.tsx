@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
+import { ROUTES } from 'shared/constants';
 
 const Header: React.FC = () => {
   return (
@@ -12,11 +13,11 @@ const Header: React.FC = () => {
         <IconButton edge='start' color='inherit' sx={{ marginRight: 2 }}>
           <MenuIcon />
         </IconButton>
-        <Link to='/' style={{ marginRight: 8 }}>
-          Home
+        <Link to={ROUTES.home.path} style={{ marginRight: 8 }}>
+          {ROUTES.home.name}
         </Link>
-        <Link to='/about'>
-          About
+        <Link to={ROUTES.about.path}>
+          {ROUTES.about.name}
         </Link>
       </Toolbar>
     </AppBar>

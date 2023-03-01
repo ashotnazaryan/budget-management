@@ -2,6 +2,7 @@
 export enum RouteKey {
   home = 'home',
   about = 'about',
+  dashboard = 'dashboard',
   login = 'login'
 }
 

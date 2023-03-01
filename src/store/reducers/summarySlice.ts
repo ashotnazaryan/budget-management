@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from 'store';
 import { SummaryState } from 'shared/models';
 
 const initialState: SummaryState = {
@@ -23,5 +24,7 @@ export const summarySlice = createSlice({
 });
 
 export const { addIncome, addExpense } = summarySlice.actions;
+
+export const selectSummary = (state: RootState): SummaryState => state.summary;
 
 export default summarySlice.reducer;

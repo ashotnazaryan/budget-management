@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
-import { RootState } from 'store';
-import { addIncome, addExpense } from 'store/reducers/summarySlice';
-import { setDefaultCurrency } from 'store/reducers/currencySlice';
+import { useAppDispatch, useAppSelector } from 'store';
+import { addIncome, addExpense, selectSummary } from 'store/reducers/summarySlice';
+import { selectDefaultCurrency, setDefaultCurrency } from 'store/reducers/currencySlice';
 import { Currency } from 'shared/models';
-import Summary from './Summary';
-import SummaryManager from './SummaryManager';
+import Summary from '../components/Summary';
+import SummaryManager from '../components/SummaryManager';
 
-const Home: React.FC = () => {
-  const { incomes, expenses, balance } = useSelector((state: RootState) => state.summary);
-  const { default: { iso, symbol } } = useSelector((state: RootState) => state.currency);
-  const dispatch = useDispatch();
+const Dashboard: React.FC = () => {
+  const { iso, symbol } = useAppSelector(selectDefaultCurrency);
+  const { incomes, expenses, balance } = useAppSelector(selectSummary);
+  const dispatch = useAppDispatch();
 
   const handleAddIncome = (value: number): void => {
     dispatch(addIncome(value));
@@ -40,4 +39,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

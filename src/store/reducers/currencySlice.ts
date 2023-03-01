@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from 'store';
 import { Currency, CurrencyState } from 'shared/models';
 import { CURRENCIES } from 'shared/constants';
 
@@ -11,7 +12,7 @@ const initialState: CurrencyState = {
 };
 
 export const currencySlice = createSlice({
-  name: 'summary',
+  name: 'currency',
   initialState,
   reducers: {
     setDefaultCurrency: (state, action: PayloadAction<Currency['iso']>): void => {
@@ -28,5 +29,7 @@ export const currencySlice = createSlice({
 });
 
 export const { setDefaultCurrency } = currencySlice.actions;
+
+export const selectDefaultCurrency = (state: RootState): CurrencyState['default'] => state.currency.default;
 
 export default currencySlice.reducer;

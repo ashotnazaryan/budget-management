@@ -7,7 +7,11 @@ export const ROUTES: AppRoute = {
   },
   about: {
     name: 'About',
-    path: 'about',
+    path: 'about'
+  },
+  dashboard: {
+    name: 'Dashboard',
+    path: '/dashboard'
   },
   login: {
     name: 'Login',

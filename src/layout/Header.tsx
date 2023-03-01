@@ -7,12 +7,27 @@ import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Grid';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { ROUTES } from 'shared/constants';
+import Avatar from '@mui/material/Avatar';
+import { useAppDispatch, useAppSelector } from 'store';
+import { ROUTES, AUTH_KEY } from 'shared/constants';
+import { removeFromLocalStorage } from 'shared/helpers';
+import { removeUser } from 'store/reducers/userSlice';
+import { removeAuth, selectAuth } from 'store/reducers/authSlice';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  fullName: string;
+  avatar?: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ fullName, avatar }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(selectAuth);
   const logout = (): void => {
     googleLogout();
+    dispatch(removeUser());
+    dispatch(removeAuth());
+    removeFromLocalStorage(AUTH_KEY);
     navigate(ROUTES.login.path);
   };
 
@@ -26,8 +41,8 @@ const Header: React.FC = () => {
             </IconButton>
           </Grid>
           <Grid item xs={1} display='flex' alignItems='center'>
-            <Link to={ROUTES.home.path}>
-              {ROUTES.home.name}
+            <Link to={ROUTES.dashboard.path}>
+              {ROUTES.dashboard.name}
             </Link>
           </Grid>
           <Grid item xs={1} display='flex' alignItems='center'>
@@ -36,9 +51,13 @@ const Header: React.FC = () => {
             </Link>
           </Grid>
           <Grid item xs={9} display='flex' alignItems='center' justifyContent='flex-end'>
-            <IconButton color='secondary' onClick={logout}>
-              <LogoutIcon />
-            </IconButton>
+            <Avatar alt={fullName} src={avatar} sx={{ marginRight: 1 }} />
+            {fullName}
+            {auth.isLoggedIn && (
+              <IconButton color='secondary' onClick={logout}>
+                <LogoutIcon />
+              </IconButton>
+            )}
           </Grid>
         </Grid>
       </Toolbar>

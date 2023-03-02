@@ -40,17 +40,17 @@ const Header: React.FC<HeaderProps> = ({ fullName, avatar }) => {
               <MenuIcon />
             </IconButton>
           </Grid>
-          <Grid item xs={1} display='flex' alignItems='center'>
+          <Grid item xs={2} display='flex' alignItems='center'>
             <Link to={ROUTES.dashboard.path}>
               {ROUTES.dashboard.name}
             </Link>
           </Grid>
-          <Grid item xs={1} display='flex' alignItems='center'>
+          <Grid item xs={2} display='flex' alignItems='center'>
             <Link to={ROUTES.about.path}>
               {ROUTES.about.name}
             </Link>
           </Grid>
-          <Grid item xs={9} display='flex' alignItems='center' justifyContent='flex-end'>
+          <Grid item xs={7} display='flex' alignItems='center' justifyContent='flex-end'>
             <Avatar alt={fullName} src={avatar} sx={{ marginRight: 1 }} />
             {fullName}
             {auth.isLoggedIn && (

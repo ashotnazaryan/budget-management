@@ -5,23 +5,22 @@ import { AuthState, UserState } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 
 const initialState: UserState = {
+  status: 'idle',
   id: '',
   firstName: '',
   lastName: '',
   email: '',
 };
 
-export const getUser = createAsyncThunk('user/setUserInfo', async (token: AuthState['token']) => {
-  const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`, {
+export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: AuthState['token']): Promise<UserState> => {
+  const response = await axios.get(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/json'
     }
   });
-  const user = response?.data;
-  const mappedUser: UserState = { ...mapUser(user) };
 
-  return mappedUser;
+  return mapUser(response?.data);
 });
 
 export const userSlice = createSlice({
@@ -32,18 +31,18 @@ export const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getUser.pending, (state) => ({
+      .addCase(getUserInfo.pending, (state) => ({
         ...state,
-        loading: true
+        status: 'loading'
       }))
-      .addCase(getUser.rejected, (state) => ({
+      .addCase(getUserInfo.rejected, (state) => ({
         ...state,
-        loading: false
+        status: 'failed'
       }))
-      .addCase(getUser.fulfilled, (state, action: PayloadAction<UserState>) => ({
+      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<UserState>) => ({
         ...state,
         ...action.payload,
-        loading: false
+        status: 'succeeded'
       }));
   }
 });
@@ -51,5 +50,6 @@ export const userSlice = createSlice({
 export const { removeUser } = userSlice.actions;
 
 export const selectUser = (state: RootState): UserState => state.user;
+export const selectUserStatus = (state: RootState): UserState['status'] => state.user.status;
 
 export default userSlice.reducer;

@@ -5,5 +5,5 @@ export interface UserState {
   email: string;
   avatar?: string;
   locale?: string;
-  loading?: boolean;
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

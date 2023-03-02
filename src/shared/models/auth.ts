@@ -5,4 +5,5 @@ export type GoogleOauthTokenResponse = Omit<TokenResponse, 'error' | 'error_desc
 export interface AuthState {
   isLoggedIn: boolean;
   token: string;
+  status?: 'idle' | 'succeeded';
 }

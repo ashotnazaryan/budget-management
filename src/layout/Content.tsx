@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getUserInfo, selectUser, selectUserStatus } from 'store/reducers/userSlice';
-import { selectAuthStatus, setAuth } from 'store/reducers/authSlice';
+import { getUserInfo, selectUser, selectUserStatus, selectAuthStatus, setAuth } from 'store/reducers';
 import { getFromLocalStorage } from 'shared/helpers';
 import { AuthState } from 'shared/models';
 import { AUTH_KEY } from 'shared/constants';

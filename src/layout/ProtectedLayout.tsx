@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
 import { getFromLocalStorage } from 'shared/helpers';

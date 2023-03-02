@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { useAppDispatch } from 'store';
 import { ROUTES, AUTH_KEY } from 'shared/constants';
 import { saveToLocalStorage } from 'shared/helpers';
-import { setAuth } from 'store/reducers/authSlice';
+import { setAuth } from 'store/reducers';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
         const auth = { isLoggedIn: true, token: codeResponse.access_token };
 
         saveToLocalStorage(AUTH_KEY, auth);
-        dispatch(setAuth({ isLoggedIn: true, token: codeResponse.access_token }));
+        dispatch(setAuth(auth));
         navigate(ROUTES.dashboard.path);
       } catch (error) {
         console.error(error);

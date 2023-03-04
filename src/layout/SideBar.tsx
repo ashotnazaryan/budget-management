@@ -40,8 +40,8 @@ const SideBar: React.FC<SideBarProps> = ({ variant, ...props }: SideBarProps) =>
     <Grid container justifyContent='flex-start' alignItems='center'>
       <Grid item>
         <Drawer
-          variant={variant}
           {...props}
+          variant={variant}
           PaperProps={{ sx: { width: '200px' } }}
           open={opened}
           onClose={close}

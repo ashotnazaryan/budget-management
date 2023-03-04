@@ -1,9 +1,11 @@
 import * as React from 'react';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
 import { getFromLocalStorage } from 'shared/helpers';
 import { AuthState } from 'shared/models';
+import { removeAuth, removeUser } from 'store/reducers';
 
 const { token } = getFromLocalStorage<AuthState>(AUTH_KEY);
 axios.create({
@@ -13,8 +15,17 @@ axios.create({
   }
 });
 
-const AxiosInterceptor = ({ children }: { children: React.ReactElement }) => {
+const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const CustomLogout = (): void => {
+    React.useEffect(() => {
+      dispatch(removeAuth());
+      dispatch(removeUser());
+      navigate(ROUTES.login.path);
+    });
+  };
 
   axios.interceptors.response.use(
     (response) => {
@@ -22,7 +33,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactElement }) => {
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        navigate(ROUTES.login.path);
+        CustomLogout();
 
         return Promise.reject(error);
       }

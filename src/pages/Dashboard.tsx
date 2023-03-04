@@ -25,12 +25,12 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, paddingY: 1 }}>
       <Grid container spacing={2}>
-        <Grid item md={4} xs={12}>
+        <Grid item md={6} xs={12}>
           <SummaryManager iso={iso} addIncome={handleAddIncome} addExpense={handleAddExpense} changeCurrency={handleCurrencyChange} />
         </Grid>
-        <Grid item md={4} xs={12}>
+        <Grid item md={6} xs={12}>
           <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} />
         </Grid>
       </Grid>

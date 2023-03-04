@@ -23,13 +23,13 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
         borderRadius: 1
       }}
     >
-      <Grid container rowSpacing={2}>
+      <Grid container>
         <Grid item xs={12}>
           <Typography variant='h5' color='primary.contrastText' sx={{ textAlign: 'center', marginBottom: 2 }}>
             Summary
           </Typography>
         </Grid>
-        <Grid container flexWrap='nowrap' sx={{ backgroundColor: 'primary.dark', borderRadius: 1 }}>
+        <Grid container flexWrap='nowrap' sx={{ backgroundColor: 'primary.dark', borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6}>
             <Typography variant='subtitle1' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
               Total Income
@@ -45,7 +45,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ backgroundColor: 'primary.light', borderRadius: 1, paddingY: 2 }}>
+          <Box sx={{ backgroundColor: 'primary.light', paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
             <Typography variant='h6' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>

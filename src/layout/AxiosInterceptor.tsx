@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
-import { getFromLocalStorage } from 'shared/helpers';
+import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
 import { AuthState } from 'shared/models';
 import { removeAuth, removeUser } from 'store/reducers';
 
@@ -18,15 +18,13 @@ axios.create({
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [expired, setExpired] = React.useState<boolean>(false);
+  const auth = getFromLocalStorage<AuthState>(AUTH_KEY);
 
   React.useEffect(() => {
-    if (expired) {
-      dispatch(removeAuth());
-      dispatch(removeUser());
+    if (!auth.isLoggedIn) {
       navigate(ROUTES.login.path);
     }
-  }, [expired, dispatch, navigate]);
+  }, [auth.isLoggedIn, dispatch, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -34,7 +32,9 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        setExpired(true);
+        dispatch(removeAuth());
+        dispatch(removeUser());
+        removeFromLocalStorage(AUTH_KEY);
 
         return Promise.reject(error);
       }

@@ -12,18 +12,16 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuth: (state, action: PayloadAction<AuthState>) => ({
-      ...state,
-      isLoggedIn: action.payload.isLoggedIn,
-      token: action.payload.token,
-      status: 'succeeded'
-    }),
-    removeAuth: (state) => ({
-      ...state,
-      isLoggedIn: false,
-      token: '',
-      status: 'succeeded'
-    })
+    setAuth: (state, action: PayloadAction<AuthState>) => {
+      state = {
+        ...state,
+        ...action.payload,
+        status: 'succeeded'
+      };
+    },
+    removeAuth: (state) => {
+      state = initialState;
+    }
   }
 });
 

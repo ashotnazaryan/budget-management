@@ -18,14 +18,15 @@ axios.create({
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [expired, setExpired] = React.useState<boolean>(false);
 
-  const CustomLogout = (): void => {
-    React.useEffect(() => {
+  React.useEffect(() => {
+    if (expired) {
       dispatch(removeAuth());
       dispatch(removeUser());
       navigate(ROUTES.login.path);
-    });
-  };
+    }
+  }, [expired, dispatch, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -33,7 +34,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        CustomLogout();
+        setExpired(true);
 
         return Promise.reject(error);
       }

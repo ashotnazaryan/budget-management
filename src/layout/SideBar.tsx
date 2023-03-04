@@ -65,7 +65,7 @@ const SideBar: React.FC<SideBarProps> = ({ variant, ...props }: SideBarProps) =>
             </Box>
             <ListItem onClick={logout}>
               <ListItemText>
-                <Button color='secondary' variant='contained' endIcon={<LogoutIcon />} onClick={logout}>
+                <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />} onClick={logout}>
                   Logout
                 </Button>
               </ListItemText>

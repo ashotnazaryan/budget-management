@@ -54,7 +54,7 @@ const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpe
 
   return (
     <Grid container rowSpacing={3}>
-      <Grid item xs={12}>
+      <Grid item md={8} xs={12}>
         <FormControl fullWidth>
           <InputLabel>Currency</InputLabel>
           <Select
@@ -70,25 +70,25 @@ const SummaryManager: React.FC<SummaryManagerProps> = ({ iso, addIncome, addExpe
       </Grid>
       <Grid item xs={12}>
         <Grid container alignItems='center' columnSpacing={2}>
-          <Grid item xs={6}>
-            <FormControl>
+          <Grid item md={4} xs={8}>
+            <FormControl fullWidth>
               <TextField type="number" label="Amount" value={income} onChange={onIncomeChange} />
             </FormControl>
           </Grid>
-          <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button color='primary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddIncome}>Add Income</Button>
+          <Grid item md={4} xs={4}>
+            <Button fullWidth color='primary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddIncome}>Add Income</Button>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Grid container alignItems='center' columnSpacing={2}>
-          <Grid item xs={6}>
-            <FormControl>
+          <Grid item md={4} xs={8}>
+            <FormControl fullWidth>
               <TextField type="number" label="Amount" value={expense} onChange={onExpenseChange} />
             </FormControl>
           </Grid>
-          <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button color='secondary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddExpense}>Add Expense</Button>
+          <Grid item md={4} xs={4}>
+            <Button fullWidth color='secondary' variant='contained' sx={{ marginBottom: 1 }} onClick={handleAddExpense}>Add Expense</Button>
           </Grid>
         </Grid>
       </Grid>

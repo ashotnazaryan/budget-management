@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
     setDialogOpened(false);
   };
 
-  const handleSaveDialog = (): void => {
+  const handleSaveTransaction = (): void => {
     setDialogOpened(false);
     dispatch(addTransaction(transaction));
   };
@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
           <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={transactions}  openDialog={handleOpenDialog} />
         </Grid>
       </Grid>
-      <Dialog fullScreen title='Add a transaction' actionButtonText='Save' open={dialogOpened} onClose={handleCloseDialog} onSave={handleSaveDialog} sx={{
+      <Dialog fullScreen title='Add a transaction' actionButtonText='Save' open={dialogOpened} onClose={handleCloseDialog} onAction={handleSaveTransaction} sx={{
         '& .MuiDialogTitle-root': {
           padding: 2,
           textAlign: 'center'

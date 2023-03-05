@@ -33,7 +33,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
     >
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h5' color='primary.contrastText' sx={{ textAlign: 'center', marginBottom: 2 }}>
+          <Typography variant='h5' color='primary.contrastText' sx={{ textAlign: 'center', marginBottom: 4 }}>
             Summary
           </Typography>
         </Grid>
@@ -62,7 +62,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 2 }}>
           <IconButton onClick={onOpenDialog}>
-            <AddIcon color='secondary' fontSize='large' />
+            <AddIcon sx={{ color: 'primary.contrastText' }} fontSize='large' />
           </IconButton>
         </Grid>
         {

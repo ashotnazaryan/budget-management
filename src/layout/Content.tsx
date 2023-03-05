@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getUserInfo, selectUser, selectUserStatus, selectAuthStatus, setAuth } from 'store/reducers';
+import { getUserInfo, selectUser, selectUserStatus } from 'store/reducers';
 import { getFromLocalStorage } from 'shared/helpers';
-import { AuthState } from 'shared/models';
+import { Auth } from 'shared/models';
 import { AUTH_KEY } from 'shared/constants';
 import Header from './Header';
 
@@ -12,21 +12,14 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
-  const auth = getFromLocalStorage<AuthState>(AUTH_KEY);
+  const auth = getFromLocalStorage<Auth>(AUTH_KEY);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const userStatus = useAppSelector(selectUserStatus);
-  const authStatus = useAppSelector(selectAuthStatus);
   const fullName = `${user.firstName} ${user.lastName}`;
 
   React.useEffect(() => {
-    if (authStatus === 'idle') {
-      dispatch(setAuth(auth));
-    }
-  });
-
-  React.useEffect(() => {
-    if (userStatus === 'idle') {
+    if (userStatus === 'idle' && auth.token) {
       dispatch(getUserInfo(auth.token));
     }
   });

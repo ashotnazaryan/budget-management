@@ -13,14 +13,14 @@ interface DialogProps<T = unknown> extends MuiDialogProps {
   children?: React.ReactNode;
   data?: T;
   onClose: () => void;
-  onSave: (data: T) => void;
+  onAction: (data: T) => void;
 }
 
-const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', actionButtonText = 'OK', onClose, onSave, children, ...props }) => {
+const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', actionButtonText = 'OK', onClose, onAction, children, ...props }) => {
   const { palette: { primary: { main, contrastText } } } = theme;
 
-  const handleOnSave = (data: DialogProps['data']): void => {
-    onSave(data);
+  const handleOnAction = (data: DialogProps['data']): void => {
+    onAction(data);
   };
 
   return (
@@ -37,7 +37,7 @@ const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', act
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{cancelButtonText}</Button>
-        <Button variant='contained' onClick={handleOnSave} autoFocus>{actionButtonText}</Button>
+        <Button variant='contained' onClick={handleOnAction} autoFocus>{actionButtonText}</Button>
       </DialogActions>
     </MuiDialog>
   );

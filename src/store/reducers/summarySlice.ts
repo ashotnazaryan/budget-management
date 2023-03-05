@@ -28,18 +28,23 @@ export const summarySlice = createSlice({
       };
     },
     addTransaction: (state, action: PayloadAction<TransactionData>) => {
-      const { type, amount } = action.payload;
+      const { id, type, amount } = action.payload;
+      const categoryAvailable = state.transactions.some((transaction) => transaction.id === id);
+      const transactions = categoryAvailable
+        ? state.transactions.map((transaction) => ({
+          ...transaction,
+          amount: id === transaction.id ? transaction.amount + amount : transaction.amount
+        }))
+        : [...state.transactions, action.payload];
 
       if (type === CategoryType.income) {
         const incomes = state.incomes + amount;
+
         return {
           ...state,
           incomes,
-          balance: incomes - state.expenses,
-          transactions: [
-            ...state.transactions,
-            action.payload
-          ]
+          transactions,
+          balance: incomes - state.expenses
         };
       }
 
@@ -48,11 +53,8 @@ export const summarySlice = createSlice({
       return {
         ...state,
         expenses,
-        balance: state.incomes - expenses,
-        transactions: [
-          ...state.transactions,
-          action.payload
-        ]
+        transactions,
+        balance: state.incomes - expenses
       };
     }
   },

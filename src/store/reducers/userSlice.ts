@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { AuthState, UserState } from 'shared/models';
+import { Auth, UserState } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 
 const initialState: UserState = {
@@ -12,7 +12,7 @@ const initialState: UserState = {
   email: '',
 };
 
-export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: AuthState['token']): Promise<UserState> => {
+export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: Auth['token']): Promise<UserState> => {
   const response = await axios.get(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`, {
     headers: {
       Authorization: `Bearer ${token}`,

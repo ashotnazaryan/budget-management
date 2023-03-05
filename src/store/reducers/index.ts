@@ -1,4 +1,3 @@
-export * from './authSlice';
 export * from './currencySlice';
 export * from './summarySlice';
 export * from './userSlice';

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
-import { AuthState } from 'shared/models';
-import { removeAuth, removeUser } from 'store/reducers';
+import { Auth } from 'shared/models';
+import { removeUser } from 'store/reducers';
 
-const { token } = getFromLocalStorage<AuthState>(AUTH_KEY);
+const { token } = getFromLocalStorage<Auth>(AUTH_KEY);
 axios.create({
   headers: {
     Authorization: `Bearer ${token}`,
@@ -18,6 +18,13 @@ axios.create({
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const auth = getFromLocalStorage<Auth>(AUTH_KEY);
+
+  React.useEffect(() => {
+    if (!auth.token) {
+      navigate(ROUTES.login.path);
+    }
+  }, [auth.token, dispatch, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -25,10 +32,8 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        dispatch(removeAuth());
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
-        navigate(ROUTES.login.path);
 
         return Promise.reject(error);
       }

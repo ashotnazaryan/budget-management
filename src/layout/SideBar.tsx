@@ -11,8 +11,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
-import { closeSidebar, removeAuth, removeUser, selectSideBarOpened } from 'store/reducers';
+import { closeSidebar, removeUser, selectSideBarOpened } from 'store/reducers';
 import { removeFromLocalStorage } from 'shared/helpers';
+import Dialog from 'components/Dialog';
 
 interface SideBarProps extends MuiDrawerProps {
 
@@ -22,6 +23,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const opened = useAppSelector(selectSideBarOpened);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
 
   const close = (): void => {
     dispatch(closeSidebar());
@@ -30,57 +32,74 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const logout = (): void => {
     googleLogout();
     dispatch(removeUser());
-    dispatch(removeAuth());
     dispatch(closeSidebar());
     removeFromLocalStorage(AUTH_KEY);
     navigate(ROUTES.login.path);
   };
 
+  const handleOpenDialog = (): void => {
+    setDialogOpened(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setDialogOpened(false);
+  };
+
+  const handleLogout = (): void => {
+    setDialogOpened(false);
+    logout();
+  };
+
   return (
-    <Grid container justifyContent='flex-start' alignItems='center'>
-      <Grid item>
-        <Drawer
-          {...props}
-          variant={props.variant}
-          PaperProps={{ sx: { width: '200px' } }}
-          open={opened}
-          onClose={close}
-        >
-          <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <ListItem onClick={close}>
+    <>
+      <Grid container justifyContent='flex-start' alignItems='center'>
+        <Grid item>
+          <Drawer
+            {...props}
+            variant={props.variant}
+            PaperProps={{ sx: { width: '200px' } }}
+            open={opened}
+            onClose={close}
+          >
+            <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+              <Box sx={{ flexGrow: 1 }}>
+                <ListItem onClick={close}>
+                  <ListItemText>
+                    <Link to={ROUTES.dashboard.path} style={{ display: 'block' }}>
+                      {ROUTES.dashboard.name}
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+                <ListItem onClick={close}>
+                  <ListItemText>
+                    <Link to={ROUTES.settings.path} style={{ display: 'block' }}>
+                      {ROUTES.settings.name}
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+                <ListItem onClick={close}>
+                  <ListItemText>
+                    <Link to={ROUTES.about.path} style={{ display: 'block' }}>
+                      {ROUTES.about.name}
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+              </Box>
+              <ListItem onClick={handleOpenDialog}>
                 <ListItemText>
-                  <Link to={ROUTES.dashboard.path}>
-                    {ROUTES.dashboard.name}
-                  </Link>
+                  <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
+                    Logout
+                  </Button>
                 </ListItemText>
               </ListItem>
-              <ListItem onClick={close}>
-                <ListItemText>
-                  <Link to={ROUTES.settings.path}>
-                    {ROUTES.settings.name}
-                  </Link>
-                </ListItemText>
-              </ListItem>
-              <ListItem onClick={close}>
-                <ListItemText>
-                  <Link to={ROUTES.about.path}>
-                    {ROUTES.about.name}
-                  </Link>
-                </ListItemText>
-              </ListItem>
-            </Box>
-            <ListItem onClick={logout}>
-              <ListItemText>
-                <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />} onClick={logout}>
-                  Logout
-                </Button>
-              </ListItemText>
-            </ListItem>
-          </List>
-        </Drawer>
+            </List>
+          </Drawer>
+        </Grid>
       </Grid>
-    </Grid>
+      <Dialog title='Are you sure you want to logout?' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} sx={{}}>
+
+      </Dialog>
+    </>
   );
 };
 

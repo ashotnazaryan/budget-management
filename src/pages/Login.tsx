@@ -3,28 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { useAppDispatch } from 'store';
 import { ROUTES, AUTH_KEY } from 'shared/constants';
 import { saveToLocalStorage } from 'shared/helpers';
-import { setAuth } from 'store/reducers';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
         const auth = { isLoggedIn: true, token: codeResponse.access_token };
 
         saveToLocalStorage(AUTH_KEY, auth);
-        dispatch(setAuth(auth));
         navigate(ROUTES.dashboard.path);
       } catch (error) {
         console.error(error);
       }
     },
     onError: (error) => {
-      dispatch(setAuth({ isLoggedIn: false, token: '' }));
       console.error(error);
     }
   });

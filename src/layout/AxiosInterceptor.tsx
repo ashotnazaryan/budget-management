@@ -18,13 +18,6 @@ axios.create({
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const auth = getFromLocalStorage<AuthState>(AUTH_KEY);
-
-  React.useEffect(() => {
-    if (!auth.isLoggedIn) {
-      navigate(ROUTES.login.path);
-    }
-  }, [auth.isLoggedIn, dispatch, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -35,6 +28,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
         dispatch(removeAuth());
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
+        navigate(ROUTES.login.path);
 
         return Promise.reject(error);
       }

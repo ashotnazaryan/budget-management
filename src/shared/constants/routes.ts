@@ -13,6 +13,10 @@ export const ROUTES: AppRoute = {
     name: 'Dashboard',
     path: '/dashboard'
   },
+  settings: {
+    name: 'Settings',
+    path: '/settings'
+  },
   login: {
     name: 'Login',
     path: '/login',

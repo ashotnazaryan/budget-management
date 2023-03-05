@@ -27,25 +27,31 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    removeUser: (state) => {
-      state = initialState;
+    removeUser: () => {
+      return initialState;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(getUserInfo.pending, (state) => ({
-        ...state,
-        status: 'loading'
-      }))
-      .addCase(getUserInfo.rejected, (state) => ({
-        ...state,
-        status: 'failed'
-      }))
-      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<UserState>) => ({
-        ...state,
-        ...action.payload,
-        status: 'succeeded'
-      }));
+      .addCase(getUserInfo.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(getUserInfo.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<UserState>) => {
+        return {
+          ...state,
+          ...action.payload,
+          status: 'succeeded'
+        };
+      });
   }
 });
 

@@ -13,14 +13,14 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action: PayloadAction<AuthState>) => {
-      state = {
+      return {
         ...state,
         ...action.payload,
         status: 'succeeded'
       };
     },
-    removeAuth: (state) => {
-      state = initialState;
+    removeAuth: () => {
+      return initialState;
     }
   }
 });

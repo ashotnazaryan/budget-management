@@ -3,16 +3,24 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-import { Currency } from 'shared/models';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import { Currency, TransactionData } from 'shared/models';
 
 interface SummaryProps {
   incomes: number;
   expenses: number;
   balance: number;
   currencySymbol: Currency['symbol'];
+  transactions?: TransactionData[];
+  openDialog: () => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol }) => {
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, openDialog }) => {
+  const onOpenDialog = (): void => {
+    openDialog();
+  };
+
   return (
     <Box
       sx={{
@@ -49,9 +57,26 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography variant='h6' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>
-            <Typography variant='h6' color={balance > 0 ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography variant='h6' fontSize={30} color={balance >= 0 ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
+        <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 2 }}>
+          <IconButton onClick={onOpenDialog}>
+            <AddIcon color='secondary' fontSize='large' />
+          </IconButton>
+        </Grid>
+        {
+          transactions?.map(({ id, type, name, amount }) => (
+            <Grid item xs={12} key={id}>
+              <Box sx={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'primary.light', paddingX: 4, paddingY: 2, marginY: 1, borderRadius: 1, width: '100%'
+              }}>
+                <Typography color='primary.contrastText'>{name}</Typography>
+                <Typography color='primary.contrastText'>{amount}</Typography>
+              </Box>
+            </Grid>
+          ))
+        }
       </Grid>
     </Box>
   );

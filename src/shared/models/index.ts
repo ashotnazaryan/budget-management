@@ -4,3 +4,4 @@ export * from './route';
 export * from './user';
 export * from './auth';
 export * from './view';
+export * from './category';

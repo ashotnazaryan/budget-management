@@ -12,6 +12,7 @@ import Category from './Category';
 
 interface TransactionProps {
   currency: Currency['iso'];
+  mode?: 'create' | 'edit';
   onChange: (data: TransactionData) => void;
 }
 
@@ -25,7 +26,7 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
   const numericRegex = NUMERIC_REGEX;
   const incomeCategories = INCOME_CATEGORIES;
   const expenseCategories = EXPENSE_CATEGORIES;
-  const TABS: Tab[] = [{ value: CategoryType.income, label: 'Income' }, { value: CategoryType.expense, label: 'Expense' }];
+  const tabs: Tab[] = [{ value: CategoryType.income, label: 'Income' }, { value: CategoryType.expense, label: 'Expense' }];
 
   let [transaction, setTransaction] = React.useState<TransactionData & { selectedCategory: string }>({
     id: '',
@@ -77,7 +78,7 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
     <Box>
       <MuiTabs value={transaction.type} onChange={handleTabChange} sx={{ marginBottom: 3 }}>
         {
-          TABS.map(({ value, label }) => (
+          tabs.map(({ value, label }) => (
             <MuiTab key={value} label={label} />
           ))
         }
@@ -91,7 +92,7 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
       <Typography sx={{ marginY: 1 }}>Category</Typography>
       {
         transaction.type === CategoryType.income && (
-          <Grid container columnGap={2}>
+          <Grid container columnGap={2} rowGap={2}>
             {
               incomeCategories.map(({ id, name, type }) => (
                 <Grid item key={id} md={2} xs={4}>
@@ -104,7 +105,7 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
       }
       {
         transaction.type === CategoryType.expense && (
-          <Grid container columnGap={2}>
+          <Grid container columnGap={2} rowGap={2}>
             {
               expenseCategories.map(({ id, name, type }) => (
                 <Grid item key={id} md={2} xs={4}>

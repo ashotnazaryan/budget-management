@@ -57,7 +57,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           <Drawer
             {...props}
             variant={props.variant}
-            PaperProps={{ sx: { width: '200px' } }}
+            PaperProps={{ sx: { width: { xs: '90%', sm: '200px' } } }}
             open={opened}
             onClose={close}
           >

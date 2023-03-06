@@ -20,6 +20,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
   const dispatch = useAppDispatch();
   const auth = getFromLocalStorage<Auth>(AUTH_KEY);
 
+  // TODO: fix, when 401 automatically doesn't logout
   React.useEffect(() => {
     if (!auth.token) {
       navigate(ROUTES.login.path);

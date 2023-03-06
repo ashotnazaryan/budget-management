@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
     <Box sx={{ flexGrow: 1, paddingY: 1 }}>
       <Grid container justifyContent='center'>
         <Grid item md={6} xs={12}>
-          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={transactions}  openDialog={handleOpenDialog} />
+          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={transactions} openDialog={handleOpenDialog} />
         </Grid>
       </Grid>
       <Dialog fullScreen title='Add a transaction' actionButtonText='Save' open={dialogOpened} onClose={handleCloseDialog} onAction={handleSaveTransaction} sx={{

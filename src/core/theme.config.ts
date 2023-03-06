@@ -13,7 +13,12 @@ export const theme = createTheme({
       main: '#b83f0f',
       contrastText: '#fff',
     },
+    info: {
+      main: '#cccccc',
+      dark: '#8c8c8c',
+      light: '#f2f2f2'
+    },
     contrastThreshold: 3,
     tonalOffset: 0.2
-  },
+  }
 });

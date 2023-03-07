@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
 import { ROUTES } from 'shared/constants';
@@ -16,9 +16,11 @@ const App: React.FC = () => {
       <Routes>
         <Route path={ROUTES.login.path} element={<Login />} />
         <Route path={ROUTES.home.path} element={<ProtectedLayout />}>
+          <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
           <Route path={ROUTES.dashboard.path} element={<Dashboard />} />
           <Route path={ROUTES.settings.path} element={<Settings />} />
           <Route path={ROUTES.about.path} element={<About />} />
+          <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
         </Route>
       </Routes>
     </Box>

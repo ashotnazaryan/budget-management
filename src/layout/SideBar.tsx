@@ -9,11 +9,14 @@ import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
-import { closeSidebar, removeUser, selectSideBarOpened } from 'store/reducers';
+import { closeSidebar, removeUser, selectDefaultCurrency, selectSideBarOpened, selectSummary, selectUser } from 'store/reducers';
 import { removeFromLocalStorage } from 'shared/helpers';
 import Dialog from 'components/Dialog';
+import UserBalanceInfo from 'components/UserBalanceInfo';
 
 interface SideBarProps extends MuiDrawerProps {
 
@@ -21,9 +24,13 @@ interface SideBarProps extends MuiDrawerProps {
 
 const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const opened = useAppSelector(selectSideBarOpened);
+  const user = useAppSelector(selectUser);
+  const { balance } = useAppSelector(selectSummary);
+  const { symbol } = useAppSelector(selectDefaultCurrency);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const fullName = `${user.firstName} ${user.lastName}`;
 
   const close = (): void => {
     dispatch(closeSidebar());
@@ -61,6 +68,9 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
             open={opened}
             onClose={close}
           >
+            <Box sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${theme.palette.primary.main}` }}>
+              <UserBalanceInfo fullName={fullName} avatar={user.avatar} currency={symbol} balance={balance} />
+            </Box>
             <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <ListItem onClick={close}>
@@ -96,8 +106,10 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           </Drawer>
         </Grid>
       </Grid>
-      <Dialog title='Are you sure you want to logout?' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} sx={{}}>
-
+      <Dialog title='Logout' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} sx={{}}>
+        <Typography variant='subtitle1'>
+          Are you sure you want to logout?
+        </Typography>
       </Dialog>
     </>
   );

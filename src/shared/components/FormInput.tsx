@@ -5,23 +5,23 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 // TODO: add own styles
 const StyledTextField = styled(TextField)({
-  '& label.Mui-focused': {
+  '&label.Mui-focused': {
     color: '#5e5b5d',
     fontWeight: 400,
   },
-  '& .MuiInputBase-input': {
+  '&.MuiInputBase-input': {
     borderColor: '#c8d0d4',
   },
-  '& .MuiInput-underline:after': {
+  '&.MuiInput-underline:after': {
     border: 'none',
   },
-  '& .MuiOutlinedInput-root': {
+  '&.MuiOutlinedInput-root': {
     '&.Mui-error': {
       '& .MuiOutlinedInput-notchedOutline': {
         borderColor: '#d32f2f',
       },
     },
-    '& fieldset': {
+    '&fieldset': {
       borderColor: '#c8d0d4',
       borderRadius: 0,
     },

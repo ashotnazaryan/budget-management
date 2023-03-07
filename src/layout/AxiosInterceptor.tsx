@@ -19,13 +19,15 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const auth = getFromLocalStorage<Auth>(AUTH_KEY);
+  const [loggedIn, setLoggedIn] = React.useState<boolean>(!!auth.token);
 
-  // TODO: fix, when 401 automatically doesn't logout
   React.useEffect(() => {
-    if (!auth.token) {
+    setLoggedIn(loggedIn);
+
+    if (!loggedIn && !auth.token) {
       navigate(ROUTES.login.path);
     }
-  }, [auth.token, dispatch, navigate]);
+  }, [auth.token, loggedIn, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -35,6 +37,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
       if (error.response?.status === 401) {
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
+        setLoggedIn(false);
 
         return Promise.reject(error);
       }

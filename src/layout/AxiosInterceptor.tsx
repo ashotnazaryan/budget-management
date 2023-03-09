@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { googleLogout } from '@react-oauth/google';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
@@ -37,6 +38,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
       if (error.response?.status === 401) {
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
+        googleLogout();
         setLoggedIn(false);
 
         return Promise.reject(error);

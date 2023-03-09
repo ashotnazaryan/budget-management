@@ -1,10 +1,15 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
+import Grid from '@mui/material/Grid';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import { useAppDispatch } from 'store';
+import { theme } from 'core/theme.config';
 import { openSideBar } from 'store/reducers';
+import { ROUTES } from 'shared/constants';
 
 interface HeaderProps { }
 
@@ -18,9 +23,20 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <AppBar position='static'>
       <Toolbar variant='dense'>
-        <IconButton edge='start' color='inherit' sx={{ marginRight: 2 }} onClick={showSideBar}>
-          <MenuIcon />
-        </IconButton>
+        <Grid container alignItems='center' justifyContent='space-between'>
+          <Grid item xs={1}>
+            <IconButton edge='start' color='inherit' sx={{ marginRight: 2 }} onClick={showSideBar}>
+              <MenuIcon />
+            </IconButton>
+          </Grid>
+          <Grid item xs={1}>
+            <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
+              <IconButton edge='end' sx={{ marginRight: 2, color: theme.palette.primary.contrastText }}>
+                <ListAltIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );

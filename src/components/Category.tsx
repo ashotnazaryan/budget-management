@@ -8,15 +8,15 @@ interface CategoryProps {
   title: CategoryModel['name'];
   type: CategoryType;
   selected?: CategoryModel['id'];
-  onClick: ({ id, name }: { id: CategoryModel['id'], name: CategoryModel['name'] }) => void;
+  onClick: ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }) => void;
 }
 
 const Category: React.FC<CategoryProps> = ({ id, selected, title, type, onClick }) => {
   const { palette: { primary, secondary } } = theme;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
-  const handleOnClick = (id: CategoryModel['id']) => (): void => {
-    onClick({ id, name: title });
+  const handleOnClick = (categoryId: CategoryModel['id']) => (): void => {
+    onClick({ categoryId, name: title });
   };
 
   const getColor = (): string => {

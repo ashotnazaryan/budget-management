@@ -4,6 +4,7 @@ export enum RouteKey {
   about = 'about',
   dashboard = 'dashboard',
   settings = 'settings',
+  transactions = 'transactions',
   login = 'login'
 }
 

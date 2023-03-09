@@ -6,11 +6,11 @@ import { selectSummary, selectDefaultCurrency, addTransaction } from 'store/redu
 import { TransactionData } from 'shared/models';
 import Summary from 'components/Summary';
 import Dialog from 'components/Dialog';
-import Transaction from 'components/Transaction';
+import NewTransaction from 'components/NewTransaction';
 
 const Dashboard: React.FC = () => {
   const { symbol, iso } = useAppSelector(selectDefaultCurrency);
-  const { incomes, expenses, balance, transactions } = useAppSelector(selectSummary);
+  const { incomes, expenses, balance, categoryTransactions } = useAppSelector(selectSummary);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const [transaction, setTransaction] = React.useState<TransactionData>({} as TransactionData);
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
     <Box sx={{ flexGrow: 1, paddingY: 1 }}>
       <Grid container justifyContent='center'>
         <Grid item md={6} xs={12}>
-          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={transactions} openDialog={handleOpenDialog} />
+          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={categoryTransactions} openDialog={handleOpenDialog} />
         </Grid>
       </Grid>
       <Dialog fullScreen title='Add a transaction' actionButtonText='Save' open={dialogOpened} onClose={handleCloseDialog} onAction={handleSaveTransaction} sx={{
@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
           textAlign: 'center'
         }
       }}>
-        <Transaction currency={iso} onChange={handleTransactionChange} />
+        <NewTransaction currency={iso} onChange={handleTransactionChange} />
       </Dialog>
     </Box>
   );

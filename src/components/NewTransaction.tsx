@@ -10,7 +10,7 @@ import { CategoryType, TransactionData, Category as CategoryModel, Currency } fr
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, NUMERIC_REGEX } from 'shared/constants';
 import Category from './Category';
 
-interface TransactionProps {
+interface NewTransactionProps {
   currency: Currency['iso'];
   mode?: 'create' | 'edit';
   onChange: (data: TransactionData) => void;
@@ -22,17 +22,19 @@ interface Tab {
 }
 
 
-const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
+const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onChange }) => {
   const numericRegex = NUMERIC_REGEX;
   const incomeCategories = INCOME_CATEGORIES;
   const expenseCategories = EXPENSE_CATEGORIES;
   const tabs: Tab[] = [{ value: CategoryType.income, label: 'Income' }, { value: CategoryType.expense, label: 'Expense' }];
 
   let [transaction, setTransaction] = React.useState<TransactionData & { selectedCategory: string }>({
-    id: '',
+    uuid: '',
+    categoryId: '',
     name: '',
     amount: 0,
     type: 0,
+    createdAt: '',
     selectedCategory: ''
   });
 
@@ -62,12 +64,12 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
     }
   };
 
-  const onCategoryItemClick = ({ id, name }: { id: CategoryModel['id'], name: CategoryModel['name'] }): void => {
+  const onCategoryItemClick = ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }): void => {
     transaction = {
       ...transaction,
-      id,
+      categoryId,
       name,
-      selectedCategory: id
+      selectedCategory: categoryId
     };
 
     setTransaction(transaction);
@@ -120,4 +122,4 @@ const Transaction: React.FC<TransactionProps> = ({ currency, onChange }) => {
   );
 };
 
-export default Transaction;
+export default NewTransaction;

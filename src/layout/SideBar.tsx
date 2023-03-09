@@ -10,6 +10,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
@@ -64,13 +66,20 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           <Drawer
             {...props}
             variant={props.variant}
-            PaperProps={{ sx: { width: { xs: '90%', sm: '200px' } } }}
+            PaperProps={{ sx: { width: { xs: '100%', sm: '280px' } } }}
             open={opened}
             onClose={close}
           >
-            <Box sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${theme.palette.primary.main}` }}>
-              <UserBalanceInfo fullName={fullName} avatar={user.avatar} currency={symbol} balance={balance} />
-            </Box>
+            <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${theme.palette.primary.main}` }} columnSpacing={2}>
+              <Grid item xs={11}>
+                <UserBalanceInfo fullName={fullName} avatar={user.avatar} currency={symbol} balance={balance} />
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton edge='start' color='primary' onClick={close}>
+                  <ArrowBackIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
             <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <ListItem onClick={close}>

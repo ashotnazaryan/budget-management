@@ -5,11 +5,14 @@ export interface SummaryState {
   expenses: number;
   balance: number;
   transactions: TransactionData[];
+  categoryTransactions: TransactionData[];
 }
 
 export interface TransactionData {
-  id: Category['id'];
+  uuid: string;
+  categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
   amount: number;
+  createdAt: string;
 }

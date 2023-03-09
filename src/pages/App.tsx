@@ -7,6 +7,7 @@ import Login from './Login';
 import About from './About';
 import Dashboard from './Dashboard';
 import Settings from './Settings';
+import Transactions from './Transactions';
 import SideBar from 'layout/SideBar';
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.dashboard.path} element={<Dashboard />} />
           <Route path={ROUTES.settings.path} element={<Settings />} />
           <Route path={ROUTES.about.path} element={<About />} />
+          <Route path={ROUTES.transactions.path} element={<Transactions />} />
           <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
         </Route>
       </Routes>

@@ -20,5 +20,10 @@ export const CURRENCIES: Currency[] = [
     iso: 'UAH',
     name: 'Ukrainian Hryvnia',
     symbol: '₴'
+  },
+  {
+    iso: 'AMD',
+    name: 'Armenian Dram',
+    symbol: '֏'
   }
 ];

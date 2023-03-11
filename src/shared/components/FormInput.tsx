@@ -1,42 +1,14 @@
 import * as React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { styled } from '@mui/material/styles';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { TextFieldProps } from '@mui/material/TextField';
+import { StyledTextField } from './FormInput.styles';
 
-// TODO: add own styles
-const StyledTextField = styled(TextField)({
-  '&label.Mui-focused': {
-    color: '#5e5b5d',
-    fontWeight: 400,
-  },
-  '&.MuiInputBase-input': {
-    borderColor: '#c8d0d4',
-  },
-  '&.MuiInput-underline:after': {
-    border: 'none',
-  },
-  '&.MuiOutlinedInput-root': {
-    '&.Mui-error': {
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#d32f2f',
-      },
-    },
-    '&fieldset': {
-      borderColor: '#c8d0d4',
-      borderRadius: 0,
-    },
-    '&:hover fieldset': {
-      border: '1px solid #c8d0d4',
-    },
-    '&.Mui-focused fieldset': {
-      border: '1px solid #c8d0d4',
-    },
-  },
-});
+type FormInputProps = {
+  name: string;
+  rules?: any;
+} & TextFieldProps;
 
-type FormInputProps = { name: string } & TextFieldProps;
-
-const FormInput: React.FC<FormInputProps> = ({ name, ...otherProps }) => {
+const FormInput: React.FC<FormInputProps> = ({ name, rules = {}, ...props }) => {
   const {
     control,
     formState: { errors },
@@ -46,15 +18,14 @@ const FormInput: React.FC<FormInputProps> = ({ name, ...otherProps }) => {
     <Controller
       control={control}
       name={name}
-      defaultValue=''
-      render={({ field }) => (
+      rules={rules}
+      render={({ field, fieldState: { error } }) => (
         <StyledTextField
           {...field}
-          {...otherProps}
-          variant='outlined'
+          {...props}
           error={!!errors[name]}
           helperText={
-            errors[name] ? (errors[name]?.message as unknown as string) : ''
+            errors[name] && error?.message
           }
         />
       )}

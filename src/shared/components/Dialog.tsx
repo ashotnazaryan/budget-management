@@ -1,14 +1,12 @@
 import * as React from 'react';
-import styled from '@emotion/styled';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { theme } from 'core/theme.config';
+import { StyledDialogContent } from './Dialog.styles';
 
-type DialogProps<T = unknown> = {
-  title: string;
+type DialogProps<T = any> = {
   cancelButtonText?: string;
   actionButtonText?: string;
   children?: React.ReactNode;
@@ -18,15 +16,7 @@ type DialogProps<T = unknown> = {
   onAction: (data: T) => void;
 } & MuiDialogProps
 
-// TODO: move to a separate file
-const StyledDialogContent = styled(DialogContent)({
-  '&.MuiDialogContent-root': {
-    paddingTop: theme.spacing(4),
-    display: 'flex'
-  }
-});
-
-const Dialog: React.FC<DialogProps> = ({ open, title, cancelButtonText = 'Cancel', actionButtonText = 'OK', withActions = true, onClose, onAction, children, ...otherProps }) => {
+const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButtonText = 'OK', withActions = true, onClose, onAction, children, ...props }) => {
   const { palette: { primary: { main, contrastText } } } = theme;
 
   const handleOnAction = (data: DialogProps['data']): void => {
@@ -35,12 +25,11 @@ const Dialog: React.FC<DialogProps> = ({ open, title, cancelButtonText = 'Cancel
 
   return (
     <MuiDialog
-      {...otherProps}
-      open={open}
+      {...props}
       onClose={onClose}
     >
       <DialogTitle sx={{ backgroundColor: main, color: contrastText }}>
-        {title}
+        {props.title}
       </DialogTitle>
       <StyledDialogContent>
         {children}

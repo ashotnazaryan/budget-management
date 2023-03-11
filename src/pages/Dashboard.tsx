@@ -4,9 +4,9 @@ import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectSummary, selectDefaultCurrency, addTransaction } from 'store/reducers';
 import { TransactionData } from 'shared/models';
-import Summary from 'components/Summary';
-import Dialog from 'components/Dialog';
-import NewTransaction from 'components/NewTransaction';
+import Summary from 'pages/components/Summary';
+import Dialog from 'shared/components/Dialog';
+import NewTransaction from 'pages/components/NewTransaction';
 
 const Dashboard: React.FC = () => {
   const { symbol, iso } = useAppSelector(selectDefaultCurrency);
@@ -22,17 +22,23 @@ const Dashboard: React.FC = () => {
     setDialogOpened(false);
   };
 
-  // TODO: fix unknown type
-  const handleSaveTransaction = (data: TransactionData | unknown): void => {
+  const handleSaveTransaction = (data: TransactionData): void => {
     setDialogOpened(false);
-    dispatch(addTransaction(data as TransactionData));
+    dispatch(addTransaction(data));
   };
 
   return (
     <Box sx={{ flexGrow: 1, paddingY: 1 }}>
       <Grid container justifyContent='center'>
         <Grid item md={6} xs={12}>
-          <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={categoryTransactions} openDialog={handleOpenDialog} />
+          <Summary
+            incomes={incomes}
+            expenses={expenses}
+            balance={balance}
+            currencySymbol={symbol}
+            transactions={categoryTransactions}
+            openDialog={handleOpenDialog}
+          />
         </Grid>
       </Grid>
       <Dialog
@@ -49,7 +55,11 @@ const Dashboard: React.FC = () => {
             textAlign: 'center'
           }
         }}>
-        <NewTransaction currency={iso} onClose={handleCloseDialog} onSubmit={handleSaveTransaction} />
+        <NewTransaction
+          currency={iso}
+          onClose={handleCloseDialog}
+          onSubmit={handleSaveTransaction}
+        />
       </Dialog>
     </Box>
   );

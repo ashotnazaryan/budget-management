@@ -23,13 +23,16 @@ const Settings: React.FC = () => {
 
   return (
     <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 2 }}>Settings</Typography>
+      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Settings</Typography>
+      <Typography variant='subtitle1' sx={{ marginY: 2 }}>Default currency</Typography>
       <FormControl>
         <InputLabel>Currency</InputLabel>
         <Select
           label='Currency'
+          variant='outlined'
           value={iso}
           onChange={handleCurrencyChange}
+          sx={{ width: 200 }}
         >
           {currencies.map(({ iso, name, symbol }) => (
             <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>

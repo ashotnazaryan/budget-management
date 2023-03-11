@@ -12,13 +12,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
 import { closeSidebar, removeUser, selectDefaultCurrency, selectSideBarOpened, selectSummary, selectUser } from 'store/reducers';
 import { removeFromLocalStorage } from 'shared/helpers';
-import Dialog from 'components/Dialog';
-import UserBalanceInfo from 'components/UserBalanceInfo';
+import Dialog from 'shared/components/Dialog';
+import UserBalanceInfo from 'pages/components/UserBalanceInfo';
 
 interface SideBarProps extends MuiDrawerProps {
 
@@ -84,15 +86,19 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
               <Box sx={{ flexGrow: 1 }}>
                 <ListItem onClick={close}>
                   <ListItemText>
-                    <Link to={ROUTES.dashboard.path} style={{ display: 'block' }}>
-                      {ROUTES.dashboard.name}
+                    <Link to={ROUTES.dashboard.path}>
+                      <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
+                        {ROUTES.dashboard.name}
+                      </Button>
                     </Link>
                   </ListItemText>
                 </ListItem>
                 <ListItem onClick={close}>
                   <ListItemText>
-                    <Link to={ROUTES.settings.path} style={{ display: 'block' }}>
-                      {ROUTES.settings.name}
+                    <Link to={ROUTES.settings.path}>
+                      <Button fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
+                        {ROUTES.settings.name}
+                      </Button>
                     </Link>
                   </ListItemText>
                 </ListItem>

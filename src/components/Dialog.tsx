@@ -7,23 +7,26 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { theme } from 'core/theme.config';
 
-interface DialogProps<T = unknown> extends MuiDialogProps {
+type DialogProps<T = unknown> = {
   title: string;
   cancelButtonText?: string;
   actionButtonText?: string;
   children?: React.ReactNode;
   data?: T;
+  withActions?: boolean;
   onClose: () => void;
   onAction: (data: T) => void;
-}
+} & MuiDialogProps
 
+// TODO: move to a separate file
 const StyledDialogContent = styled(DialogContent)({
   '&.MuiDialogContent-root': {
-    paddingTop: theme.spacing(4)
+    paddingTop: theme.spacing(4),
+    display: 'flex'
   }
 });
 
-const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', actionButtonText = 'OK', onClose, onAction, children, ...props }) => {
+const Dialog: React.FC<DialogProps> = ({ open, title, cancelButtonText = 'Cancel', actionButtonText = 'OK', withActions = true, onClose, onAction, children, ...otherProps }) => {
   const { palette: { primary: { main, contrastText } } } = theme;
 
   const handleOnAction = (data: DialogProps['data']): void => {
@@ -32,8 +35,8 @@ const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', act
 
   return (
     <MuiDialog
-      {...props}
-      open={props.open}
+      {...otherProps}
+      open={open}
       onClose={onClose}
     >
       <DialogTitle sx={{ backgroundColor: main, color: contrastText }}>
@@ -42,10 +45,12 @@ const Dialog: React.FC<DialogProps> = ({ title, cancelButtonText = 'Cancel', act
       <StyledDialogContent>
         {children}
       </StyledDialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{cancelButtonText}</Button>
-        <Button variant='contained' onClick={handleOnAction} autoFocus>{actionButtonText}</Button>
-      </DialogActions>
+      {withActions && (
+        <DialogActions>
+          <Button onClick={onClose}>{cancelButtonText}</Button>
+          <Button variant='contained' onClick={handleOnAction} autoFocus>{actionButtonText}</Button>
+        </DialogActions>
+      )}
     </MuiDialog>
   );
 };

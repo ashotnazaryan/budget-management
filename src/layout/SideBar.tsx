@@ -96,13 +96,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                     </Link>
                   </ListItemText>
                 </ListItem>
-                <ListItem onClick={close}>
-                  <ListItemText>
-                    <Link to={ROUTES.about.path} style={{ display: 'block' }}>
-                      {ROUTES.about.name}
-                    </Link>
-                  </ListItemText>
-                </ListItem>
               </Box>
               <ListItem onClick={handleOpenDialog}>
                 <ListItemText>

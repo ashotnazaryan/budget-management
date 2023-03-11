@@ -5,3 +5,4 @@ export * from './user';
 export * from './auth';
 export * from './view';
 export * from './category';
+export * from './form-fields';

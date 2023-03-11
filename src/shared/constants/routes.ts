@@ -5,10 +5,6 @@ export const ROUTES: AppRoute = {
     name: 'Home',
     path: '/'
   },
-  about: {
-    name: 'About',
-    path: 'about'
-  },
   dashboard: {
     name: 'Dashboard',
     path: '/dashboard'

@@ -24,12 +24,12 @@ const Header: React.FC<HeaderProps> = () => {
     <AppBar position='static'>
       <Toolbar variant='dense'>
         <Grid container alignItems='center' justifyContent='space-between'>
-          <Grid item xs={1}>
+          <Grid item>
             <IconButton edge='start' color='inherit' sx={{ marginRight: 2 }} onClick={showSideBar}>
               <MenuIcon />
             </IconButton>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item>
             <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
               <IconButton edge='end' sx={{ marginRight: 2, color: theme.palette.primary.contrastText }}>
                 <ListAltIcon />

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 export enum RouteKey {
   home = 'home',
-  about = 'about',
   dashboard = 'dashboard',
   settings = 'settings',
   transactions = 'transactions',

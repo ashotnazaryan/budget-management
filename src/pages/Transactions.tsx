@@ -11,7 +11,7 @@ const Transactions: React.FC = () => {
 
   return (
     <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 2 }}>Transactions</Typography>
+      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Transactions</Typography>
       <Grid container rowSpacing={2}>
         {
           transactions?.map(({ uuid, createdAt, name, amount }) => (

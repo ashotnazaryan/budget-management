@@ -60,13 +60,13 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography variant='h6' fontSize={30} color={balance >= 0 ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
-        <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 2 }}>
+        <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>
           <IconButton onClick={onOpenDialog}>
             <AddIcon sx={{ color: 'primary.contrastText' }} fontSize='large' />
           </IconButton>
         </Grid>
         {
-          transactions?.map(({ categoryId, type, name, amount }) => (
+          transactions?.map(({ categoryId, name, amount }) => (
             <Grid item xs={12} key={categoryId}>
               <Box sx={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'primary.light', paddingX: 4, paddingY: 2, marginY: 1, borderRadius: 1, width: '100%'

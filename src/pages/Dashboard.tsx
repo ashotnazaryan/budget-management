@@ -12,7 +12,6 @@ const Dashboard: React.FC = () => {
   const { symbol, iso } = useAppSelector(selectDefaultCurrency);
   const { incomes, expenses, balance, categoryTransactions } = useAppSelector(selectSummary);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const [transaction, setTransaction] = React.useState<TransactionData>({} as TransactionData);
   const dispatch = useAppDispatch();
 
   const handleOpenDialog = (): void => {
@@ -23,13 +22,10 @@ const Dashboard: React.FC = () => {
     setDialogOpened(false);
   };
 
-  const handleSaveTransaction = (): void => {
+  // TODO: fix unknown type
+  const handleSaveTransaction = (data: TransactionData | unknown): void => {
     setDialogOpened(false);
-    dispatch(addTransaction(transaction));
-  };
-
-  const handleTransactionChange = (data: TransactionData): void => {
-    setTransaction(data);
+    dispatch(addTransaction(data as TransactionData));
   };
 
   return (
@@ -39,13 +35,21 @@ const Dashboard: React.FC = () => {
           <Summary incomes={incomes} expenses={expenses} balance={balance} currencySymbol={symbol} transactions={categoryTransactions} openDialog={handleOpenDialog} />
         </Grid>
       </Grid>
-      <Dialog fullScreen title='Add a transaction' actionButtonText='Save' open={dialogOpened} onClose={handleCloseDialog} onAction={handleSaveTransaction} sx={{
-        '& .MuiDialogTitle-root': {
-          padding: 2,
-          textAlign: 'center'
-        }
-      }}>
-        <NewTransaction currency={iso} onChange={handleTransactionChange} />
+      <Dialog
+        fullScreen
+        withActions={false}
+        title='Add a transaction'
+        actionButtonText='Save'
+        open={dialogOpened}
+        onClose={handleCloseDialog}
+        onAction={handleSaveTransaction}
+        sx={{
+          '& .MuiDialogTitle-root': {
+            padding: 2,
+            textAlign: 'center'
+          }
+        }}>
+        <NewTransaction currency={iso} onClose={handleCloseDialog} onSubmit={handleSaveTransaction} />
       </Dialog>
     </Box>
   );

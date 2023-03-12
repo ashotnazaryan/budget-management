@@ -110,11 +110,11 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
             }}
             render={({ field, fieldState: { error } }) => (
               <>
-                <Grid container {...field} columnGap={2} rowGap={2}>
+                <Grid container {...field} columnGap={8} rowGap={4}>
                   {
-                    categories.filter(({ type }) => type === watchType).map(({ id, name, type }) => (
+                    categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
                       <Grid item key={id}>
-                        <Category id={id} title={name} type={type} selected={field.value} onClick={onCategoryItemClick} />
+                        <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={onCategoryItemClick} />
                       </Grid>
                     ))
                   }

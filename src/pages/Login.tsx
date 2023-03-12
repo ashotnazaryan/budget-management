@@ -18,9 +18,7 @@ const Login: React.FC = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
-        const auth = { isLoggedIn: true, token: codeResponse.access_token };
-
-        saveToLocalStorage(AUTH_KEY, auth);
+        saveToLocalStorage(AUTH_KEY, { token: codeResponse.access_token });
         navigate(ROUTES.dashboard.path);
       } catch (error) {
         console.error(error);

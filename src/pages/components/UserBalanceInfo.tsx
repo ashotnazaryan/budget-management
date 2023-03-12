@@ -2,6 +2,7 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import { theme } from 'core/theme.config';
+import Ellipsis from 'shared/components/Ellipsis';
 
 interface UserBalanceInfoProps {
   fullName: string;
@@ -17,9 +18,12 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, ful
         <Avatar alt={fullName} src={avatar} sx={{ width: 48, height: 48, marginRight: 1, border: `1px solid ${theme.palette.primary.main}` }} />
       </Grid>
       <Grid item container sm={8} xs={9}>
-        {/* TODO: Move common styles to a shared level */}
-        <Grid item xs={12} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fullName}</Grid>
-        <Grid item xs={12} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Balance: {currency}{balance}</Grid>
+        <Grid item xs={12}>
+          <Ellipsis text={fullName} />
+        </Grid>
+        <Grid item xs={12}>
+          <Ellipsis text={`Balance: ${currency}${balance}`} />
+        </Grid>
       </Grid>
     </Grid>
   );

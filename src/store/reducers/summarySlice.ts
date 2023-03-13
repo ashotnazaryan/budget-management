@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'store';
@@ -11,6 +12,12 @@ const initialState: SummaryState = {
   transactions: [],
   categoryTransactions: []
 };
+
+export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<SummaryState> => {
+  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/getSummary`);
+
+  return response?.data;
+});
 
 export const summarySlice = createSlice({
   name: 'summary',
@@ -50,6 +57,28 @@ export const summarySlice = createSlice({
       };
     }
   },
+  extraReducers(builder) {
+    builder
+      .addCase(getSummary.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(getSummary.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(getSummary.fulfilled, (state, action: PayloadAction<SummaryState>) => {
+        return {
+          ...state,
+          ...action.payload,
+          status: 'succeeded'
+        };
+      });
+  }
 });
 
 export const { addTransaction } = summarySlice.actions;

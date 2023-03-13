@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { selectSummary, selectDefaultCurrency, addTransaction } from 'store/reducers';
+import { selectSummary, selectDefaultCurrency, addTransaction, getSummary } from 'store/reducers';
 import { TransactionData } from 'shared/models';
 import Summary from 'pages/components/Summary';
 import Dialog from 'shared/components/Dialog';
@@ -13,6 +13,10 @@ const Dashboard: React.FC = () => {
   const { incomes, expenses, balance, categoryTransactions } = useAppSelector(selectSummary);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    dispatch(getSummary());
+  }, [dispatch]);
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);

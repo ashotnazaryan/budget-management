@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
 import { RootState } from 'store';
-import { CategoryType, SummaryState, TransactionData } from 'shared/models';
+import { SummaryDTO, SummaryState, TransactionData } from 'shared/models';
+import { mapSummary } from 'shared/helpers';
 
 const initialState: SummaryState = {
   incomes: 0,
@@ -14,49 +13,30 @@ const initialState: SummaryState = {
 };
 
 export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<SummaryState> => {
-  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/getSummary`);
+  try {
+    const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/getSummary`);
 
-  return response?.data;
+    const { data } = response.data;
+    return mapSummary(data);
+  } catch (error) {
+    console.error(error);
+    return {} as SummaryState;
+  }
+});
+
+export const addTransaction = createAsyncThunk('summary/addTransaction', async (transaction: TransactionData, { dispatch }): Promise<void> => {
+  try {
+    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/addTransaction`, transaction);
+    dispatch(getSummary());
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 export const summarySlice = createSlice({
   name: 'summary',
   initialState,
-  reducers: {
-    addTransaction: (state, action: PayloadAction<TransactionData>): SummaryState => {
-      const payload = { ...action.payload, uuid: uuidv4(), createdAt: moment().format('LL') };
-      const { categoryId, type, amount } = payload;
-      const categoryAvailable = state.categoryTransactions.some((transaction) => transaction.categoryId === categoryId);
-      const categoryTransactions = categoryAvailable
-        ? state.categoryTransactions.map((transaction) => ({
-          ...transaction,
-          amount: categoryId === transaction.categoryId ? transaction.amount + amount : transaction.amount
-        }))
-        : [...state.categoryTransactions, payload];
-
-      if (type === CategoryType.income) {
-        const incomes = state.incomes + amount;
-
-        return {
-          ...state,
-          incomes,
-          categoryTransactions: categoryTransactions,
-          transactions: [...state.transactions, payload],
-          balance: incomes - state.expenses
-        };
-      }
-
-      const expenses = state.expenses + amount;
-
-      return {
-        ...state,
-        expenses,
-        categoryTransactions: categoryTransactions,
-        transactions: [...state.transactions, payload],
-        balance: state.incomes - expenses
-      };
-    }
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(getSummary.pending, (state) => {
@@ -80,8 +60,6 @@ export const summarySlice = createSlice({
       });
   }
 });
-
-export const { addTransaction } = summarySlice.actions;
 
 export const selectSummary = (state: RootState): SummaryState => state.summary;
 

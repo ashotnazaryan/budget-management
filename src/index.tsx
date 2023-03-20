@@ -2,7 +2,6 @@ import * as React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeProvider } from '@mui/material/styles';
 import { store } from './store';
 import { theme } from './core/theme.config';
@@ -14,7 +13,6 @@ import App from './pages/App';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-const clientId = `${process.env.REACT_APP_GOOGLE_OUATH_CLIENT_ID}`;
 
 root.render(
   <React.StrictMode>
@@ -22,9 +20,7 @@ root.render(
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <AxiosInterceptor>
-            <GoogleOAuthProvider clientId={clientId}>
-              <App />
-            </GoogleOAuthProvider>
+            <App />
           </AxiosInterceptor>
         </BrowserRouter>
       </ThemeProvider>

@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import summaryReducer from './reducers/summarySlice';
 import currencyReducer from './reducers/currencySlice';
+import authReducer from './reducers/authSlice';
 import userReducer from './reducers/userSlice';
 import viewReducer from './reducers/viewSlice';
 
@@ -18,6 +19,7 @@ export const store = configureStore({
   reducer: {
     summary: summaryReducer,
     currency: currencyReducer,
+    auth: authReducer,
     user: userReducer,
     view: viewReducer
   }

@@ -1,33 +1,19 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useGoogleLogin } from '@react-oauth/google';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { theme } from 'core/theme.config';
-import { ROUTES, AUTH_KEY } from 'shared/constants';
-import { saveToLocalStorage } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
   const methods = useForm();
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (codeResponse) => {
-      try {
-        saveToLocalStorage(AUTH_KEY, { token: codeResponse.access_token });
-        navigate(ROUTES.dashboard.path);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    onError: (error) => {
-      console.error(error);
-    }
-  });
+
+  const googleLogin = () => {
+    window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/google`, '_self');
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexGrow: 1, padding: 2 }}>

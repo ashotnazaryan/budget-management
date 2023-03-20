@@ -4,7 +4,7 @@ import { theme } from 'core/theme.config';
 import { useAppDispatch } from 'store';
 import { getUserInfo } from 'store/reducers';
 import { getFromLocalStorage } from 'shared/helpers';
-import { Auth } from 'shared/models';
+import { AuthState } from 'shared/models';
 import { AUTH_KEY } from 'shared/constants';
 import Header from './Header';
 
@@ -13,20 +13,20 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
-  const auth = getFromLocalStorage<Auth>(AUTH_KEY);
+  const { accessToken } = getFromLocalStorage<AuthState>(AUTH_KEY);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(getUserInfo(auth.token));
-  }, [dispatch, auth.token]);
+    dispatch(getUserInfo(accessToken));
+  }, [dispatch, accessToken]);
 
   return (
-    <>
+    <Box flexGrow={1} display='flex' flexDirection='column'>
       <Header />
       <Box flexGrow={1} sx={{ paddingY: 2, paddingX: 4, backgroundColor: theme.palette.info.light }}>
         {children}
       </Box>
-    </>
+    </Box>
   );
 };
 

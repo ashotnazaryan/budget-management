@@ -1,34 +1,21 @@
 import * as React from 'react';
-import { googleLogout } from '@react-oauth/google';
 import axios, { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
-import { AUTH_KEY, ROUTES } from 'shared/constants';
+import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
-import { Auth } from 'shared/models';
-import { removeUser } from 'store/reducers';
+import { AuthState } from 'shared/models';
+import { logout, removeUser } from 'store/reducers';
 
-const { token } = getFromLocalStorage<Auth>(AUTH_KEY);
+const { accessToken } = getFromLocalStorage<AuthState>(AUTH_KEY);
 axios.create({
   headers: {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${accessToken}`,
     Accept: 'application/json'
   }
 });
 
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const auth = getFromLocalStorage<Auth>(AUTH_KEY);
-  const [loggedIn, setLoggedIn] = React.useState<boolean>(!!auth.token);
-
-  React.useEffect(() => {
-    setLoggedIn(loggedIn);
-
-    if (!loggedIn && !auth.token) {
-      navigate(ROUTES.login.path);
-    }
-  }, [auth.token, loggedIn, navigate]);
 
   axios.interceptors.response.use(
     (response) => {
@@ -38,8 +25,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
       if (error.response?.status === 401) {
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
-        googleLogout();
-        setLoggedIn(false);
+        dispatch(logout());
 
         return Promise.reject(error);
       }

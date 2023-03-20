@@ -1,18 +1,31 @@
+import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
-import { AUTH_KEY, ROUTES } from 'shared/constants';
-import { getFromLocalStorage } from 'shared/helpers';
-import { Auth } from 'shared/models';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getUserToken, selectAuth } from 'store/reducers';
+import { ROUTES } from 'shared/constants';
 import Content from './Content';
+import Loading from './Loading';
 
 export const ProtectedLayout = () => {
-  const auth = getFromLocalStorage<Auth>(AUTH_KEY);
+  const { accessToken, status } = useAppSelector(selectAuth);
   const outlet = useOutlet();
+  const dispatch = useAppDispatch();
 
-  if (!auth.token) {
-    return <Navigate to={ROUTES.login.path} />;
+  React.useEffect(() => {
+    if (!accessToken) {
+      dispatch(getUserToken());
+    }
+  }, [dispatch, accessToken]);
+
+  if (!accessToken && (status === 'idle' || status === 'loading')) {
+    return <Loading />;
   }
 
-  return (
-    <Content>{outlet}</Content>
-  );
+  if (accessToken) {
+    return (
+      <Content>{outlet}</Content>
+    );
+  }
+
+  return <Navigate to={ROUTES.login.path} />;
 };

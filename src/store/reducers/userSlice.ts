@@ -13,12 +13,7 @@ const initialState: UserState = {
 };
 
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: AuthState['accessToken']): Promise<UserState> => {
-  const response = await axios.get(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json'
-    }
-  });
+  const response = await axios.get(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`);
 
   return mapUser(response?.data);
 });

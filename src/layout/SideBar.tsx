@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Link/*, useNavigate*/ } from 'react-router-dom';
-// import { googleLogout } from '@react-oauth/google';
+import { Link } from 'react-router-dom';
 import Drawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -16,9 +15,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
-import { /*AUTH_KEY,*/ ROUTES } from 'shared/constants';
-import { closeSidebar, logout, /*removeUser,*/ selectDefaultCurrency, selectSideBarOpened, selectSummary, selectUser } from 'store/reducers';
-// import { removeFromLocalStorage } from 'shared/helpers';
+import { ROUTES } from 'shared/constants';
+import { closeSidebar, logout, selectDefaultCurrency, selectSideBarOpened, selectSummary, selectUser } from 'store/reducers';
 import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'pages/components/UserBalanceInfo';
 
@@ -32,7 +30,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const { balance } = useAppSelector(selectSummary);
   const { symbol } = useAppSelector(selectDefaultCurrency);
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;
@@ -40,14 +37,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const close = (): void => {
     dispatch(closeSidebar());
   };
-
-  // const logout = (): void => {
-  //   googleLogout();
-  //   dispatch(removeUser());
-  //   dispatch(closeSidebar());
-  //   removeFromLocalStorage(AUTH_KEY);
-  //   navigate(ROUTES.login.path);
-  // };
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -60,7 +49,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const handleLogout = (): void => {
     setDialogOpened(false);
     dispatch(logout());
-    // logout();
+    dispatch(closeSidebar());
   };
 
   return (

@@ -2,13 +2,19 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/system/Box';
-import { useAppSelector } from 'store';
-import { selectDefaultCurrency, selectSummary } from 'store/reducers';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getSummary, selectDefaultCurrency, selectSummary } from 'store/reducers';
 
 const Transactions: React.FC = () => {
-  // TODO: findByText, transactions are being gotten only in Dashboard
-  const { transactions } = useAppSelector(selectSummary);
   const { symbol } = useAppSelector(selectDefaultCurrency);
+  const { transactions } = useAppSelector(selectSummary);
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    if (!transactions.length) {
+      dispatch(getSummary());
+    }
+  }, [dispatch, transactions]);
 
   return (
     <Box>

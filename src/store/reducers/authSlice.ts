@@ -12,14 +12,7 @@ const initialState: AuthState = {
 };
 
 export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<AuthState> => {
-  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`, {
-    withCredentials: true,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Credentials': true
-    }
-  });
+  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`);
 
   const auth: AuthState = { userId: response.data.data.userId, accessToken: response.data.data.accessToken };
 
@@ -29,14 +22,7 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
 });
 
 export const logout = createAsyncThunk('auth/logout', async (): Promise<AuthState> => {
-  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`, {
-    withCredentials: true,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Credentials': true
-    }
-  });
+  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
 
@@ -86,8 +72,7 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action: PayloadAction<AuthState>) => {
         return {
-          ...state,
-          ...action.payload,
+          ...initialState,
           status: 'succeeded'
         };
       });

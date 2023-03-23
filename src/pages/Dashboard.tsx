@@ -4,9 +4,9 @@ import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectSummary, selectDefaultCurrency, addTransaction, getSummary } from 'store/reducers';
 import { TransactionData } from 'shared/models';
-import Summary from 'pages/components/Summary';
 import Dialog from 'shared/components/Dialog';
-import NewTransaction from 'pages/components/NewTransaction';
+import Summary from './components/Summary';
+import NewTransaction from './components/NewTransaction';
 
 const Dashboard: React.FC = () => {
   const { symbol, iso } = useAppSelector(selectDefaultCurrency);

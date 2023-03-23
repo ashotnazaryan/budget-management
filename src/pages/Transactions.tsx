@@ -5,16 +5,16 @@ import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getSummary, selectDefaultCurrency, selectSummary } from 'store/reducers';
 
-const Transactions: React.FC = () => {
+interface TransactionsProps { }
+
+const Transactions: React.FC<TransactionsProps> = () => {
   const { symbol } = useAppSelector(selectDefaultCurrency);
   const { transactions } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    if (!transactions.length) {
-      dispatch(getSummary());
-    }
-  }, [dispatch, transactions]);
+    dispatch(getSummary());
+  }, [dispatch]);
 
   return (
     <Box>

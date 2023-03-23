@@ -18,8 +18,8 @@ const Category: React.FC<CategoryProps> = ({ id, selected, title, type, icon, on
   const { palette: { primary, secondary } } = theme;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
-  const handleOnClick = (categoryId: CategoryModel['id']) => (): void => {
-    onClick({ categoryId, name: title });
+  const onCategoryClick = (id: CategoryModel['id']) => (): void => {
+    onClick({ categoryId: id, name: title });
   };
 
   const getColor = (): string => {
@@ -28,7 +28,7 @@ const Category: React.FC<CategoryProps> = ({ id, selected, title, type, icon, on
 
   return (
     <Box display='flex' flexDirection='column' alignItems='center' width={128}>
-      <Box onClick={handleOnClick(id)} sx={{
+      <Box onClick={onCategoryClick(id)} sx={{
         backgroundColor: selected === id ? categoryColor : 'transparent',
         border: `1px solid ${categoryColor}`,
         color: getColor(),

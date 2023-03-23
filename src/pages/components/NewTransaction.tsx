@@ -6,16 +6,19 @@ import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { CategoryType, TransactionData, Category as CategoryModel, Currency, TransactionField } from 'shared/models';
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, NUMERIC_REGEX } from 'shared/constants';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getCategories, selectCategories } from 'store/reducers';
+import { CategoryType, Category as CategoryModel, Currency, TransactionField, Transaction } from 'shared/models';
+import { NUMERIC_REGEX } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
+import Skeleton from 'shared/components/Skeleton';
 import Category from './Category';
 
 interface NewTransactionProps {
   currency: Currency['iso'];
   mode?: 'create' | 'edit';
-  onSubmit: (data: TransactionData) => void;
+  onSubmit: (data: Transaction) => void;
   onClose: () => void;
 }
 
@@ -24,13 +27,18 @@ interface Tab {
   label: string;
 }
 
-type FormData = TransactionData;
+type FormData = Transaction;
 
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
   const numericRegex = NUMERIC_REGEX;
-  const categories = [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
+  const { categories, status } = useAppSelector(selectCategories);
+  const dispatch = useAppDispatch();
   const tabs: Tab[] = [{ value: CategoryType.expense, label: 'Expense' }, { value: CategoryType.income, label: 'Income' }];
   const helper = transactionHelper();
+
+  React.useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   const defaultValues = {
     amount: 0,
@@ -59,7 +67,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
     const mappedData = {
       ...data,
       amount: Number(data.amount)
-    } as TransactionData;
+    } as Transaction;
 
     onSubmit(mappedData);
   };
@@ -72,6 +80,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
             control={methods.control}
             name={TransactionField.type}
             render={({ field }) => (
+              // TODO: use Tabs component
               <MuiTabs {...field} value={field.value} onChange={handleTabChange} sx={{ marginBottom: 3 }}>
                 {
                   tabs.map(({ value, label }) => (
@@ -110,15 +119,21 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
             }}
             render={({ field, fieldState: { error } }) => (
               <>
-                <Grid container {...field} columnGap={8} rowGap={4}>
-                  {
-                    categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
-                      <Grid item key={id}>
-                        <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryItemClick} />
+                {
+                  status === 'loading'
+                    ? <Skeleton />
+                    : (
+                      <Grid container {...field} columnGap={4} rowGap={4}>
+                        {
+                          categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
+                            <Grid item key={`${name}-${icon}`}>
+                              <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryItemClick} />
+                            </Grid>
+                          ))
+                        }
                       </Grid>
-                    ))
-                  }
-                </Grid>
+                    )
+                }
                 <Typography color='error.main' fontSize={12}>{error ? helper.categoryId[error.type]?.message : ''}</Typography>
               </>
             )}

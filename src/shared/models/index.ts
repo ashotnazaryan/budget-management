@@ -1,4 +1,5 @@
 export * from './summary';
+export * from './transaction';
 export * from './currency';
 export * from './route';
 export * from './user';

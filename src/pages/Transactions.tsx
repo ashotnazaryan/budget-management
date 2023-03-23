@@ -3,40 +3,53 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getSummary, selectDefaultCurrency, selectSummary } from 'store/reducers';
+import { getTransactions, selectDefaultCurrency, selectTransaction } from 'store/reducers';
+import Skeleton from 'shared/components/Skeleton';
+import Ellipsis from 'shared/components/Ellipsis';
 
 interface TransactionsProps { }
 
 const Transactions: React.FC<TransactionsProps> = () => {
   const { symbol } = useAppSelector(selectDefaultCurrency);
-  const { transactions } = useAppSelector(selectSummary);
+  const { transactions, status } = useAppSelector(selectTransaction);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(getSummary());
+    dispatch(getTransactions());
   }, [dispatch]);
 
-  return (
-    <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Transactions</Typography>
+  const getContent = (): React.ReactElement => {
+    if (status === 'loading') {
+      return <Skeleton />;
+    }
+
+    return (
       <Grid container rowSpacing={2}>
         {
-          transactions?.map(({ createdAt, name, amount }) => (
-            // TODO: fix the key
-            <Grid item container key={`${name}-${amount}`} columnSpacing={2}>
-              <Grid item xs={3}>
-                <Typography>{name}</Typography>
+          transactions?.map(({ id, createdAt, name, amount }) => (
+            <Grid item container key={id} columnSpacing={2}>
+              <Grid item xs={4}>
+                <Ellipsis text={name} />
               </Grid>
-              <Grid item xs={3}>
-                <Typography>{symbol}{amount}</Typography>
+              <Grid item xs={4}>
+                <Ellipsis text={`${symbol}${amount}`} />
               </Grid>
-              <Grid item xs={3}>
-                <Typography>{createdAt}</Typography>
+              <Grid item xs={4}>
+                <Ellipsis text={createdAt} />
               </Grid>
             </Grid>
           ))
         }
       </Grid>
+    );
+  };
+
+  const content = getContent();
+
+  return (
+    <Box>
+      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Transactions</Typography>
+      {content}
     </Box>
   );
 };

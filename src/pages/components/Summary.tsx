@@ -5,14 +5,14 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { Currency, TransactionData } from 'shared/models';
+import { Currency, Transaction } from 'shared/models';
 
 interface SummaryProps {
   incomes: number;
   expenses: number;
   balance: number;
   currencySymbol: Currency['symbol'];
-  transactions?: TransactionData[];
+  transactions?: Transaction[];
   openDialog: () => void;
 }
 

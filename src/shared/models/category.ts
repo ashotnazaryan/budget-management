@@ -11,6 +11,7 @@ export enum CategoryType {
 }
 
 export interface CategoryDTO {
+  _id: string;
   name: string;
   type: CategoryType;
   id: string;
@@ -18,9 +19,9 @@ export interface CategoryDTO {
 }
 
 export interface Category {
+  id: string;
   name: string;
   type: CategoryType;
-  id: string;
   icon: IconType;
 }
 

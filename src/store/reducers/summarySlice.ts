@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { SummaryDTO, SummaryState, TransactionData } from 'shared/models';
+import { SummaryDTO, SummaryState } from 'shared/models';
 import { mapSummary } from 'shared/helpers';
 
 const initialState: SummaryState = {
   incomes: 0,
   expenses: 0,
   balance: 0,
-  transactions: [],
-  categoryTransactions: []
+  categoryTransactions: [],
+  status: 'idle'
 };
 
 export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<SummaryState> => {
@@ -21,15 +21,6 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (): Promi
   } catch (error) {
     console.error(error);
     return {} as SummaryState;
-  }
-});
-
-export const addTransaction = createAsyncThunk('summary/addTransaction', async (transaction: TransactionData, { dispatch }): Promise<void> => {
-  try {
-    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/addTransaction`, transaction);
-    dispatch(getSummary());
-  } catch (error) {
-    console.error(error);
   }
 });
 

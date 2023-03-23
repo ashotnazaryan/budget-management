@@ -1,36 +1,16 @@
-import { Category, CategoryType } from './category';
+import { Transaction, TransactionDTO } from './transaction';
 
-// TODO: distinguish Summary, SummaryDTO and SummaryState
 export interface SummaryDTO {
   incomes: number;
   expenses: number;
   balance: number;
-  transactions: TransactionDataDTO[];
-  categoryTransactions: TransactionDataDTO[];
+  categoryTransactions: TransactionDTO[];
 }
 
 export interface SummaryState {
   incomes: number;
   expenses: number;
   balance: number;
-  transactions: TransactionData[];
-  categoryTransactions: TransactionData[];
-}
-
-export interface TransactionDataDTO {
-  uuid: string;
-  categoryId: Category['id'];
-  type: CategoryType;
-  name: Category['name'];
-  amount: number;
-  createdAt: Date;
-}
-
-export interface TransactionData {
-  uuid: string;
-  categoryId: Category['id'];
-  type: CategoryType;
-  name: Category['name'];
-  amount: number;
-  createdAt: string;
+  categoryTransactions: Transaction[];
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

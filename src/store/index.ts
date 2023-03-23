@@ -5,6 +5,7 @@ import summaryReducer from './reducers/summarySlice';
 import currencyReducer from './reducers/currencySlice';
 import authReducer from './reducers/authSlice';
 import userReducer from './reducers/userSlice';
+import categoryReducer from './reducers/categorySlice';
 import viewReducer from './reducers/viewSlice';
 
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
@@ -21,6 +22,7 @@ export const store = configureStore({
     currency: currencyReducer,
     auth: authReducer,
     user: userReducer,
+    category: categoryReducer,
     view: viewReducer
   }
 });

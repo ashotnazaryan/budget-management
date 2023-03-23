@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
+import SideBar from 'layout/SideBar';
 import { ROUTES } from 'shared/constants';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Settings from './Settings';
 import Transactions from './Transactions';
-import SideBar from 'layout/SideBar';
+import Categories from './Categories';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.dashboard.path} element={<Dashboard />} />
           <Route path={ROUTES.settings.path} element={<Settings />} />
           <Route path={ROUTES.transactions.path} element={<Transactions />} />
+          <Route path={ROUTES.categories.path} element={<Categories />} />
           <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
         </Route>
       </Routes>

@@ -26,8 +26,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
       sx={{
         backgroundColor: 'primary.main',
         paddingX: 2,
-        paddingTop: 2,
-        paddingBottom: 4,
+        paddingY: 4,
         borderRadius: 1
       }}
     >

@@ -30,9 +30,9 @@ const Login: React.FC = () => {
                 >
                   Log into your account
                 </Typography>
-                <FormInput label='Email' type='email' name='email' focused required sx={{ mb: 4 }} />
-                <FormInput type='password' label='Password' name='password' required focused sx={{ mb: 4 }} />
-                <Button variant='contained'>Login</Button>
+                <FormInput label='Email' type='email' name='email' required disabled sx={{ mb: 4 }} />
+                <FormInput type='password' label='Password' name='password' required disabled sx={{ mb: 4 }} />
+                <Button disabled variant='contained'>Login</Button>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -40,7 +40,7 @@ const Login: React.FC = () => {
                 sx={{
                   paddingLeft: { sm: 4 },
                   marginTop: { xs: 4, sm: 0 },
-                  marginBottom: { sm: 2, xs: 4 },
+                  marginBottom: { xs: 4, sm: 2 },
                   textAlign: 'center',
                 }}
               >

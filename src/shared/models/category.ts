@@ -6,8 +6,15 @@ import { IconType } from './icon';
 export type MuiSvg = OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string; };
 
 export enum CategoryType {
-  income = 0,
-  expense = 1
+  income = 1,
+  expense = 0
+}
+
+export interface CategoryDTO {
+  name: string;
+  type: CategoryType;
+  id: string;
+  icon: IconType;
 }
 
 export interface Category {
@@ -15,4 +22,9 @@ export interface Category {
   type: CategoryType;
   id: string;
   icon: IconType;
+}
+
+export interface CategoryState {
+  categories: Category[];
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

@@ -29,13 +29,13 @@ type FormData = TransactionData;
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
   const numericRegex = NUMERIC_REGEX;
   const categories = [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
-  const tabs: Tab[] = [{ value: CategoryType.income, label: 'Income' }, { value: CategoryType.expense, label: 'Expense' }];
+  const tabs: Tab[] = [{ value: CategoryType.expense, label: 'Expense' }, { value: CategoryType.income, label: 'Income' }];
   const helper = transactionHelper();
 
   const defaultValues = {
     amount: 0,
     categoryId: '',
-    type: CategoryType.income
+    type: CategoryType.expense
   };
 
   const methods = useForm<FormData>({
@@ -50,7 +50,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
     methods.setValue(TransactionField.type, selectedTab);
   };
 
-  const onCategoryItemClick = ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }): void => {
+  const handleCategoryItemClick = ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }): void => {
     methods.setValue(TransactionField.categoryId, categoryId, { shouldValidate: true });
     methods.setValue('name', name, { shouldValidate: true });
   };
@@ -114,7 +114,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
                   {
                     categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
                       <Grid item key={id}>
-                        <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={onCategoryItemClick} />
+                        <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryItemClick} />
                       </Grid>
                     ))
                   }

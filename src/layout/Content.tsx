@@ -23,7 +23,11 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   return (
     <Box flexGrow={1} display='flex' flexDirection='column'>
       <Header />
-      <Box flexGrow={1} sx={{ paddingY: 2, paddingX: 4, backgroundColor: theme.palette.info.light }}>
+      <Box flexGrow={1} sx={{
+        paddingY: 2,
+        paddingX: { xs: 2, sm: 4 },
+        backgroundColor: theme.palette.info.light
+      }}>
         {children}
       </Box>
     </Box>

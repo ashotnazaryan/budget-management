@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
+import CategoryIcon from '@mui/icons-material/Category';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
@@ -80,6 +81,15 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                     <Link to={ROUTES.dashboard.path}>
                       <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {ROUTES.dashboard.name}
+                      </Button>
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+                <ListItem onClick={close}>
+                  <ListItemText>
+                    <Link to={ROUTES.categories.path}>
+                      <Button fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
+                        {ROUTES.categories.name}
                       </Button>
                     </Link>
                   </ListItemText>

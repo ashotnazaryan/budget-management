@@ -11,7 +11,7 @@ const initialState: CategoryState = {
 
 export const getCategories = createAsyncThunk('categories/getCategories', async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<{ data: CategoryDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/getDefaultCategories`);
+    const response = await axios.get<{ data: CategoryDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/defaultCategories`);
 
     const { data } = response.data;
     return mapCategories(data);

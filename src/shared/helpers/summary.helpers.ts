@@ -8,7 +8,7 @@ export const mapSummary = (summary: SummaryDTO): SummaryState => {
 
   return {
     ...summary,
-    categoryTransactions: summary.categoryTransactions.map((transaction) => ({
+    categoryExpenseTransactions: summary.categoryExpenseTransactions.map((transaction) => ({
       ...transaction,
       createdAt: moment(transaction.createdAt).format('LL')
     }))

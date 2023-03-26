@@ -12,7 +12,7 @@ const initialState: TransactionState = {
 
 export const getTransactions = createAsyncThunk('transaction/getTransactions', async (): Promise<Transaction[]> => {
   try {
-    const response = await axios.get<{ data: TransactionDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transaction/getTransactions`);
+    const response = await axios.get<{ data: TransactionDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions`);
 
     const { data } = response.data;
     return mapTransactions(data);
@@ -24,8 +24,7 @@ export const getTransactions = createAsyncThunk('transaction/getTransactions', a
 
 export const addTransaction = createAsyncThunk('transaction/addTransaction', async (transaction: Transaction, { dispatch }): Promise<void> => {
   try {
-    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transaction/addTransaction`, transaction);
-    dispatch(getTransactions());
+    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/transaction`, transaction);
     dispatch(getSummary());
   } catch (error) {
     console.error(error);

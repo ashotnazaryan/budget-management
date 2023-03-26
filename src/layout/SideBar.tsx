@@ -17,23 +17,25 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
-import { closeSidebar, logout, selectDefaultCurrency, selectSideBarOpened, selectSummary, selectUser } from 'store/reducers';
+import { closeSidebar, getBalance, logout, selectBalance, selectCurrency, selectSideBarOpened, selectUser } from 'store/reducers';
 import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'pages/components/UserBalanceInfo';
 
-interface SideBarProps extends MuiDrawerProps {
-
-}
+interface SideBarProps extends MuiDrawerProps { }
 
 const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const opened = useAppSelector(selectSideBarOpened);
   const user = useAppSelector(selectUser);
-  const { balance } = useAppSelector(selectSummary);
-  const { symbol } = useAppSelector(selectDefaultCurrency);
+  const balance = useAppSelector(selectBalance);
+  const { symbol } = useAppSelector(selectCurrency);
   const dispatch = useAppDispatch();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;
+
+  React.useEffect(() => {
+    dispatch(getBalance());
+  }, [dispatch]);
 
   const close = (): void => {
     dispatch(closeSidebar());

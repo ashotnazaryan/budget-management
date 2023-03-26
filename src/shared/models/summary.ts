@@ -4,13 +4,16 @@ export interface SummaryDTO {
   incomes: number;
   expenses: number;
   balance: number;
-  categoryTransactions: TransactionDTO[];
+  categoryExpenseTransactions: TransactionDTO[];
 }
 
-export interface SummaryState {
+export interface Summary {
   incomes: number;
   expenses: number;
   balance: number;
-  categoryTransactions: Transaction[];
+  categoryExpenseTransactions: Transaction[];
+}
+
+export interface SummaryState extends Summary {
   status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

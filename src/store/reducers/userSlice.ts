@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { AuthState, UserState } from 'shared/models';
+import { AuthState, User, UserDTO, UserState } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 
 const initialState: UserState = {
@@ -9,11 +9,13 @@ const initialState: UserState = {
   id: '',
   firstName: '',
   lastName: '',
+  fullName: '',
+  avatar: '',
   email: '',
 };
 
-export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: AuthState['accessToken']): Promise<UserState> => {
-  const response = await axios.get(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`);
+export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: AuthState['accessToken']): Promise<User> => {
+  const response = await axios.get<UserDTO>(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`);
 
   return mapUser(response?.data);
 });

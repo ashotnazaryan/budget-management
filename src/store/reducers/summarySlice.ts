@@ -1,26 +1,38 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { SummaryDTO, SummaryState } from 'shared/models';
+import { Summary, SummaryDTO, SummaryState } from 'shared/models';
 import { mapSummary } from 'shared/helpers';
 
 const initialState: SummaryState = {
   incomes: 0,
   expenses: 0,
   balance: 0,
-  categoryTransactions: [],
+  categoryExpenseTransactions: [],
   status: 'idle'
 };
 
-export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<SummaryState> => {
+export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<Summary> => {
   try {
-    const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/getSummary`);
+    const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
 
     const { data } = response.data;
     return mapSummary(data);
   } catch (error) {
     console.error(error);
     return {} as SummaryState;
+  }
+});
+
+export const getBalance = createAsyncThunk('summary/getBalance', async (): Promise<Summary['balance']> => {
+  try {
+    const response = await axios.get<{ data: SummaryDTO['balance'] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
+
+    const { data } = response.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return 0;
   }
 });
 
@@ -42,10 +54,29 @@ export const summarySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getSummary.fulfilled, (state, action: PayloadAction<SummaryState>) => {
+      .addCase(getSummary.fulfilled, (state, action: PayloadAction<Summary>) => {
         return {
           ...state,
           ...action.payload,
+          status: 'succeeded'
+        };
+      })
+      .addCase(getBalance.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(getBalance.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(getBalance.fulfilled, (state, action: PayloadAction<Summary['balance']>) => {
+        return {
+          ...state,
+          balance: action.payload,
           status: 'succeeded'
         };
       });
@@ -53,5 +84,6 @@ export const summarySlice = createSlice({
 });
 
 export const selectSummary = (state: RootState): SummaryState => state.summary;
+export const selectBalance = (state: RootState): SummaryState['balance'] => state.summary.balance;
 
 export default summarySlice.reducer;

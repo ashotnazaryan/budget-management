@@ -6,13 +6,14 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Currency, Transaction } from 'shared/models';
+import CategoryExpenseTransaction from './CategoryExpenseTransaction';
 
 interface SummaryProps {
   incomes: number;
   expenses: number;
   balance: number;
   currencySymbol: Currency['symbol'];
-  transactions?: Transaction[];
+  transactions: Transaction[];
   openDialog: () => void;
 }
 
@@ -65,14 +66,9 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </IconButton>
         </Grid>
         {
-          transactions?.map(({ categoryId, name, amount }) => (
+          transactions.map(({ categoryId, name, amount, categoryExpenseValue }) => (
             <Grid item xs={12} key={categoryId}>
-              <Box sx={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'primary.light', paddingX: 4, paddingY: 2, marginY: 1, borderRadius: 1, width: '100%'
-              }}>
-                <Typography color='primary.contrastText'>{name}</Typography>
-                <Typography color='primary.contrastText'>{amount}</Typography>
-              </Box>
+              <CategoryExpenseTransaction name={name} amount={amount} currency={currencySymbol} value={categoryExpenseValue} />
             </Grid>
           ))
         }

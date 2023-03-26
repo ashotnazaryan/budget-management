@@ -10,6 +10,7 @@ export const mapSummary = (summary: SummaryDTO): SummaryState => {
     ...summary,
     categoryExpenseTransactions: summary.categoryExpenseTransactions.map((transaction) => ({
       ...transaction,
+      categoryExpenseValue: `${transaction.categoryExpenseValue}%`,
       createdAt: moment(transaction.createdAt).format('LL')
     }))
   };

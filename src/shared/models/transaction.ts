@@ -13,6 +13,7 @@ export interface TransactionDTO {
   type: CategoryType;
   name: Category['name'];
   amount: number;
+  categoryExpenseValue?: number;
   createdAt: Date;
 }
 
@@ -23,5 +24,6 @@ export interface Transaction {
   type: CategoryType;
   name: Category['name'];
   amount: number;
+  categoryExpenseValue?: string;
   createdAt: string;
 }

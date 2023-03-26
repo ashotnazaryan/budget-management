@@ -9,6 +9,7 @@ export const mapTransactions = (transactions: TransactionDTO[]): Transaction[] =
   return transactions.map((transaction) => ({
     ...transaction,
     id: transaction._id,
+    categoryExpenseValue: `${transaction.categoryExpenseValue}%`,
     createdAt: moment(transaction.createdAt).format('LL')
   }));
 };

@@ -3,14 +3,14 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getTransactions, selectDefaultCurrency, selectTransaction } from 'store/reducers';
+import { getTransactions, selectCurrency, selectTransaction } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface TransactionsProps { }
 
 const Transactions: React.FC<TransactionsProps> = () => {
-  const { symbol } = useAppSelector(selectDefaultCurrency);
+  const { symbol } = useAppSelector(selectCurrency);
   const { transactions, status } = useAppSelector(selectTransaction);
   const dispatch = useAppDispatch();
 

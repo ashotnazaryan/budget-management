@@ -1,4 +1,4 @@
-export * from './currencySlice';
+export * from './settingSlice';
 export * from './summarySlice';
 export * from './transactionSlice';
 export * from './categorySlice';

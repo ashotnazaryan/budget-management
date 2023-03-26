@@ -4,6 +4,14 @@ export interface Currency {
   symbol: '$' | '€' | 'zł' | '₴' | '֏';
 }
 
-export interface CurrencyState {
-  default: Currency;
+export interface SettingDTO {
+  currency: Currency;
+}
+
+export interface Setting {
+  currency: Currency;
+}
+
+export interface SettingState extends Setting {
+  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

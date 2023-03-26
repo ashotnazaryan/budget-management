@@ -25,13 +25,13 @@ const Header: React.FC<HeaderProps> = () => {
       <Toolbar variant='dense'>
         <Grid container alignItems='center' justifyContent='space-between'>
           <Grid item>
-            <IconButton edge='start' color='inherit' sx={{ marginRight: 2 }} onClick={showSideBar}>
+            <IconButton edge='start' color='inherit' onClick={showSideBar}>
               <MenuIcon />
             </IconButton>
           </Grid>
           <Grid item>
             <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
-              <IconButton edge='end' sx={{ marginRight: 2, color: theme.palette.primary.contrastText }}>
+              <IconButton edge='end' sx={{ color: theme.palette.primary.contrastText }}>
                 <ListAltIcon />
               </IconButton>
             </Link>

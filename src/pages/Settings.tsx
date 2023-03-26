@@ -7,18 +7,23 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES } from 'shared/constants';
-import { selectDefaultCurrency, setDefaultCurrency } from 'store/reducers';
+import { addSetting, getSettings, selectCurrency, } from 'store/reducers';
 import { Currency } from 'shared/models';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const { iso } = useAppSelector(selectDefaultCurrency);
+  const { iso } = useAppSelector(selectCurrency);
   const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    dispatch(getSettings());
+  }, [dispatch]);
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
+    const currency = currencies.find(({ iso }) => iso === isoCode) as Currency;
 
-    dispatch(setDefaultCurrency(isoCode));
+    dispatch(addSetting({ currency }));
   };
 
   return (

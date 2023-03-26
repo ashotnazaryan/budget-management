@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { selectSummary, selectDefaultCurrency, addTransaction, getSummary } from 'store/reducers';
+import { selectSummary, selectCurrency, addTransaction, getSummary } from 'store/reducers';
 import { Transaction } from 'shared/models';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
@@ -10,8 +10,8 @@ import Summary from './components/Summary';
 import NewTransaction from './components/NewTransaction';
 
 const Dashboard: React.FC = () => {
-  const { symbol, iso } = useAppSelector(selectDefaultCurrency);
-  const { incomes, expenses, balance, categoryTransactions, status } = useAppSelector(selectSummary);
+  const { symbol, iso } = useAppSelector(selectCurrency);
+  const { incomes, expenses, balance, categoryExpenseTransactions, status } = useAppSelector(selectSummary);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
             expenses={expenses}
             balance={balance}
             currencySymbol={symbol}
-            transactions={categoryTransactions}
+            transactions={categoryExpenseTransactions}
             openDialog={handleOpenDialog}
           />
         </Grid>

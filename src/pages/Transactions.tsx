@@ -19,7 +19,7 @@ const Transactions: React.FC<TransactionsProps> = () => {
   }, [dispatch]);
 
   const getContent = (): React.ReactElement => {
-    if (status === 'loading') {
+    if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
 

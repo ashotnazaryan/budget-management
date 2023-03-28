@@ -1,1 +1,1 @@
-export const NUMERIC_REGEX: RegExp = /^[1-9][0-9]*$/;
+export const NUMERIC_REGEX: RegExp = /^\d+\.\d{0,2}$/;

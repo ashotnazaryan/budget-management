@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
+import { RootState, store } from 'store';
 import { Summary, SummaryDTO, SummaryState } from 'shared/models';
-import { mapSummary } from 'shared/helpers';
+import { mapBalance, mapSummary } from 'shared/helpers';
 
 const initialState: SummaryState = {
-  incomes: 0,
-  expenses: 0,
-  balance: 0,
+  incomes: '0',
+  expenses: '0',
+  balance: '0',
   categoryExpenseTransactions: [],
   status: 'idle'
 };
@@ -17,7 +17,9 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (): Promi
     const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
 
     const { data } = response.data;
-    return mapSummary(data);
+    const { showDecimals } = store.getState().setting;
+
+    return mapSummary(data, showDecimals);
   } catch (error) {
     console.error(error);
     return {} as SummaryState;
@@ -29,10 +31,12 @@ export const getBalance = createAsyncThunk('summary/getBalance', async (): Promi
     const response = await axios.get<{ data: SummaryDTO['balance'] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
 
     const { data } = response.data;
-    return data;
+    const { showDecimals } = store.getState().setting;
+
+    return mapBalance(data, showDecimals);
   } catch (error) {
     console.error(error);
-    return 0;
+    return '0';
   }
 });
 

@@ -6,7 +6,7 @@ import Ellipsis from 'shared/components/Ellipsis';
 
 interface UserBalanceInfoProps {
   fullName: string;
-  balance: number;
+  balance: string;
   currency: string;
   avatar?: string;
 }
@@ -15,7 +15,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, ful
   return (
     <Grid container alignItems='center' columnSpacing={2}>
       <Grid item sm={4} xs={3}>
-        <Avatar alt={fullName} src={avatar} sx={{ width: 48, height: 48, marginRight: 1, border: `1px solid ${theme.palette.primary.main}` }} />
+        <Avatar alt={fullName} src={avatar} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${theme.palette.primary.main}` }} />
       </Grid>
       <Grid item container sm={8} xs={9}>
         <Grid item xs={12}>

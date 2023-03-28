@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <AppBar position='static'>
-      <Toolbar variant='dense'>
+      <Toolbar variant='dense' sx={{ paddingX: { sm: 4, xs: 2 } }}>
         <Grid container alignItems='center' justifyContent='space-between'>
           <Grid item>
             <IconButton edge='start' color='inherit' onClick={showSideBar}>

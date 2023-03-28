@@ -57,10 +57,9 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
           if (data) {
             saveToLocalStorage<Auth>(AUTH_KEY, newAuth);
             axios.defaults.headers.common['Authorization'] = `Bearer ${newAuth.accessToken}`;
+            // TODO: check this (401 after fetched new access token)
+            dispatch(getUserInfo(newAuth.accessToken));
           }
-
-          // TODO: check this (401 after fetched new access token)
-          dispatch(getUserInfo(newAuth.accessToken));
 
           return axios.request(config);
         } catch {

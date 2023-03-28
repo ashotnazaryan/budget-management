@@ -8,7 +8,8 @@ const initialState: SettingState = {
     iso: 'USD',
     name: 'US Dollar',
     symbol: '$'
-  }
+  },
+  showDecimals: false
 };
 
 export const getSettings = createAsyncThunk('setting/getSettings', async (): Promise<Setting> => {
@@ -24,7 +25,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (): Pro
   }
 });
 
-export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Setting, { dispatch }): Promise<void> => {
+export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Partial<Setting>, { dispatch }): Promise<void> => {
   try {
     await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
     dispatch(getSettings());

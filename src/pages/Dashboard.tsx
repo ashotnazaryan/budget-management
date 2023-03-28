@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectSummary, selectCurrency, addTransaction, getSummary } from 'store/reducers';
-import { Transaction } from 'shared/models';
+import { TransactionDTO } from 'shared/models';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import Summary from './components/Summary';
@@ -26,13 +26,13 @@ const Dashboard: React.FC = () => {
     setDialogOpened(false);
   };
 
-  const handleSaveTransaction = (data: Transaction): void => {
+  const handleSaveTransaction = (data: TransactionDTO): void => {
     setDialogOpened(false);
     dispatch(addTransaction(data));
   };
 
   const getContent = (): React.ReactElement => {
-    if (status === 'loading') {
+    if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
 

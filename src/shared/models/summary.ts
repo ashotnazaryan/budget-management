@@ -8,9 +8,9 @@ export interface SummaryDTO {
 }
 
 export interface Summary {
-  incomes: number;
-  expenses: number;
-  balance: number;
+  incomes: string;
+  expenses: string;
+  balance: string;
   categoryExpenseTransactions: Transaction[];
 }
 

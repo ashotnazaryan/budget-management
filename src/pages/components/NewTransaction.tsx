@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getCategories, selectCategories } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, Currency, TransactionField, Transaction } from 'shared/models';
+import { CategoryType, Category as CategoryModel, Currency, TransactionField, TransactionDTO } from 'shared/models';
 import { NUMERIC_REGEX } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
@@ -18,7 +18,7 @@ import Category from './Category';
 interface NewTransactionProps {
   currency: Currency['iso'];
   mode?: 'create' | 'edit';
-  onSubmit: (data: Transaction) => void;
+  onSubmit: (data: TransactionDTO) => void;
   onClose: () => void;
 }
 
@@ -26,8 +26,6 @@ interface Tab {
   value: CategoryType;
   label: string;
 }
-
-type FormData = Transaction;
 
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
   const numericRegex = NUMERIC_REGEX;
@@ -46,7 +44,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
     type: CategoryType.expense
   };
 
-  const methods = useForm<FormData>({
+  const methods = useForm<TransactionDTO>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
@@ -63,11 +61,11 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
     methods.setValue('name', name, { shouldValidate: true });
   };
 
-  const onFormSubmit = (data: Partial<FormData>) => {
+  const onFormSubmit = (data: TransactionDTO): void => {
     const mappedData = {
       ...data,
       amount: Number(data.amount)
-    } as Transaction;
+    };
 
     onSubmit(mappedData);
   };

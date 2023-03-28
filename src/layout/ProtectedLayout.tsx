@@ -2,12 +2,15 @@ import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getUserToken, selectAuth } from 'store/reducers';
-import { ROUTES } from 'shared/constants';
+import { getFromLocalStorage } from 'shared/helpers';
+import { Auth } from 'shared/models';
+import { AUTH_KEY, ROUTES } from 'shared/constants';
 import Content from './Content';
 import Loading from './Loading';
 
 export const ProtectedLayout = () => {
-  const { accessToken, status } = useAppSelector(selectAuth);
+  const { status } = useAppSelector(selectAuth);
+  const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const outlet = useOutlet();
   const dispatch = useAppDispatch();
 

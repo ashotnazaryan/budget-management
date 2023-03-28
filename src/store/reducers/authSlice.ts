@@ -1,27 +1,32 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { AuthState } from 'shared/models';
+import { AuthState, Auth } from 'shared/models';
 import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
 
 const initialState: AuthState = {
   status: 'idle',
   accessToken: '',
+  refreshToken: '',
   userId: ''
 };
 
-export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<AuthState> => {
+export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {
   const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`);
 
-  const auth: AuthState = { userId: response.data.data.userId, accessToken: response.data.data.accessToken };
+  const auth: Auth = {
+    userId: response.data.data.userId,
+    accessToken: response.data.data.accessToken,
+    refreshToken: response.data.data.refreshToken
+  };
 
   saveToLocalStorage(AUTH_KEY, auth);
 
   return auth;
 });
 
-export const logout = createAsyncThunk('auth/logout', async (): Promise<AuthState> => {
+export const logout = createAsyncThunk('auth/logout', async (): Promise<Auth> => {
   const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
@@ -51,7 +56,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<AuthState>) => {
+      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<Auth>) => {
         return {
           ...state,
           ...action.payload,
@@ -70,7 +75,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(logout.fulfilled, (state, action: PayloadAction<AuthState>) => {
+      .addCase(logout.fulfilled, (state, action: PayloadAction<Auth>) => {
         return {
           ...initialState,
           status: 'succeeded'

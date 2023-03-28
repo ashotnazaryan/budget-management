@@ -76,9 +76,9 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 </IconButton>
               </Grid>
             </Grid>
-            <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: 3 }}>
               <Box sx={{ flexGrow: 1 }}>
-                <ListItem onClick={close}>
+                <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.dashboard.path}>
                       <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
@@ -87,7 +87,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                     </Link>
                   </ListItemText>
                 </ListItem>
-                <ListItem onClick={close}>
+                <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.categories.path}>
                       <Button fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
@@ -96,7 +96,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                     </Link>
                   </ListItemText>
                 </ListItem>
-                <ListItem onClick={close}>
+                <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.settings.path}>
                       <Button fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
@@ -106,7 +106,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                   </ListItemText>
                 </ListItem>
               </Box>
-              <ListItem onClick={handleOpenDialog}>
+              <ListItem onClick={handleOpenDialog} sx={{ padding: 0 }}>
                 <ListItemText>
                   <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
                     Logout

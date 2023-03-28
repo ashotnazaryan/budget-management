@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getTransactions, selectCurrency, selectTransaction } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import Ellipsis from 'shared/components/Ellipsis';
+import PageTitle from 'shared/components/PageTitle';
 
 interface TransactionsProps { }
 
@@ -31,10 +31,10 @@ const Transactions: React.FC<TransactionsProps> = () => {
               <Grid item xs={4}>
                 <Ellipsis text={name} />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3} display='flex' justifyContent='flex-end'>
                 <Ellipsis text={`${symbol}${amount}`} />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={5} display='flex' justifyContent='flex-end'>
                 <Ellipsis text={createdAt} />
               </Grid>
             </Grid>
@@ -48,7 +48,7 @@ const Transactions: React.FC<TransactionsProps> = () => {
 
   return (
     <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Transactions</Typography>
+      <PageTitle text='Transactions' />
       {content}
     </Box>
   );

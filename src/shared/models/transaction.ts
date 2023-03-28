@@ -1,4 +1,4 @@
-import { AuthState } from './auth';
+import { Auth } from './auth';
 import { Category, CategoryType } from './category';
 
 export interface TransactionState {
@@ -8,7 +8,7 @@ export interface TransactionState {
 
 export interface TransactionDTO {
   _id?: string;
-  userId: AuthState['userId'];
+  userId: Auth['userId'];
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
@@ -19,7 +19,7 @@ export interface TransactionDTO {
 
 export interface Transaction {
   id?: string;
-  userId: AuthState['userId'];
+  userId: Auth['userId'];
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];

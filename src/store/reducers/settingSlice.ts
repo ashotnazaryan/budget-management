@@ -62,5 +62,6 @@ export const settingSlice = createSlice({
 });
 
 export const selectCurrency = (state: RootState): SettingState['currency'] => state.setting.currency;
+export const selectSettings = (state: RootState): SettingState => state.setting;
 
 export default settingSlice.reducer;

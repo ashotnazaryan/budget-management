@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType, Category as CategoryModel } from 'shared/models';
 import { getCategories, selectCategories } from 'store/reducers';
 import Tabs, { Tab } from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import Category from './components/Category';
+import PageTitle from 'shared/components/PageTitle';
 
 interface CategoriesProps { }
 
@@ -48,7 +48,7 @@ const Categories: React.FC<CategoriesProps> = () => {
   const tabs: Tab[] = [{ value: CategoryType.expense, label: 'Expense' }, { value: CategoryType.income, label: 'Income' }];
   return (
     <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Categories</Typography>
+      <PageTitle text='Categories' />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
     </Box>

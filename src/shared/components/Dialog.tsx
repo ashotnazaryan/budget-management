@@ -1,5 +1,6 @@
 import * as React from 'react';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
+import Grid from '@mui/material/Grid';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
@@ -32,7 +33,9 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButt
         {props.title}
       </DialogTitle>
       <StyledDialogContent>
-        {children}
+        <Grid container justifyContent='center'>
+          <Grid item md={8} xs={12} display='flex'>{children}</Grid>
+        </Grid>
       </StyledDialogContent>
       {withActions && (
         <DialogActions>

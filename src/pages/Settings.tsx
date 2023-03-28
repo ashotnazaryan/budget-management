@@ -7,12 +7,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES } from 'shared/constants';
-import { addSetting, getSettings, selectCurrency, } from 'store/reducers';
+import { addSetting, getSettings, selectSettings, } from 'store/reducers';
 import { Currency } from 'shared/models';
+import PageTitle from 'shared/components/PageTitle';
+import Skeleton from 'shared/components/Skeleton';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const { iso } = useAppSelector(selectCurrency);
+  const { status, currency: { iso } } = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
@@ -26,24 +28,37 @@ const Settings: React.FC = () => {
     dispatch(addSetting({ currency }));
   };
 
+  const getContent = (): React.ReactElement => {
+    if (status === 'loading') {
+      return <Skeleton />;
+    }
+
+    return (
+      <>
+        <Typography variant='subtitle1' sx={{ marginY: 2 }}>Default currency</Typography>
+        <FormControl sx={{ width: { xs: '100%', sm: 200 } }}>
+          <InputLabel>Currency</InputLabel>
+          <Select
+            label='Currency'
+            variant='outlined'
+            value={iso}
+            onChange={handleCurrencyChange}
+          >
+            {currencies.map(({ iso, name, symbol }) => (
+              <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </>
+    );
+  };
+
+  const content = getContent();
+
   return (
     <Box>
-      <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }}>Settings</Typography>
-      <Typography variant='subtitle1' sx={{ marginY: 2 }}>Default currency</Typography>
-      <FormControl>
-        <InputLabel>Currency</InputLabel>
-        <Select
-          label='Currency'
-          variant='outlined'
-          value={iso}
-          onChange={handleCurrencyChange}
-          sx={{ width: 200 }}
-        >
-          {currencies.map(({ iso, name, symbol }) => (
-            <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <PageTitle text='Settings' />
+      {content}
     </Box>
   );
 };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { selectSummary, selectCurrency, addTransaction, getSummary } from 'store/reducers';
@@ -38,18 +37,14 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-      <Grid container justifyContent='center'>
-        <Grid item md={6} xs={12}>
-          <Summary
-            incomes={incomes}
-            expenses={expenses}
-            balance={balance}
-            currencySymbol={symbol}
-            transactions={categoryExpenseTransactions}
-            openDialog={handleOpenDialog}
-          />
-        </Grid>
-      </Grid>
+      <Summary
+        incomes={incomes}
+        expenses={expenses}
+        balance={balance}
+        currencySymbol={symbol}
+        transactions={categoryExpenseTransactions}
+        openDialog={handleOpenDialog}
+      />
     );
   };
 

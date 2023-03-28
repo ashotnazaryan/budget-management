@@ -2,10 +2,9 @@ import * as React from 'react';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
 import DialogActions from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { theme } from 'core/theme.config';
-import { StyledDialogContent } from './Dialog.styles';
+import { StyledDialogTitle, StyledDialogContent } from './Dialog.styles';
 
 type DialogProps<T = any> = {
   cancelButtonText?: string;
@@ -29,9 +28,9 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButt
       {...props}
       onClose={onClose}
     >
-      <DialogTitle sx={{ backgroundColor: main, color: contrastText }}>
+      <StyledDialogTitle sx={{ backgroundColor: main, color: contrastText }}>
         {props.title}
-      </DialogTitle>
+      </StyledDialogTitle>
       <StyledDialogContent>
         <Grid container justifyContent='center'>
           <Grid item md={8} xs={12} display='flex'>{children}</Grid>

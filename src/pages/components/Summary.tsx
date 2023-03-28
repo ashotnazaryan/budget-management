@@ -6,12 +6,13 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Currency, Transaction } from 'shared/models';
+import { isPositiveString } from 'shared/helpers';
 import CategoryExpenseTransaction from './CategoryExpenseTransaction';
 
 interface SummaryProps {
-  incomes: number;
-  expenses: number;
-  balance: number;
+  incomes: string;
+  expenses: string;
+  balance: string;
   currencySymbol: Currency['symbol'];
   transactions: Transaction[];
   openDialog: () => void;
@@ -57,7 +58,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography variant='h6' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>
-            <Typography variant='h6' fontSize={30} color={balance >= 0 ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography variant='h6' fontSize={30} color={isPositiveString(balance) ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

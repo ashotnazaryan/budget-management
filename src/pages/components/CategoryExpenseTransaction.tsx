@@ -25,13 +25,13 @@ const CategoryExpenseTransaction: React.FC<CategoryExpenseTransactionProps> = ({
       width: '100%'
     }}>
       <Grid container>
-        <Grid item xs={8} display='flex'>
+        <Grid item xs={4} display='flex'>
           <Typography color='primary.contrastText'>{name}</Typography>
         </Grid>
-        <Grid item xs={2} display='flex' justifyContent='flex-end'>
+        <Grid item xs={4} display='flex' justifyContent='flex-end'>
           <Typography color='primary.contrastText'>{value}</Typography>
         </Grid>
-        <Grid item xs={2} display='flex' justifyContent='flex-end'>
+        <Grid item xs={4} display='flex' justifyContent='flex-end'>
           <Typography color='primary.contrastText'>{currency}{amount}</Typography>
         </Grid>
       </Grid>

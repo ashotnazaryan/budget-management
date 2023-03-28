@@ -29,7 +29,7 @@ const Categories: React.FC<CategoriesProps> = () => {
   };
 
   const getContent = (): React.ReactElement => {
-    if (status === 'loading') {
+    if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
 

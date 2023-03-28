@@ -117,7 +117,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           </Drawer>
         </Grid>
       </Grid>
-      <Dialog title='Logout' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} sx={{}}>
+      <Dialog title='Logout' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} fullWidth maxWidth='xs'>
         <Typography variant='subtitle1'>
           Are you sure you want to logout?
         </Typography>

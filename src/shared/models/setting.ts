@@ -6,10 +6,12 @@ export interface Currency {
 
 export interface SettingDTO {
   currency: Currency;
+  showDecimals: boolean;
 }
 
 export interface Setting {
   currency: Currency;
+  showDecimals: boolean;
 }
 
 export interface SettingState extends Setting {

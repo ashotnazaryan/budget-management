@@ -23,7 +23,7 @@ export interface Transaction {
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
-  amount: number;
+  amount: string;
   categoryExpenseValue?: string;
   createdAt: string;
 }

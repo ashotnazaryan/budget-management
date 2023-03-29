@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import { useAppDispatch, useAppSelector } from 'store';
 import { Category as CategoryModel } from 'shared/models';
 import { TABS } from 'shared/constants';
-import { getCategories, selectCategories } from 'store/reducers';
+import { getCategories, selectCategory } from 'store/reducers';
 import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import Category from './components/Category';
@@ -13,7 +13,7 @@ import PageTitle from 'shared/components/PageTitle';
 interface CategoriesProps { }
 
 const Categories: React.FC<CategoriesProps> = () => {
-  const { categories, status } = useAppSelector(selectCategories);
+  const { categories, status } = useAppSelector(selectCategory);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
   const tabs = TABS;

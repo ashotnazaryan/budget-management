@@ -5,9 +5,11 @@ import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import SubwayIcon from '@mui/icons-material/Subway';
 import HelpIcon from '@mui/icons-material/Help';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { IconType, IconTypes } from 'shared/models';
 
 export const ICONS: IconTypes = {
+  // Category icons
   [IconType.salary]: PaidIcon,
   [IconType.otherIncome]: CardGiftcardIcon,
   [IconType.rent]: ApartmentIcon,
@@ -16,4 +18,6 @@ export const ICONS: IconTypes = {
   [IconType.transportation]: SubwayIcon,
   [IconType.otherExpense]: HelpIcon,
   [IconType.default]: HelpIcon,
+  // Account icons
+  [IconType.wallet]: AccountBalanceWalletIcon,
 };

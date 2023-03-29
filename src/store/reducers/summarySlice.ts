@@ -17,13 +17,17 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (): Promi
   try {
     const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
 
-    const { data } = response.data;
-    const { showDecimals } = store.getState().setting;
+    if (response?.data) {
+      const { data } = response.data;
+      const { showDecimals } = store.getState().setting;
 
-    return mapSummary(data, showDecimals);
+      return mapSummary(data, showDecimals);
+    }
+
+    return {} as Summary;
   } catch (error) {
     console.error(error);
-    return {} as SummaryState;
+    return {} as Summary;
   }
 });
 
@@ -31,10 +35,14 @@ export const getBalance = createAsyncThunk('summary/getBalance', async (): Promi
   try {
     const response = await axios.get<{ data: SummaryDTO['balance'] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
 
-    const { data } = response.data;
-    const { showDecimals } = store.getState().setting;
+    if (response?.data) {
+      const { data } = response.data;
+      const { showDecimals } = store.getState().setting;
 
-    return mapBalance(data, showDecimals);
+      return mapBalance(data, showDecimals);
+    }
+
+    return '0';
   } catch (error) {
     console.error(error);
     return '0';

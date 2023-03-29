@@ -14,10 +14,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CategoryIcon from '@mui/icons-material/Category';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
-import { closeSidebar, getBalance, logout, selectBalance, selectCurrency, selectSideBarOpened, selectUser } from 'store/reducers';
+import { closeSidebar, getBalance, logout, selectBalance, selectSettings, selectSideBarOpened, selectUser } from 'store/reducers';
 import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'pages/components/UserBalanceInfo';
 
@@ -27,7 +28,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const opened = useAppSelector(selectSideBarOpened);
   const user = useAppSelector(selectUser);
   const balance = useAppSelector(selectBalance);
-  const { symbol } = useAppSelector(selectCurrency);
+  const { currency: { symbol }, showDecimals } = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
@@ -35,7 +36,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
 
   React.useEffect(() => {
     dispatch(getBalance());
-  }, [dispatch]);
+  }, [dispatch, showDecimals]);
 
   const close = (): void => {
     dispatch(closeSidebar());
@@ -52,7 +53,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const handleLogout = (): void => {
     setDialogOpened(false);
     dispatch(logout());
-    dispatch(closeSidebar());
   };
 
   return (
@@ -83,6 +83,15 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                     <Link to={ROUTES.dashboard.path}>
                       <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {ROUTES.dashboard.name}
+                      </Button>
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+                <ListItem onClick={close} sx={{ padding: 0 }}>
+                  <ListItemText>
+                    <Link to={ROUTES.accounts.path}>
+                      <Button fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
+                        {ROUTES.accounts.name}
                       </Button>
                     </Link>
                   </ListItemText>

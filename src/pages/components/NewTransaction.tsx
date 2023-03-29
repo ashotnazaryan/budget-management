@@ -6,7 +6,7 @@ import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useAppSelector } from 'store';
-import { selectCategories, selectTransaction } from 'store/reducers';
+import { selectCategory, selectTransaction } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, Currency, TransactionField, TransactionDTO } from 'shared/models';
 import { NUMERIC_REGEX, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
@@ -24,7 +24,7 @@ interface NewTransactionProps {
 
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
   const numericRegex = NUMERIC_REGEX;
-  const { categories, status } = useAppSelector(selectCategories);
+  const { categories, status } = useAppSelector(selectCategory);
   const transactionStatus = useAppSelector(selectTransaction).status;
   const loading = transactionStatus === 'loading';
   const tabs = TABS;

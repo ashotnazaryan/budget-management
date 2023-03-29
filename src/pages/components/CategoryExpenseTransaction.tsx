@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Currency, Transaction } from 'shared/models';
 import { theme } from 'core/theme.config';
+import { Currency, Transaction } from 'shared/models';
+import Ellipsis from 'shared/components/Ellipsis';
 
 interface CategoryExpenseTransactionProps {
   name: Transaction['name'];
@@ -32,14 +32,14 @@ const CategoryExpenseTransaction: React.FC<CategoryExpenseTransactionProps> = ({
       width: '100%'
     }}>
       <Grid container>
-        <Grid item xs={4} display='flex'>
-          <Typography color='primary.contrastText'>{name}</Typography>
+        <Grid item sm={8} xs={5} display='flex'>
+          <Ellipsis color='primary.contrastText' text={name} />
         </Grid>
-        <Grid item xs={4} display='flex' justifyContent='flex-end'>
-          <Typography color='primary.contrastText'>{value}</Typography>
+        <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
+          <Ellipsis color='primary.contrastText' text={value} />
         </Grid>
-        <Grid item xs={4} display='flex' justifyContent='flex-end'>
-          <Typography color='primary.contrastText'>{currency}{amount}</Typography>
+        <Grid item sm={2} xs={4} display='flex' justifyContent='flex-end'>
+          <Ellipsis color='primary.contrastText' text={`${currency}${amount}`} />
         </Grid>
       </Grid>
     </Box>

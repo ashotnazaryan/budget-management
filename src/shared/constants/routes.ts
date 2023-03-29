@@ -17,6 +17,10 @@ export const ROUTES: AppRoute = {
     name: 'Categories',
     path: '/categories'
   },
+  accounts: {
+    name: 'Accounts',
+    path: '/accounts'
+  },
   transactions: {
     name: 'Transactions',
     path: '/transactions'

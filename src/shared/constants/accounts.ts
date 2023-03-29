@@ -4,6 +4,7 @@ export const ACCOUNTS: Account[] = [
   {
     id: '1',
     name: 'Wallet',
-    icon: IconType.wallet
+    icon: IconType.wallet,
+    initialAmount: '0'
   }
 ];

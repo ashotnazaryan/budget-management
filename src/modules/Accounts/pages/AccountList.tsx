@@ -1,25 +1,34 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'store';
-import { Account as AccountModel } from 'shared/models';
+import { Account as AccountModel, IconType } from 'shared/models';
+import { ROUTES } from 'shared/constants';
 import { getAccounts, selectAccount } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
-import Account from './components/Account';
+import Icon from 'shared/components/Icon';
+import Account from '../components/Account';
 
-interface AccountsProps { }
+interface AccountListProps { }
 
-const Accounts: React.FC<AccountsProps> = () => {
+const AccountList: React.FC<AccountListProps> = () => {
   const { accounts, status } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     dispatch(getAccounts());
   }, [dispatch]);
 
-  const handleAccountItemClick = ({ accountId, name }: { accountId: AccountModel['id'], name: AccountModel['name'] }): void => {
+  const handleAccountItemClick = ({ name, id }: { id: AccountModel['id'], name?: AccountModel['name'] }): void => {
 
+  };
+
+  const openNewAccountPage = (): void => {
+    navigate(`${ROUTES.accounts.path}/new`);
   };
 
   const getContent = (): React.ReactElement => {
@@ -34,12 +43,17 @@ const Accounts: React.FC<AccountsProps> = () => {
             <Account id={id} title={name} icon={icon} onClick={handleAccountItemClick} />
           </Grid>
         ))}
+        <Grid item>
+          <IconButton color='primary' onClick={openNewAccountPage}>
+            <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
+          </IconButton>
+        </Grid>
       </Grid>
     );
   };
 
   const content = getContent();
-  
+
   return (
     <Box>
       <PageTitle text='Accounts' />
@@ -48,4 +62,4 @@ const Accounts: React.FC<AccountsProps> = () => {
   );
 };
 
-export default Accounts;
+export default AccountList;

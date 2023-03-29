@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useAppSelector } from 'store';
 import { selectCategory, selectTransaction } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, Currency, TransactionField, TransactionDTO } from 'shared/models';
-import { NUMERIC_REGEX, TABS } from 'shared/constants';
+import { POSITIVE_NUMERIC_REGEX, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
@@ -23,14 +23,14 @@ interface NewTransactionProps {
 }
 
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
-  const numericRegex = NUMERIC_REGEX;
+  const regex = POSITIVE_NUMERIC_REGEX;
   const { categories, status } = useAppSelector(selectCategory);
   const transactionStatus = useAppSelector(selectTransaction).status;
   const loading = transactionStatus === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
 
-  const defaultValues = {
+  const defaultValues: Partial<TransactionDTO> = {
     amount: 0,
     categoryId: '',
     type: CategoryType.expense
@@ -54,7 +54,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
   };
 
   const onFormSubmit = (data: TransactionDTO): void => {
-    const mappedData = {
+    const mappedData: TransactionDTO = {
       ...data,
       amount: Number(data.amount)
     };
@@ -92,7 +92,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
                   message: helper.amount.required?.message
                 },
                 pattern: {
-                  value: numericRegex,
+                  value: regex,
                   message: helper.amount.pattern?.message
                 }
               }}
@@ -132,7 +132,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <Button onClick={onClose} sx={{ marginRight: 2 }}>Cancel</Button>
-        <Button variant='contained' onClick={methods.handleSubmit(onFormSubmit)} loading={loading} autoFocus>Save</Button>
+        <Button variant='contained' onClick={methods.handleSubmit(onFormSubmit)} loading={loading}>Save</Button>
       </Box>
     </Box>
   );

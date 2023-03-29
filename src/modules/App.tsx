@@ -8,7 +8,7 @@ import Dashboard from './Dashboard';
 import Settings from './Settings';
 import Transactions from './Transactions';
 import Categories from './Categories';
-import Accounts from './Accounts';
+import Accounts from './Accounts/Accounts';
 
 const App: React.FC = () => {
   return (
@@ -21,7 +21,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.settings.path} element={<Settings />} />
           <Route path={ROUTES.transactions.path} element={<Transactions />} />
           <Route path={ROUTES.categories.path} element={<Categories />} />
-          <Route path={ROUTES.accounts.path} element={<Accounts />} />
+          <Route path={`${ROUTES.accounts.path}/*`} element={<Accounts />} />
           <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
         </Route>
       </Routes>

@@ -10,7 +10,6 @@ export interface CategoryDTO {
   _id: string;
   name: string;
   type: CategoryType;
-  id: string;
   icon: IconType;
 }
 

@@ -11,7 +11,7 @@ const initialState: AccountState = {
 
 export const getAccounts = createAsyncThunk('accounts/getAccounts', async (): Promise<Account[]> => {
   try {
-    const response = await axios.get<{ data: AccountDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/account/default-accounts`);
+    const response = await axios.get<{ data: AccountDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts`);
 
     if (response?.data) {
       const { data } = response.data;
@@ -23,6 +23,15 @@ export const getAccounts = createAsyncThunk('accounts/getAccounts', async (): Pr
   } catch (error) {
     console.error(error);
     return [];
+  }
+});
+
+export const createAccount = createAsyncThunk('accounts/createAccount', async (transaction: AccountDTO, { dispatch }): Promise<void> => {
+  try {
+    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/account`, transaction);
+    dispatch(getAccounts());
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -48,6 +57,24 @@ export const AccountSlice = createSlice({
         return {
           ...state,
           accounts: action.payload,
+          status: 'succeeded'
+        };
+      })
+      .addCase(createAccount.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(createAccount.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(createAccount.fulfilled, (state) => {
+        return {
+          ...state,
           status: 'succeeded'
         };
       });

@@ -1,22 +1,35 @@
 import * as React from 'react';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { selectSummary, selectCurrency, addTransaction, getSummary } from 'store/reducers';
-import { TransactionDTO } from 'shared/models';
+import { selectSummary, selectCurrency, addTransaction, getSummary, getCategories, selectTransaction } from 'store/reducers';
+import { CategoryType, TransactionDTO } from 'shared/models';
+import { TABS } from 'shared/constants';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
+import Tabs from 'shared/components/Tabs';
 import Summary from './components/Summary';
 import NewTransaction from './components/NewTransaction';
 
 const Dashboard: React.FC = () => {
   const { symbol, iso } = useAppSelector(selectCurrency);
-  const { incomes, expenses, balance, categoryExpenseTransactions, status } = useAppSelector(selectSummary);
+  const { incomes, expenses, balance, categoryExpenseTransactions, categoryIncomeTransactions, status } = useAppSelector(selectSummary);
+  const transactionStatus = useAppSelector(selectTransaction).status;
+  const tabs = TABS;
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const [categoryType, setCategoryType] = React.useState<number>(0);
   const dispatch = useAppDispatch();
+  const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
 
   React.useEffect(() => {
     dispatch(getSummary());
+    dispatch(getCategories());
   }, [dispatch]);
+
+  React.useEffect(() => {
+    if (transactionStatus === 'succeeded') {
+      setDialogOpened(false);
+    }
+  }, [transactionStatus]);
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -26,8 +39,11 @@ const Dashboard: React.FC = () => {
     setDialogOpened(false);
   };
 
+  const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
+    setCategoryType(value);
+  };
+
   const handleSaveTransaction = (data: TransactionDTO): void => {
-    setDialogOpened(false);
     dispatch(addTransaction(data));
   };
 
@@ -42,7 +58,7 @@ const Dashboard: React.FC = () => {
         expenses={expenses}
         balance={balance}
         currencySymbol={symbol}
-        transactions={categoryExpenseTransactions}
+        transactions={transactions}
         openDialog={handleOpenDialog}
       />
     );
@@ -52,6 +68,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1, paddingY: 1 }}>
+      <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
       <Dialog
         fullScreen

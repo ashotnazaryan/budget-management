@@ -9,6 +9,7 @@ const initialState: SummaryState = {
   expenses: '0',
   balance: '0',
   categoryExpenseTransactions: [],
+  categoryIncomeTransactions: [],
   status: 'idle'
 };
 

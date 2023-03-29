@@ -3,21 +3,28 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Currency, Transaction } from 'shared/models';
+import { theme } from 'core/theme.config';
 
 interface CategoryExpenseTransactionProps {
   name: Transaction['name'];
   amount: Transaction['amount'];
   currency: Currency['symbol'];
-  value?: Transaction['categoryExpenseValue'];
+  value?: Transaction['percentValue'];
 }
 
 const CategoryExpenseTransaction: React.FC<CategoryExpenseTransactionProps> = ({ name, amount, currency, value = '' }) => {
+  const getBGColor = () => {
+    const percentageValue = parseInt(value);
+
+    return `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} calc(${percentageValue}%), ${theme.palette.primary.light} calc(${percentageValue}%), ${theme.palette.primary.light} 100%)`;
+  };
+
   return (
     <Box sx={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor: 'primary.light',
+      background: getBGColor(),
       paddingX: 4,
       paddingY: 2,
       marginY: 1,

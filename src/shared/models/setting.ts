@@ -15,5 +15,5 @@ export interface Setting {
 }
 
 export interface SettingState extends Setting {
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

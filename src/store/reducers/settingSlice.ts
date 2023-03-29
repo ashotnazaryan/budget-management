@@ -9,7 +9,8 @@ const initialState: SettingState = {
     name: 'US Dollar',
     symbol: '$'
   },
-  showDecimals: false
+  showDecimals: false,
+  status: 'idle'
 };
 
 export const getSettings = createAsyncThunk('setting/getSettings', async (): Promise<Setting> => {

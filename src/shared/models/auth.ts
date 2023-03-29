@@ -10,5 +10,5 @@ export interface AuthDTO {
 }
 
 export interface AuthState extends Auth {
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

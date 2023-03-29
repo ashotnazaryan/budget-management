@@ -5,6 +5,7 @@ export interface SummaryDTO {
   expenses: number;
   balance: number;
   categoryExpenseTransactions: TransactionDTO[];
+  categoryIncomeTransactions: TransactionDTO[];
 }
 
 export interface Summary {
@@ -12,8 +13,9 @@ export interface Summary {
   expenses: string;
   balance: string;
   categoryExpenseTransactions: Transaction[];
+  categoryIncomeTransactions: Transaction[];
 }
 
 export interface SummaryState extends Summary {
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

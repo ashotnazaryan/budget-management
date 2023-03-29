@@ -2,9 +2,10 @@ import * as React from 'react';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import { useAppDispatch, useAppSelector } from 'store';
-import { CategoryType, Category as CategoryModel } from 'shared/models';
+import { Category as CategoryModel } from 'shared/models';
+import { TABS } from 'shared/constants';
 import { getCategories, selectCategories } from 'store/reducers';
-import Tabs, { Tab } from 'shared/components/Tabs';
+import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import Category from './components/Category';
 import PageTitle from 'shared/components/PageTitle';
@@ -15,12 +16,13 @@ const Categories: React.FC<CategoriesProps> = () => {
   const { categories, status } = useAppSelector(selectCategories);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
+  const tabs = TABS;
 
   React.useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
-  const handleTabChange = (event: React.SyntheticEvent, value: number) => {
+  const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
     setCategoryType(value);
   };
 
@@ -45,7 +47,7 @@ const Categories: React.FC<CategoriesProps> = () => {
   };
 
   const content = getContent();
-  const tabs: Tab[] = [{ value: CategoryType.expense, label: 'Expense' }, { value: CategoryType.income, label: 'Income' }];
+  
   return (
     <Box>
       <PageTitle text='Categories' />

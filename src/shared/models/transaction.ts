@@ -3,7 +3,7 @@ import { Category, CategoryType } from './category';
 
 export interface TransactionState {
   transactions: Transaction[];
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 export interface TransactionDTO {
@@ -13,7 +13,7 @@ export interface TransactionDTO {
   type: CategoryType;
   name: Category['name'];
   amount: number;
-  categoryExpenseValue?: number;
+  percentValue?: number;
   createdAt: Date;
 }
 
@@ -24,6 +24,6 @@ export interface Transaction {
   type: CategoryType;
   name: Category['name'];
   amount: string;
-  categoryExpenseValue?: string;
+  percentValue?: string;
   createdAt: string;
 }

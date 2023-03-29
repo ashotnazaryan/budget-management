@@ -57,8 +57,8 @@ const Settings: React.FC = () => {
                 checked={showDecimals}
                 onChange={handleDecimalsChange}
               />}
-            label='Show decimals'
-            labelPlacement='top'
+            label='Show decimals (e.g. 1.23)'
+            labelPlacement='start'
             sx={{
               '&.MuiFormControlLabel-root': {
                 margin: 0

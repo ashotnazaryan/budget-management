@@ -26,6 +26,21 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
   return auth;
 });
 
+// export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
+//   const { data } = await axios.post<{ data: AuthDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/access-token`, { refreshToken });
+//   const { userId } = store.getState().auth;
+
+//   const newAuth: Auth = {
+//     userId,
+//     accessToken: data.data.access_token,
+//     refreshToken: data.data.refresh_token
+//   };
+
+//   saveToLocalStorage(AUTH_KEY, newAuth);
+
+//   return newAuth;
+// });
+
 export const logout = createAsyncThunk('auth/logout', async (): Promise<Auth> => {
   const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 

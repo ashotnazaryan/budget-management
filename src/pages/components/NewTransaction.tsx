@@ -5,14 +5,14 @@ import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { useAppDispatch, useAppSelector } from 'store';
-import { getCategories, selectCategories } from 'store/reducers';
+import { useAppSelector } from 'store';
+import { selectCategories, selectTransaction } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, Currency, TransactionField, TransactionDTO } from 'shared/models';
-import { NUMERIC_REGEX } from 'shared/constants';
+import { NUMERIC_REGEX, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
+import Button from 'shared/components/Button';
 import Category from './Category';
 
 interface NewTransactionProps {
@@ -22,21 +22,13 @@ interface NewTransactionProps {
   onClose: () => void;
 }
 
-interface Tab {
-  value: CategoryType;
-  label: string;
-}
-
 const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
   const numericRegex = NUMERIC_REGEX;
   const { categories, status } = useAppSelector(selectCategories);
-  const dispatch = useAppDispatch();
-  const tabs: Tab[] = [{ value: CategoryType.expense, label: 'Expense' }, { value: CategoryType.income, label: 'Income' }];
+  const transactionStatus = useAppSelector(selectTransaction).status;
+  const loading = transactionStatus === 'loading';
+  const tabs = TABS;
   const helper = transactionHelper();
-
-  React.useEffect(() => {
-    dispatch(getCategories());
-  }, [dispatch]);
 
   const defaultValues = {
     amount: 0,
@@ -140,7 +132,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <Button onClick={onClose} sx={{ marginRight: 2 }}>Cancel</Button>
-        <Button variant='contained' onClick={methods.handleSubmit(onFormSubmit)} autoFocus>Save</Button>
+        <Button variant='contained' onClick={methods.handleSubmit(onFormSubmit)} loading={loading} autoFocus>Save</Button>
       </Box>
     </Box>
   );

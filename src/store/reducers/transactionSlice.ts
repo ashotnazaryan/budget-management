@@ -57,6 +57,24 @@ export const transactionSlice = createSlice({
           transactions: action.payload,
           status: 'succeeded'
         };
+      })
+      .addCase(addTransaction.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(addTransaction.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(addTransaction.fulfilled, (state) => {
+        return {
+          ...state,
+          status: 'succeeded'
+        };
       });
   }
 });

@@ -27,5 +27,5 @@ export interface Category {
 
 export interface CategoryState {
   categories: Category[];
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }

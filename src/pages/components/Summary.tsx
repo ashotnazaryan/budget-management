@@ -67,9 +67,9 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </IconButton>
         </Grid>
         {
-          transactions.map(({ categoryId, name, amount, categoryExpenseValue }) => (
+          transactions.map(({ categoryId, name, amount, percentValue }) => (
             <Grid item xs={12} key={categoryId}>
-              <CategoryExpenseTransaction name={name} amount={amount} currency={currencySymbol} value={categoryExpenseValue} />
+              <CategoryExpenseTransaction name={name} amount={amount} currency={currencySymbol} value={percentValue} />
             </Grid>
           ))
         }

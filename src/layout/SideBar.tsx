@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
 import { closeSidebar, getBalance, logout, selectBalance, selectSettings, selectSideBarOpened, selectUser } from 'store/reducers';
 import Dialog from 'shared/components/Dialog';
-import UserBalanceInfo from 'pages/components/UserBalanceInfo';
+import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 
 interface SideBarProps extends MuiDrawerProps { }
 

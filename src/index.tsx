@@ -8,7 +8,7 @@ import { theme } from './core/theme.config';
 import AxiosInterceptor from './layout/AxiosInterceptor';
 import reportWebVitals from './reportWebVitals';
 import './index.scss';
-import App from './pages/App';
+import App from './modules/App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ErrorType, TransactionField } from 'shared/models';
+import { AccountField, ErrorType, TransactionField } from 'shared/models';
 
 export const transactionHelper = (): { [key in TransactionField]: ErrorType } => ({
   [TransactionField.amount]: {
@@ -16,4 +16,25 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
     }
   },
   [TransactionField.type]: {}
+});
+
+export const accountHelper = (): { [key in AccountField]: ErrorType } => ({
+  [AccountField.initialAmount]: {
+    required: {
+      message: 'Amount is required'
+    },
+    pattern: {
+      message: 'Invalid amount'
+    }
+  },
+  [AccountField.icon]: {
+    required: {
+      message: 'Icon is required'
+    }
+  },
+  [AccountField.name]: {
+    required: {
+      message: 'Name is required'
+    }
+  }
 });

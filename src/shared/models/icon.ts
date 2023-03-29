@@ -13,9 +13,16 @@ export enum IconType {
   transportation = 'transportation',
   otherExpense = 'otherExpense',
   // Account icons
-  wallet = 'wallet'
+  wallet = 'wallet',
+  // Other icons
+  plus = 'plus'
 }
 
-type MuiSvg = OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string; };
+export interface Icon {
+  name: IconType;
+  icon: MuiSvg;
+}
+
+export type MuiSvg = OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string; };
 export type IconTypes = { [name: string]: MuiSvg };
 

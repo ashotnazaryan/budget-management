@@ -7,17 +7,19 @@ import Ellipsis from 'shared/components/Ellipsis';
 
 interface AccountProps {
   id: AccountModel['id'];
-  title: AccountModel['name'];
-  selected?: AccountModel['id'];
   icon: AccountModel['icon'];
-  onClick: ({ accountId, name }: { accountId: AccountModel['id'], name: AccountModel['name'] }) => void;
+  title?: AccountModel['name'];
+  selected?: AccountModel['id'];
+  showTitle?: boolean;
+  size?: number;
+  onClick: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
 }
 
-const Account: React.FC<AccountProps> = ({ id, selected, title, icon, onClick }) => {
+const Account: React.FC<AccountProps> = ({ id, selected, title = '', showTitle = true, icon, size = 64, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = theme;
 
   const onAccountClick = (id: AccountModel['id']) => (): void => {
-    onClick({ accountId: id, name: title });
+    onClick({ id, name: title });
   };
 
   const getColor = (): string => {
@@ -30,8 +32,8 @@ const Account: React.FC<AccountProps> = ({ id, selected, title, icon, onClick })
         backgroundColor: selected === id ? main : 'transparent',
         border: `1px solid ${main}`,
         color: getColor(),
-        height: 64,
-        width: 64,
+        height: size,
+        width: size,
         borderRadius: '50%',
         display: 'flex',
         flexDirection: 'column',
@@ -41,7 +43,7 @@ const Account: React.FC<AccountProps> = ({ id, selected, title, icon, onClick })
       }}>
         <Icon name={icon}></Icon>
       </Box>
-      <Ellipsis text={title} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />
+      {showTitle && <Ellipsis text={title} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />}
     </Box>
   );
 };

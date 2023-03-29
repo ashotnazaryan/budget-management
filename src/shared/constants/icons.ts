@@ -6,7 +6,8 @@ import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import SubwayIcon from '@mui/icons-material/Subway';
 import HelpIcon from '@mui/icons-material/Help';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import { IconType, IconTypes } from 'shared/models';
+import AddIcon from '@mui/icons-material/Add';
+import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const ICONS: IconTypes = {
   // Category icons
@@ -20,4 +21,10 @@ export const ICONS: IconTypes = {
   [IconType.default]: HelpIcon,
   // Account icons
   [IconType.wallet]: AccountBalanceWalletIcon,
+  // Other icons
+  [IconType.plus]: AddIcon
 };
+
+export const ICONS_LIST: Icon[] = Object.keys(ICONS).reduce<Icon[]>((acc, curr) => {
+  return [...acc, { name: curr as IconType, icon: ICONS[curr] }];
+}, []);

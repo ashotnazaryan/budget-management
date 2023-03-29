@@ -11,13 +11,13 @@ export const viewSlice = createSlice({
   name: 'view',
   initialState,
   reducers: {
-    openSideBar: (state): void => {
+    openSideBar: (state) => {
       state.sideBarOpened = true;
     },
-    closeSidebar: (state): void => {
+    closeSidebar: (state) => {
       state.sideBarOpened = false;
     },
-    setLoading: (state, action: PayloadAction<ViewState>): void => {
+    setLoading: (state, action: PayloadAction<ViewState>) => {
       state.loading = action.payload.loading;
     }
   },

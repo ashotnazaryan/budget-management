@@ -3,6 +3,7 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material/SvgIcon';
 
 export enum IconType {
+  // Category icons
   salary = 'salary',
   otherIncome = 'otherIncome',
   rent = 'rent',
@@ -10,7 +11,9 @@ export enum IconType {
   default = 'default',
   media = 'media',
   transportation = 'transportation',
-  otherExpense = 'otherExpense'
+  otherExpense = 'otherExpense',
+  // Account icons
+  wallet = 'wallet'
 }
 
 type MuiSvg = OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string; };

@@ -4,6 +4,7 @@ import { RootState } from 'store';
 import { AuthState, Auth } from 'shared/models';
 import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
+import { closeSidebar } from './viewSlice';
 
 const initialState: AuthState = {
   status: 'idle',
@@ -41,10 +42,11 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
 //   return newAuth;
 // });
 
-export const logout = createAsyncThunk('auth/logout', async (): Promise<Auth> => {
+export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }): Promise<Auth> => {
   const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
+  dispatch(closeSidebar());
 
   return response.data;
 });

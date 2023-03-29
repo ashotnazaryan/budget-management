@@ -13,8 +13,13 @@ export const getCategories = createAsyncThunk('categories/getCategories', async 
   try {
     const response = await axios.get<{ data: CategoryDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/default-categories`);
 
-    const { data } = response.data;
-    return mapCategories(data);
+    if (response?.data) {
+      const { data } = response.data;
+
+      return mapCategories(data);
+    }
+
+    return [];
   } catch (error) {
     console.error(error);
     return [];
@@ -49,6 +54,6 @@ export const categorySlice = createSlice({
   }
 });
 
-export const selectCategories = (state: RootState): CategoryState => state.category;
+export const selectCategory = (state: RootState): CategoryState => state.category;
 
 export default categorySlice.reducer;

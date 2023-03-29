@@ -7,6 +7,7 @@ import settingReducer from './reducers/settingSlice';
 import authReducer from './reducers/authSlice';
 import userReducer from './reducers/userSlice';
 import categoryReducer from './reducers/categorySlice';
+import accountReducer from './reducers/accountSlice';
 import viewReducer from './reducers/viewSlice';
 
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
@@ -25,6 +26,7 @@ export const store = configureStore({
     auth: authReducer,
     user: userReducer,
     category: categoryReducer,
+    account: accountReducer,
     view: viewReducer
   }
 });

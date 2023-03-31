@@ -9,3 +9,4 @@ export * from './category';
 export * from './account';
 export * from './form';
 export * from './icon';
+export * from './common';

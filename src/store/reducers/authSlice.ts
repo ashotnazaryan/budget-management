@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
 import { AuthState, Auth } from 'shared/models';
@@ -14,12 +14,12 @@ const initialState: AuthState = {
 };
 
 export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {
-  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`);
+  const response = await axios.get<Auth>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`);
 
   const auth: Auth = {
-    userId: response.data.data.userId,
-    accessToken: response.data.data.accessToken,
-    refreshToken: response.data.data.refreshToken
+    userId: response.data.userId,
+    accessToken: response.data.accessToken,
+    refreshToken: response.data.refreshToken
   };
 
   saveToLocalStorage(AUTH_KEY, auth);
@@ -42,13 +42,11 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
 //   return newAuth;
 // });
 
-export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }): Promise<Auth> => {
-  const response = await axios.get(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
+export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }): Promise<void> => {
+  await axios.get<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
   dispatch(closeSidebar());
-
-  return response.data;
 });
 
 export const authSlice = createSlice({
@@ -73,7 +71,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<Auth>) => {
+      .addCase(getUserToken.fulfilled, (state, action) => {
         return {
           ...state,
           ...action.payload,
@@ -92,7 +90,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(logout.fulfilled, (state, action: PayloadAction<Auth>) => {
+      .addCase(logout.fulfilled, (state, action) => {
         return {
           ...initialState,
           status: 'succeeded'

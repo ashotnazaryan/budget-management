@@ -1,3 +1,5 @@
+import { StatusState } from './common';
+
 export interface UserDTO {
   email: string;
   family_name: string;
@@ -19,5 +21,5 @@ export interface User {
 }
 
 export interface UserState extends User {
-  status?: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: StatusState;
 }

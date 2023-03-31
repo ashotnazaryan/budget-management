@@ -1,4 +1,5 @@
 import { Transaction, TransactionDTO } from './transaction';
+import { StatusState } from './common';
 
 export interface SummaryDTO {
   incomes: number;
@@ -17,5 +18,5 @@ export interface Summary {
 }
 
 export interface SummaryState extends Summary {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: StatusState;
 }

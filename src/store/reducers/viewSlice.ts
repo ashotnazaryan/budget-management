@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 import { ViewState } from 'shared/models';
 
@@ -17,7 +17,7 @@ export const viewSlice = createSlice({
     closeSidebar: (state) => {
       state.sideBarOpened = false;
     },
-    setLoading: (state, action: PayloadAction<ViewState>) => {
+    setLoading: (state, action) => {
       state.loading = action.payload.loading;
     }
   },

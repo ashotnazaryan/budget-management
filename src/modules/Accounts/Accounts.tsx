@@ -11,7 +11,7 @@ const Accounts: React.FC<AccountsProps> = () => {
     <Routes>
       <Route path='/' element={<AccountList />} />
       <Route path='/new' element={<NewAccount />} />
-      <Route path="*" element={<Navigate to={ROUTES.accounts.path} replace />} />
+      <Route path='*' element={<Navigate to={ROUTES.accounts.path} replace />} />
     </Routes>
   );
 };

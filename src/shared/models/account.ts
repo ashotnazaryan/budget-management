@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { ErrorResponse, StatusState } from './common';
 import { IconType } from './icon';
 
 export interface AccountDTO {
@@ -15,7 +16,8 @@ export interface Account {
   icon: IconType;
 }
 
-export interface AccountState  {
+export interface AccountState {
   accounts: Account[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: StatusState;
+  error?: ErrorResponse;
 }

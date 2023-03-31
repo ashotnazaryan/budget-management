@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
 import { Auth, User, UserDTO, UserState } from 'shared/models';
@@ -42,7 +42,7 @@ export const userSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<UserState>) => {
+      .addCase(getUserInfo.fulfilled, (state, action) => {
         return {
           ...state,
           ...action.payload,

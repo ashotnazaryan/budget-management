@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
 import { Setting, SettingDTO, SettingState } from 'shared/models';
@@ -15,11 +15,9 @@ const initialState: SettingState = {
 
 export const getSettings = createAsyncThunk('setting/getSettings', async (): Promise<Setting> => {
   try {
-    const response = await axios.get<{ data: SettingDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
+    const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
 
-    const { data } = response.data;
-
-    return data;
+    return response.data;
   } catch (error) {
     console.error(error);
     return {} as Setting;
@@ -53,7 +51,7 @@ export const settingSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getSettings.fulfilled, (state, action: PayloadAction<Setting>) => {
+      .addCase(getSettings.fulfilled, (state, action) => {
         return {
           ...state,
           ...action.payload,

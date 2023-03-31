@@ -1,3 +1,5 @@
+import { StatusState } from './common';
+
 export interface Auth {
   accessToken: string;
   refreshToken: string;
@@ -10,5 +12,5 @@ export interface AuthDTO {
 }
 
 export interface AuthState extends Auth {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: StatusState;
 }

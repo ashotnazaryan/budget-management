@@ -1,3 +1,5 @@
+import { StatusState } from './common';
+
 export interface Currency {
   iso: 'USD' | 'EUR' | 'PLN' | 'UAH' | 'AMD';
   name: 'US Dollar' | 'Euro' | 'Polish Zloty' | 'Ukrainian Hryvnia' | 'Armenian Dram';
@@ -15,5 +17,5 @@ export interface Setting {
 }
 
 export interface SettingState extends Setting {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: StatusState;
 }

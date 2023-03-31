@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
 import { Category, CategoryDTO, CategoryState } from 'shared/models';
@@ -11,12 +11,10 @@ const initialState: CategoryState = {
 
 export const getCategories = createAsyncThunk('categories/getCategories', async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<{ data: CategoryDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/default-categories`);
+    const response = await axios.get<CategoryDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/default-categories`);
 
     if (response?.data) {
-      const { data } = response.data;
-
-      return mapCategories(data);
+      return mapCategories(response.data);
     }
 
     return [];
@@ -44,7 +42,7 @@ export const categorySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
+      .addCase(getCategories.fulfilled, (state, action) => {
         return {
           ...state,
           categories: action.payload,

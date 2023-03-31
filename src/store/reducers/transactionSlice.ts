@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState, store } from 'store';
 import { Transaction, TransactionDTO, TransactionState } from 'shared/models';
@@ -12,12 +12,15 @@ const initialState: TransactionState = {
 
 export const getTransactions = createAsyncThunk('transaction/getTransactions', async (): Promise<Transaction[]> => {
   try {
-    const response = await axios.get<{ data: TransactionDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions`);
+    const response = await axios.get<TransactionDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions`);
 
-    const { data } = response.data;
-    const { showDecimals } = store.getState().setting;
+    if (response?.data) {
+      const { showDecimals } = store.getState().setting;
 
-    return mapTransactions(data, showDecimals);
+      return mapTransactions(response.data, showDecimals);
+    }
+
+    return [];
   } catch (error) {
     console.error(error);
     return [];
@@ -51,7 +54,7 @@ export const transactionSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getTransactions.fulfilled, (state, action: PayloadAction<Transaction[]>) => {
+      .addCase(getTransactions.fulfilled, (state, action) => {
         return {
           ...state,
           transactions: action.payload,

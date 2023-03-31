@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createAccount, selectAccount } from 'store/reducers';
 import { ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
@@ -24,9 +26,11 @@ const NewAccount: React.FC<NewAccountProps> = () => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector(selectAccount);
+  const { status, error } = useAppSelector(selectAccount);
   const loading = status === 'loading';
   const helper = accountHelper();
+  const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
   const defaultValues: Partial<AccountDTO> = {
     initialAmount: 0,
@@ -39,22 +43,32 @@ const NewAccount: React.FC<NewAccountProps> = () => {
     defaultValues
   });
 
-  const goBack = (): void => {
-    navigate(`${ROUTES.accounts.path}`);
-  };
-
   const handleAccountIconClick = ({ id, name }: { id: string, name: string }): void => {
     methods.setValue(AccountField.icon, id as IconType, { shouldValidate: true });
   };
 
-  const handleFormSubmit = (data: AccountDTO): void => {
+  const handleFormSubmit = async (data: AccountDTO): Promise<void> => {
     const mappedData: AccountDTO = {
       ...data,
       initialAmount: Number(data.initialAmount)
     };
 
     dispatch(createAccount(mappedData));
+    setFormSubmitted(true);
   };
+
+  const goBack = React.useCallback(() => {
+    navigate(`${ROUTES.accounts.path}`);
+  }, [navigate]);
+
+
+  React.useEffect(() => {
+    if (status === 'succeeded' && formSubmitted) {
+      goBack();
+    } else if (status === 'failed') {
+      setShowSnackbar(true);
+    }
+  }, [goBack, loading, status, formSubmitted]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -126,6 +140,15 @@ const NewAccount: React.FC<NewAccountProps> = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 3 }}>
         <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
+      {/* TODO: create shared Snackbar component */}
+      {showSnackbar && (<Snackbar
+        open={true}
+        autoHideDuration={6000}
+      >
+        <Alert severity='error'>
+          {error?.message}
+        </Alert>
+      </Snackbar>)}
     </Box>
   );
 };

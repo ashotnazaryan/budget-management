@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { Account, AccountDTO, AccountState } from 'shared/models';
+import { Account, AccountDTO, AccountState, ErrorResponse } from 'shared/models';
 import { mapAccounts } from 'shared/helpers';
 
 const initialState: AccountState = {
@@ -9,14 +9,12 @@ const initialState: AccountState = {
   accounts: []
 };
 
-export const getAccounts = createAsyncThunk('accounts/getAccounts', async (): Promise<Account[]> => {
+export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccounts', async (): Promise<Account[]> => {
   try {
-    const response = await axios.get<{ data: AccountDTO[] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts`);
+    const response = await axios.get<AccountDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts`);
 
     if (response?.data) {
-      const { data } = response.data;
-
-      return mapAccounts(data);
+      return mapAccounts(response.data);
     }
 
     return [];
@@ -26,14 +24,21 @@ export const getAccounts = createAsyncThunk('accounts/getAccounts', async (): Pr
   }
 });
 
-export const createAccount = createAsyncThunk('accounts/createAccount', async (transaction: AccountDTO, { dispatch }): Promise<void> => {
-  try {
-    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/account`, transaction);
-    dispatch(getAccounts());
-  } catch (error) {
-    console.error(error);
-  }
-});
+// TODO: create error mechanism for all axios requests
+export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: ErrorResponse }>(
+  'accounts/createAccount',
+  async (account, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/account`, account);
+
+      if (response?.data) {
+        dispatch(getAccounts());
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
 
 export const AccountSlice = createSlice({
   name: 'accounts',
@@ -53,7 +58,7 @@ export const AccountSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getAccounts.fulfilled, (state, action: PayloadAction<Account[]>) => {
+      .addCase(getAccounts.fulfilled, (state, action) => {
         return {
           ...state,
           accounts: action.payload,
@@ -63,19 +68,23 @@ export const AccountSlice = createSlice({
       .addCase(createAccount.pending, (state) => {
         return {
           ...state,
-          status: 'loading'
+          status: 'loading',
+          newAccountStatus: 'loading'
         };
       })
-      .addCase(createAccount.rejected, (state) => {
+      .addCase(createAccount.rejected, (state, action) => {
         return {
           ...state,
-          status: 'failed'
+          status: 'failed',
+          newAccountStatus: 'failed',
+          error: action.payload
         };
       })
       .addCase(createAccount.fulfilled, (state) => {
         return {
           ...state,
-          status: 'succeeded'
+          status: 'succeeded',
+          newAccountStatus: 'succeeded'
         };
       });
   }

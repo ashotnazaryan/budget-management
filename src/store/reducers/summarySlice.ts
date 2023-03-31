@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState, store } from 'store';
 import { Summary, SummaryDTO, SummaryState } from 'shared/models';
@@ -15,13 +15,12 @@ const initialState: SummaryState = {
 
 export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<Summary> => {
   try {
-    const response = await axios.get<{ data: SummaryDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
+    const response = await axios.get<SummaryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
 
     if (response?.data) {
-      const { data } = response.data;
       const { showDecimals } = store.getState().setting;
 
-      return mapSummary(data, showDecimals);
+      return mapSummary(response.data, showDecimals);
     }
 
     return {} as Summary;
@@ -33,13 +32,12 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (): Promi
 
 export const getBalance = createAsyncThunk('summary/getBalance', async (): Promise<Summary['balance']> => {
   try {
-    const response = await axios.get<{ data: SummaryDTO['balance'] }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
+    const response = await axios.get<SummaryDTO['balance']>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
 
     if (response?.data) {
-      const { data } = response.data;
       const { showDecimals } = store.getState().setting;
 
-      return mapBalance(data, showDecimals);
+      return mapBalance(response.data, showDecimals);
     }
 
     return '0';
@@ -67,7 +65,7 @@ export const summarySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getSummary.fulfilled, (state, action: PayloadAction<Summary>) => {
+      .addCase(getSummary.fulfilled, (state, action) => {
         return {
           ...state,
           ...action.payload,
@@ -86,7 +84,7 @@ export const summarySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getBalance.fulfilled, (state, action: PayloadAction<Summary['balance']>) => {
+      .addCase(getBalance.fulfilled, (state, action) => {
         return {
           ...state,
           balance: action.payload,

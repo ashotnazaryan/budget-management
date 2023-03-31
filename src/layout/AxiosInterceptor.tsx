@@ -3,7 +3,7 @@ import axios, { AxiosError, CreateAxiosDefaults } from 'axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
-import { AuthState } from 'shared/models';
+import { AuthState, ErrorResponse } from 'shared/models';
 import { logout, removeUser } from 'store/reducers';
 
 const defaultConfigs: CreateAxiosDefaults = {
@@ -34,9 +34,14 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
 
   axios.interceptors.response.use(
     (response) => {
-      return response;
+      if (response) {
+        response.data = response.data.data || response.data;
+        return response;
+      }
+
+      throw new Error(response);
     },
-    (error: AxiosError) => {
+    (error: AxiosError<ErrorResponse>) => {
       if (error.response?.status === 401) {
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
@@ -44,6 +49,12 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
 
         return Promise.reject(error);
       }
+
+      if (!error.isAxiosError) {
+        return Promise.reject(error);
+      }
+
+      return Promise.reject(error.response?.data);
     }
   );
 

@@ -25,6 +25,7 @@ export const ICONS: IconTypes = {
   [IconType.plus]: AddIcon
 };
 
-export const ICONS_LIST: Icon[] = Object.keys(ICONS).reduce<Icon[]>((acc, curr) => {
-  return [...acc, { name: curr as IconType, icon: ICONS[curr] }];
-}, []);
+export const ICONS_LIST: Icon[] = Object.keys(ICONS)
+  .reduce<Icon[]>((acc, curr) => {
+    return [...acc, { name: curr as IconType, icon: ICONS[curr] }];
+  }, []);

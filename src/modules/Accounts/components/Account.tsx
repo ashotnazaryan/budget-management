@@ -1,50 +1,38 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import Icon from 'shared/components/Icon';
 import { theme } from 'core/theme.config';
 import { Account as AccountModel } from 'shared/models';
-import Icon from 'shared/components/Icon';
+import Grid from '@mui/material/Grid';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface AccountProps {
-  id: AccountModel['id'];
+  name: AccountModel['name'];
   icon: AccountModel['icon'];
-  title?: AccountModel['name'];
-  selected?: AccountModel['id'];
-  showTitle?: boolean;
-  size?: number;
-  onClick: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
+  initialAmount: AccountModel['initialAmount'];
+  symbol: AccountModel['currencySymbol'];
 }
 
-const Account: React.FC<AccountProps> = ({ id, selected, title = '', showTitle = true, icon, size = 64, onClick }) => {
-  const { palette: { primary: { main, contrastText } } } = theme;
-
-  const onAccountClick = (id: AccountModel['id']) => (): void => {
-    onClick({ id, name: title });
-  };
-
-  const getColor = (): string => {
-    return selected === id ? contrastText : main;
-  };
-
+const Account: React.FC<AccountProps> = ({ name, icon, initialAmount, symbol }) => {
   return (
-    <Box display='flex' flexDirection='column' alignItems='center' width={128}>
-      <Box onClick={onAccountClick(id)} sx={{
-        backgroundColor: selected === id ? main : 'transparent',
-        border: `1px solid ${main}`,
-        color: getColor(),
-        height: size,
-        width: size,
-        borderRadius: '50%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer'
+    <Grid container display='flex' alignItems='center' justifyContent='space-between'
+      sx={{
+        paddingX: 4,
+        paddingY: 2,
+        marginY: 1,
+        borderRadius: 1,
+        width: '100%',
+        minHeight: 40
       }}>
-        <Icon name={icon}></Icon>
-      </Box>
-      {showTitle && <Ellipsis text={title} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />}
-    </Box>
+      <Grid item xs={1} display='flex'>
+        {icon && <Icon name={icon} sx={{ fontSize: 24, color: theme.palette.primary.main }}></Icon>}
+      </Grid>
+      <Grid item xs={7} display='flex'>
+        <Ellipsis text={name} />
+      </Grid>
+      <Grid item xs={4} display='flex' justifyContent='flex-end'>
+        <Ellipsis text={`${symbol}${initialAmount}`} />
+      </Grid>
+    </Grid>
   );
 };
 

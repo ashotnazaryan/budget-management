@@ -5,21 +5,23 @@ import { Category as CategoryModel, CategoryType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
-interface CategoryProps {
+interface CategoryIconProps {
   id: CategoryModel['id'];
   title: CategoryModel['name'];
   type: CategoryType;
   selected?: CategoryModel['id'];
   icon: CategoryModel['icon'];
-  onClick: ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }) => void;
+  onClick?: ({ categoryId, name, icon }: { categoryId: CategoryModel['id'], name: CategoryModel['name'], icon: CategoryModel['icon'] }) => void;
 }
 
-const Category: React.FC<CategoryProps> = ({ id, selected, title, type, icon, onClick }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, onClick }) => {
   const { palette: { primary, secondary } } = theme;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
-  const onCategoryClick = (id: CategoryModel['id']) => (): void => {
-    onClick({ categoryId: id, name: title });
+  const onCategoryClick = (id: CategoryModel['id'], icon: CategoryModel['icon']) => (): void => {
+    if (onClick) {
+      onClick({ icon, categoryId: id, name: title });
+    }
   };
 
   const getColor = (): string => {
@@ -28,7 +30,7 @@ const Category: React.FC<CategoryProps> = ({ id, selected, title, type, icon, on
 
   return (
     <Box display='flex' flexDirection='column' alignItems='center' width={128}>
-      <Box onClick={onCategoryClick(id)} sx={{
+      <Box onClick={onCategoryClick(id, icon)} sx={{
         backgroundColor: selected === id ? categoryColor : 'transparent',
         border: `1px solid ${categoryColor}`,
         color: getColor(),
@@ -48,4 +50,4 @@ const Category: React.FC<CategoryProps> = ({ id, selected, title, type, icon, on
   );
 };
 
-export default Category;
+export default CategoryIcon;

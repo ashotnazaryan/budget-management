@@ -1,6 +1,7 @@
 import { Auth } from './auth';
 import { Category, CategoryType } from './category';
 import { StatusState } from './common';
+import { IconType } from './icon';
 
 export interface TransactionDTO {
   _id?: string;
@@ -11,6 +12,7 @@ export interface TransactionDTO {
   amount: number;
   percentValue?: number;
   createdAt: Date;
+  icon: string;
 }
 
 export interface Transaction {
@@ -22,6 +24,7 @@ export interface Transaction {
   amount: string;
   percentValue?: string;
   createdAt: string;
+  icon: IconType;
 }
 
 export interface TransactionState {

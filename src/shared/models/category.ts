@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IconType } from './icon';
-import { StatusState } from './common';
+import { ErrorResponse, StatusState } from './common';
 
 export enum CategoryType {
   income = 1,
@@ -24,4 +24,5 @@ export interface Category {
 export interface CategoryState {
   categories: Category[];
   status: StatusState;
+  error?: ErrorResponse;
 }

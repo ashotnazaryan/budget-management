@@ -1,5 +1,5 @@
 import * as React from 'react';
-import axios, { AxiosError, CreateAxiosDefaults } from 'axios';
+import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from 'axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
@@ -10,6 +10,18 @@ const defaultConfigs: CreateAxiosDefaults = {
   headers: {
     'Content-Type': 'application/json',
   }
+};
+
+const mapResponse = (response: AxiosResponse): AxiosResponse => {
+  if (response) {
+    if (response.data.data || response.data.data === 0) {
+      response.data = response.data.data;
+    }
+
+    return response;
+  }
+
+  throw new Error(response);
 };
 
 axios.create(defaultConfigs);
@@ -34,12 +46,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
 
   axios.interceptors.response.use(
     (response) => {
-      if (response) {
-        response.data = response.data.data || response.data;
-        return response;
-      }
-
-      throw new Error(response);
+      return mapResponse(response);
     },
     (error: AxiosError<ErrorResponse>) => {
       if (error.response?.status === 401) {

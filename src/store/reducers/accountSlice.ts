@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
+import { RootState, store } from 'store';
 import { Account, AccountDTO, AccountState, ErrorResponse } from 'shared/models';
 import { mapAccounts } from 'shared/helpers';
 
@@ -14,7 +14,9 @@ export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccoun
     const response = await axios.get<AccountDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts`);
 
     if (response?.data) {
-      return mapAccounts(response.data);
+      const { showDecimals } = store.getState().setting;
+
+      return mapAccounts(response.data, showDecimals);
     }
 
     return [];
@@ -68,23 +70,20 @@ export const AccountSlice = createSlice({
       .addCase(createAccount.pending, (state) => {
         return {
           ...state,
-          status: 'loading',
-          newAccountStatus: 'loading'
+          status: 'loading'
         };
       })
       .addCase(createAccount.rejected, (state, action) => {
         return {
           ...state,
           status: 'failed',
-          newAccountStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(createAccount.fulfilled, (state) => {
         return {
           ...state,
-          status: 'succeeded',
-          newAccountStatus: 'succeeded'
+          status: 'succeeded'
         };
       });
   }

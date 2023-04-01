@@ -4,13 +4,21 @@ import { FieldError } from 'react-hook-form';
 export enum TransactionField {
   amount = 'amount',
   categoryId = 'categoryId',
-  type = 'type'
+  type = 'type',
+  icon = 'icon'
 }
 
 export enum AccountField {
   initialAmount = 'initialAmount',
   icon = 'icon',
-  name = 'name'
+  name = 'name',
+  currencyIso = 'currencyIso'
+}
+
+export enum CategoryField {
+  icon = 'icon',
+  name = 'name',
+  type = 'type'
 }
 
 type FieldErrorType = FieldError['type'];

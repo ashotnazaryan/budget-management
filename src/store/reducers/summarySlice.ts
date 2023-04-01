@@ -72,23 +72,10 @@ export const summarySlice = createSlice({
           status: 'succeeded'
         };
       })
-      .addCase(getBalance.pending, (state) => {
-        return {
-          ...state,
-          status: 'loading'
-        };
-      })
-      .addCase(getBalance.rejected, (state) => {
-        return {
-          ...state,
-          status: 'failed'
-        };
-      })
       .addCase(getBalance.fulfilled, (state, action) => {
         return {
           ...state,
-          balance: action.payload,
-          status: 'succeeded'
+          balance: action.payload
         };
       });
   }

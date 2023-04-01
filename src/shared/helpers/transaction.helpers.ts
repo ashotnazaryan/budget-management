@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Transaction, TransactionDTO } from 'shared/models';
+import { IconType, Transaction, TransactionDTO } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
 
 export const mapTransactions = (transactions: TransactionDTO[], showDecimals = false): Transaction[] => {
@@ -12,6 +12,7 @@ export const mapTransactions = (transactions: TransactionDTO[], showDecimals = f
     id: transaction._id,
     amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
     percentValue: `${transaction.percentValue}%`,
-    createdAt: moment(transaction.createdAt).format('LL')
+    createdAt: moment(transaction.createdAt).format('LL'),
+    icon: transaction.icon as IconType
   }));
 };

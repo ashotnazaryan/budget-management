@@ -1,6 +1,6 @@
 export const mapNumberToCurrencyString = (value: number, showDecimals = false): string => {
   if (value === null || value === undefined) {
-    return '0';
+    return showDecimals ? '0.00' : '0';
   }
 
   const decimals = showDecimals ? 2 : 0;

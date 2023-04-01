@@ -15,7 +15,10 @@ export enum IconType {
   // Account icons
   wallet = 'wallet',
   // Other icons
-  plus = 'plus'
+  plus = 'plus',
+  dollar = 'dollar',
+  euro = 'euro',
+  pound = 'pound'
 }
 
 export interface Icon {

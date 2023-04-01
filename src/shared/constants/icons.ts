@@ -7,6 +7,10 @@ import SubwayIcon from '@mui/icons-material/Subway';
 import HelpIcon from '@mui/icons-material/Help';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddIcon from '@mui/icons-material/Add';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import EuroIcon from '@mui/icons-material/Euro';
+import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const ICONS: IconTypes = {
@@ -18,9 +22,12 @@ export const ICONS: IconTypes = {
   [IconType.media]: ElectricBoltIcon,
   [IconType.transportation]: SubwayIcon,
   [IconType.otherExpense]: HelpIcon,
-  [IconType.default]: HelpIcon,
+  [IconType.default]: QuestionMarkIcon,
   // Account icons
   [IconType.wallet]: AccountBalanceWalletIcon,
+  [IconType.dollar]: AttachMoneyIcon,
+  [IconType.euro]: EuroIcon,
+  [IconType.pound]: CurrencyPoundIcon,
   // Other icons
   [IconType.plus]: AddIcon
 };

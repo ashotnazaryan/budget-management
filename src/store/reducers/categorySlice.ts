@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'store';
-import { Category, CategoryDTO, CategoryState } from 'shared/models';
+import { Category, CategoryDTO, CategoryState, ErrorResponse } from 'shared/models';
 import { mapCategories } from 'shared/helpers';
 
 const initialState: CategoryState = {
@@ -11,7 +11,7 @@ const initialState: CategoryState = {
 
 export const getCategories = createAsyncThunk('categories/getCategories', async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<CategoryDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/category/default-categories`);
+    const response = await axios.get<CategoryDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories`);
 
     if (response?.data) {
       return mapCategories(response.data);
@@ -23,6 +23,21 @@ export const getCategories = createAsyncThunk('categories/getCategories', async 
     return [];
   }
 });
+
+export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue: ErrorResponse }>(
+  'categories/createCategory',
+  async (category, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/category`, category);
+
+      if (response?.data) {
+        dispatch(getCategories());
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
 
 export const categorySlice = createSlice({
   name: 'categories',
@@ -46,6 +61,25 @@ export const categorySlice = createSlice({
         return {
           ...state,
           categories: action.payload,
+          status: 'succeeded'
+        };
+      })
+      .addCase(createCategory.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        return {
+          ...state,
+          status: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(createCategory.fulfilled, (state) => {
+        return {
+          ...state,
           status: 'succeeded'
         };
       });

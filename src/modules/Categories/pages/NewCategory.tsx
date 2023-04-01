@@ -4,70 +4,62 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, selectAccount, selectSettings } from 'store/reducers';
-import { CURRENCIES, ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
-import { accountHelper } from 'shared/helpers';
+import { createCategory, selectCategory } from 'store/reducers';
+import { ICONS_LIST, ROUTES } from 'shared/constants';
+import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
+import { categoryHelper } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
-import AccountIcon from '../components/AccountIcon';
+import AccountIcon from 'modules/Accounts/components/AccountIcon';
 
-interface NewAccountProps { }
+interface NewCategoryProps { }
 
 const icons = ICONS_LIST;
 
-const NewAccount: React.FC<NewAccountProps> = () => {
-  const regex = POSITIVE_NUMERIC_REGEX;
-  const currencies = CURRENCIES;
+const NewCategory: React.FC<NewCategoryProps> = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status, error = { message: '' } } = useAppSelector(selectAccount);
-  const { currency: { iso } } = useAppSelector(selectSettings);
+  const { status, error = { message: '' } } = useAppSelector(selectCategory);
   const loading = status === 'loading';
-  const helper = accountHelper();
+  const helper = categoryHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
-  const defaultValues: Partial<AccountDTO> = {
-    initialAmount: 0,
+  const defaultValues: Partial<CategoryDTO> = {
+    type: CategoryType.expense,
     name: '',
-    currencyIso: iso
   };
 
-  const methods = useForm<AccountDTO>({
+  const methods = useForm<CategoryDTO>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
   });
 
-  const handleAccountIconClick = ({ id, name }: { id: string, name: string }): void => {
-    methods.setValue(AccountField.icon, id as IconType, { shouldValidate: true });
+  const handleCategoryIconClick = ({ id, name }: { id: string, name: string }): void => {
+    methods.setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
   };
 
-  const handleCurrencyChange = (event: SelectChangeEvent): void => {
-    const iso = event.target.value as Currency['iso'];
+  const handleCategoryTypeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const type = Number(event.target.value) as CategoryType;
 
-    methods.setValue(AccountField.currencyIso, iso, { shouldValidate: true });
+    methods.setValue(CategoryField.type, type, { shouldValidate: true });
   };
 
-  const handleFormSubmit = async (data: AccountDTO): Promise<void> => {
-    const mappedData: AccountDTO = {
-      ...data,
-      initialAmount: Number(data.initialAmount)
-    };
-
-    dispatch(createAccount(mappedData));
+  const handleFormSubmit = async (data: CategoryDTO): Promise<void> => {
+    dispatch(createCategory(data));
     setFormSubmitted(true);
   };
 
   const goBack = React.useCallback(() => {
-    navigate(`${ROUTES.accounts.path}`);
+    navigate(`${ROUTES.categories.path}`);
   }, [navigate]);
 
   const handleSnackbarClose = (): void => {
@@ -88,14 +80,14 @@ const NewAccount: React.FC<NewAccountProps> = () => {
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
         <BackButton onClick={goBack} />
-        <PageTitle text='Create new account' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
+        <PageTitle text='Create new category' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
       </Box>
       <Box flexGrow={1} display='flex' flexDirection='column'>
         <FormProvider {...methods}>
           <FormInput
             focused
             label='Name'
-            name={AccountField.name}
+            name={CategoryField.name}
             rules={{
               required: {
                 value: true,
@@ -106,47 +98,41 @@ const NewAccount: React.FC<NewAccountProps> = () => {
               marginBottom: 4
             }}
           />
-          <FormInput
-            label='Initial amount'
-            type='number'
-            name={AccountField.initialAmount}
-            rules={{
-              required: {
-                value: true,
-                message: helper.initialAmount.required?.message
-              },
-              pattern: {
-                value: regex,
-                message: helper.initialAmount.pattern?.message
-              }
-            }}
-            sx={{
-              marginBottom: 4
-            }}
-          />
+          <Typography variant='subtitle1' sx={{ marginY: 1 }}>Type</Typography>
           <Controller
             control={methods.control}
-            name={AccountField.currencyIso}
+            name={CategoryField.type}
             rules={{
               required: true
             }}
             render={({ field, fieldState: { error } }) => (
-              <Select
-                label='Currency'
-                variant='outlined'
-                value={field.value}
-                onChange={handleCurrencyChange}
-              >
-                {currencies.map(({ iso, name, symbol }) => (
-                  <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-                ))}
-              </Select>
+              // TODO: move to a shared components
+              <RadioGroup row>
+                <FormControlLabel value={field.value} label='Expense'
+                  control={
+                    <Radio
+                      checked={field.value === 0}
+                      onChange={handleCategoryTypeChange}
+                      value={0}
+                    />
+                  }
+                />
+                <FormControlLabel value={field.value} label='Income'
+                  control={
+                    <Radio
+                      checked={field.value === 1}
+                      onChange={handleCategoryTypeChange}
+                      value={1}
+                    />
+                  }
+                />
+              </RadioGroup>
             )}
           />
           <Typography variant='subtitle1' sx={{ marginY: 1 }}>Icon</Typography>
           <Controller
             control={methods.control}
-            name={AccountField.icon}
+            name={CategoryField.icon}
             rules={{
               required: true
             }}
@@ -156,7 +142,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
                   {
                     icons.map(({ name }) => (
                       <Grid item key={name}>
-                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleCategoryIconClick} />
                       </Grid>
                     ))
                   }
@@ -175,4 +161,4 @@ const NewAccount: React.FC<NewAccountProps> = () => {
   );
 };
 
-export default NewAccount;
+export default NewCategory;

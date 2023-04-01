@@ -4,7 +4,7 @@ import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'store';
-import { Account as AccountModel, IconType } from 'shared/models';
+import { IconType } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import { getAccounts, selectAccount } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
@@ -23,10 +23,6 @@ const AccountList: React.FC<AccountListProps> = () => {
     dispatch(getAccounts());
   }, [dispatch]);
 
-  const handleAccountItemClick = ({ name, id }: { id: AccountModel['id'], name?: AccountModel['name'] }): void => {
-
-  };
-
   const openNewAccountPage = (): void => {
     navigate(`${ROUTES.accounts.path}/new`);
   };
@@ -37,14 +33,14 @@ const AccountList: React.FC<AccountListProps> = () => {
     }
 
     return (
-      <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {accounts.map(({ name, icon, id }) => (
-          <Grid item key={id}>
-            <Account id={id} title={name} icon={icon} onClick={handleAccountItemClick} />
+      <Grid container rowGap={4} sx={{ marginTop: 4 }}>
+        {accounts.map(({ name, icon, id, initialAmount, currencySymbol }) => (
+          <Grid item key={id} xs={12}>
+            <Account name={name} initialAmount={initialAmount} icon={icon} symbol={currencySymbol} />
           </Grid>
         ))}
-        <Grid item>
-          <IconButton color='primary' onClick={openNewAccountPage}>
+        <Grid item xs={12} display='flex' justifyContent='flex-end'>
+          <IconButton color='primary' onClick={openNewAccountPage} sx={{ alignSelf: 'flex-end' }}>
             <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
           </IconButton>
         </Grid>

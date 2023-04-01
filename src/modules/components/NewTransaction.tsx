@@ -13,7 +13,7 @@ import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
 import Button from 'shared/components/Button';
-import Category from './Category';
+import CategoryIcon from 'modules/Categories/components/CategoryIcon';
 
 interface NewTransactionProps {
   currency: Currency['iso'];
@@ -48,8 +48,9 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
     methods.setValue(TransactionField.type, selectedTab);
   };
 
-  const handleCategoryItemClick = ({ categoryId, name }: { categoryId: CategoryModel['id'], name: CategoryModel['name'] }): void => {
+  const handleCategoryIconClick = ({ categoryId, name, icon }: { categoryId: CategoryModel['id'], name: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
     methods.setValue(TransactionField.categoryId, categoryId, { shouldValidate: true });
+    methods.setValue(TransactionField.icon, icon);
     methods.setValue('name', name, { shouldValidate: true });
   };
 
@@ -117,7 +118,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
                         {
                           categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
                             <Grid item key={`${name}-${icon}`}>
-                              <Category id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryItemClick} />
+                              <CategoryIcon id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryIconClick} />
                             </Grid>
                           ))
                         }

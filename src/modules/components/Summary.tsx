@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Currency, Transaction } from 'shared/models';
 import { isPositiveString } from 'shared/helpers';
-import CategoryExpenseTransaction from './CategoryExpenseTransaction';
+import CategoryTransaction from './CategoryTransaction';
 
 interface SummaryProps {
   incomes: string;
@@ -67,9 +67,9 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </IconButton>
         </Grid>
         {
-          transactions.map(({ categoryId, name, amount, percentValue }) => (
+          transactions.map(({ categoryId, name, amount, icon, percentValue }) => (
             <Grid item xs={12} key={categoryId}>
-              <CategoryExpenseTransaction name={name} amount={amount} currency={currencySymbol} value={percentValue} />
+              <CategoryTransaction name={name} amount={amount} currency={currencySymbol} value={percentValue} icon={icon} />
             </Grid>
           ))
         }

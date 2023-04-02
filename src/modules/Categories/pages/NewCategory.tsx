@@ -17,7 +17,7 @@ import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
-import AccountIcon from 'modules/Accounts/components/AccountIcon';
+import AccountIcon from 'shared/components/AccountIcon';
 
 interface NewCategoryProps { }
 
@@ -43,7 +43,7 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
     defaultValues
   });
 
-  const handleCategoryIconClick = ({ id, name }: { id: string, name: string }): void => {
+  const handleAccountIconClick = ({ id }: { id: string }): void => {
     methods.setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
   };
 
@@ -53,7 +53,7 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
     methods.setValue(CategoryField.type, type, { shouldValidate: true });
   };
 
-  const handleFormSubmit = async (data: CategoryDTO): Promise<void> => {
+  const handleFormSubmit = (data: CategoryDTO): void => {
     dispatch(createCategory(data));
     setFormSubmitted(true);
   };
@@ -66,7 +66,6 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
     setShowSnackbar(false);
   };
 
-
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
@@ -77,7 +76,7 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
   }, [goBack, loading, status, formSubmitted]);
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
       <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
         <BackButton onClick={goBack} />
         <PageTitle text='Create new category' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
@@ -142,7 +141,7 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
                   {
                     icons.map(({ name }) => (
                       <Grid item key={name}>
-                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleCategoryIconClick} />
+                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
                       </Grid>
                     ))
                   }

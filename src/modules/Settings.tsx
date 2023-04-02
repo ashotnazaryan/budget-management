@@ -31,7 +31,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box flexGrow={1}>
       <PageTitle text='Settings' />
       <Typography variant='subtitle1' sx={{ marginY: 2 }}>Default currency</Typography>
       <Grid container rowGap={4}>

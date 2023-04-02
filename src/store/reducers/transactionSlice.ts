@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState, store } from 'store';
-import { Transaction, TransactionDTO, TransactionState } from 'shared/models';
+import { ErrorResponse, Transaction, TransactionDTO, TransactionState } from 'shared/models';
 import { mapTransactions } from 'shared/helpers/transaction.helpers';
 import { getSummary } from './summarySlice';
 
@@ -27,14 +27,20 @@ export const getTransactions = createAsyncThunk('transaction/getTransactions', a
   }
 });
 
-export const addTransaction = createAsyncThunk('transaction/addTransaction', async (transaction: TransactionDTO, { dispatch }): Promise<void> => {
-  try {
-    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/transaction`, transaction);
-    dispatch(getSummary());
-  } catch (error) {
-    console.error(error);
-  }
-});
+export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectValue: ErrorResponse }>(
+  'transaction/addTransaction',
+  async (transaction, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/transaction`, transaction);
+
+      if (response?.data) {
+        dispatch(getSummary());
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
 
 export const transactionSlice = createSlice({
   name: 'transaction',

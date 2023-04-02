@@ -4,7 +4,7 @@ import Box from '@mui/system/Box';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
 import { ROUTES } from 'shared/constants';
 import Login from './Login';
-import Dashboard from './Dashboard';
+import Main from './Dashboard/Main';
 import Settings from './Settings';
 import Transactions from './Transactions';
 import Categories from './Categories/Categories';
@@ -17,7 +17,7 @@ const App: React.FC = () => {
         <Route path={ROUTES.login.path} element={<Login />} />
         <Route path={ROUTES.home.path} element={<ProtectedLayout />}>
           <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
-          <Route path={ROUTES.dashboard.path} element={<Dashboard />} />
+          <Route path={`${ROUTES.dashboard.path}/*`} element={<Main />} />
           <Route path={ROUTES.settings.path} element={<Settings />} />
           <Route path={ROUTES.transactions.path} element={<Transactions />} />
           <Route path={`${ROUTES.categories.path}/*`} element={<Categories />} />

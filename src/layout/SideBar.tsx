@@ -25,11 +25,11 @@ import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 interface SideBarProps extends MuiDrawerProps { }
 
 const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
+  const dispatch = useAppDispatch();
   const opened = useAppSelector(selectSideBarOpened);
   const user = useAppSelector(selectUser);
   const balance = useAppSelector(selectBalance);
   const { currency: { symbol }, showDecimals } = useAppSelector(selectSettings);
-  const dispatch = useAppDispatch();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;

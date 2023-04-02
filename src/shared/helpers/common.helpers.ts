@@ -4,8 +4,9 @@ export const mapNumberToCurrencyString = (value: number, showDecimals = false): 
   }
 
   const decimals = showDecimals ? 2 : 0;
+  const currencyString = value.toFixed(decimals).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-  return value.toFixed(decimals).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  return currencyString;
 };
 
 export const isPositiveString = (value: string): boolean => {

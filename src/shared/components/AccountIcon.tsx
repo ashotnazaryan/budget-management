@@ -1,24 +1,23 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { theme } from 'core/theme.config';
-import { Account as AccountModel } from 'shared/models';
+import { IconType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 
 interface AccountIconProps {
-  id: AccountModel['id'];
-  icon: AccountModel['icon'];
-  title?: AccountModel['name'];
-  selected?: AccountModel['id'];
+  id: string;
+  icon: IconType;
+  selected?: string;
   size?: number;
-  onClick: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
+  onClick: ({ id }: { id: string }) => void;
 }
 
 // TODO: make this component generic
-const AccountIcon: React.FC<AccountIconProps> = ({ id, selected, title = '', icon, size = 64, onClick }) => {
+const AccountIcon: React.FC<AccountIconProps> = ({ id, selected, icon, size = 64, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = theme;
 
-  const onAccountClick = (id: AccountModel['id']) => (): void => {
-    onClick({ id, name: title });
+  const onAccountClick = (id: string) => (): void => {
+    onClick({ id });
   };
 
   const getColor = (): string => {

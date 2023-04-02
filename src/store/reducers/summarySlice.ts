@@ -33,14 +33,9 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (): Promi
 export const getBalance = createAsyncThunk('summary/getBalance', async (): Promise<Summary['balance']> => {
   try {
     const response = await axios.get<SummaryDTO['balance']>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
+    const { showDecimals } = store.getState().setting;
 
-    if (response?.data) {
-      const { showDecimals } = store.getState().setting;
-
-      return mapBalance(response.data, showDecimals);
-    }
-
-    return '0';
+    return mapBalance(response.data, showDecimals) || '0';
   } catch (error) {
     console.error(error);
     return '0';

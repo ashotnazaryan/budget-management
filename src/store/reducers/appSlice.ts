@@ -16,13 +16,9 @@ export const eraseUserData = createAsyncThunk<void, void, { rejectValue: ErrorRe
   'app/eraseUserData',
   async (_, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/delete-all`);
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/delete-all`);
 
-      if (response.data) {
-        dispatch(resetApp());
-      }
-
-      return response.data;
+      dispatch(resetApp());
     } catch (error: any) {
       console.error(error);
       return rejectWithValue(error.error);

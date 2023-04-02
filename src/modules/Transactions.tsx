@@ -3,12 +3,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getTransactions, selectCurrency, selectTransaction } from 'store/reducers';
 import { CategoryType } from 'shared/models';
 import Skeleton from 'shared/components/Skeleton';
 import Ellipsis from 'shared/components/Ellipsis';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
+import { selectCurrency, getTransactions, selectTransaction } from 'store/reducers';
 
 interface TransactionsProps { }
 

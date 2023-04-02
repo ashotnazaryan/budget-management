@@ -7,7 +7,6 @@ import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from 'store';
-import { addTransaction, getCategories, selectCategory, selectCurrency, selectTransaction } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
@@ -18,6 +17,13 @@ import Snackbar from 'shared/components/Snackbar';
 import BackButton from 'shared/components/BackButton';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
+import {
+  getCategories,
+  selectCategory,
+  addTransaction,
+  selectTransaction,
+  selectCurrency
+} from 'store/reducers';
 
 interface NewTransactionProps { }
 

@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from 'store';
 import { ViewState } from 'shared/models';
+import { RootState } from './rootReducer';
 
+// TODO: move this to app slice
 const initialState: ViewState = {
   sideBarOpened: false,
   loading: false

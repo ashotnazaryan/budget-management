@@ -8,7 +8,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createCategory, selectCategory } from 'store/reducers';
 import { ICONS_LIST, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
 import { categoryHelper } from 'shared/helpers';
@@ -18,6 +17,7 @@ import FormInput from 'shared/components/FormInput';
 import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
+import { createCategory, selectCategory } from 'store/reducers';
 
 interface NewCategoryProps { }
 

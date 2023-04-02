@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState, store } from 'store';
+import { store } from 'store';
 import { Account, AccountDTO, AccountState, ErrorResponse } from 'shared/models';
 import { mapAccounts } from 'shared/helpers';
+import { resetApp } from './appSlice';
+import { RootState } from './rootReducer';
 
 const initialState: AccountState = {
   status: 'idle',
@@ -42,7 +44,7 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
     }
   });
 
-export const AccountSlice = createSlice({
+export const accountSlice = createSlice({
   name: 'accounts',
   initialState,
   reducers: {},
@@ -85,10 +87,13 @@ export const AccountSlice = createSlice({
           ...state,
           status: 'succeeded'
         };
+      })
+      .addCase(resetApp, () => {
+        return initialState;
       });
   }
 });
 
 export const selectAccount = (state: RootState): AccountState => state.account;
 
-export default AccountSlice.reducer;
+export default accountSlice.reducer;

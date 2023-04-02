@@ -4,7 +4,7 @@ import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
 import { AuthState, ErrorResponse } from 'shared/models';
-import { logout, removeUser } from 'store/reducers';
+import { removeUser, logout } from 'store/reducers';
 
 const defaultConfigs: CreateAxiosDefaults = {
   headers: {

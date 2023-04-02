@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
+import { RootState } from './rootReducer';
 import { AuthState, Auth } from 'shared/models';
 import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
@@ -99,8 +99,7 @@ export const authSlice = createSlice({
   }
 });
 
-export const { removeAuth } = authSlice.actions;
-
 export const selectAuth = (state: RootState): AuthState => state.auth;
 
+export const { removeAuth } = authSlice.actions;
 export default authSlice.reducer;

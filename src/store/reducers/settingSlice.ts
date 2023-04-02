@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
 import { Setting, SettingDTO, SettingState } from 'shared/models';
+import { RootState } from './rootReducer';
+import { resetApp } from './appSlice';
 
 const initialState: SettingState = {
   currency: {
@@ -17,7 +18,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (): Pro
   try {
     const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
 
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error(error);
     return {} as Setting;
@@ -57,6 +58,9 @@ export const settingSlice = createSlice({
           ...action.payload,
           status: 'succeeded'
         };
+      })
+      .addCase(resetApp, () => {
+        return initialState;
       });
   }
 });

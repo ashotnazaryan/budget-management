@@ -18,8 +18,16 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
-import { closeSidebar, getBalance, logout, selectBalance, selectSettings, selectSideBarOpened, selectUser } from 'store/reducers';
 import Dialog from 'shared/components/Dialog';
+import {
+  closeSidebar,
+  selectSideBarOpened,
+  selectUser,
+  getBalance,
+  selectBalance,
+  selectSettings,
+  logout
+} from 'store/reducers';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 
 interface SideBarProps extends MuiDrawerProps { }

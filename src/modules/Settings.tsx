@@ -10,14 +10,27 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES } from 'shared/constants';
-import { addSetting, selectSettings, } from 'store/reducers';
 import { Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
+import Button from 'shared/components/Button';
+import Dialog from 'shared/components/Dialog';
+import { addSetting, selectSettings, eraseUserData, selectApp } from 'store/reducers';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
   const { currency: { iso }, showDecimals } = useAppSelector(selectSettings);
+  const { status } = useAppSelector(selectApp);
+  const loading = status === 'loading';
   const dispatch = useAppDispatch();
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+
+  const handleOpenDialog = (): void => {
+    setDialogOpened(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setDialogOpened(false);
+  };
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
@@ -29,6 +42,16 @@ const Settings: React.FC = () => {
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
     dispatch(addSetting({ showDecimals: checked }));
   };
+
+  const deleteUserData = (): void => {
+    dispatch(eraseUserData());
+  };
+
+  React.useEffect(() => {
+    if (status === 'succeeded') {
+      setDialogOpened(false);
+    }
+  }, [status]);
 
   return (
     <Box flexGrow={1}>
@@ -66,7 +89,15 @@ const Settings: React.FC = () => {
             }}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Button color='secondary' variant='contained' onClick={handleOpenDialog}>Erase user data</Button>
+        </Grid>
       </Grid>
+      <Dialog title='Delete all data' loading={loading} actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={deleteUserData} fullWidth maxWidth='xs'>
+        <Typography variant='subtitle1'>
+          Are you sure you want to delete all the data? This action cannot be undone.
+        </Typography>
+      </Dialog>
     </Box>
   );
 };

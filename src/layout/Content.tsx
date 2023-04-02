@@ -27,12 +27,12 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   }, [dispatch]);
 
   return (
-    <Box flexGrow={1} display='flex' flexDirection='column' sx={{ overflowX: 'hidden', backgroundColor: theme.palette.info.light }}>
+    <Box display='flex' flexDirection='column' flexGrow={1} sx={{ overflowX: 'hidden', backgroundColor: theme.palette.info.light }}>
       <Header />
       <SideBar variant='temporary' />
-      <Grid container justifyContent='center'>
-        <Grid item md={8} xs={12}>
-          <Box flexGrow={1} sx={{
+      <Grid container display='flex' justifyContent='center' flexGrow={1}>
+        <Grid item display='flex' md={8} xs={12}>
+          <Box display='flex' flexGrow={1} sx={{
             paddingY: 2,
             paddingX: { xs: 2, sm: 4 }
           }}>

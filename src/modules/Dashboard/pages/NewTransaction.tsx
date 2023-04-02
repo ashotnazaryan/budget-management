@@ -1,34 +1,39 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useAppSelector } from 'store';
-import { selectCategory, selectTransaction } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, Currency, TransactionField, TransactionDTO } from 'shared/models';
-import { POSITIVE_NUMERIC_REGEX, TABS } from 'shared/constants';
+import { useAppDispatch, useAppSelector } from 'store';
+import { addTransaction, getCategories, selectCategory, selectCurrency, selectTransaction } from 'store/reducers';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO } from 'shared/models';
+import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
 import Button from 'shared/components/Button';
-import CategoryIcon from 'modules/Categories/components/CategoryIcon';
+import Snackbar from 'shared/components/Snackbar';
+import BackButton from 'shared/components/BackButton';
+import PageTitle from 'shared/components/PageTitle';
+import CategoryIcon from 'shared/components/CategoryIcon';
 
-interface NewTransactionProps {
-  currency: Currency['iso'];
-  mode?: 'create' | 'edit';
-  onSubmit: (data: TransactionDTO) => void;
-  onClose: () => void;
-}
+interface NewTransactionProps { }
 
-const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onClose }) => {
+const NewTransaction: React.FC<NewTransactionProps> = () => {
   const regex = POSITIVE_NUMERIC_REGEX;
-  const { categories, status } = useAppSelector(selectCategory);
-  const transactionStatus = useAppSelector(selectTransaction).status;
-  const loading = transactionStatus === 'loading';
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { categories } = useAppSelector(selectCategory);
+  const categoryStatus = useAppSelector(selectCategory).status;
+  const { status, error = { message: '' } } = useAppSelector(selectTransaction);
+  const { iso } = useAppSelector(selectCurrency);
+  const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
+  const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
   const defaultValues: Partial<TransactionDTO> = {
     amount: 0,
@@ -44,27 +49,53 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
 
   const watchType = methods.watch(TransactionField.type);
 
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+  };
+
   const handleTabChange = (event: React.SyntheticEvent, selectedTab: number): void => {
     methods.setValue(TransactionField.type, selectedTab);
   };
 
-  const handleCategoryIconClick = ({ categoryId, name, icon }: { categoryId: CategoryModel['id'], name: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
-    methods.setValue(TransactionField.categoryId, categoryId, { shouldValidate: true });
+  const handleCategoryIconClick = ({ id, title, icon }: { id: CategoryModel['id'], title: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
+    methods.setValue(TransactionField.categoryId, id, { shouldValidate: true });
     methods.setValue(TransactionField.icon, icon);
-    methods.setValue('name', name, { shouldValidate: true });
+    methods.setValue('name', title, { shouldValidate: true });
   };
 
-  const onFormSubmit = (data: TransactionDTO): void => {
+  const handleFormSubmit = (data: TransactionDTO): void => {
     const mappedData: TransactionDTO = {
       ...data,
       amount: Number(data.amount)
     };
 
-    onSubmit(mappedData);
+    dispatch(addTransaction(mappedData));
+    setFormSubmitted(true);
   };
 
+  const goBack = React.useCallback(() => {
+    navigate(`${ROUTES.dashboard.path}`);
+  }, [navigate]);
+
+  React.useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (status === 'succeeded' && formSubmitted) {
+      goBack();
+      setShowSnackbar(false);
+    } else if (status === 'failed') {
+      setShowSnackbar(true);
+    }
+  }, [goBack, loading, status, formSubmitted]);
+
   return (
-    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={methods.handleSubmit(onFormSubmit)}>
+    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
+      <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
+        <BackButton onClick={goBack} />
+        <PageTitle text='Add new transaction' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
+      </Box>
       <Box flexGrow={1}>
         <FormProvider {...methods} >
           <Controller
@@ -99,7 +130,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
               }}
               sx={{ marginRight: 2 }}
             />
-            <Typography>{currency}</Typography>
+            <Typography>{iso}</Typography>
           </Box>
           <Typography variant='subtitle1' sx={{ marginY: 1 }}>Category</Typography>
           <Controller
@@ -111,7 +142,7 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
             render={({ field, fieldState: { error } }) => (
               <>
                 {
-                  status === 'loading'
+                  categoryStatus === 'loading'
                     ? <Skeleton />
                     : (
                       <Grid container {...field} columnGap={4} rowGap={4}>
@@ -132,9 +163,9 @@ const NewTransaction: React.FC<NewTransactionProps> = ({ currency, onSubmit, onC
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-        <Button onClick={onClose} sx={{ marginRight: 2 }}>Cancel</Button>
-        <Button variant='contained' onClick={methods.handleSubmit(onFormSubmit)} loading={loading}>Save</Button>
+        <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
+      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>
   );
 };

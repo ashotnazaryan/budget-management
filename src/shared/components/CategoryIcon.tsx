@@ -1,26 +1,27 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { theme } from 'core/theme.config';
-import { Category as CategoryModel, CategoryType } from 'shared/models';
+import { CategoryType, IconType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface CategoryIconProps {
-  id: CategoryModel['id'];
-  title: CategoryModel['name'];
+  id: string;
+  title: string;
   type: CategoryType;
-  selected?: CategoryModel['id'];
-  icon: CategoryModel['icon'];
-  onClick?: ({ categoryId, name, icon }: { categoryId: CategoryModel['id'], name: CategoryModel['name'], icon: CategoryModel['icon'] }) => void;
+  selected?: string;
+  icon: IconType;
+  onClick?: ({ id, title, icon }: { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'] }) => void;
 }
 
+// TODO: make this component generic
 const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, onClick }) => {
   const { palette: { primary, secondary } } = theme;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
-  const onCategoryClick = (id: CategoryModel['id'], icon: CategoryModel['icon']) => (): void => {
+  const onCategoryClick = (id: CategoryIconProps['id'], icon: CategoryIconProps['icon']) => (): void => {
     if (onClick) {
-      onClick({ icon, categoryId: id, name: title });
+      onClick({ icon, id, title });
     }
   };
 
@@ -29,7 +30,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, 
   };
 
   return (
-    <Box display='flex' flexDirection='column' alignItems='center' width={128}>
+    <Box display='flex' flexDirection='column' alignItems='center' width={100}>
       <Box onClick={onCategoryClick(id, icon)} sx={{
         backgroundColor: selected === id ? categoryColor : 'transparent',
         border: `1px solid ${categoryColor}`,

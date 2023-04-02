@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { Currency, Transaction } from 'shared/models';
 import { isPositiveString } from 'shared/helpers';
-import CategoryTransaction from './CategoryTransaction';
+import CategoryTransaction from '../../components/CategoryTransaction';
 
 interface SummaryProps {
   incomes: string;
@@ -15,12 +15,12 @@ interface SummaryProps {
   balance: string;
   currencySymbol: Currency['symbol'];
   transactions: Transaction[];
-  openDialog: () => void;
+  addTransaction: () => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, openDialog }) => {
-  const onOpenDialog = (): void => {
-    openDialog();
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
+  const onAddTransaction = (): void => {
+    addTransaction();
   };
 
   return (
@@ -62,7 +62,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>
-          <IconButton onClick={onOpenDialog}>
+          <IconButton onClick={onAddTransaction}>
             <AddIcon sx={{ color: 'primary.contrastText' }} fontSize='large' />
           </IconButton>
         </Grid>

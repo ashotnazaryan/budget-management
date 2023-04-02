@@ -1,6 +1,6 @@
 import { Auth } from './auth';
 import { Category, CategoryType } from './category';
-import { StatusState } from './common';
+import { ErrorResponse, StatusState } from './common';
 import { IconType } from './icon';
 
 export interface TransactionDTO {
@@ -30,4 +30,5 @@ export interface Transaction {
 export interface TransactionState {
   transactions: Transaction[];
   status: StatusState;
+  error?: ErrorResponse;
 }

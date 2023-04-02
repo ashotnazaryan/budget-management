@@ -57,7 +57,7 @@ const Transactions: React.FC<TransactionsProps> = () => {
   const content = getContent();
 
   return (
-    <Box>
+    <Box flexGrow={1}>
       <PageTitle text='Transactions' />
       {content}
     </Box>

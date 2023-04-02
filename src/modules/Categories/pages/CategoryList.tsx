@@ -12,7 +12,7 @@ import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
-import Category from '../components/CategoryIcon';
+import CategoryIcon from 'shared/components/CategoryIcon';
 
 interface CategoryListProps { }
 
@@ -48,7 +48,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
         {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id }) => (
           <Grid item key={id}>
-            <Category id={id} title={name} type={type} icon={icon} />
+            <CategoryIcon id={id} title={name} type={type} icon={icon} />
           </Grid>
         ))}
         <Grid item>
@@ -63,7 +63,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const content = getContent();
 
   return (
-    <Box>
+    <Box flexGrow={1}>
       <PageTitle text='Categories' />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}

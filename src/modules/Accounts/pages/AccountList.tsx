@@ -51,7 +51,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   const content = getContent();
 
   return (
-    <Box>
+    <Box flexGrow={1}>
       <PageTitle text='Accounts' />
       {content}
     </Box>

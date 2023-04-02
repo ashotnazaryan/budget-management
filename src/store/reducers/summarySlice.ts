@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState, store } from 'store';
+import { store } from 'store';
 import { Summary, SummaryDTO, SummaryState } from 'shared/models';
 import { mapBalance, mapSummary } from 'shared/helpers';
+import { RootState } from './rootReducer';
+import { resetApp } from './appSlice';
 
 const initialState: SummaryState = {
   incomes: '0',
@@ -72,6 +74,9 @@ export const summarySlice = createSlice({
           ...state,
           balance: action.payload
         };
+      })
+      .addCase(resetApp, () => {
+        return initialState;
       });
   }
 });

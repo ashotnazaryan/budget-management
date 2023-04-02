@@ -8,8 +8,8 @@ import Grid from '@mui/material/Grid';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { useAppDispatch } from 'store';
 import { theme } from 'core/theme.config';
-import { openSideBar } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
+import { openSideBar } from 'store/reducers';
 
 interface HeaderProps { }
 

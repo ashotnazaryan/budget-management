@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, selectAccount, selectSettings } from 'store/reducers';
 import { CURRENCIES, ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
 import { accountHelper } from 'shared/helpers';
@@ -16,7 +15,8 @@ import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
-import AccountIcon from '../../../shared/components/AccountIcon';
+import AccountIcon from 'shared/components/AccountIcon';
+import { createAccount, selectAccount, selectSettings } from 'store/reducers';
 
 interface NewAccountProps { }
 

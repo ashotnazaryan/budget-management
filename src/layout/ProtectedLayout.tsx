@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getUserToken, selectAuth } from 'store/reducers';
 import { getFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
+import { getUserToken, selectAuth } from 'store/reducers';
 import Content from './Content';
 import Loading from './Loading';
 

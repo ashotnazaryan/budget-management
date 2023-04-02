@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
 import { Category, CategoryDTO, CategoryState, ErrorResponse } from 'shared/models';
 import { mapCategories } from 'shared/helpers';
+import { RootState } from './rootReducer';
+import { resetApp } from './appSlice';
 
 const initialState: CategoryState = {
   status: 'idle',
@@ -82,6 +83,9 @@ export const categorySlice = createSlice({
           ...state,
           status: 'succeeded'
         };
+      })
+      .addCase(resetApp, () => {
+        return initialState;
       });
   }
 });

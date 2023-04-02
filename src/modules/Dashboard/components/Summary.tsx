@@ -58,7 +58,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography variant='h6' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>
-            <Typography variant='h6' fontSize={30} color={isPositiveString(balance) ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

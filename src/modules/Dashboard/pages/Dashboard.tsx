@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { selectSummary, selectCurrency, getSummary } from 'store/reducers';
 import { CategoryType } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
+import { getSummary, selectSummary, selectCurrency } from 'store/reducers';
 import Summary from '../components/Summary';
 
 const Dashboard: React.FC = () => {

@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState, store } from 'store';
+import { store } from 'store';
 import { ErrorResponse, Transaction, TransactionDTO, TransactionState } from 'shared/models';
 import { mapTransactions } from 'shared/helpers/transaction.helpers';
+import { RootState } from './rootReducer';
 import { getSummary } from './summarySlice';
+import { resetApp } from './appSlice';
 
 const initialState: TransactionState = {
   transactions: [],
@@ -84,6 +86,9 @@ export const transactionSlice = createSlice({
           ...state,
           status: 'succeeded'
         };
+      })
+      .addCase(resetApp, () => {
+        return initialState;
       });
   }
 });

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from 'store';
 import { Auth, User, UserDTO, UserState } from 'shared/models';
 import { mapUser } from 'shared/helpers';
+import { RootState } from './rootReducer';
 
 const initialState: UserState = {
   status: 'idle',
@@ -52,8 +52,7 @@ export const userSlice = createSlice({
   }
 });
 
-export const { removeUser } = userSlice.actions;
-
 export const selectUser = (state: RootState): UserState => state.user;
 
+export const { removeUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -7,12 +7,12 @@ import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType, IconType } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
-import { getCategories, selectCategory } from 'store/reducers';
 import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import CategoryIcon from 'shared/components/CategoryIcon';
+import { getCategories, selectCategory } from 'store/reducers';
 
 interface CategoryListProps { }
 

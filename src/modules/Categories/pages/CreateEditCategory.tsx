@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -8,29 +8,33 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useAppDispatch, useAppSelector } from 'store';
+import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory } from 'store/reducers';
 import { ICONS_LIST, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
 import { categoryHelper } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
-import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
-import { createCategory, selectCategory } from 'store/reducers';
 
-interface NewCategoryProps { }
+interface NewCategoryProps {
+  mode: 'create' | 'edit';
+}
 
 const icons = ICONS_LIST;
 
-const NewCategory: React.FC<NewCategoryProps> = () => {
+const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const dispatch = useAppDispatch();
   const { status, error = { message: '' } } = useAppSelector(selectCategory);
+  const category = useAppSelector(selectCurrentCategory);
   const loading = status === 'loading';
   const helper = categoryHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
+  const categoryId = state?.id || null;
 
   const defaultValues: Partial<CategoryDTO> = {
     type: CategoryType.expense,
@@ -43,27 +47,48 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
     defaultValues
   });
 
+  const { setValue, handleSubmit } = methods;
+
   const handleAccountIconClick = ({ id }: { id: string }): void => {
-    methods.setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
+    setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
   };
 
   const handleCategoryTypeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const type = Number(event.target.value) as CategoryType;
 
-    methods.setValue(CategoryField.type, type, { shouldValidate: true });
+    setValue(CategoryField.type, type, { shouldValidate: true });
   };
 
   const handleFormSubmit = (data: CategoryDTO): void => {
-    dispatch(createCategory(data));
+    mode === 'create'
+      ? dispatch(createCategory(data))
+      : dispatch(editCategory([categoryId, data]));
     setFormSubmitted(true);
   };
 
+  const setFormValues = React.useCallback(() => {
+    if (category) {
+      setValue(CategoryField.type, category.type);
+      setValue(CategoryField.name, category.name);
+      setValue(CategoryField.icon, category.icon);
+    }
+  }, [category, setValue]);
+
+  const resetForm = React.useCallback(() => {
+    dispatch(resetCurrentCategory());
+  }, [dispatch]);
+
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.categories.path}`);
-  }, [navigate]);
+    resetForm();
+  }, [navigate, resetForm]);
 
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
+  };
+
+  const getTitle = (): string => {
+    return mode === 'create' ? 'Create new category' : 'Edit category';
   };
 
   React.useEffect(() => {
@@ -75,12 +100,19 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
     }
   }, [goBack, loading, status, formSubmitted]);
 
+  React.useEffect(() => {
+    if (categoryId && mode === 'edit') {
+      dispatch(getCategory(categoryId));
+    }
+  }, [categoryId, mode, dispatch]);
+
+  React.useEffect(() => {
+    setFormValues();
+  }, [setFormValues]);
+
   return (
-    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
-        <BackButton onClick={goBack} />
-        <PageTitle text='Create new category' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
-      </Box>
+    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
+      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1} display='flex' flexDirection='column'>
         <FormProvider {...methods}>
           <FormInput
@@ -153,11 +185,11 @@ const NewCategory: React.FC<NewCategoryProps> = () => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 3 }}>
-        <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>
   );
 };
 
-export default NewCategory;
+export default CreateEditCategory;

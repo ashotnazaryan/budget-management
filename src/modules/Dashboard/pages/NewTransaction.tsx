@@ -14,7 +14,6 @@ import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
-import BackButton from 'shared/components/BackButton';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import {
@@ -98,10 +97,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
-        <BackButton onClick={goBack} />
-        <PageTitle text='Add new transaction' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
-      </Box>
+      <PageTitle withBackButton text='Add new transaction' onBackButtonClick={goBack} />
       <Box flexGrow={1}>
         <FormProvider {...methods} >
           <Controller

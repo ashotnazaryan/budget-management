@@ -10,6 +10,7 @@ import { getAccounts, selectAccount } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
+import EmptyState from 'shared/components/EmptyState';
 import Account from '../components/Account';
 
 interface AccountListProps { }
@@ -30,6 +31,10 @@ const AccountList: React.FC<AccountListProps> = () => {
   const getContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
+    }
+
+    if (!accounts?.length) {
+      return <EmptyState />;
     }
 
     return (

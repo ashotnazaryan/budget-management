@@ -5,14 +5,15 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { theme } from 'core/theme.config';
 import { useAppDispatch, useAppSelector } from 'store';
-import { CategoryType, IconType } from 'shared/models';
+import { getCategories, selectCategory } from 'store/reducers';
+import { Category, CategoryType, IconType } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import CategoryIcon from 'shared/components/CategoryIcon';
-import { getCategories, selectCategory } from 'store/reducers';
+import EmptyState from 'shared/components/EmptyState';
 
 interface CategoryListProps { }
 
@@ -31,6 +32,14 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     setCategoryType(value);
   };
 
+  const handleCategoryIconClick = ({ id, title, isDefaultCategory }: { id: Category['id'], title: Category['name'], isDefaultCategory?: Category['isDefaultCategory'] }): void => {
+    if (isDefaultCategory) {
+      return;
+    }
+
+    navigate(`${ROUTES.categories.path}/edit/${title}`, { state: { id } });
+  };
+
   const openNewCategoryPage = (): void => {
     navigate(`${ROUTES.categories.path}/new`);
   };
@@ -44,11 +53,15 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       return <Skeleton />;
     }
 
+    if (!categories?.length) {
+      return <EmptyState />;
+    }
+
     return (
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id }) => (
+        {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id, isDefaultCategory }) => (
           <Grid item key={id}>
-            <CategoryIcon id={id} title={name} type={type} icon={icon} />
+            <CategoryIcon id={id} title={name} type={type} icon={icon} isDefaultCategory={isDefaultCategory} onClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>

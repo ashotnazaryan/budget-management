@@ -1,12 +1,26 @@
 import * as React from 'react';
 import Typography, { TypographyProps } from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import BackButton from './BackButton';
 
-type PageTitleProps = { text: string; } & TypographyProps;
+type PageTitleProps = {
+  text: string;
+  withBackButton?: boolean;
+  onBackButtonClick?: () => void;
+} & TypographyProps;
 
-// TODO: refactor this component to receive any children (e.g. back button)
-const PageTitle: React.FC<PageTitleProps> = ({ text, ...props }) => {
+const PageTitle: React.FC<PageTitleProps> = ({ text, withBackButton = false, onBackButtonClick, ...props }) => {
+  const onClick = () => {
+    if (onBackButtonClick) {
+      onBackButtonClick();
+    }
+  };
+
   return (
-    <Typography variant='h5' sx={{ textAlign: 'center', marginBottom: 3 }} {...props}>{text}</Typography>
+    <Box display='flex' alignItems='center' sx={{ marginBottom: 5 }}>
+      {withBackButton && <BackButton onClick={onClick} />}
+      <Typography variant='h5' sx={{ textAlign: 'center', width: '100%' }} {...props}>{text}</Typography>
+    </Box>
   );
 };
 

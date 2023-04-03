@@ -14,6 +14,7 @@ import { Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
+import Snackbar from 'shared/components/Snackbar';
 import { addSetting, selectSettings, eraseUserData, selectApp, selectUser } from 'store/reducers';
 
 const Settings: React.FC = () => {
@@ -24,6 +25,7 @@ const Settings: React.FC = () => {
   const loading = status === 'loading';
   const dispatch = useAppDispatch();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -31,6 +33,10 @@ const Settings: React.FC = () => {
 
   const handleCloseDialog = (): void => {
     setDialogOpened(false);
+  };
+
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
   };
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
@@ -51,6 +57,7 @@ const Settings: React.FC = () => {
   React.useEffect(() => {
     if (status === 'succeeded') {
       setDialogOpened(false);
+      setShowSnackbar(true);
     }
   }, [status]);
 
@@ -99,6 +106,7 @@ const Settings: React.FC = () => {
           Are you sure you want to delete all the data? This action cannot be undone.
         </Typography>
       </Dialog>
+      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='All user data has been erased' type='success' />
     </Box>
   );
 };

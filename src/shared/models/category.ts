@@ -11,6 +11,7 @@ export interface CategoryDTO {
   name: string;
   type: CategoryType;
   icon: IconType;
+  isDefaultCategory?: boolean;
 }
 
 export interface Category {
@@ -18,4 +19,5 @@ export interface Category {
   name: string;
   type: CategoryType;
   icon: IconType;
+  isDefaultCategory?: boolean;
 }

@@ -9,6 +9,7 @@ import Ellipsis from 'shared/components/Ellipsis';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import { selectCurrency, getTransactions, selectTransaction } from 'store/reducers';
+import EmptyState from 'shared/components/EmptyState';
 
 interface TransactionsProps { }
 
@@ -30,10 +31,14 @@ const Transactions: React.FC<TransactionsProps> = () => {
       return <Skeleton />;
     }
 
+    if (!transactions?.length) {
+      return <EmptyState text='No transactions available' />;
+    }
+
     return (
       <Grid container rowSpacing={2}>
         {
-          transactions?.map(({ id, createdAt, name, amount, icon, type }) => (
+          transactions.map(({ id, createdAt, name, amount, icon, type }) => (
             <Grid item container key={id} columnSpacing={2} alignItems='center'>
               <Grid item xs={1} display='flex'>
                 {icon && <Icon name={icon} sx={{ fontSize: 22, color: getIconColor(type) }}></Icon>}

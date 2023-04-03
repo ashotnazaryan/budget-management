@@ -13,7 +13,6 @@ import { accountHelper } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
-import BackButton from 'shared/components/BackButton';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
 import { createAccount, selectAccount, selectSettings } from 'store/reducers';
@@ -86,10 +85,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
 
   return (
     <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <Box display='flex' alignItems='center' sx={{ marginBottom: 3 }}>
-        <BackButton onClick={goBack} />
-        <PageTitle text='Create new account' sx={{ marginBottom: 0, flexGrow: 1, textAlign: 'center' }} />
-      </Box>
+      <PageTitle withBackButton text='Create new account' onBackButtonClick={goBack} />
       <Box flexGrow={1} display='flex' flexDirection='column'>
         <FormProvider {...methods}>
           <FormInput

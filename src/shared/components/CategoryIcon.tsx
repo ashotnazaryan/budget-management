@@ -9,19 +9,21 @@ interface CategoryIconProps {
   id: string;
   title: string;
   type: CategoryType;
-  selected?: string;
   icon: IconType;
-  onClick?: ({ id, title, icon }: { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'] }) => void;
+  selected?: string;
+  isDefaultCategory?: boolean;
+  onClick?: ({ id, title, icon, isDefaultCategory }:
+    { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'], isDefaultCategory?: boolean }) => void;
 }
 
 // TODO: make this component generic
-const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, onClick }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, isDefaultCategory = false, onClick }) => {
   const { palette: { primary, secondary } } = theme;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
-  const onCategoryClick = (id: CategoryIconProps['id'], icon: CategoryIconProps['icon']) => (): void => {
+  const onCategoryClick = (): void => {
     if (onClick) {
-      onClick({ icon, id, title });
+      onClick({ icon, id, title, isDefaultCategory });
     }
   };
 
@@ -31,7 +33,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, 
 
   return (
     <Box display='flex' flexDirection='column' alignItems='center' width={100}>
-      <Box onClick={onCategoryClick(id, icon)} sx={{
+      <Box onClick={onCategoryClick} sx={{
         backgroundColor: selected === id ? categoryColor : 'transparent',
         border: `1px solid ${categoryColor}`,
         color: getColor(),

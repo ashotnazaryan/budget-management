@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from './rootReducer';
-import { AuthState, Auth } from 'shared/models';
+import { Auth, StatusState } from 'shared/models';
 import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
 import { closeSidebar } from './viewSlice';
+
+export interface AuthState extends Auth {
+  status: StatusState;
+}
 
 const initialState: AuthState = {
   status: 'idle',

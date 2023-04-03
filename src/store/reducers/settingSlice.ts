@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Setting, SettingDTO, SettingState } from 'shared/models';
+import { Setting, SettingDTO, StatusState } from 'shared/models';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
+
+export interface SettingState extends Setting {
+  status: StatusState;
+}
 
 const initialState: SettingState = {
   currency: {

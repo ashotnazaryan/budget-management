@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ViewState } from 'shared/models';
 import { RootState } from './rootReducer';
 
-// TODO: move this to app slice
+export interface ViewState {
+  sideBarOpened: boolean;
+  loading: boolean;
+}
+
 const initialState: ViewState = {
   sideBarOpened: false,
   loading: false
@@ -24,9 +27,8 @@ export const viewSlice = createSlice({
   },
 });
 
-export const { openSideBar, closeSidebar, setLoading } = viewSlice.actions;
-
 export const selectSideBarOpened = (state: RootState): ViewState['sideBarOpened'] => state.view.sideBarOpened;
 export const selectLoading = (state: RootState): ViewState['loading'] => state.view.loading;
 
+export const { openSideBar, closeSidebar, setLoading } = viewSlice.actions;
 export default viewSlice.reducer;

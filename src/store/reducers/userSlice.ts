@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Auth, User, UserDTO, UserState } from 'shared/models';
+import { Auth, StatusState, User, UserDTO } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 import { RootState } from './rootReducer';
+
+export interface UserState extends User {
+  status: StatusState;
+}
 
 const initialState: UserState = {
   status: 'idle',

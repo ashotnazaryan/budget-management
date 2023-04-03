@@ -12,11 +12,11 @@ const initialState: AppState = {
   status: 'idle'
 };
 
-export const eraseUserData = createAsyncThunk<void, void, { rejectValue: ErrorResponse }>(
+export const eraseUserData = createAsyncThunk<void, string, { rejectValue: ErrorResponse }>(
   'app/eraseUserData',
-  async (_, { dispatch, rejectWithValue }): Promise<any> => {
+  async (userId, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/delete-all`);
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/${userId}/delete-all`);
 
       dispatch(resetApp());
     } catch (error: any) {

@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from 'axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
-import { AuthState, ErrorResponse } from 'shared/models';
+import { Auth, ErrorResponse } from 'shared/models';
 import { removeUser, logout } from 'store/reducers';
 
 const defaultConfigs: CreateAxiosDefaults = {
@@ -31,7 +31,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
   const apiBase = process.env.REACT_APP_BUDGET_MANAGEMENT_API || '';
 
   axios.interceptors.request.use((config) => {
-    const { accessToken } = getFromLocalStorage<AuthState>(AUTH_KEY);
+    const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;

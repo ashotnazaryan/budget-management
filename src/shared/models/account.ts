@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-import { ErrorResponse, StatusState } from './common';
 import { IconType } from './icon';
 import { Currency } from './setting';
 
@@ -17,10 +15,4 @@ export interface Account {
   initialAmount: string;
   currencySymbol: Currency['symbol'];
   icon: IconType;
-}
-
-export interface AccountState {
-  accounts: Account[];
-  status: StatusState;
-  error?: ErrorResponse;
 }

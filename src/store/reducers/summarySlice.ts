@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
-import { Summary, SummaryDTO, SummaryState } from 'shared/models';
+import { StatusState, Summary, SummaryDTO } from 'shared/models';
 import { mapBalance, mapSummary } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
+
+export interface SummaryState extends Summary {
+  status: StatusState;
+}
 
 const initialState: SummaryState = {
   incomes: '0',

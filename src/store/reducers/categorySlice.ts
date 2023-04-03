@@ -1,9 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Category, CategoryDTO, CategoryState, ErrorResponse } from 'shared/models';
+import { Category, CategoryDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapCategories } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
+
+export interface CategoryState {
+  categories: Category[];
+  status: StatusState;
+  error?: ErrorResponse;
+}
 
 const initialState: CategoryState = {
   status: 'idle',

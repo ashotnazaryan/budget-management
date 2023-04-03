@@ -1,5 +1,4 @@
 import { Transaction, TransactionDTO } from './transaction';
-import { StatusState } from './common';
 
 export interface SummaryDTO {
   incomes: number;
@@ -15,8 +14,4 @@ export interface Summary {
   balance: string;
   categoryExpenseTransactions: Transaction[];
   categoryIncomeTransactions: Transaction[];
-}
-
-export interface SummaryState extends Summary {
-  status: StatusState;
 }

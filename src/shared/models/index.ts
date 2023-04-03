@@ -4,7 +4,6 @@ export * from './setting';
 export * from './route';
 export * from './user';
 export * from './auth';
-export * from './view';
 export * from './category';
 export * from './account';
 export * from './form';

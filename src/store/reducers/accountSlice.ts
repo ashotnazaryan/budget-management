@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
-import { Account, AccountDTO, AccountState, ErrorResponse } from 'shared/models';
+import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapAccounts } from 'shared/helpers';
 import { resetApp } from './appSlice';
 import { RootState } from './rootReducer';
+
+export interface AccountState {
+  accounts: Account[];
+  status: StatusState;
+  error?: ErrorResponse;
+}
 
 const initialState: AccountState = {
   status: 'idle',

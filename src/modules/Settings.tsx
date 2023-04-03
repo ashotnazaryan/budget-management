@@ -14,11 +14,12 @@ import { Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
-import { addSetting, selectSettings, eraseUserData, selectApp } from 'store/reducers';
+import { addSetting, selectSettings, eraseUserData, selectApp, selectUser } from 'store/reducers';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
   const { currency: { iso }, showDecimals } = useAppSelector(selectSettings);
+  const { id } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const loading = status === 'loading';
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ const Settings: React.FC = () => {
   };
 
   const deleteUserData = (): void => {
-    dispatch(eraseUserData());
+    dispatch(eraseUserData(id));
   };
 
   React.useEffect(() => {

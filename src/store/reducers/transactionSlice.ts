@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
-import { ErrorResponse, Transaction, TransactionDTO, TransactionState } from 'shared/models';
+import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
 import { mapTransactions } from 'shared/helpers/transaction.helpers';
 import { RootState } from './rootReducer';
 import { getSummary } from './summarySlice';
 import { resetApp } from './appSlice';
+
+export interface TransactionState {
+  transactions: Transaction[];
+  status: StatusState;
+  error?: ErrorResponse;
+}
 
 const initialState: TransactionState = {
   transactions: [],

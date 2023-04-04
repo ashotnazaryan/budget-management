@@ -8,6 +8,7 @@ import Box from '@mui/system/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES } from 'shared/constants';
 import { Currency } from 'shared/models';
@@ -19,11 +20,12 @@ import { addSetting, selectSettings, eraseUserData, selectApp, selectUser } from
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const { currency: { iso }, showDecimals } = useAppSelector(selectSettings);
+  const { currency: { iso }, showDecimals, isDarkTheme } = useAppSelector(selectSettings);
   const { id } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const loading = status === 'loading';
   const dispatch = useAppDispatch();
+  const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
@@ -50,6 +52,10 @@ const Settings: React.FC = () => {
     dispatch(addSetting({ showDecimals: checked }));
   };
 
+  const handleThemeChange = (): void => {
+    dispatch(addSetting({ isDarkTheme: !isDarkTheme }));
+  };
+
   const deleteUserData = (): void => {
     dispatch(eraseUserData(id));
   };
@@ -64,7 +70,7 @@ const Settings: React.FC = () => {
   return (
     <Box flexGrow={1}>
       <PageTitle text='Settings' />
-      <Typography variant='subtitle1' sx={{ marginY: 2 }}>Default currency</Typography>
+      <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default currency</Typography>
       <Grid container rowGap={4}>
         <Grid item xs={12}>
           <FormControl fullWidth>
@@ -88,7 +94,27 @@ const Settings: React.FC = () => {
                 checked={showDecimals}
                 onChange={handleDecimalsChange}
               />}
-            label='Show decimals (e.g. 1.23)'
+            label={
+              <Typography color={contrastText}>Show decimals (e.g. 1.23)</Typography>
+            }
+            labelPlacement='start'
+            sx={{
+              '&.MuiFormControlLabel-root': {
+                margin: 0
+              }
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isDarkTheme}
+                onChange={handleThemeChange}
+              />}
+            label={
+              <Typography color={contrastText}>Dark theme</Typography>
+            }
             labelPlacement='start'
             sx={{
               '&.MuiFormControlLabel-root': {

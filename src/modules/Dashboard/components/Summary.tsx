@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import { useTheme } from '@mui/material/styles';
 import { Currency, Transaction } from 'shared/models';
 import { isPositiveString } from 'shared/helpers';
 import CategoryTransaction from '../../components/CategoryTransaction';
@@ -19,6 +20,8 @@ interface SummaryProps {
 }
 
 const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
+  const { palette: { primary: { main, dark, light, contrastText }, secondary } } = useTheme();
+
   const onAddTransaction = (): void => {
     addTransaction();
   };
@@ -26,7 +29,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
   return (
     <Box
       sx={{
-        backgroundColor: 'primary.main',
+        backgroundColor: main,
         paddingX: 2,
         paddingY: 4,
         borderRadius: 1
@@ -34,36 +37,36 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
     >
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h5' color='primary.contrastText' sx={{ textAlign: 'center', marginBottom: 4 }}>
+          <Typography variant='h5' color={contrastText} sx={{ textAlign: 'center', marginBottom: 4 }}>
             Summary
           </Typography>
         </Grid>
-        <Grid container flexWrap='nowrap' sx={{ backgroundColor: 'primary.dark', borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
+        <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6}>
-            <Typography variant='subtitle1' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
+            <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
               Total Income
             </Typography>
-            <Typography color='primary.contrastText' sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
+            <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
           </Grid>
-          <Divider orientation='vertical' sx={{ backgroundColor: 'primary.light' }} flexItem />
+          <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6}>
-            <Typography variant='subtitle1' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
+            <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
               Total Expenses
             </Typography>
-            <Typography color='primary.contrastText' sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
+            <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ backgroundColor: 'primary.light', paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Typography variant='h6' color='primary.contrastText' component='p' sx={{ textAlign: 'center' }}>
+          <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
+            <Typography variant='h6' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>
-            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? 'primary.contrastText' : 'secondary.main'} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? contrastText : secondary.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>
           <IconButton onClick={onAddTransaction}>
-            <AddIcon sx={{ color: 'primary.contrastText' }} fontSize='large' />
+            <AddIcon sx={{ color: contrastText }} fontSize='large' />
           </IconButton>
         </Grid>
         {

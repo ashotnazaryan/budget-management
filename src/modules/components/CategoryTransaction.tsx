@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { Currency, Transaction } from 'shared/models';
 import Ellipsis from 'shared/components/Ellipsis';
 import Icon from 'shared/components/Icon';
@@ -16,7 +16,7 @@ interface CategoryTransactionProps {
 }
 
 const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ name, amount, currency, icon, showPercentage = true, value = '' }) => {
-  const { primary: { dark, light, contrastText } } = theme.palette;
+  const { palette: { primary: { dark, light, contrastText } } } = useTheme();
 
   const getBGColor = () => {
     const percentageValue = parseInt(value);
@@ -42,13 +42,13 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ name, amount,
           {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>
         <Grid item sm={7} xs={5} display='flex'>
-          <Ellipsis color='primary.contrastText' text={name} />
+          <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
-          {showPercentage && <Ellipsis color='primary.contrastText' text={value} />}
+          {showPercentage && <Ellipsis color={contrastText} text={value} />}
         </Grid>
         <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis color='primary.contrastText' text={`${currency}${amount}`} />
+          <Ellipsis color={contrastText} text={`${currency}${amount}`} />
         </Grid>
       </Grid>
     </Box>

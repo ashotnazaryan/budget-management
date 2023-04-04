@@ -6,7 +6,6 @@ import categoryReducer from './categorySlice';
 import accountReducer from './accountSlice';
 import authReducer from './authSlice';
 import userReducer from './userSlice';
-import viewReducer from './viewSlice';
 import appReducer from './appSlice';
 
 const rootReducer = combineReducers({
@@ -17,7 +16,6 @@ const rootReducer = combineReducers({
   account: accountReducer,
   auth: authReducer,
   user: userReducer,
-  view: viewReducer,
   app: appReducer
 });
 

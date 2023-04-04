@@ -4,7 +4,7 @@ import { RootState } from './rootReducer';
 import { Auth, StatusState } from 'shared/models';
 import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
-import { closeSidebar } from './viewSlice';
+import { closeSidebar } from './appSlice';
 
 export interface AuthState extends Auth {
   status: StatusState;

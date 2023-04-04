@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch } from 'store';
 import { getFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
@@ -17,6 +17,7 @@ interface ContentProps {
 const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const dispatch = useAppDispatch();
+  const { palette: { info: { light } } } = useTheme();
 
   React.useEffect(() => {
     dispatch(getUserInfo(accessToken));
@@ -27,7 +28,7 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   }, [dispatch]);
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1} sx={{ overflowX: 'hidden', backgroundColor: theme.palette.info.light }}>
+    <Box display='flex' flexDirection='column' flexGrow={1} sx={{ overflowX: 'hidden', backgroundColor: light }}>
       <Header />
       <SideBar variant='temporary' />
       <Grid container display='flex' justifyContent='center' flexGrow={1}>

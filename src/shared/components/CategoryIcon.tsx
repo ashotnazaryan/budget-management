@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { CategoryType, IconType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
@@ -18,7 +18,7 @@ interface CategoryIconProps {
 
 // TODO: make this component generic
 const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, isDefaultCategory = false, onClick }) => {
-  const { palette: { primary, secondary } } = theme;
+  const { palette: { primary, secondary, info } } = useTheme();
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
   const onCategoryClick = (): void => {
@@ -48,7 +48,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, 
       }}>
         <Icon name={icon}></Icon>
       </Box>
-      <Ellipsis text={title} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />
+      <Ellipsis text={title} color={info.contrastText} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />
     </Box>
   );
 };

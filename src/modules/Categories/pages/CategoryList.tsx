@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getCategories, selectCategory } from 'store/reducers';
 import { Category, CategoryType, IconType } from 'shared/models';
@@ -14,6 +14,7 @@ import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import EmptyState from 'shared/components/EmptyState';
+import Snackbar from 'shared/components/Snackbar';
 
 interface CategoryListProps { }
 
@@ -21,7 +22,9 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const { categories, status } = useAppSelector(selectCategory);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { palette } = useTheme();
   const [categoryType, setCategoryType] = React.useState<number>(0);
+  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const tabs = TABS;
 
   React.useEffect(() => {
@@ -32,8 +35,14 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     setCategoryType(value);
   };
 
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+  };
+
   const handleCategoryIconClick = ({ id, title, isDefaultCategory }: { id: Category['id'], title: Category['name'], isDefaultCategory?: Category['isDefaultCategory'] }): void => {
     if (isDefaultCategory) {
+      setShowSnackbar(true);
+
       return;
     }
 
@@ -45,7 +54,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   };
 
   const getIconColor = (): string => {
-    return categoryType === CategoryType.expense ? theme.palette.secondary.main : theme.palette.primary.main;
+    return categoryType === CategoryType.expense ? palette.secondary.main : palette.primary.main;
   };
 
   const getContent = (): React.ReactElement => {
@@ -80,6 +89,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <PageTitle text='Categories' />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
+      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='You cannot edit default categiry' type='info' />
     </Box>
   );
 };

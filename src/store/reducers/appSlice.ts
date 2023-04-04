@@ -5,10 +5,12 @@ import { ErrorResponse, StatusState } from 'shared/models';
 
 interface AppState {
   status: StatusState;
+  sideBarOpened: boolean;
   error?: ErrorResponse;
 }
 
 const initialState: AppState = {
+  sideBarOpened: false,
   status: 'idle'
 };
 
@@ -32,6 +34,18 @@ const appSlice = createSlice({
     resetApp(state) {
       return initialState;
     },
+    openSideBar: (state) => {
+      state.sideBarOpened = true;
+    },
+    closeSidebar: (state) => {
+      state.sideBarOpened = false;
+    },
+    setLoading: (state, action) => {
+      return {
+        ...state,
+        status: action.payload
+      };
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -59,5 +73,5 @@ const appSlice = createSlice({
 
 export const selectApp = (state: RootState): AppState => state.app;
 
-export const { resetApp } = appSlice.actions;
+export const { resetApp, setLoading, openSideBar, closeSidebar } = appSlice.actions;
 export default appSlice.reducer;

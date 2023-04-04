@@ -7,9 +7,11 @@ export interface Currency {
 export interface SettingDTO {
   currency: Currency;
   showDecimals: boolean;
+  isDarkTheme: boolean;
 }
 
 export interface Setting {
   currency: Currency;
   showDecimals: boolean;
+  isDarkTheme: boolean;
 }

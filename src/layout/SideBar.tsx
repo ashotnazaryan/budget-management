@@ -15,18 +15,18 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CategoryIcon from '@mui/icons-material/Category';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { ROUTES } from 'shared/constants';
 import Dialog from 'shared/components/Dialog';
 import {
   closeSidebar,
-  selectSideBarOpened,
   selectUser,
   getBalance,
   selectBalance,
   selectSettings,
-  logout
+  logout,
+  selectApp
 } from 'store/reducers';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 
@@ -34,13 +34,14 @@ interface SideBarProps extends MuiDrawerProps { }
 
 const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const dispatch = useAppDispatch();
-  const opened = useAppSelector(selectSideBarOpened);
+  const { sideBarOpened } = useAppSelector(selectApp);
   const user = useAppSelector(selectUser);
   const balance = useAppSelector(selectBalance);
   const { currency: { symbol }, showDecimals } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;
+  const { palette } = useTheme();
 
   React.useEffect(() => {
     dispatch(getBalance());
@@ -71,10 +72,10 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
             {...props}
             variant={props.variant}
             PaperProps={{ sx: { width: { xs: '100%', sm: '280px' } } }}
-            open={opened}
+            open={sideBarOpened}
             onClose={close}
           >
-            <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${theme.palette.primary.main}` }} columnSpacing={2}>
+            <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${palette.primary.main}` }} columnSpacing={2}>
               <Grid item xs={11}>
                 <UserBalanceInfo fullName={fullName} avatar={avatar} currency={symbol} balance={balance} />
               </Grid>

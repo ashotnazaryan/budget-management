@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
+import { useTheme } from '@mui/material/styles';
 import { StyledTextField } from './FormInput.styles';
 
 type FormInputProps = {
@@ -9,6 +10,8 @@ type FormInputProps = {
 } & TextFieldProps;
 
 const FormInput: React.FC<FormInputProps> = ({ name, rules = {}, ...props }) => {
+  const theme = useTheme();
+
   const {
     control,
     formState: { errors },
@@ -23,6 +26,7 @@ const FormInput: React.FC<FormInputProps> = ({ name, rules = {}, ...props }) => 
         <StyledTextField
           {...field}
           {...props}
+          theme={theme}
           error={!!errors[name]}
           helperText={
             errors[name] && error?.message

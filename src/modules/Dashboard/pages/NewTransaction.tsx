@@ -6,6 +6,7 @@ import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
@@ -34,6 +35,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const categoryStatus = useAppSelector(selectCategory).status;
   const { status, error = { message: '' } } = useAppSelector(selectTransaction);
   const { iso } = useAppSelector(selectCurrency);
+  const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
@@ -132,9 +134,9 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
               }}
               sx={{ marginRight: 2 }}
             />
-            <Typography>{iso}</Typography>
+            <Typography color={contrastText}>{iso}</Typography>
           </Box>
-          <Typography variant='subtitle1' sx={{ marginY: 1 }}>Category</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Category</Typography>
           <Controller
             control={methods.control}
             name={TransactionField.categoryId}
@@ -164,7 +166,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
           />
         </FormProvider>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />

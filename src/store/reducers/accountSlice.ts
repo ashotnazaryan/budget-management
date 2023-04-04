@@ -2,13 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
-import { mapAccounts } from 'shared/helpers';
+import { mapAccount, mapAccounts } from 'shared/helpers';
 import { resetApp } from './appSlice';
 import { RootState } from './rootReducer';
 
 export interface AccountState {
   accounts: Account[];
   status: StatusState;
+  currentAccount?: Account;
   error?: ErrorResponse;
 }
 
@@ -34,6 +35,23 @@ export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccoun
   }
 });
 
+export const getAccount = createAsyncThunk<Account, AccountDTO['_id'], { rejectValue: ErrorResponse }>(
+  'accounts/getAccount',
+  async (accountId): Promise<Account> => {
+    try {
+      const response = await axios.get<AccountDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${accountId}`);
+
+      if (response?.data) {
+        return mapAccount(response.data);
+      }
+
+      return {} as Account;
+    } catch (error) {
+      console.error(error);
+      return {} as Account;
+    }
+  });
+
 // TODO: create error mechanism for all axios requests
 export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: ErrorResponse }>(
   'accounts/createAccount',
@@ -50,10 +68,32 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
     }
   });
 
+export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDTO, '_id'>], { rejectValue: ErrorResponse }>(
+  'accounts/editAccount',
+  async ([accountId, account], { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${accountId}`, account);
+
+      if (response?.data) {
+        dispatch(getAccounts());
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
+
 export const accountSlice = createSlice({
   name: 'accounts',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCurrentAccount(state) {
+      return {
+        ...state,
+        currentAccount: undefined
+      };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getAccounts.pending, (state) => {
@@ -75,6 +115,12 @@ export const accountSlice = createSlice({
           status: 'succeeded'
         };
       })
+      .addCase(getAccount.fulfilled, (state, action) => {
+        return {
+          ...state,
+          currentAccount: action.payload
+        };
+      })
       .addCase(createAccount.pending, (state) => {
         return {
           ...state,
@@ -94,6 +140,25 @@ export const accountSlice = createSlice({
           status: 'succeeded'
         };
       })
+      .addCase(editAccount.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(editAccount.rejected, (state, action) => {
+        return {
+          ...state,
+          status: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(editAccount.fulfilled, (state) => {
+        return {
+          ...state,
+          status: 'succeeded'
+        };
+      })
       .addCase(resetApp, () => {
         return initialState;
       });
@@ -101,5 +166,7 @@ export const accountSlice = createSlice({
 });
 
 export const selectAccount = (state: RootState): AccountState => state.account;
+export const selectCurrentAccount = (state: RootState): AccountState['currentAccount'] => state.account.currentAccount;
 
+export const { resetCurrentAccount } = accountSlice.actions;
 export default accountSlice.reducer;

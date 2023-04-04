@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { CategoryType, IconType } from 'shared/models';
 import Icon from 'shared/components/Icon';
-import Ellipsis from 'shared/components/Ellipsis';
+import Typography from '@mui/material/Typography';
 
 interface CategoryIconProps {
   id: string;
@@ -48,7 +48,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, 
       }}>
         <Icon name={icon}></Icon>
       </Box>
-      <Ellipsis text={title} color={info.contrastText} sx={{ width: '100%', textAlign: 'center', marginTop: 1 }} />
+      <Typography color={info.contrastText} sx={{ width: '100%', textAlign: 'center', marginTop: 1, fontSize: 13 }}>{title}</Typography>
     </Box>
   );
 };

@@ -35,7 +35,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const categoryStatus = useAppSelector(selectCategory).status;
   const { status, error = { message: '' } } = useAppSelector(selectTransaction);
   const { iso } = useAppSelector(selectCurrency);
-  const { palette: { info: { contrastText } } } = useTheme();
+  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
@@ -160,7 +160,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
                       </Grid>
                     )
                 }
-                <Typography color='error.main' fontSize={12}>{error ? helper.categoryId[error.type]?.message : ''}</Typography>
+                <Typography color={main} fontSize={12}>{error ? helper.categoryId[error.type]?.message : ''}</Typography>
               </>
             )}
           />

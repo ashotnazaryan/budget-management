@@ -81,9 +81,10 @@ export const transactionSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(addTransaction.rejected, (state) => {
+      .addCase(addTransaction.rejected, (state, action) => {
         return {
           ...state,
+          error: action.payload,
           status: 'failed'
         };
       })

@@ -54,7 +54,7 @@ const AccountList: React.FC<AccountListProps> = () => {
     }
 
     return (
-      <Grid container rowGap={4} sx={{ marginTop: 4 }}>
+      <Grid container rowGap={2} sx={{ marginTop: 4 }}>
         {accounts.map(({ name, icon, id, initialAmount, isDefaultAccount, currencySymbol }) => (
           <Grid item key={id} xs={12}>
             <Account id={id} name={name} initialAmount={initialAmount} icon={icon} symbol={currencySymbol} isDefaultAccount={isDefaultAccount} onClick={handleAccountItemClick} />

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import Icon from 'shared/components/Icon';
 import { Account as AccountModel } from 'shared/models';
@@ -26,24 +27,26 @@ const Account: React.FC<AccountProps> = ({ id, name, icon, initialAmount, symbol
   };
 
   return (
-    <Grid container display='flex' alignItems='center' justifyContent='space-between' columnSpacing={2}
-      sx={{
-        borderRadius: 1,
-        width: '100%',
-        minHeight: 40,
-        cursor: 'pointer'
-      }}
-      onClick={onAccountClick}>
-      <Grid item xs={1} display='flex'>
-        {icon && <Icon name={icon} sx={{ fontSize: 24, color: main }}></Icon>}
+    <Paper elevation={1} sx={{ paddingX: 2 }}>
+      <Grid container display='flex' alignItems='center' justifyContent='space-between' columnSpacing={2}
+        sx={{
+          borderRadius: 1,
+          width: '100%',
+          minHeight: 40,
+          cursor: 'pointer'
+        }}
+        onClick={onAccountClick}>
+        <Grid item sm={1} xs={2} display='flex'>
+          {icon && <Icon name={icon} sx={{ fontSize: 24, color: main }}></Icon>}
+        </Grid>
+        <Grid item sm={7} xs={6} display='flex'>
+          <Ellipsis color={contrastText} text={name} />
+        </Grid>
+        <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
+          <Ellipsis color={contrastText} text={`${symbol}${initialAmount}`} />
+        </Grid>
       </Grid>
-      <Grid item xs={7} display='flex'>
-        <Ellipsis color={contrastText} text={name} />
-      </Grid>
-      <Grid item xs={4} display='flex' justifyContent='flex-end'>
-        <Ellipsis color={contrastText} text={`${symbol}${initialAmount}`} />
-      </Grid>
-    </Grid>
+    </Paper>
   );
 };
 

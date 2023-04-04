@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Icon from 'shared/components/Icon';
-import { theme } from 'core/theme.config';
-import { Account as AccountModel } from 'shared/models';
 import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material/styles';
+import Icon from 'shared/components/Icon';
+import { Account as AccountModel } from 'shared/models';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface AccountProps {
@@ -13,24 +13,23 @@ interface AccountProps {
 }
 
 const Account: React.FC<AccountProps> = ({ name, icon, initialAmount, symbol }) => {
+  const { palette: { primary: { main }, info: { contrastText } } } = useTheme();
+
   return (
-    <Grid container display='flex' alignItems='center' justifyContent='space-between'
+    <Grid container display='flex' alignItems='center' justifyContent='space-between' columnSpacing={2}
       sx={{
-        paddingX: 4,
-        paddingY: 2,
-        marginY: 1,
         borderRadius: 1,
         width: '100%',
         minHeight: 40
       }}>
       <Grid item xs={1} display='flex'>
-        {icon && <Icon name={icon} sx={{ fontSize: 24, color: theme.palette.primary.main }}></Icon>}
+        {icon && <Icon name={icon} sx={{ fontSize: 24, color: main }}></Icon>}
       </Grid>
       <Grid item xs={7} display='flex'>
-        <Ellipsis text={name} />
+        <Ellipsis color={contrastText} text={name} />
       </Grid>
       <Grid item xs={4} display='flex' justifyContent='flex-end'>
-        <Ellipsis text={`${symbol}${initialAmount}`} />
+        <Ellipsis color={contrastText} text={`${symbol}${initialAmount}`} />
       </Grid>
     </Grid>
   );

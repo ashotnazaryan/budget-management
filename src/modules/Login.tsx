@@ -5,11 +5,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import FormInput from 'shared/components/FormInput';
 
 const Login: React.FC = () => {
   const methods = useForm();
+  const { palette: { info: { main } } } = useTheme();
 
   const googleLogin = () => {
     window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/google`, '_self');
@@ -22,7 +23,7 @@ const Login: React.FC = () => {
           <Grid container justifyContent='space-between'>
             <Grid item xs={12} sm={6}>
               <Box display='flex' flexDirection='column' component='form' noValidate autoComplete='off'
-                sx={{ paddingRight: { sm: 4 }, borderRight: { sm: `1px solid ${theme.palette.info.main}` } }}
+                sx={{ paddingRight: { sm: 4 }, borderRight: { sm: `1px solid ${main}` } }}
                 onSubmit={methods.handleSubmit(googleLogin)}
               >
                 <Typography variant='subtitle2'

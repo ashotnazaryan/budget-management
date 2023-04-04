@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES, ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
@@ -26,6 +27,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
   const currencies = CURRENCIES;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { palette: { info: { contrastText } } } = useTheme();
   const { status, error = { message: '' } } = useAppSelector(selectAccount);
   const { currency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
@@ -139,7 +141,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
               </Select>
             )}
           />
-          <Typography variant='subtitle1' sx={{ marginY: 1 }}>Icon</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Icon</Typography>
           <Controller
             control={methods.control}
             name={AccountField.icon}
@@ -163,7 +165,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
           />
         </FormProvider>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />

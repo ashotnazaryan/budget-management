@@ -5,5 +5,4 @@ export * from './categorySlice';
 export * from './accountSlice';
 export * from './authSlice';
 export * from './userSlice';
-export * from './viewSlice';
 export * from './appSlice';

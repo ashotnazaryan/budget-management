@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import Button from './Button';
 import { StyledDialogTitle, StyledDialogContent } from './Dialog.styles';
 
@@ -17,7 +17,7 @@ type DialogProps<T = any> = {
 } & MuiDialogProps
 
 const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButtonText = 'OK', withActions = true, loading = false, onClose, onAction, children, ...props }) => {
-  const { palette: { primary: { main, contrastText } } } = theme;
+  const theme = useTheme();
 
   const handleOnAction = (data: DialogProps['data']): void => {
     if (onAction) {
@@ -30,10 +30,10 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButt
       {...props}
       onClose={onClose}
     >
-      <StyledDialogTitle sx={{ backgroundColor: main, color: contrastText }}>
+      <StyledDialogTitle theme={theme} sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.primary.contrastText }}>
         {props.title}
       </StyledDialogTitle>
-      <StyledDialogContent>
+      <StyledDialogContent theme={theme} sx={{ display: 'flex' }}>
         {children}
       </StyledDialogContent>
       {withActions && (

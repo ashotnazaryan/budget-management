@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory } from 'store/reducers';
 import { ICONS_LIST, ROUTES } from 'shared/constants';
@@ -30,6 +31,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const dispatch = useAppDispatch();
   const { status, error = { message: '' } } = useAppSelector(selectCategory);
   const category = useAppSelector(selectCurrentCategory);
+  const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
   const helper = categoryHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
@@ -47,7 +49,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { setValue, handleSubmit } = methods;
+  const { setValue, handleSubmit, control } = methods;
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
     setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
@@ -60,9 +62,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   };
 
   const handleFormSubmit = (data: CategoryDTO): void => {
-    mode === 'create'
-      ? dispatch(createCategory(data))
-      : dispatch(editCategory([categoryId, data]));
+    mode === 'create' ? dispatch(createCategory(data)) : dispatch(editCategory([categoryId, data]));
     setFormSubmitted(true);
   };
 
@@ -129,9 +129,9 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               marginBottom: 4
             }}
           />
-          <Typography variant='subtitle1' sx={{ marginY: 1 }}>Type</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Type</Typography>
           <Controller
-            control={methods.control}
+            control={control}
             name={CategoryField.type}
             rules={{
               required: true
@@ -139,7 +139,10 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
             render={({ field, fieldState: { error } }) => (
               // TODO: move to a shared components
               <RadioGroup row>
-                <FormControlLabel value={field.value} label='Expense'
+                <FormControlLabel value={field.value}
+                  label={
+                    <Typography color={contrastText}>Expense</Typography>
+                  }
                   control={
                     <Radio
                       checked={field.value === 0}
@@ -148,7 +151,10 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                     />
                   }
                 />
-                <FormControlLabel value={field.value} label='Income'
+                <FormControlLabel value={field.value}
+                  label={
+                    <Typography color={contrastText}>Income</Typography>
+                  }
                   control={
                     <Radio
                       checked={field.value === 1}
@@ -160,9 +166,9 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               </RadioGroup>
             )}
           />
-          <Typography variant='subtitle1' sx={{ marginY: 1 }}>Icon</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Icon</Typography>
           <Controller
-            control={methods.control}
+            control={control}
             name={CategoryField.icon}
             rules={{
               required: true
@@ -184,7 +190,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
           />
         </FormProvider>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />

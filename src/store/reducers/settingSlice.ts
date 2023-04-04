@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Setting, SettingDTO, StatusState } from 'shared/models';
 import { RootState } from './rootReducer';
-import { resetApp } from './appSlice';
+import { resetApp, setLoading } from './appSlice';
 
 export interface SettingState extends Setting {
   status: StatusState;
@@ -15,21 +15,27 @@ const initialState: SettingState = {
     symbol: '$'
   },
   showDecimals: false,
-  status: 'idle'
+  status: 'idle',
+  isDarkTheme: false
 };
 
-export const getSettings = createAsyncThunk('setting/getSettings', async (): Promise<Setting> => {
+export const getSettings = createAsyncThunk('setting/getSettings', async (_, { dispatch }): Promise<Setting> => {
   try {
     const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
+
+    dispatch(setLoading(false));
 
     return response?.data;
   } catch (error) {
     console.error(error);
+    dispatch(setLoading(false));
     return {} as Setting;
   }
 });
 
 export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Partial<Setting>, { dispatch }): Promise<void> => {
+  dispatch(setLoading(true));
+
   try {
     await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
     dispatch(getSettings());

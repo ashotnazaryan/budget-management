@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface UserBalanceInfoProps {
@@ -12,10 +12,12 @@ interface UserBalanceInfoProps {
 }
 
 const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, fullName = '', balance = 0 }) => {
+  const { palette: { primary: { main } } } = useTheme();
+
   return (
     <Grid container alignItems='center' columnSpacing={2}>
       <Grid item sm={4} xs={3}>
-        <Avatar alt={fullName} src={avatar} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${theme.palette.primary.main}` }} />
+        <Avatar alt={fullName} src={avatar} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${main}` }} />
       </Grid>
       <Grid item container sm={8} xs={9}>
         <Grid item xs={12}>

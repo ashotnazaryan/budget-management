@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType } from 'shared/models';
 import Skeleton from 'shared/components/Skeleton';
@@ -17,13 +17,14 @@ const Transactions: React.FC<TransactionsProps> = () => {
   const { symbol } = useAppSelector(selectCurrency);
   const { transactions, status } = useAppSelector(selectTransaction);
   const dispatch = useAppDispatch();
+  const { palette: { primary, secondary, info: { contrastText } } } = useTheme();
 
   React.useEffect(() => {
     dispatch(getTransactions());
   }, [dispatch]);
 
   const getIconColor = (type: CategoryType): string => {
-    return type === CategoryType.expense ? theme.palette.secondary.main : theme.palette.primary.main;
+    return type === CategoryType.expense ? secondary.main : primary.main;
   };
 
   const getContent = (): React.ReactElement => {
@@ -44,13 +45,13 @@ const Transactions: React.FC<TransactionsProps> = () => {
                 {icon && <Icon name={icon} sx={{ fontSize: 22, color: getIconColor(type) }}></Icon>}
               </Grid>
               <Grid item xs={4}>
-                <Ellipsis text={name} />
+                <Ellipsis text={name} color={contrastText} />
               </Grid>
               <Grid item xs={3} display='flex' justifyContent='flex-end'>
-                <Ellipsis text={`${symbol}${amount}`} />
+                <Ellipsis text={`${symbol}${amount}`} color={contrastText} />
               </Grid>
               <Grid item xs={4} display='flex' justifyContent='flex-end'>
-                <Ellipsis text={createdAt} />
+                <Ellipsis text={createdAt} color={contrastText} />
               </Grid>
             </Grid>
           ))

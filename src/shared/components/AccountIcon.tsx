@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { theme } from 'core/theme.config';
+import { useTheme } from '@mui/material/styles';
 import { IconType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 
@@ -14,7 +14,7 @@ interface AccountIconProps {
 
 // TODO: make this component generic
 const AccountIcon: React.FC<AccountIconProps> = ({ id, selected, icon, size = 64, onClick }) => {
-  const { palette: { primary: { main, contrastText } } } = theme;
+  const { palette: { primary: { main, contrastText } } } = useTheme();
 
   const onAccountClick = (id: string) => (): void => {
     onClick({ id });

@@ -26,9 +26,9 @@ const lightPalette: PaletteOptions = {
 
 const darkPalette: PaletteOptions = {
   primary: {
-    main: '#c99403',
-    light: '#fbb904',
-    dark: '#976f02',
+    main: '#996633',
+    light: '#bf8040',
+    dark: '#734d26',
     contrastText: '#fff'
   },
   secondary: {
@@ -39,9 +39,9 @@ const darkPalette: PaletteOptions = {
     main: '#ff6666'
   },
   info: {
-    main: '404040',
-    dark: '#333333',
-    light: '#4d4d4d',
+    main: '#262626',
+    light: '#404040',
+    dark: '#121212',
     contrastText: '#fff'
   },
 };

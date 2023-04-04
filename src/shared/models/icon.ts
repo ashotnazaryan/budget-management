@@ -12,13 +12,19 @@ export enum IconType {
   media = 'media',
   transportation = 'transportation',
   otherExpense = 'otherExpense',
+  mall = 'mall',
   // Account icons
   wallet = 'wallet',
-  // Other icons
-  plus = 'plus',
   dollar = 'dollar',
   euro = 'euro',
-  pound = 'pound'
+  pound = 'pound',
+  currencyExchange = 'currencyExchange',
+  business = 'business',
+  sell = 'sell',
+  house = 'house',
+  savings = 'savings',
+  // Other icons
+  plus = 'plus',
 }
 
 export interface Icon {

@@ -11,6 +11,12 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EuroIcon from '@mui/icons-material/Euro';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import SellIcon from '@mui/icons-material/Sell';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import LocalMallIcon from '@mui/icons-material/LocalMall';
+import SavingsIcon from '@mui/icons-material/Savings';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const ICONS: IconTypes = {
@@ -28,6 +34,12 @@ export const ICONS: IconTypes = {
   [IconType.dollar]: AttachMoneyIcon,
   [IconType.euro]: EuroIcon,
   [IconType.pound]: CurrencyPoundIcon,
+  [IconType.currencyExchange]: CurrencyExchangeIcon,
+  [IconType.business]: AddBusinessIcon,
+  [IconType.sell]: SellIcon,
+  [IconType.house]: AccountBalanceIcon,
+  [IconType.mall]: LocalMallIcon,
+  [IconType.savings]: SavingsIcon,
   // Other icons
   [IconType.plus]: AddIcon
 };

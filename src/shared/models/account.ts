@@ -7,12 +7,15 @@ export interface AccountDTO {
   initialAmount: number;
   currencyIso: Currency['iso'];
   icon: IconType;
+  isDefaultAccount?: boolean;
 }
 
 export interface Account {
   id: string;
   name: string;
   initialAmount: string;
+  currencyIso: Currency['iso'];
   currencySymbol: Currency['symbol'];
   icon: IconType;
+  isDefaultAccount?: boolean;
 }

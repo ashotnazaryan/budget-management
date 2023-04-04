@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,24 +16,29 @@ import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
-import { createAccount, selectAccount, selectSettings } from 'store/reducers';
+import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
 
-interface NewAccountProps { }
+interface CreateEditAccountProps {
+  mode: 'create' | 'edit';
+}
 
 const icons = ICONS_LIST;
 
-const NewAccount: React.FC<NewAccountProps> = () => {
+const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const currencies = CURRENCIES;
   const navigate = useNavigate();
+  const { state } = useLocation();
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
   const { status, error = { message: '' } } = useAppSelector(selectAccount);
+  const account = useAppSelector(selectCurrentAccount);
   const { currency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
   const helper = accountHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
+  const accountId = state?.id || null;
 
   const defaultValues: Partial<AccountDTO> = {
     initialAmount: 0,
@@ -47,14 +52,16 @@ const NewAccount: React.FC<NewAccountProps> = () => {
     defaultValues
   });
 
+  const { setValue, handleSubmit, control } = methods;
+
   const handleAccountIconClick = ({ id }: { id: string }): void => {
-    methods.setValue(AccountField.icon, id as IconType, { shouldValidate: true });
+    setValue(AccountField.icon, id as IconType, { shouldValidate: true });
   };
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const iso = event.target.value as Currency['iso'];
 
-    methods.setValue(AccountField.currencyIso, iso, { shouldValidate: true });
+    setValue(AccountField.currencyIso, iso, { shouldValidate: true });
   };
 
   const handleFormSubmit = async (data: AccountDTO): Promise<void> => {
@@ -63,18 +70,35 @@ const NewAccount: React.FC<NewAccountProps> = () => {
       initialAmount: Number(data.initialAmount)
     };
 
-    dispatch(createAccount(mappedData));
+    mode === 'create' ? dispatch(createAccount(mappedData)) : dispatch(editAccount([accountId, mappedData]));
     setFormSubmitted(true);
   };
-
-  const goBack = React.useCallback(() => {
-    navigate(`${ROUTES.accounts.path}`);
-  }, [navigate]);
 
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
   };
 
+  const getTitle = (): string => {
+    return mode === 'create' ? 'Create new account' : 'Edit account';
+  };
+
+  const setFormValues = React.useCallback(() => {
+    if (account) {
+      setValue(AccountField.name, account.name);
+      setValue(AccountField.icon, account.icon);
+      setValue(AccountField.initialAmount, Number(account.initialAmount));
+      setValue(AccountField.currencyIso, account.currencyIso);
+    }
+  }, [account, setValue]);
+
+  const resetForm = React.useCallback(() => {
+    dispatch(resetCurrentAccount());
+  }, [dispatch]);
+
+  const goBack = React.useCallback(() => {
+    navigate(`${ROUTES.accounts.path}`);
+    resetForm();
+  }, [navigate, resetForm]);
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
@@ -85,9 +109,19 @@ const NewAccount: React.FC<NewAccountProps> = () => {
     }
   }, [goBack, loading, status, formSubmitted]);
 
+  React.useEffect(() => {
+    if (accountId && mode === 'edit') {
+      dispatch(getAccount(accountId));
+    }
+  }, [accountId, mode, dispatch]);
+
+  React.useEffect(() => {
+    setFormValues();
+  }, [setFormValues]);
+
   return (
-    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text='Create new account' onBackButtonClick={goBack} />
+    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
+      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1} display='flex' flexDirection='column'>
         <FormProvider {...methods}>
           <FormInput
@@ -123,7 +157,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
             }}
           />
           <Controller
-            control={methods.control}
+            control={control}
             name={AccountField.currencyIso}
             rules={{
               required: true
@@ -143,7 +177,7 @@ const NewAccount: React.FC<NewAccountProps> = () => {
           />
           <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Icon</Typography>
           <Controller
-            control={methods.control}
+            control={control}
             name={AccountField.icon}
             rules={{
               required: true
@@ -166,11 +200,11 @@ const NewAccount: React.FC<NewAccountProps> = () => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>
   );
 };
 
-export default NewAccount;
+export default CreateEditAccount;

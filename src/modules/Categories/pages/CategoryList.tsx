@@ -89,7 +89,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <PageTitle text='Categories' />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='You cannot edit default categiry' type='info' />
+      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='You cannot edit the default category' type='info' />
     </Box>
   );
 };

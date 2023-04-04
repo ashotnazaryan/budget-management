@@ -6,6 +6,8 @@ export const ACCOUNTS: Account[] = [
     name: 'Wallet',
     icon: IconType.wallet,
     currencySymbol: '$',
-    initialAmount: '0'
+    currencyIso: 'USD',
+    initialAmount: '0',
+    isDefaultAccount: true
   }
 ];

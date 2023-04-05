@@ -11,7 +11,6 @@ import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import EmptyState from 'shared/components/EmptyState';
-import Snackbar from 'shared/components/Snackbar';
 import Account from '../components/Account';
 
 interface AccountListProps { }
@@ -20,7 +19,6 @@ const AccountList: React.FC<AccountListProps> = () => {
   const { accounts, status } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch(getAccounts());
@@ -30,18 +28,8 @@ const AccountList: React.FC<AccountListProps> = () => {
     navigate(`${ROUTES.accounts.path}/new`);
   };
 
-  const handleAccountItemClick = ({ id, name, isDefaultAccount }: { id: AccountModel['id'], name: AccountModel['name'], isDefaultAccount: AccountModel['isDefaultAccount'] }): void => {
-    if (isDefaultAccount) {
-      setShowSnackbar(true);
-
-      return;
-    }
-
+  const handleAccountItemClick = ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }): void => {
     navigate(`${ROUTES.accounts.path}/edit/${name}`, { state: { id } });
-  };
-
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
   };
 
   const getContent = (): React.ReactElement => {
@@ -55,9 +43,9 @@ const AccountList: React.FC<AccountListProps> = () => {
 
     return (
       <Grid container rowGap={2} sx={{ marginTop: 4 }}>
-        {accounts.map(({ name, icon, id, initialAmount, isDefaultAccount, currencySymbol }) => (
+        {accounts.map(({ name, icon, id, initialAmount, balance, currencySymbol }) => (
           <Grid item key={id} xs={12}>
-            <Account id={id} name={name} initialAmount={initialAmount} icon={icon} symbol={currencySymbol} isDefaultAccount={isDefaultAccount} onClick={handleAccountItemClick} />
+            <Account id={id} name={name} initialAmount={initialAmount} balance={balance} icon={icon} symbol={currencySymbol} onClick={handleAccountItemClick} />
           </Grid>
         ))}
         <Grid item xs={12} display='flex' justifyContent='flex-end'>
@@ -75,7 +63,6 @@ const AccountList: React.FC<AccountListProps> = () => {
     <Box flexGrow={1}>
       <PageTitle text='Accounts' />
       {content}
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='You cannot edit the default account' type='info' />
     </Box>
   );
 };

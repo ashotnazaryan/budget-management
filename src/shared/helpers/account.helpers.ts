@@ -13,6 +13,7 @@ export const mapAccount = (account: AccountDTO, showDecimals = false): Account =
     ...account,
     id: account._id,
     initialAmount: mapNumberToCurrencyString(account.initialAmount, showDecimals),
+    balance: mapNumberToCurrencyString(account.balance, showDecimals),
     icon: IconType[account.icon],
     currencySymbol: CURRENCIES.find(({iso}) => iso === account.currencyIso)?.symbol || '$'
   };

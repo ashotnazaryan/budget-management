@@ -1,7 +1,6 @@
 import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import Box from '@mui/system/Box';
@@ -11,18 +10,19 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES } from 'shared/constants';
-import { Currency } from 'shared/models';
+import { Account, Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
 import Snackbar from 'shared/components/Snackbar';
-import { addSetting, selectSettings, eraseUserData, selectApp, selectUser } from 'store/reducers';
+import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const { currency: { iso }, showDecimals, isDarkTheme } = useAppSelector(selectSettings);
+  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, defaultAccount = '' } = useAppSelector(selectSettings);
   const { id } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
+  const { accounts } = useAppSelector(selectAccount);
   const loading = status === 'loading';
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -43,13 +43,19 @@ const Settings: React.FC = () => {
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
-    const currency = currencies.find(({ iso }) => iso === isoCode) as Currency;
+    const defaultCurrency = currencies.find(({ iso }) => iso === isoCode) as Currency;
 
-    dispatch(addSetting({ currency }));
+    dispatch(addSetting({ defaultCurrency }));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
     dispatch(addSetting({ showDecimals: checked }));
+  };
+
+  const handleAccountChange = (event: SelectChangeEvent): void => {
+    const accountId = event.target.value as Account['id'];
+
+    dispatch(addSetting({ defaultAccount: accountId }));
   };
 
   const handleThemeChange = (): void => {
@@ -65,24 +71,40 @@ const Settings: React.FC = () => {
       setDialogOpened(false);
       setShowSnackbar(true);
     }
-  }, [status]);
+  }, [status, dispatch]);
+
+  React.useEffect(() => {
+    dispatch(getAccounts());
+  }, [dispatch]);
 
   return (
     <Box flexGrow={1}>
       <PageTitle text='Settings' />
-      <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default currency</Typography>
       <Grid container rowGap={4}>
         <Grid item xs={12}>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default currency</Typography>
           <FormControl fullWidth>
-            <InputLabel>Currency</InputLabel>
             <Select
-              label='Currency'
               variant='outlined'
               value={iso}
               onChange={handleCurrencyChange}
             >
               {currencies.map(({ iso, name, symbol }) => (
                 <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default account</Typography>
+          <FormControl fullWidth>
+            <Select
+              variant='outlined'
+              value={accounts.length ? defaultAccount : ''}
+              onChange={handleAccountChange}
+            >
+              {accounts.map(({ id, name }) => (
+                <MenuItem value={id} key={id}>{name}</MenuItem>
               ))}
             </Select>
           </FormControl>

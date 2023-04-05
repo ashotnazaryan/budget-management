@@ -12,17 +12,17 @@ interface AccountProps {
   name: AccountModel['name'];
   icon: AccountModel['icon'];
   initialAmount: AccountModel['initialAmount'];
+  balance: AccountModel['balance'];
   symbol: AccountModel['currencySymbol'];
-  isDefaultAccount?: AccountModel['isDefaultAccount'];
-  onClick?: ({ id, name, isDefaultAccount }: { id: AccountModel['id'], name: AccountModel['name'], isDefaultAccount: AccountModel['isDefaultAccount'] }) => void;
+  onClick?: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
 }
 
-const Account: React.FC<AccountProps> = ({ id, name, icon, initialAmount, symbol, isDefaultAccount, onClick }) => {
+const Account: React.FC<AccountProps> = ({ id, name, icon, initialAmount, balance, symbol, onClick }) => {
   const { palette: { primary: { main }, info: { contrastText } } } = useTheme();
 
   const onAccountClick = (): void => {
     if (onClick) {
-      onClick({ id, name, isDefaultAccount });
+      onClick({ id, name });
     }
   };
 
@@ -43,7 +43,7 @@ const Account: React.FC<AccountProps> = ({ id, name, icon, initialAmount, symbol
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={contrastText} text={`${symbol}${initialAmount}`} />
+          <Ellipsis color={contrastText} text={`${symbol}${balance}`} />
         </Grid>
       </Grid>
     </Paper>

@@ -15,6 +15,11 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
       message: 'Category is required'
     }
   },
+  [TransactionField.accountId]: {
+    required: {
+      message: 'Account is required'
+    }
+  },
   [TransactionField.icon]: {},
   [TransactionField.type]: {}
 });

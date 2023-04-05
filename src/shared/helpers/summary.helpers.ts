@@ -14,6 +14,7 @@ export const mapSummary = (summary: SummaryDTO, showDecimals = false): Summary =
     balance: mapNumberToCurrencyString(summary.balance, showDecimals),
     categoryExpenseTransactions: summary.categoryExpenseTransactions.map((transaction) => ({
       ...transaction,
+      id: transaction._id,
       amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
       percentValue: `${transaction.percentValue}%`,
       createdAt: moment(transaction.createdAt).format('LL'),
@@ -21,6 +22,7 @@ export const mapSummary = (summary: SummaryDTO, showDecimals = false): Summary =
     })),
     categoryIncomeTransactions: summary.categoryIncomeTransactions.map((transaction) => ({
       ...transaction,
+      id: transaction._id,
       amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
       percentValue: `${transaction.percentValue}%`,
       createdAt: moment(transaction.createdAt).format('LL'),

@@ -33,7 +33,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const { palette: { info: { contrastText } } } = useTheme();
   const { status, error = { message: '' } } = useAppSelector(selectAccount);
   const account = useAppSelector(selectCurrentAccount);
-  const { currency: { iso } } = useAppSelector(selectSettings);
+  const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
   const helper = accountHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);

@@ -6,9 +6,22 @@ import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO } from 'shared/models';
+import {
+  getCategories,
+  selectCategory,
+  addTransaction,
+  selectTransaction,
+  selectCurrency,
+  selectAccount,
+  getAccounts,
+  selectSettings
+} from 'store/reducers';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
 import { transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
@@ -17,13 +30,6 @@ import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
-import {
-  getCategories,
-  selectCategory,
-  addTransaction,
-  selectTransaction,
-  selectCurrency
-} from 'store/reducers';
 
 interface NewTransactionProps { }
 
@@ -34,7 +40,9 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const { categories } = useAppSelector(selectCategory);
   const categoryStatus = useAppSelector(selectCategory).status;
   const { status, error = { message: '' } } = useAppSelector(selectTransaction);
+  const { accounts } = useAppSelector(selectAccount);
   const { iso } = useAppSelector(selectCurrency);
+  const { defaultAccount = '' } = useAppSelector(selectSettings);
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
@@ -45,6 +53,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const defaultValues: Partial<TransactionDTO> = {
     amount: 0,
     categoryId: '',
+    accountId: defaultAccount || '',
     type: CategoryType.expense
   };
 
@@ -70,6 +79,10 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
     methods.setValue('name', title, { shouldValidate: true });
   };
 
+  const handleAccountChange = (event: SelectChangeEvent<Account['id']>): void => {
+    methods.setValue(TransactionField.accountId, event.target.value);
+  };
+
   const handleFormSubmit = (data: TransactionDTO): void => {
     const mappedData: TransactionDTO = {
       ...data,
@@ -86,6 +99,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
 
   React.useEffect(() => {
     dispatch(getCategories());
+    dispatch(getAccounts());
   }, [dispatch]);
 
   React.useEffect(() => {
@@ -119,6 +133,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
           <Box display='flex' alignItems='baseline' sx={{ marginBottom: 2 }}>
             <FormInput
               focused
+              fullWidth
               label='Amount'
               type='number'
               name={TransactionField.amount}
@@ -136,6 +151,31 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
             />
             <Typography color={contrastText}>{iso}</Typography>
           </Box>
+          <Controller
+            control={methods.control}
+            name={TransactionField.accountId}
+            rules={{
+              required: {
+                value: true,
+                message: helper.accountId.required?.message || ''
+              },
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <>
+                <InputLabel>Account</InputLabel>
+                <Select
+                  fullWidth
+                  variant='outlined'
+                  value={accounts.length ? (field.value || defaultAccount) : ''}
+                  onChange={handleAccountChange}
+                >
+                  {accounts.map(({ id, name }) => (
+                    <MenuItem value={id} key={id}>{name}</MenuItem>
+                  ))}
+                </Select>
+              </>
+            )}
+          />
           <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Category</Typography>
           <Controller
             control={methods.control}

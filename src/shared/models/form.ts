@@ -5,7 +5,8 @@ export enum TransactionField {
   amount = 'amount',
   categoryId = 'categoryId',
   type = 'type',
-  icon = 'icon'
+  icon = 'icon',
+  accountId = 'accountId'
 }
 
 export enum AccountField {

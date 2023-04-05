@@ -8,6 +8,7 @@ export const ACCOUNTS: Account[] = [
     currencySymbol: '$',
     currencyIso: 'USD',
     initialAmount: '0',
+    balance: '0',
     isDefaultAccount: true
   }
 ];

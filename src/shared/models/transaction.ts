@@ -1,27 +1,34 @@
+import { Account, AccountDTO } from './account';
 import { Auth } from './auth';
 import { Category, CategoryType } from './category';
 import { IconType } from './icon';
 
 export interface TransactionDTO {
-  _id?: string;
+  _id: string;
   userId: Auth['userId'];
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
   amount: number;
-  percentValue?: number;
   createdAt: Date;
   icon: string;
+  accountId: AccountDTO['_id'];
+  accountName: AccountDTO['name'];
+  accountIcon: AccountDTO['icon'];
+  percentValue?: number;
 }
 
 export interface Transaction {
-  id?: string;
+  id: string;
   userId: Auth['userId'];
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
   amount: string;
-  percentValue?: string;
   createdAt: string;
   icon: IconType;
+  accountId: Account['id'];
+  accountName: Account['name'];
+  accountIcon: Account['icon'];
+  percentValue?: string;
 }

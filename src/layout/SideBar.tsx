@@ -37,7 +37,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const { sideBarOpened } = useAppSelector(selectApp);
   const user = useAppSelector(selectUser);
   const balance = useAppSelector(selectBalance);
-  const { currency: { symbol }, showDecimals } = useAppSelector(selectSettings);
+  const { defaultCurrency: { symbol }, showDecimals } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;

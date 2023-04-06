@@ -14,7 +14,6 @@ import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import EmptyState from 'shared/components/EmptyState';
-import Snackbar from 'shared/components/Snackbar';
 
 interface CategoryListProps { }
 
@@ -24,7 +23,6 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [categoryType, setCategoryType] = React.useState<number>(0);
-  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const tabs = TABS;
 
   React.useEffect(() => {
@@ -35,17 +33,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     setCategoryType(value);
   };
 
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
-  };
-
-  const handleCategoryIconClick = ({ id, title, isDefaultCategory }: { id: Category['id'], title: Category['name'], isDefaultCategory?: Category['isDefaultCategory'] }): void => {
-    if (isDefaultCategory) {
-      setShowSnackbar(true);
-
-      return;
-    }
-
+  const handleCategoryIconClick = ({ id, title }: { id: Category['id'], title: Category['name'] }): void => {
     navigate(`${ROUTES.categories.path}/edit/${title}`, { state: { id } });
   };
 
@@ -63,14 +51,14 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     }
 
     if (!categories?.length) {
-      return <EmptyState />;
+      return <EmptyState text='No categories available' />;
     }
 
     return (
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id, isDefaultCategory }) => (
+        {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id }) => (
           <Grid item key={id}>
-            <CategoryIcon id={id} title={name} type={type} icon={icon} isDefaultCategory={isDefaultCategory} onClick={handleCategoryIconClick} />
+            <CategoryIcon id={id} title={name} type={type} icon={icon} onClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>
@@ -89,7 +77,6 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <PageTitle text='Categories' />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='You cannot edit the default category' type='info' />
     </Box>
   );
 };

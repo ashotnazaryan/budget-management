@@ -54,7 +54,7 @@ const Transactions: React.FC<TransactionsProps> = () => {
                 <Ellipsis text={accountName} color={contrastText} />
               </Grid>
               <Grid item xs={1} display='flex'>
-                {accountIcon && <Icon name={accountIcon} sx={{ fontSize: 22 }}></Icon>}
+                {accountIcon && <Icon name={accountIcon} color='primary' sx={{ fontSize: 22, color: contrastText }}></Icon>}
               </Grid>
               <Grid item xs={3} display='flex' justifyContent='flex-end'>
                 <Ellipsis text={createdAt} color={contrastText} />

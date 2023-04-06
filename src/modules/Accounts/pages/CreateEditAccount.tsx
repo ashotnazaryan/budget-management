@@ -200,7 +200,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button type='submit' variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

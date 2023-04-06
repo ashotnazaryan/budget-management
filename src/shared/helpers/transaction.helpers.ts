@@ -9,7 +9,6 @@ export const mapTransactions = (transactions: TransactionDTO[], showDecimals = f
 
   return transactions.map((transaction) => ({
     ...transaction,
-    id: transaction._id,
     amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
     percentValue: `${transaction.percentValue}%`,
     createdAt: moment(transaction.createdAt).format('LL'),

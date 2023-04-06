@@ -4,7 +4,7 @@ import { Category, CategoryType } from './category';
 import { IconType } from './icon';
 
 export interface TransactionDTO {
-  _id: string;
+  id: string;
   userId: Auth['userId'];
   categoryId: Category['id'];
   type: CategoryType;

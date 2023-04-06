@@ -11,19 +11,18 @@ interface CategoryIconProps {
   type: CategoryType;
   icon: IconType;
   selected?: string;
-  isDefaultCategory?: boolean;
-  onClick?: ({ id, title, icon, isDefaultCategory }:
-    { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'], isDefaultCategory?: boolean }) => void;
+  onClick?: ({ id, title, icon }:
+    { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'] }) => void;
 }
 
 // TODO: make this component generic
-const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, isDefaultCategory = false, onClick }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, onClick }) => {
   const { palette: { primary, secondary, info } } = useTheme();
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
   const onCategoryClick = (): void => {
     if (onClick) {
-      onClick({ icon, id, title, isDefaultCategory });
+      onClick({ icon, id, title });
     }
   };
 

@@ -207,7 +207,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button type='submit' variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

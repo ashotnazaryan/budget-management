@@ -32,7 +32,7 @@ export const getCategories = createAsyncThunk<Category[], void>('categories/getC
   }
 });
 
-export const getCategory = createAsyncThunk<Category, CategoryDTO['_id'], { rejectValue: ErrorResponse }>(
+export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejectValue: ErrorResponse }>(
   'categories/getCategory',
   async (categoryId): Promise<Category> => {
     try {
@@ -64,7 +64,7 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
     }
   });
 
-export const editCategory = createAsyncThunk<void, [Category['id'], Omit<CategoryDTO, '_id'>], { rejectValue: ErrorResponse }>(
+export const editCategory = createAsyncThunk<void, [Category['id'], Omit<CategoryDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'categories/editCategory',
   async ([categoryId, category], { dispatch, rejectWithValue }): Promise<any> => {
     try {

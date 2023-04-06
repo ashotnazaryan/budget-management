@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory } from 'store/reducers';
@@ -184,7 +185,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                     ))
                   }
                 </Grid>
-                <Typography color='error.main' fontSize={12} sx={{ marginTop: 2 }}>{error ? helper.icon[error.type]?.message : ''}</Typography>
+                {error && <FormHelperText error>{helper.icon[error.type]?.message}</FormHelperText>}
               </>
             )}
           />

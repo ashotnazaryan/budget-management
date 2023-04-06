@@ -4,7 +4,7 @@ export const mapNumberToCurrencyString = (value: number, showDecimals = false): 
   }
 
   const decimals = showDecimals ? 2 : 0;
-  const currencyString = value.toFixed(decimals).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  const currencyString = value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
   return currencyString;
 };

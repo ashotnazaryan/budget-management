@@ -20,7 +20,7 @@ interface SummaryProps {
 }
 
 const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
-  const { palette: { primary: { main, dark, light, contrastText }, secondary } } = useTheme();
+  const { palette: { primary: { main, dark, light, contrastText }, error } } = useTheme();
 
   const onAddTransaction = (): void => {
     addTransaction();
@@ -61,7 +61,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography variant='h6' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
               Remaining Monthly Balance
             </Typography>
-            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? contrastText : secondary.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

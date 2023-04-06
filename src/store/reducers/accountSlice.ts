@@ -35,7 +35,7 @@ export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccoun
   }
 });
 
-export const getAccount = createAsyncThunk<Account, AccountDTO['_id'], { rejectValue: ErrorResponse }>(
+export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectValue: ErrorResponse }>(
   'accounts/getAccount',
   async (accountId): Promise<Account> => {
     try {
@@ -68,7 +68,7 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
     }
   });
 
-export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDTO, '_id'>], { rejectValue: ErrorResponse }>(
+export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'accounts/editAccount',
   async ([accountId, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {

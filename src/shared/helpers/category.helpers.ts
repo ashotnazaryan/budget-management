@@ -7,7 +7,6 @@ export const mapCategories = (categories: CategoryDTO[]): Category[] => {
 export const mapCategory = (category: CategoryDTO): Category => {
   return {
     ...category,
-    id: category._id,
     icon: IconType[category.icon]
   };
 };

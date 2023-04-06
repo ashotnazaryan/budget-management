@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
@@ -43,7 +44,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const { accounts } = useAppSelector(selectAccount);
   const { iso } = useAppSelector(selectCurrency);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
-  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
+  const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
@@ -173,6 +174,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
                     <MenuItem value={id} key={id}>{name}</MenuItem>
                   ))}
                 </Select>
+                {error && <FormHelperText error>{helper.accountId[error.type]?.message}</FormHelperText>}
               </>
             )}
           />
@@ -200,7 +202,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
                       </Grid>
                     )
                 }
-                <Typography color={main} fontSize={12}>{error ? helper.categoryId[error.type]?.message : ''}</Typography>
+                {error && <FormHelperText error>{helper.categoryId[error.type]?.message}</FormHelperText>}
               </>
             )}
           />

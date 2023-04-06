@@ -6,7 +6,7 @@ type EllipsisProps = { text: string; } & TypographyProps;
 
 const Ellipsis: React.FC<EllipsisProps> = ({ text, ...props }) => {
   return (
-    <StyledEllipsis variant='inherit' {...props}>{text}</StyledEllipsis>
+    <StyledEllipsis variant='inherit' sx={{ fontSize: { sm: 16, xs: 14 } }} {...props}>{text}</StyledEllipsis>
   );
 };
 

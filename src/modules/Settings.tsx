@@ -43,9 +43,8 @@ const Settings: React.FC = () => {
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
-    const defaultCurrency = currencies.find(({ iso }) => iso === isoCode) as Currency;
 
-    dispatch(addSetting({ defaultCurrency }));
+    dispatch(addSetting({ defaultCurrency: isoCode }));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {

@@ -12,7 +12,7 @@ export interface TransactionDTO {
   amount: number;
   createdAt: Date;
   icon: string;
-  accountId: AccountDTO['_id'];
+  accountId: AccountDTO['id'];
   accountName: AccountDTO['name'];
   accountIcon: AccountDTO['icon'];
   percentValue?: number;

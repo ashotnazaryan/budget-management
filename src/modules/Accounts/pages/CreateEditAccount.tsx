@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CURRENCIES, ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
@@ -193,7 +194,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                     ))
                   }
                 </Grid>
-                <Typography color='error.main' fontSize={12} sx={{ marginTop: 2 }}>{error ? helper.icon[error.type]?.message : ''}</Typography>
+                {error && <FormHelperText error>{helper.icon[error.type]?.message}</FormHelperText>}
               </>
             )}
           />

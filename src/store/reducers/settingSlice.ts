@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Setting, SettingDTO, StatusState } from 'shared/models';
+import { CURRENCIES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setLoading } from './appSlice';
@@ -10,11 +11,7 @@ export interface SettingState extends Setting {
 }
 
 const initialState: SettingState = {
-  defaultCurrency: {
-    iso: 'USD',
-    name: 'US Dollar',
-    symbol: '$'
-  },
+  defaultCurrency: CURRENCIES[0],
   showDecimals: false,
   status: 'idle',
   isDarkTheme: false
@@ -34,7 +31,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
   }
 });
 
-export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Partial<Setting>, { dispatch }): Promise<void> => {
+export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Partial<SettingDTO>, { dispatch }): Promise<void> => {
   dispatch(setLoading(true));
 
   try {

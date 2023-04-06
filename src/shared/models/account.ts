@@ -2,7 +2,7 @@ import { IconType } from './icon';
 import { Currency } from './setting';
 
 export interface AccountDTO {
-  _id: string;
+  id: string;
   name: string;
   initialAmount: number;
   balance: number;

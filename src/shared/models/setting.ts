@@ -9,8 +9,8 @@ export interface Currency {
 export interface SettingDTO {
   showDecimals: boolean;
   isDarkTheme: boolean;
-  defaultCurrency: Currency;
-  defaultAccount?: AccountDTO['_id'];
+  defaultCurrency: Currency['iso'];
+  defaultAccount?: AccountDTO['id'];
 }
 
 export interface Setting {

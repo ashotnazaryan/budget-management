@@ -42,10 +42,10 @@ const Transactions: React.FC<TransactionsProps> = () => {
           transactions.map(({ id, createdAt, name, amount, icon, type, accountName, accountIcon }) => (
             <Grid item container key={id} columnSpacing={2} alignItems='center'>
               <Grid item xs={1} display='flex'>
-                {icon && <Icon name={icon} sx={{ fontSize: 22, color: getIconColor(type) }}></Icon>}
+                {icon && <Icon name={icon} sx={{ color: getIconColor(type), fontSize: { sm: 22, xs: 17 } }}></Icon>}
               </Grid>
               <Grid item xs={3}>
-                <Ellipsis text={name} fontSize={18} color={contrastText} />
+                <Ellipsis text={name} color={contrastText} />
               </Grid>
               <Grid item xs={2} display='flex' justifyContent='flex-end'>
                 <Ellipsis text={`${symbol}${amount}`} color={contrastText} />

@@ -8,11 +8,9 @@ export const mapAccounts = (accounts: AccountDTO[], showDecimals = false): Accou
   });
 };
 
-// TODO: remove all _id fields in DTOs, map ids on the BE
 export const mapAccount = (account: AccountDTO, showDecimals = false): Account => {
   return {
     ...account,
-    id: account._id,
     initialAmount: mapNumberToCurrencyString(account.initialAmount, showDecimals),
     balance: mapNumberToCurrencyString(account.balance, showDecimals),
     icon: IconType[account.icon],

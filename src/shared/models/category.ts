@@ -7,7 +7,7 @@ export enum CategoryType {
 }
 
 export interface CategoryDTO {
-  _id: string;
+  id: string;
   name: string;
   type: CategoryType;
   icon: IconType;

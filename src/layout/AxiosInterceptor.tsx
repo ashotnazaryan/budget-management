@@ -4,9 +4,9 @@ import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
-import { removeUser, logout, getNewAccessToken } from 'store/reducers';
+import { removeUser, logout } from 'store/reducers';
 
-let retried = false;
+// let retried = false;
 
 const defaultConfigs: CreateAxiosDefaults = {
   headers: {
@@ -51,35 +51,48 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
       return mapResponse(response);
     },
     async (error) => {
-      const originalConfig = error.config;
+      if (error.response?.status === 401) {
+        dispatch(removeUser());
+        removeFromLocalStorage(AUTH_KEY);
+        dispatch(logout());
 
-      if (error.response) {
-        if (error.response.status === 401 && !retried) {
-          retried = true;
-
-          try {
-            const { refreshToken } = getFromLocalStorage<Auth>(AUTH_KEY);
-            await dispatch(getNewAccessToken(refreshToken));
-
-            const newAccessToken = getFromLocalStorage<Auth>(AUTH_KEY).accessToken;
-
-            axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-            return axios(originalConfig);
-          } catch (_error) {
-            dispatch(removeUser());
-            removeFromLocalStorage(AUTH_KEY);
-            dispatch(logout());
-
-            return Promise.reject(_error);
-          }
-        }
-
-        if (!error.isAxiosError) {
-          return Promise.reject(error);
-        }
-
-        return Promise.reject(error.response?.data);
+        return Promise.reject(error);
       }
+
+      if (!error.isAxiosError) {
+        return Promise.reject(error);
+      }
+
+      return Promise.reject(error.response?.data);
+      // const originalConfig = error.config;
+
+      // if (error.response) {
+      //   if (error.response.status === 401 && !retried) {
+      //     retried = true;
+
+      //     try {
+      //       const { refreshToken } = getFromLocalStorage<Auth>(AUTH_KEY);
+      //       await dispatch(getNewAccessToken(refreshToken));
+
+      //       const newAccessToken = getFromLocalStorage<Auth>(AUTH_KEY).accessToken;
+
+      //       axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+      //       return axios(originalConfig);
+      //     } catch (_error) {
+      //       dispatch(removeUser());
+      //       removeFromLocalStorage(AUTH_KEY);
+      //       dispatch(logout());
+
+      //       return Promise.reject(_error);
+      //     }
+      //   }
+
+      //   if (!error.isAxiosError) {
+      //     return Promise.reject(error);
+      //   }
+
+      //   return Promise.reject(error.response?.data);
+      // }
     }
   );
 

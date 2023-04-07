@@ -11,10 +11,10 @@ const Skeleton: React.FC<SkeletonProps> = ({ ...props }) => {
         <MuiSkeleton variant='rounded' />
       </Grid>
       <Grid item xs={12}>
-        <MuiSkeleton {...props} variant='rounded' animation='wave' height={100} sx={{ marginTop: 3 }} />
+        <MuiSkeleton {...props} variant='rounded' animation='wave' height={50} sx={{ marginTop: 3 }} />
       </Grid>
       <Grid item xs={12}>
-        <MuiSkeleton {...props} variant='rounded' height={200} sx={{ marginTop: 3 }} />
+        <MuiSkeleton {...props} variant='rounded' height={100} sx={{ marginTop: 3 }} />
       </Grid>
     </Grid>
   );

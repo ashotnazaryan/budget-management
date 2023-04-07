@@ -1,1 +1,1 @@
-export const POSITIVE_NUMERIC_REGEX: RegExp = /^[+]?(0|[1-9]\d*)(\.\d+)?$/;
+export const POSITIVE_NUMERIC_REGEX: RegExp = /^[1-9]\d*(\.\d+)?$|^(0\.([1-9]\d*|\d*[1-9]))$/;

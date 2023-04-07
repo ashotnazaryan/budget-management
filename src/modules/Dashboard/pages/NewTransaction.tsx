@@ -52,7 +52,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
 
   const defaultValues: Partial<TransactionDTO> = {
-    amount: 0,
+    amount: '' as unknown as number,
     categoryId: '',
     accountId: defaultAccount || '',
     type: CategoryType.expense
@@ -114,7 +114,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text='Add new transaction' onBackButtonClick={goBack} />
+      <PageTitle withBackButton text='New transaction' onBackButtonClick={goBack} />
       <Box flexGrow={1}>
         <FormProvider {...methods} >
           <Controller

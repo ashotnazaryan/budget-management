@@ -23,10 +23,10 @@ import {
   closeSidebar,
   selectUser,
   getBalance,
-  selectBalance,
   selectSettings,
   logout,
-  selectApp
+  selectApp,
+  selectSummary
 } from 'store/reducers';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 
@@ -36,7 +36,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const dispatch = useAppDispatch();
   const { sideBarOpened } = useAppSelector(selectApp);
   const user = useAppSelector(selectUser);
-  const balance = useAppSelector(selectBalance);
+  const { balance } = useAppSelector(selectSummary);
   const { palette } = useTheme();
   const { defaultCurrency: { symbol }, showDecimals } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);

@@ -6,7 +6,7 @@ type BackButtonProps = ButtonProps;
 
 const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
   return (
-    <Button color='primary' onClick={props.onClick} startIcon={<ArrowBackIcon />}>
+    <Button color='primary' onClick={props.onClick} {...props} startIcon={<ArrowBackIcon />}>
       Back
     </Button>
   );

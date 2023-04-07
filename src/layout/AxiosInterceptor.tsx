@@ -1,10 +1,12 @@
 import * as React from 'react';
-import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from 'axios';
+import axios, { AxiosResponse, CreateAxiosDefaults } from 'axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
-import { Auth, ErrorResponse } from 'shared/models';
-import { removeUser, logout } from 'store/reducers';
+import { Auth } from 'shared/models';
+import { removeUser, logout, getNewAccessToken } from 'store/reducers';
+
+let retried = false;
 
 const defaultConfigs: CreateAxiosDefaults = {
   headers: {
@@ -33,7 +35,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
   axios.interceptors.request.use((config) => {
     const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-    if (accessToken) {
+    if (accessToken && config.url?.includes(apiBase)) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
@@ -48,20 +50,36 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
     (response) => {
       return mapResponse(response);
     },
-    (error: AxiosError<ErrorResponse>) => {
-      if (error.response?.status === 401) {
-        dispatch(removeUser());
-        removeFromLocalStorage(AUTH_KEY);
-        dispatch(logout());
+    async (error) => {
+      const originalConfig = error.config;
 
-        return Promise.reject(error);
+      if (error.response) {
+        if (error.response.status === 401 && !retried) {
+          retried = true;
+
+          try {
+            const { refreshToken } = getFromLocalStorage<Auth>(AUTH_KEY);
+            await dispatch(getNewAccessToken(refreshToken));
+
+            const newAccessToken = getFromLocalStorage<Auth>(AUTH_KEY).accessToken;
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+            return axios(originalConfig);
+          } catch (_error) {
+            dispatch(removeUser());
+            removeFromLocalStorage(AUTH_KEY);
+            dispatch(logout());
+
+            return Promise.reject(_error);
+          }
+        }
+
+        if (!error.isAxiosError) {
+          return Promise.reject(error);
+        }
+
+        return Promise.reject(error.response?.data);
       }
-
-      if (!error.isAxiosError) {
-        return Promise.reject(error);
-      }
-
-      return Promise.reject(error.response?.data);
     }
   );
 

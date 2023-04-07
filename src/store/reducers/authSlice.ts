@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from './rootReducer';
-import { Auth, StatusState } from 'shared/models';
-import { removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
+import { Auth, AuthDTO, StatusState } from 'shared/models';
+import { getFromLocalStorage, removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
+import { RootState } from './rootReducer';
 import { closeSidebar } from './appSlice';
 
 export interface AuthState extends Auth {
@@ -31,20 +31,29 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
   return auth;
 });
 
-// export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
-//   const { data } = await axios.post<{ data: AuthDTO }>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/access-token`, { refreshToken });
-//   const { userId } = store.getState().auth;
+export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
+  try {
+    const response = await axios.post<AuthDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/access-token`, { refreshToken });
+    const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-//   const newAuth: Auth = {
-//     userId,
-//     accessToken: data.data.access_token,
-//     refreshToken: data.data.refresh_token
-//   };
+    if (response?.data) {
+      const newAuth: Auth = {
+        userId,
+        accessToken: response.data.access_token,
+        refreshToken: response.data.refresh_token
+      };
 
-//   saveToLocalStorage(AUTH_KEY, newAuth);
+      saveToLocalStorage(AUTH_KEY, newAuth);
 
-//   return newAuth;
-// });
+      return newAuth;
+    }
+
+    return {} as Auth;
+  } catch (error) {
+    console.error(error);
+    return {} as Auth;
+  }
+});
 
 export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }): Promise<void> => {
   await axios.get<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
@@ -76,6 +85,25 @@ export const authSlice = createSlice({
         };
       })
       .addCase(getUserToken.fulfilled, (state, action) => {
+        return {
+          ...state,
+          ...action.payload,
+          status: 'succeeded'
+        };
+      })
+      .addCase(getNewAccessToken.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(getNewAccessToken.rejected, (state) => {
+        return {
+          ...state,
+          status: 'failed'
+        };
+      })
+      .addCase(getNewAccessToken.fulfilled, (state, action) => {
         return {
           ...state,
           ...action.payload,

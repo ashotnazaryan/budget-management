@@ -22,7 +22,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, ful
       </Grid>
       <Grid item container sm={8} xs={9}>
         <Grid item xs={12}>
-          <Ellipsis text={fullName} />
+          <Ellipsis text={fullName} sx={{ fontSize: { sm: 18, xs: 16 } }} />
         </Grid>
         <Grid item xs={12}>
           <Ellipsis text={`Balance: ${currency}${balance}`} color={isPositiveString(balance) ? contrastText : error.main} />

@@ -44,14 +44,14 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6}>
             <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
-              Total Income
+              Total income
             </Typography>
             <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6}>
             <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
-              Total Expenses
+              Total expenses
             </Typography>
             <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
           </Grid>
@@ -59,7 +59,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
             <Typography variant='h6' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
-              Remaining Monthly Balance
+              Remaining balance
             </Typography>
             <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>

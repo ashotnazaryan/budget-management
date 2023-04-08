@@ -9,15 +9,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
+import { createAccount, editAccount, getAccount, getBalance, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
 import { CURRENCIES, ICONS_LIST, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
-import { accountHelper } from 'shared/helpers';
+import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
-import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
 
 interface CreateEditAccountProps {
   mode: 'create' | 'edit';
@@ -42,7 +42,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const accountId = state?.id || null;
 
   const defaultValues: Partial<AccountDTO> = {
-    initialAmount: 0,
+    balance: 0,
     name: '',
     currencyIso: iso
   };
@@ -68,7 +68,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const handleFormSubmit = async (data: AccountDTO): Promise<void> => {
     const mappedData: AccountDTO = {
       ...data,
-      initialAmount: Number(data.initialAmount)
+      balance: Number(data.balance)
     };
 
     mode === 'create' ? dispatch(createAccount(mappedData)) : dispatch(editAccount([accountId, mappedData]));
@@ -80,14 +80,14 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? 'Create new account' : 'Edit account';
+    return mode === 'create' ? 'New account' : 'Edit account';
   };
 
   const setFormValues = React.useCallback(() => {
     if (account) {
       setValue(AccountField.name, account.name);
       setValue(AccountField.icon, account.icon);
-      setValue(AccountField.initialAmount, Number(account.initialAmount));
+      setValue(AccountField.balance, mapCurrencyStringToNumber(account.balance));
       setValue(AccountField.currencyIso, account.currencyIso);
     }
   }, [account, setValue]);
@@ -105,10 +105,11 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
+      dispatch(getBalance());
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
-  }, [goBack, loading, status, formSubmitted]);
+  }, [goBack, loading, status, formSubmitted, dispatch]);
 
   React.useEffect(() => {
     if (accountId && mode === 'edit') {
@@ -140,17 +141,17 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             }}
           />
           <FormInput
-            label='Initial amount'
+            label='Balance'
             type='number'
-            name={AccountField.initialAmount}
+            name={AccountField.balance}
             rules={{
               required: {
                 value: true,
-                message: helper.initialAmount.required?.message
+                message: helper.balance.required?.message
               },
               pattern: {
                 value: regex,
-                message: helper.initialAmount.pattern?.message
+                message: helper.balance.pattern?.message
               }
             }}
             sx={{

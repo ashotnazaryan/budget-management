@@ -7,7 +7,6 @@ export const ACCOUNTS: Account[] = [
     icon: IconType.wallet,
     currencySymbol: '$',
     currencyIso: 'USD',
-    initialAmount: '0',
     balance: '0',
     isDefaultAccount: true
   }

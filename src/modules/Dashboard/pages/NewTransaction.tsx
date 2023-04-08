@@ -22,15 +22,16 @@ import {
   getAccounts,
   selectSettings
 } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
-import { transactionHelper } from 'shared/helpers';
+import { getCurrencySymbolByIsoCode, isPositiveString, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
+import Ellipsis from 'shared/components/Ellipsis';
 
 interface NewTransactionProps { }
 
@@ -44,7 +45,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   const { accounts } = useAppSelector(selectAccount);
   const { iso } = useAppSelector(selectCurrency);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
-  const { palette: { info: { contrastText } } } = useTheme();
+  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
@@ -66,6 +67,16 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
 
   const watchType = methods.watch(TransactionField.type);
 
+  const getAccountValue = (accountId: Account['id']): string => {
+    return accounts.find(({ id }) => id === accountId)?.name || '';
+  };
+
+  const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
+    const symbol = getCurrencySymbolByIsoCode(iso);
+
+    return `${symbol}${balance}`;
+  };
+
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
   };
@@ -81,7 +92,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   };
 
   const handleAccountChange = (event: SelectChangeEvent<Account['id']>): void => {
-    methods.setValue(TransactionField.accountId, event.target.value);
+    methods.setValue(TransactionField.accountId, event.target.value, { shouldValidate: true });
   };
 
   const handleFormSubmit = (data: TransactionDTO): void => {
@@ -156,10 +167,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
             control={methods.control}
             name={TransactionField.accountId}
             rules={{
-              required: {
-                value: true,
-                message: helper.accountId.required?.message || ''
-              },
+              required: true
             }}
             render={({ field, fieldState: { error } }) => (
               <>
@@ -169,9 +177,15 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
                   variant='outlined'
                   value={accounts.length ? (field.value || defaultAccount) : ''}
                   onChange={handleAccountChange}
+                  renderValue={(value) => (
+                    <Ellipsis text={getAccountValue(value)} />
+                  )}
                 >
-                  {accounts.map(({ id, name }) => (
-                    <MenuItem value={id} key={id}>{name}</MenuItem>
+                  {accounts.map(({ id, name, balance, currencyIso }) => (
+                    <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Ellipsis text={name} />
+                      <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                    </MenuItem>
                   ))}
                 </Select>
                 {error && <FormHelperText error>{helper.accountId[error.type]?.message}</FormHelperText>}

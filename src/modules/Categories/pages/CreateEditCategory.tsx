@@ -89,7 +89,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? 'Create new category' : 'Edit category';
+    return mode === 'create' ? 'New category' : 'Edit category';
   };
 
   React.useEffect(() => {

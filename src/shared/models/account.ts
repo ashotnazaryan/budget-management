@@ -4,7 +4,6 @@ import { Currency } from './setting';
 export interface AccountDTO {
   id: string;
   name: string;
-  initialAmount: number;
   balance: number;
   currencyIso: Currency['iso'];
   icon: IconType;
@@ -14,7 +13,6 @@ export interface AccountDTO {
 export interface Account {
   id: string;
   name: string;
-  initialAmount: string;
   balance: string;
   currencyIso: Currency['iso'];
   currencySymbol: Currency['symbol'];

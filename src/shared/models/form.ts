@@ -10,7 +10,7 @@ export enum TransactionField {
 }
 
 export enum AccountField {
-  initialAmount = 'initialAmount',
+  balance = 'balance',
   icon = 'icon',
   name = 'name',
   currencyIso = 'currencyIso'

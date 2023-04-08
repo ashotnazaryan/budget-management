@@ -11,7 +11,6 @@ export const mapAccounts = (accounts: AccountDTO[], showDecimals = false): Accou
 export const mapAccount = (account: AccountDTO, showDecimals = false): Account => {
   return {
     ...account,
-    initialAmount: mapNumberToCurrencyString(account.initialAmount, showDecimals),
     balance: mapNumberToCurrencyString(account.balance, showDecimals),
     icon: IconType[account.icon],
     currencySymbol: CURRENCIES.find(({iso}) => iso === account.currencyIso)?.symbol || '$'

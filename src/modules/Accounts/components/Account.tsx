@@ -12,13 +12,12 @@ interface AccountProps {
   id: AccountModel['id'];
   name: AccountModel['name'];
   icon: AccountModel['icon'];
-  initialAmount: AccountModel['initialAmount'];
   balance: AccountModel['balance'];
   symbol: AccountModel['currencySymbol'];
   onClick?: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
 }
 
-const Account: React.FC<AccountProps> = ({ id, name, icon, initialAmount, balance, symbol, onClick }) => {
+const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onClick }) => {
   const { palette: { primary: { main }, info: { contrastText }, error } } = useTheme();
 
   const onAccountClick = (): void => {

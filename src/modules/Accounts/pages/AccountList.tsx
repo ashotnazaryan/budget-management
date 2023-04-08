@@ -43,9 +43,9 @@ const AccountList: React.FC<AccountListProps> = () => {
 
     return (
       <Grid container rowGap={2} sx={{ marginTop: 4 }}>
-        {accounts.map(({ name, icon, id, initialAmount, balance, currencySymbol }) => (
+        {accounts.map(({ name, icon, id, balance, currencySymbol }) => (
           <Grid item key={id} xs={12}>
-            <Account id={id} name={name} initialAmount={initialAmount} balance={balance} icon={icon} symbol={currencySymbol} onClick={handleAccountItemClick} />
+            <Account id={id} name={name} balance={balance} icon={icon} symbol={currencySymbol} onClick={handleAccountItemClick} />
           </Grid>
         ))}
         <Grid item xs={12} display='flex' justifyContent='flex-end'>

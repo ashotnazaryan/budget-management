@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import MuiTabs from '@mui/material/Tabs';
@@ -20,11 +20,15 @@ import {
   selectCurrency,
   selectAccount,
   getAccounts,
-  selectSettings
+  selectSettings,
+  selectCurrentTransaction,
+  getTransaction,
+  resetCurrentTransaction,
+  editTransaction
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
-import { getCurrencySymbolByIsoCode, isPositiveString, transactionHelper } from 'shared/helpers';
+import { getCurrencySymbolByIsoCode, isPositiveString, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Skeleton from 'shared/components/Skeleton';
 import Button from 'shared/components/Button';
@@ -33,24 +37,29 @@ import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import Ellipsis from 'shared/components/Ellipsis';
 
-interface NewTransactionProps { }
+interface CreateEditTransactionProps {
+  mode: 'create' | 'edit';
+}
 
-const NewTransaction: React.FC<NewTransactionProps> = () => {
+const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { categories } = useAppSelector(selectCategory);
   const categoryStatus = useAppSelector(selectCategory).status;
   const { status, error = { message: '' } } = useAppSelector(selectTransaction);
   const { accounts } = useAppSelector(selectAccount);
   const { iso } = useAppSelector(selectCurrency);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
+  const transaction = useAppSelector(selectCurrentTransaction);
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
   const tabs = TABS;
   const helper = transactionHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
+  const transactionId = state?.id || null;
 
   const defaultValues: Partial<TransactionDTO> = {
     amount: '' as unknown as number,
@@ -65,7 +74,9 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
     defaultValues
   });
 
-  const watchType = methods.watch(TransactionField.type);
+  const { setValue, handleSubmit, control, watch } = methods;
+
+  const watchType = watch(TransactionField.type);
 
   const getAccountValue = (accountId: Account['id']): string => {
     return accounts.find(({ id }) => id === accountId)?.name || '';
@@ -82,17 +93,17 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, selectedTab: number): void => {
-    methods.setValue(TransactionField.type, selectedTab);
+    setValue(TransactionField.type, selectedTab);
   };
 
   const handleCategoryIconClick = ({ id, title, icon }: { id: CategoryModel['id'], title: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
-    methods.setValue(TransactionField.categoryId, id, { shouldValidate: true });
-    methods.setValue(TransactionField.icon, icon);
-    methods.setValue('name', title, { shouldValidate: true });
+    setValue(TransactionField.categoryId, id, { shouldValidate: true });
+    setValue(TransactionField.icon, icon);
+    setValue('name', title, { shouldValidate: true });
   };
 
   const handleAccountChange = (event: SelectChangeEvent<Account['id']>): void => {
-    methods.setValue(TransactionField.accountId, event.target.value, { shouldValidate: true });
+    setValue(TransactionField.accountId, event.target.value, { shouldValidate: true });
   };
 
   const handleFormSubmit = (data: TransactionDTO): void => {
@@ -101,13 +112,32 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
       amount: Number(data.amount)
     };
 
-    dispatch(addTransaction(mappedData));
+    mode === 'create' ? dispatch(addTransaction(mappedData)) : dispatch(editTransaction([transactionId, mappedData]));
     setFormSubmitted(true);
   };
 
+  const getTitle = (): string => {
+    return mode === 'create' ? 'New transaction' : 'Edit transaction';
+  };
+
+  const setFormValues = React.useCallback(() => {
+    if (transaction) {
+      setValue(TransactionField.categoryId, transaction.categoryId);
+      setValue(TransactionField.accountId, transaction.accountId);
+      setValue(TransactionField.icon, transaction.icon);
+      setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
+      setValue(TransactionField.type, transaction.type);
+    }
+  }, [transaction, setValue]);
+
+  const resetForm = React.useCallback(() => {
+    dispatch(resetCurrentTransaction());
+  }, [dispatch]);
+
   const goBack = React.useCallback(() => {
-    navigate(`${ROUTES.dashboard.path}`);
-  }, [navigate]);
+    navigate(`${mode === 'create' ? ROUTES.dashboard.path : ROUTES.transactions.path}`);
+    resetForm();
+  }, [navigate, resetForm, mode]);
 
   React.useEffect(() => {
     dispatch(getCategories());
@@ -123,13 +153,23 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
     }
   }, [goBack, loading, status, formSubmitted]);
 
+  React.useEffect(() => {
+    if (transactionId && mode === 'edit') {
+      dispatch(getTransaction(transactionId));
+    }
+  }, [transactionId, mode, dispatch]);
+
+  React.useEffect(() => {
+    setFormValues();
+  }, [setFormValues]);
+
   return (
-    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={methods.handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text='New transaction' onBackButtonClick={goBack} />
+    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
+      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
         <FormProvider {...methods} >
           <Controller
-            control={methods.control}
+            control={control}
             name={TransactionField.type}
             render={({ field }) => (
               // TODO: use Tabs component
@@ -164,7 +204,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
             <Typography color={contrastText}>{iso}</Typography>
           </Box>
           <Controller
-            control={methods.control}
+            control={control}
             name={TransactionField.accountId}
             rules={{
               required: true
@@ -194,7 +234,7 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
           />
           <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Category</Typography>
           <Controller
-            control={methods.control}
+            control={control}
             name={TransactionField.categoryId}
             rules={{
               required: true
@@ -223,11 +263,11 @@ const NewTransaction: React.FC<NewTransactionProps> = () => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' onClick={methods.handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button type='submit' variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>
   );
 };
 
-export default NewTransaction;
+export default CreateEditTransaction;

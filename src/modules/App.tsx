@@ -9,7 +9,7 @@ import { ROUTES } from 'shared/constants';
 import Login from './Login';
 import Main from './Dashboard/Main';
 import Settings from './Settings';
-import Transactions from './Transactions';
+import Transactions from './Transactions/Transactions';
 import Categories from './Categories/Categories';
 import Accounts from './Accounts/Accounts';
 import { selectSettings } from 'store/reducers';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
             <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
             <Route path={`${ROUTES.dashboard.path}/*`} element={<Main />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
-            <Route path={ROUTES.transactions.path} element={<Transactions />} />
+            <Route path={`${ROUTES.transactions.path}/*`} element={<Transactions />} />
             <Route path={`${ROUTES.categories.path}/*`} element={<Categories />} />
             <Route path={`${ROUTES.accounts.path}/*`} element={<Accounts />} />
             <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />

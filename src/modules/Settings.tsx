@@ -68,6 +68,7 @@ const Settings: React.FC = () => {
   React.useEffect(() => {
     if (status === 'succeeded') {
       setDialogOpened(false);
+      // TODO: fix, snackbar is being shown initially because of succeeded status
       setShowSnackbar(true);
     }
   }, [status, dispatch]);

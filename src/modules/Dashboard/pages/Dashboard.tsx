@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleAddTransaction = (): void => {
-    navigate(`${ROUTES.dashboard.path}/new`);
+    navigate(`${ROUTES.transactions.path}/new`);
   };
 
   const getContent = (): React.ReactElement => {

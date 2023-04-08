@@ -1,3 +1,6 @@
+import { CURRENCIES } from 'shared/constants';
+import { Currency } from 'shared/models';
+
 export const mapNumberToCurrencyString = (value: number, showDecimals = false): string => {
   if (value === null || value === undefined) {
     return showDecimals ? '0.00' : '0';
@@ -9,6 +12,14 @@ export const mapNumberToCurrencyString = (value: number, showDecimals = false): 
   return currencyString;
 };
 
+export const mapCurrencyStringToNumber = (value: string): number => {
+  return Number(value.replace(/[^0-9.-]+/g, ''));
+};
+
 export const isPositiveString = (value: string): boolean => {
   return parseInt(value) >= 0;
+};
+
+export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Currency['symbol'] => {
+  return CURRENCIES.find(({ iso }) => currencyIso)?.symbol || CURRENCIES[0].symbol;
 };

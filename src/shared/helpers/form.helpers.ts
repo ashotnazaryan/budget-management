@@ -25,9 +25,9 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
 });
 
 export const accountHelper = (): { [key in AccountField]: ErrorType } => ({
-  [AccountField.initialAmount]: {
+  [AccountField.balance]: {
     required: {
-      message: 'Amount is required'
+      message: 'Balance is required'
     },
     pattern: {
       message: 'Invalid amount'

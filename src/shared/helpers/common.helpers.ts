@@ -21,5 +21,5 @@ export const isPositiveString = (value: string): boolean => {
 };
 
 export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Currency['symbol'] => {
-  return CURRENCIES.find(({ iso }) => currencyIso)?.symbol || CURRENCIES[0].symbol;
+  return CURRENCIES.find(({ iso }) => iso === currencyIso)?.symbol || CURRENCIES[0].symbol;
 };

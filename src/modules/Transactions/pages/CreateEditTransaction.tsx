@@ -127,6 +127,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.icon, transaction.icon);
       setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
       setValue(TransactionField.type, transaction.type);
+      setValue('name', transaction.name);
     }
   }, [transaction, setValue]);
 
@@ -183,6 +184,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             )}
           />
           <Box display='flex' alignItems='baseline' sx={{ marginBottom: 2 }}>
+            <Typography color={contrastText} sx={{ marginRight: 2 }}>{iso}</Typography>
             <FormInput
               focused
               fullWidth
@@ -199,9 +201,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                   message: helper.amount.pattern?.message
                 }
               }}
-              sx={{ marginRight: 2 }}
             />
-            <Typography color={contrastText}>{iso}</Typography>
           </Box>
           <Controller
             control={control}

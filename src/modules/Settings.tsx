@@ -149,7 +149,16 @@ const Settings: React.FC = () => {
           <Button color='secondary' variant='contained' onClick={handleOpenDialog}>Erase user data</Button>
         </Grid>
       </Grid>
-      <Dialog title='Delete all data' loading={loading} actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={deleteUserData} fullWidth maxWidth='xs'>
+      <Dialog
+        fullWidth
+        maxWidth='xs'
+        title='Delete all data'
+        actionButtonText='Yes'
+        loading={loading}
+        open={dialogOpened}
+        onClose={handleCloseDialog}
+        onAction={deleteUserData}
+      >
         <Typography variant='subtitle1'>
           Are you sure you want to delete all the data? This action cannot be undone.
         </Typography>

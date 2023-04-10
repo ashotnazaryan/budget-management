@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
-import { Currency, Transaction as TransactionModel } from 'shared/models';
+import { CategoryType, Currency, Transaction as TransactionModel } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
@@ -13,8 +13,8 @@ interface TransactionProps {
 }
 
 const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
-  const { palette: { info: { contrastText } } } = useTheme();
-  const { name, icon, accountName, accountIcon, createdAt, amount } = data;
+  const { palette: { info: { contrastText }, error } } = useTheme();
+  const { name, icon, accountName, accountIcon, createdAt, amount, type } = data;
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -32,7 +32,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
           <Ellipsis text={name} color={contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={`${symbol}${amount}`} color={contrastText} />
+          <Ellipsis text={`${symbol}${amount}`} color={type === CategoryType.expense ? error.main : contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
           <Ellipsis text={accountName} color={contrastText} />

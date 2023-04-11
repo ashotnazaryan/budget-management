@@ -7,22 +7,22 @@ import Typography from '@mui/material/Typography';
 
 interface CategoryIconProps {
   id: string;
-  title: string;
+  name: string;
   type: CategoryType;
   icon: IconType;
   selected?: string;
-  onClick?: ({ id, title, icon }:
-    { id: CategoryIconProps['id'], title: CategoryIconProps['title'], icon: CategoryIconProps['icon'] }) => void;
+  onClick?: ({ id, name, icon }:
+    { id: CategoryIconProps['id'], name: CategoryIconProps['name'], icon: CategoryIconProps['icon'] }) => void;
 }
 
 // TODO: make this component generic
-const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, icon, onClick }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, name, type, icon, onClick }) => {
   const { palette: { primary, secondary, info } } = useTheme();
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
   const onCategoryClick = (): void => {
     if (onClick) {
-      onClick({ icon, id, title });
+      onClick({ icon, id, name });
     }
   };
 
@@ -47,7 +47,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, title, type, 
       }}>
         <Icon name={icon}></Icon>
       </Box>
-      <Typography color={info.contrastText} sx={{ width: '100%', textAlign: 'center', marginTop: 1, fontSize: 13 }}>{title}</Typography>
+      <Typography color={info.contrastText} sx={{ width: '100%', textAlign: 'center', marginTop: 1, fontSize: 13 }}>{name}</Typography>
     </Box>
   );
 };

@@ -9,13 +9,13 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
+import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES } from 'shared/constants';
 import { Account, Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
 import Snackbar from 'shared/components/Snackbar';
-import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
@@ -28,6 +28,7 @@ const Settings: React.FC = () => {
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
+  const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -62,16 +63,17 @@ const Settings: React.FC = () => {
   };
 
   const deleteUserData = (): void => {
+    setFormSubmitted(true);
     dispatch(eraseUserData(id));
   };
 
   React.useEffect(() => {
-    if (status === 'succeeded') {
+    if (status === 'succeeded' && formSubmitted) {
       setDialogOpened(false);
-      // TODO: fix, snackbar is being shown initially because of succeeded status
       setShowSnackbar(true);
+      dispatch(getAccounts());
     }
-  }, [status, dispatch]);
+  }, [status, dispatch, formSubmitted]);
 
   React.useEffect(() => {
     dispatch(getAccounts());

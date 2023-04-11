@@ -38,9 +38,9 @@ export const getTransactions = createAsyncThunk('transactions/getTransactions', 
 
 export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id'], { rejectValue: ErrorResponse }>(
   'transactions/getTransaction',
-  async (transactionId): Promise<Transaction> => {
+  async (id): Promise<Transaction> => {
     try {
-      const response = await axios.get<TransactionDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${transactionId}`);
+      const response = await axios.get<TransactionDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`);
 
       if (response?.data) {
         return mapTransaction(response.data);
@@ -70,9 +70,9 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
 
 export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<TransactionDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'transactions/editTransaction',
-  async ([transactionId, transaction], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, transaction], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${transactionId}`, transaction);
+      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`, transaction);
 
       if (response?.data) {
         dispatch(getTransactions());

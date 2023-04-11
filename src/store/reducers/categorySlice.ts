@@ -34,9 +34,9 @@ export const getCategories = createAsyncThunk<Category[], void>('categories/getC
 
 export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejectValue: ErrorResponse }>(
   'categories/getCategory',
-  async (categoryId): Promise<Category> => {
+  async (id): Promise<Category> => {
     try {
-      const response = await axios.get<CategoryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${categoryId}`);
+      const response = await axios.get<CategoryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`);
 
       if (response?.data) {
         return mapCategory(response.data);
@@ -66,9 +66,9 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
 
 export const editCategory = createAsyncThunk<void, [Category['id'], Omit<CategoryDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'categories/editCategory',
-  async ([categoryId, category], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, category], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${categoryId}`, category);
+      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`, category);
 
       if (response?.data) {
         dispatch(getCategories());

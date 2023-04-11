@@ -17,10 +17,10 @@ import SellIcon from '@mui/icons-material/Sell';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import SavingsIcon from '@mui/icons-material/Savings';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
-export const ICONS: IconTypes = {
-  // Category icons
+export const CATEGORY_ICONS: IconTypes = {
   [IconType.salary]: PaidIcon,
   [IconType.otherIncome]: CardGiftcardIcon,
   [IconType.rent]: ApartmentIcon,
@@ -29,22 +29,45 @@ export const ICONS: IconTypes = {
   [IconType.transportation]: SubwayIcon,
   [IconType.otherExpense]: HelpIcon,
   [IconType.default]: QuestionMarkIcon,
-  // Account icons
+  [IconType.shopping]: AddShoppingCartIcon,
+  [IconType.business]: AddBusinessIcon,
+};
+
+export const ACCOUNT_ICONS: IconTypes = {
   [IconType.wallet]: AccountBalanceWalletIcon,
   [IconType.dollar]: AttachMoneyIcon,
   [IconType.euro]: EuroIcon,
   [IconType.pound]: CurrencyPoundIcon,
   [IconType.currencyExchange]: CurrencyExchangeIcon,
-  [IconType.business]: AddBusinessIcon,
   [IconType.sell]: SellIcon,
   [IconType.house]: AccountBalanceIcon,
   [IconType.mall]: LocalMallIcon,
   [IconType.savings]: SavingsIcon,
-  // Other icons
+};
+
+export const OTHER_ICONS: IconTypes = {
   [IconType.plus]: AddIcon
 };
 
-export const ICONS_LIST: Icon[] = Object.keys(ICONS)
+export const ALL_ICONS: IconTypes = {
+  ...CATEGORY_ICONS,
+  ...ACCOUNT_ICONS,
+  ...OTHER_ICONS
+};
+
+export const CATEGORY_ICONS_LIST: Icon[] = Object.keys(CATEGORY_ICONS)
   .reduce<Icon[]>((acc, curr) => {
-    return [...acc, { name: curr as IconType, icon: ICONS[curr] }];
+    return [...acc, { name: curr as IconType, icon: CATEGORY_ICONS[curr] }];
   }, []);
+
+export const ACCOUNT_ICONS_LIST: Icon[] = Object.keys(ACCOUNT_ICONS)
+  .reduce<Icon[]>((acc, curr) => {
+    return [...acc, { name: curr as IconType, icon: ACCOUNT_ICONS[curr] }];
+  }, []);
+
+export const OTHER_ICONS_LIST: Icon[] = Object.keys(OTHER_ICONS)
+  .reduce<Icon[]>((acc, curr) => {
+    return [...acc, { name: curr as IconType, icon: OTHER_ICONS[curr] }];
+  }, []);
+
+export const ALL_ICONS_LIST: Icon[] = [...CATEGORY_ICONS_LIST, ...ACCOUNT_ICONS_LIST, ...OTHER_ICONS_LIST];

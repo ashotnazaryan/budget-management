@@ -13,6 +13,7 @@ export enum IconType {
   transportation = 'transportation',
   otherExpense = 'otherExpense',
   mall = 'mall',
+  shopping = 'shopping',
   // Account icons
   wallet = 'wallet',
   dollar = 'dollar',

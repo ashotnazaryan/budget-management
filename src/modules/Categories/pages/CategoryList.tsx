@@ -33,8 +33,8 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     setCategoryType(value);
   };
 
-  const handleCategoryIconClick = ({ id, title }: { id: Category['id'], title: Category['name'] }): void => {
-    navigate(`${ROUTES.categories.path}/edit/${title}`, { state: { id } });
+  const handleCategoryIconClick = ({ id, name }: { id: Category['id'], name: Category['name'] }): void => {
+    navigate(`${ROUTES.categories.path}/edit/${name}`, { state: { id } });
   };
 
   const openNewCategoryPage = (): void => {
@@ -58,7 +58,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
         {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id }) => (
           <Grid item key={id}>
-            <CategoryIcon id={id} title={name} type={type} icon={icon} onClick={handleCategoryIconClick} />
+            <CategoryIcon id={id} name={name} type={type} icon={icon} onClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>

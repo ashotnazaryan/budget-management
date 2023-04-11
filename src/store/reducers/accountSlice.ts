@@ -37,9 +37,9 @@ export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccoun
 
 export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectValue: ErrorResponse }>(
   'accounts/getAccount',
-  async (accountId): Promise<Account> => {
+  async (id): Promise<Account> => {
     try {
-      const response = await axios.get<AccountDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${accountId}`);
+      const response = await axios.get<AccountDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${id}`);
 
       if (response?.data) {
         return mapAccount(response.data);
@@ -70,9 +70,9 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
 
 export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'accounts/editAccount',
-  async ([accountId, account], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${accountId}`, account);
+      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${id}`, account);
 
       if (response?.data) {
         dispatch(getAccounts());

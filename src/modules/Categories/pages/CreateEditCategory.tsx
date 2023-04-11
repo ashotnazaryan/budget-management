@@ -11,7 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory } from 'store/reducers';
-import { ICONS_LIST, ROUTES } from 'shared/constants';
+import { CATEGORY_ICONS_LIST, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
 import { categoryHelper } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
@@ -24,7 +24,7 @@ interface NewCategoryProps {
   mode: 'create' | 'edit';
 }
 
-const icons = ICONS_LIST;
+const icons = CATEGORY_ICONS_LIST;
 
 const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();

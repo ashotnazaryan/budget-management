@@ -10,7 +10,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createAccount, editAccount, getAccount, getBalance, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
-import { CURRENCIES, ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
+import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
 import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
@@ -23,7 +23,7 @@ interface CreateEditAccountProps {
   mode: 'create' | 'edit';
 }
 
-const icons = ICONS_LIST;
+const icons = ACCOUNT_ICONS_LIST;
 
 const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const regex = NUMERIC_REGEX;

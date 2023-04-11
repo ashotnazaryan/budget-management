@@ -24,7 +24,8 @@ import {
   selectCurrentTransaction,
   getTransaction,
   resetCurrentTransaction,
-  editTransaction
+  editTransaction,
+  getBalance
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
@@ -96,10 +97,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setValue(TransactionField.type, selectedTab);
   };
 
-  const handleCategoryIconClick = ({ id, title, icon }: { id: CategoryModel['id'], title: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
+  const handleCategoryIconClick = ({ id, name, icon }: { id: CategoryModel['id'], name: CategoryModel['name'], icon: CategoryModel['icon'] }): void => {
     setValue(TransactionField.categoryId, id, { shouldValidate: true });
     setValue(TransactionField.icon, icon);
-    setValue('name', title, { shouldValidate: true });
+    setValue('name', name, { shouldValidate: true });
   };
 
   const handleAccountChange = (event: SelectChangeEvent<Account['id']>): void => {
@@ -149,10 +150,11 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
+      dispatch(getBalance());
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
-  }, [goBack, loading, status, formSubmitted]);
+  }, [goBack, loading, status, formSubmitted, dispatch]);
 
   React.useEffect(() => {
     if (transactionId && mode === 'edit') {
@@ -249,7 +251,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                         {
                           categories.filter(({ type }) => type === watchType).map(({ id, name, type, icon }) => (
                             <Grid item key={`${name}-${icon}`}>
-                              <CategoryIcon id={id} title={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryIconClick} />
+                              <CategoryIcon id={id} name={name} type={type} selected={field.value} icon={icon} onClick={handleCategoryIconClick} />
                             </Grid>
                           ))
                         }

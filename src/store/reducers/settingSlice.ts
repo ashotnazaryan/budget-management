@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Setting, SettingDTO, StatusState } from 'shared/models';
+import { ErrorResponse, Setting, SettingDTO, StatusState } from 'shared/models';
 import { CURRENCIES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
@@ -13,8 +13,8 @@ export interface SettingState extends Setting {
 const initialState: SettingState = {
   defaultCurrency: CURRENCIES[0],
   showDecimals: false,
-  status: 'idle',
-  isDarkTheme: false
+  isDarkTheme: false,
+  status: 'idle'
 };
 
 export const getSettings = createAsyncThunk('setting/getSettings', async (_, { dispatch }): Promise<Setting> => {
@@ -31,16 +31,21 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
   }
 });
 
-export const addSetting = createAsyncThunk('setting/addSetting', async (setting: Partial<SettingDTO>, { dispatch }): Promise<void> => {
-  dispatch(setLoading(true));
+export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?], { rejectValue: ErrorResponse }>(
+  'setting/addSetting',
+  async ([setting, isGlobalLoading], { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
+      dispatch(getSettings());
 
-  try {
-    await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
-    dispatch(getSettings());
-  } catch (error) {
-    console.error(error);
-  }
-});
+      if (isGlobalLoading) {
+        dispatch(setLoading(true));
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
 
 export const settingSlice = createSlice({
   name: 'setting',

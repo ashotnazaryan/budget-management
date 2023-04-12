@@ -23,7 +23,6 @@ const Settings: React.FC = () => {
   const { id } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
-  const loading = status === 'loading';
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
@@ -45,21 +44,21 @@ const Settings: React.FC = () => {
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
 
-    dispatch(addSetting({ defaultCurrency: isoCode }));
+    dispatch(addSetting([{ defaultCurrency: isoCode }]));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-    dispatch(addSetting({ showDecimals: checked }));
+    dispatch(addSetting([{ showDecimals: checked }]));
   };
 
   const handleAccountChange = (event: SelectChangeEvent): void => {
     const accountId = event.target.value as Account['id'];
 
-    dispatch(addSetting({ defaultAccount: accountId }));
+    dispatch(addSetting([{ defaultAccount: accountId }]));
   };
 
   const handleThemeChange = (): void => {
-    dispatch(addSetting({ isDarkTheme: !isDarkTheme }));
+    dispatch(addSetting([{ isDarkTheme: !isDarkTheme }, true]));
   };
 
   const deleteUserData = (): void => {
@@ -156,7 +155,6 @@ const Settings: React.FC = () => {
         maxWidth='xs'
         title='Delete all data'
         actionButtonText='Yes'
-        loading={loading}
         open={dialogOpened}
         onClose={handleCloseDialog}
         onAction={deleteUserData}

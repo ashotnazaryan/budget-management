@@ -162,6 +162,7 @@ export const categorySlice = createSlice({
 });
 
 export const selectCategory = (state: RootState): CategoryState => state.category;
+export const selectCategoryStatus = (state: RootState): CategoryState['status'] => state.category.status;
 export const selectCurrentCategory = (state: RootState): CategoryState['currentCategory'] => state.category.currentCategory;
 
 export const { resetCurrentCategory } = categorySlice.actions;

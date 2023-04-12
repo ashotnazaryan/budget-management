@@ -3,8 +3,9 @@ import axios from 'axios';
 import { store } from 'store';
 import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapAccount, mapAccounts } from 'shared/helpers';
-import { resetApp } from './appSlice';
 import { RootState } from './rootReducer';
+import { resetApp } from './appSlice';
+import { getSummary } from './summarySlice';
 
 export interface AccountState {
   accounts: Account[];
@@ -61,6 +62,7 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
 
       if (response?.data) {
         dispatch(getAccounts());
+        dispatch(getSummary());
       }
     } catch (error: any) {
       console.error(error);
@@ -76,6 +78,7 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
 
       if (response?.data) {
         dispatch(getAccounts());
+        dispatch(getSummary());
       }
     } catch (error: any) {
       console.error(error);
@@ -166,6 +169,7 @@ export const accountSlice = createSlice({
 });
 
 export const selectAccount = (state: RootState): AccountState => state.account;
+export const selectAccountStatus = (state: RootState): AccountState['status'] => state.account.status;
 export const selectCurrentAccount = (state: RootState): AccountState['currentAccount'] => state.account.currentAccount;
 
 export const { resetCurrentAccount } = accountSlice.actions;

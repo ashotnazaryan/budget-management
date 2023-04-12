@@ -25,7 +25,9 @@ import {
   getTransaction,
   resetCurrentTransaction,
   editTransaction,
-  getBalance
+  getBalance,
+  selectCategoryStatus,
+  selectAccountStatus
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
 import { POSITIVE_NUMERIC_REGEX, ROUTES, TABS } from 'shared/constants';
@@ -49,9 +51,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const navigate = useNavigate();
   const { state } = useLocation();
   const { categories } = useAppSelector(selectCategory);
-  const categoryStatus = useAppSelector(selectCategory).status;
+  const categoryStatus = useAppSelector(selectCategoryStatus);
   const { status, error = { message: '' } } = useAppSelector(selectTransaction);
   const { accounts } = useAppSelector(selectAccount);
+  const accountStatus = useAppSelector(selectAccountStatus);
   const { iso } = useAppSelector(selectCurrency);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
@@ -145,8 +148,11 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     if (categoryStatus === 'idle') {
       dispatch(getCategories());
     }
-    dispatch(getAccounts());
-  }, [dispatch, categoryStatus]);
+
+    if (accountStatus === 'idle') {
+      dispatch(getAccounts());
+    }
+  }, [dispatch, categoryStatus, accountStatus]);
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {

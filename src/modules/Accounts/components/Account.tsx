@@ -18,7 +18,7 @@ interface AccountProps {
 }
 
 const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onClick }) => {
-  const { palette: { primary: { main }, info: { contrastText }, error } } = useTheme();
+  const { palette: { primary: { main, contrastText }, error } } = useTheme();
 
   const onAccountClick = (): void => {
     if (onClick) {
@@ -27,7 +27,7 @@ const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onCl
   };
 
   return (
-    <Paper elevation={1} sx={{ paddingX: 2 }}>
+    <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }}>
       <Grid container display='flex' alignItems='center' justifyContent='space-between' columnSpacing={2}
         sx={{
           borderRadius: 1,
@@ -37,7 +37,7 @@ const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onCl
         }}
         onClick={onAccountClick}>
         <Grid item sm={1} xs={2} display='flex'>
-          {icon && <Icon name={icon} sx={{ fontSize: 24, color: main }}></Icon>}
+          {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>
         <Grid item sm={7} xs={6} display='flex'>
           <Ellipsis color={contrastText} text={name} />

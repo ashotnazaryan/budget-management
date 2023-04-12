@@ -19,8 +19,10 @@ const Dashboard: React.FC = () => {
   const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
 
   React.useEffect(() => {
-    dispatch(getSummary());
-  }, [dispatch]);
+    if (status === 'idle') {
+      dispatch(getSummary());
+    }
+  }, [dispatch, status]);
 
   const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
     setCategoryType(value);

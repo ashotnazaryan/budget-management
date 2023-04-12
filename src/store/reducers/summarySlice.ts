@@ -88,7 +88,8 @@ export const summarySlice = createSlice({
       .addCase(getBalance.fulfilled, (state, action) => {
         return {
           ...state,
-          balance: action.payload
+          balance: action.payload,
+          status: 'succeeded'
         };
       })
       .addCase(resetApp, () => {

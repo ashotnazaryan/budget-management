@@ -61,6 +61,7 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
 
       if (response?.data) {
         dispatch(getSummary());
+        dispatch(getTransactions());
       }
     } catch (error: any) {
       console.error(error);
@@ -75,6 +76,7 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
       const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`, transaction);
 
       if (response?.data) {
+        dispatch(getSummary());
         dispatch(getTransactions());
       }
     } catch (error: any) {

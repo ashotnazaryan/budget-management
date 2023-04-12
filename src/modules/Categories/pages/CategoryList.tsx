@@ -26,8 +26,10 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const tabs = TABS;
 
   React.useEffect(() => {
-    dispatch(getCategories());
-  }, [dispatch]);
+    if (status === 'idle') {
+      dispatch(getCategories());
+    }
+  }, [dispatch, status]);
 
   const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
     setCategoryType(value);

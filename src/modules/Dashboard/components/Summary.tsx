@@ -37,31 +37,31 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
     >
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h5' color={contrastText} sx={{ textAlign: 'center', marginBottom: 4 }}>
+          <Typography color={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center', marginBottom: 4 }}>
             Summary
           </Typography>
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
-          <Grid item xs={6}>
-            <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center'>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               Total income
             </Typography>
-            <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
-          <Grid item xs={6}>
-            <Typography variant='subtitle1' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center'>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               Total expenses
             </Typography>
-            <Typography color={contrastText} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Typography variant='h6' color={contrastText} component='p' sx={{ textAlign: 'center' }}>
+            <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
               Remaining balance
             </Typography>
-            <Typography variant='h6' fontSize={26} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Typography fontSize={{ sm: 26, xs: 22 }} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Auth, AuthDTO, StatusState } from 'shared/models';
 import { getFromLocalStorage, removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
+import { resetApp } from './appSlice';
 import { RootState } from './rootReducer';
-import { closeSidebar } from './appSlice';
 
 export interface AuthState extends Auth {
   status: StatusState;
@@ -59,7 +59,7 @@ export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }
   await axios.get<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
-  dispatch(closeSidebar());
+  dispatch(resetApp());
 });
 
 export const authSlice = createSlice({

@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({ loading = false, ...props }) => {
   const icon = loadingIcon();
 
   return (
-    <MuiButton {...props} endIcon={icon} sx={{ minWidth: 120, width: { sm: 'auto', xs: '100%' } }}>{props.children}</MuiButton>
+    <MuiButton {...props} endIcon={icon} disabled={loading} sx={{ minWidth: 120, width: { sm: 'auto', xs: '100%' } }}>{!loading && props.children}</MuiButton>
   );
 };
 

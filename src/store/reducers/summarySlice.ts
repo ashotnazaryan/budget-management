@@ -8,6 +8,7 @@ import { resetApp } from './appSlice';
 
 export interface SummaryState extends Summary {
   status: StatusState;
+  balanceStatus: StatusState;
 }
 
 const initialState: SummaryState = {
@@ -16,7 +17,8 @@ const initialState: SummaryState = {
   balance: '0',
   categoryExpenseTransactions: [],
   categoryIncomeTransactions: [],
-  status: 'idle'
+  status: 'idle',
+  balanceStatus: 'idle'
 };
 
 export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<Summary> => {
@@ -76,20 +78,20 @@ export const summarySlice = createSlice({
       .addCase(getBalance.pending, (state) => {
         return {
           ...state,
-          status: 'loading'
+          balanceStatus: 'loading'
         };
       })
       .addCase(getBalance.rejected, (state) => {
         return {
           ...state,
-          status: 'failed'
+          balanceStatus: 'failed'
         };
       })
       .addCase(getBalance.fulfilled, (state, action) => {
         return {
           ...state,
           balance: action.payload,
-          status: 'succeeded'
+          balanceStatus: 'succeeded'
         };
       })
       .addCase(resetApp, () => {

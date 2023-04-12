@@ -42,14 +42,14 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </Typography>
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
-          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center'>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               Total income
             </Typography>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
-          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center'>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               Total expenses
             </Typography>

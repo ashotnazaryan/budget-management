@@ -35,7 +35,7 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
         <Grid item display='flex' md={8} xs={12}>
           <Box display='flex' flexGrow={1} sx={{
             paddingY: 2,
-            paddingX: { xs: 2, sm: 4 }
+            paddingX: 3
           }}>
             {children}
           </Box>

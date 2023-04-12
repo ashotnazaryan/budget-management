@@ -21,8 +21,10 @@ const AccountList: React.FC<AccountListProps> = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    dispatch(getAccounts());
-  }, [dispatch]);
+    if (status === 'idle') {
+      dispatch(getAccounts());
+    }
+  }, [dispatch, status]);
 
   const openNewAccountPage = (): void => {
     navigate(`${ROUTES.accounts.path}/new`);

@@ -19,8 +19,10 @@ const TransactionList: React.FC<TransactionListProps> = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    dispatch(getTransactions());
-  }, [dispatch]);
+    if (status === 'idle') {
+      dispatch(getTransactions());
+    }
+  }, [dispatch, status]);
 
   const handleTransactionClick = ({ id, name }: TransactionModel): void => {
     navigate(`${ROUTES.transactions.path}/edit/${name}`, { state: { id } });

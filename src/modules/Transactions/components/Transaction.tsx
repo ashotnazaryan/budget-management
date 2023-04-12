@@ -13,7 +13,7 @@ interface TransactionProps {
 }
 
 const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
-  const { palette: { info: { contrastText }, error } } = useTheme();
+  const { palette: { primary: { main, contrastText }, error } } = useTheme();
   const { name, icon, accountName, accountIcon, createdAt, amount, type } = data;
 
   const onTransactionClick = (): void => {
@@ -23,7 +23,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
   };
 
   return (
-    <Paper elevation={1} sx={{ paddingX: 2 }} onClick={onTransactionClick}>
+    <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
       <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 30, cursor: 'pointer' }}>
         <Grid item xs={1} display='flex'>
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}

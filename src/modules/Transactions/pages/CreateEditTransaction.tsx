@@ -44,6 +44,7 @@ interface CreateEditTransactionProps {
 
 const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
+  const tabs = TABS;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -56,7 +57,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const transaction = useAppSelector(selectCurrentTransaction);
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
-  const tabs = TABS;
   const helper = transactionHelper();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
@@ -142,15 +142,18 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [navigate, resetForm, mode]);
 
   React.useEffect(() => {
-    dispatch(getCategories());
+    if (categoryStatus === 'idle') {
+      dispatch(getCategories());
+    }
     dispatch(getAccounts());
-  }, [dispatch]);
+  }, [dispatch, categoryStatus]);
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
       dispatch(getBalance());
+      dispatch(getAccounts());
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
@@ -265,7 +268,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' onClick={handleSubmit(handleFormSubmit)} loading={loading}>Save</Button>
+        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>Save</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

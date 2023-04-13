@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { getFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { AUTH_KEY } from 'shared/constants';
-import { getUserInfo, getSettings, selectApp } from 'store/reducers';
+import { getUserInfo, getSettings, selectApp, selectSettings, getBalance, getSummary, getAccounts, getTransactions, getCategories } from 'store/reducers';
 import Header from './Header';
 import SideBar from './SideBar';
 import Loading from './Loading';
@@ -20,6 +20,7 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   const dispatch = useAppDispatch();
   const { palette: { info: { light } } } = useTheme();
   const { status } = useAppSelector(selectApp);
+  const { showDecimals } = useAppSelector(selectSettings);
 
   React.useEffect(() => {
     dispatch(getUserInfo(accessToken));
@@ -28,6 +29,14 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   React.useEffect(() => {
     dispatch(getSettings());
   }, [dispatch]);
+
+  React.useEffect(() => {
+    dispatch(getBalance());
+    dispatch(getSummary());
+    dispatch(getAccounts());
+    dispatch(getTransactions());
+    dispatch(getCategories());
+  }, [dispatch, showDecimals]);
 
   const getContent = (): React.ReactElement => {
     if (status === 'idle' || status === 'loading') {

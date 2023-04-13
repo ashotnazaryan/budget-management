@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { SummaryDTO, Summary, IconType } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
 
@@ -16,14 +16,14 @@ export const mapSummary = (summary: SummaryDTO, showDecimals = false): Summary =
       ...transaction,
       amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: moment(transaction.createdAt).format('LL'),
+      createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
       icon: transaction.icon as IconType
     })),
     categoryIncomeTransactions: summary.categoryIncomeTransactions.map((transaction) => ({
       ...transaction,
       amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: moment(transaction.createdAt).format('LL'),
+      createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
       icon: transaction.icon as IconType
     }))
   };

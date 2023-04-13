@@ -74,10 +74,6 @@ const Settings: React.FC = () => {
     }
   }, [status, dispatch, formSubmitted]);
 
-  React.useEffect(() => {
-    dispatch(getAccounts());
-  }, [dispatch]);
-
   return (
     <Box flexGrow={1}>
       <PageTitle text='Settings' />

@@ -22,7 +22,6 @@ import Dialog from 'shared/components/Dialog';
 import {
   closeSidebar,
   selectUser,
-  getBalance,
   selectSettings,
   logout,
   selectApp,
@@ -38,14 +37,10 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const user = useAppSelector(selectUser);
   const { balance } = useAppSelector(selectSummary);
   const { palette } = useTheme();
-  const { defaultCurrency: { symbol }, showDecimals } = useAppSelector(selectSettings);
+  const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;
-
-  React.useEffect(() => {
-    dispatch(getBalance());
-  }, [dispatch, showDecimals]);
 
   const close = (): void => {
     dispatch(closeSidebar());

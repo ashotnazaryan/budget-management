@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import { useAppDispatch, useAppSelector } from 'store';
+import { useAppSelector } from 'store';
 import { IconType, Account as AccountModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';
-import { getAccounts, selectAccount } from 'store/reducers';
+import { selectAccount } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
@@ -17,14 +17,7 @@ interface AccountListProps { }
 
 const AccountList: React.FC<AccountListProps> = () => {
   const { accounts, status } = useAppSelector(selectAccount);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (status === 'idle') {
-      dispatch(getAccounts());
-    }
-  }, [dispatch, status]);
 
   const openNewAccountPage = (): void => {
     navigate(`${ROUTES.accounts.path}/new`);

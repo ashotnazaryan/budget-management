@@ -4,7 +4,7 @@ import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
-import { removeUser, logout, resetApp } from 'store/reducers';
+import { removeUser, logout } from 'store/reducers';
 
 // let retried = false;
 
@@ -55,7 +55,6 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
         dispatch(removeUser());
         removeFromLocalStorage(AUTH_KEY);
         dispatch(logout());
-        dispatch(resetApp());
 
         return Promise.reject(error);
       }

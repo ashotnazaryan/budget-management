@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import dayjs, { Dayjs } from 'dayjs';
 import Box from '@mui/material/Box';
 import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
@@ -39,6 +40,7 @@ import Snackbar from 'shared/components/Snackbar';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import Ellipsis from 'shared/components/Ellipsis';
+import DatePicker from 'shared/components/DatePicker';
 
 interface CreateEditTransactionProps {
   mode: 'create' | 'edit';
@@ -69,7 +71,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     amount: '' as unknown as number,
     categoryId: '',
     accountId: defaultAccount || '',
-    type: CategoryType.expense
+    type: CategoryType.expense,
+    createdAt: new Date()
   };
 
   const methods = useForm<TransactionDTO>({
@@ -110,6 +113,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setValue(TransactionField.accountId, event.target.value, { shouldValidate: true });
   };
 
+  const handleDatePickerChange = (value: Dayjs | null): void => {
+    setValue(TransactionField.createdAt, value!.toDate(), { shouldValidate: true });
+  };
+
   const handleFormSubmit = (data: TransactionDTO): void => {
     const mappedData: TransactionDTO = {
       ...data,
@@ -131,6 +138,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.icon, transaction.icon);
       setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
       setValue(TransactionField.type, transaction.type);
+      setValue(TransactionField.createdAt, transaction.createdAt as unknown as Date);
       setValue('name', transaction.name);
     }
   }, [transaction, setValue]);
@@ -178,8 +186,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
-      <Box flexGrow={1}>
-        <FormProvider {...methods} >
+      <FormProvider {...methods} >
+        <Grid container flexDirection='column' flexGrow={1} rowGap={3}>
           <Controller
             control={control}
             name={TransactionField.type}
@@ -243,6 +251,13 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               </>
             )}
           />
+          <Controller
+            control={control}
+            name={TransactionField.createdAt}
+            render={({ field }) => (
+              <DatePicker label='Date' value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
+            )}
+          />
           <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Category</Typography>
           <Controller
             control={control}
@@ -271,8 +286,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               </>
             )}
           />
-        </FormProvider>
-      </Box>
+        </Grid>
+      </FormProvider>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>Save</Button>
       </Box>

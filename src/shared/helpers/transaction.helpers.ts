@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { IconType, Transaction, TransactionDTO } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
 
@@ -13,7 +13,7 @@ export const mapTransaction = (transaction: TransactionDTO, showDecimals = false
     ...transaction,
     amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
     percentValue: `${transaction.percentValue}%`,
-    createdAt: moment(transaction.createdAt).format('LL'),
+    createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
     icon: transaction.icon as IconType
   };
 };

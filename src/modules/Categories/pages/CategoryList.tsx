@@ -4,8 +4,8 @@ import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
-import { useAppDispatch, useAppSelector } from 'store';
-import { getCategories, selectCategory } from 'store/reducers';
+import { useAppSelector } from 'store';
+import { selectCategory } from 'store/reducers';
 import { Category, CategoryType, IconType } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Tabs from 'shared/components/Tabs';
@@ -19,17 +19,10 @@ interface CategoryListProps { }
 
 const CategoryList: React.FC<CategoryListProps> = () => {
   const { categories, status } = useAppSelector(selectCategory);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [categoryType, setCategoryType] = React.useState<number>(0);
   const tabs = TABS;
-
-  React.useEffect(() => {
-    if (status === 'idle') {
-      dispatch(getCategories());
-    }
-  }, [dispatch, status]);
 
   const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
     setCategoryType(value);

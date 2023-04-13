@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
@@ -110,14 +110,14 @@ export const transactionSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getTransactions.fulfilled, (state, action) => {
+      .addCase(getTransactions.fulfilled, (state, action: PayloadAction<Transaction[]>) => {
         return {
           ...state,
           transactions: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getTransaction.fulfilled, (state, action) => {
+      .addCase(getTransaction.fulfilled, (state, action: PayloadAction<Transaction>) => {
         return {
           ...state,
           currentTransaction: action.payload
@@ -129,7 +129,7 @@ export const transactionSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(addTransaction.rejected, (state, action) => {
+      .addCase(addTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           error: action.payload,
@@ -148,7 +148,7 @@ export const transactionSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(editTransaction.rejected, (state, action) => {
+      .addCase(editTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           status: 'failed',

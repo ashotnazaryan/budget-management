@@ -26,7 +26,6 @@ import {
   getTransaction,
   resetCurrentTransaction,
   editTransaction,
-  getBalance,
   selectCategoryStatus,
   selectAccountStatus
 } from 'store/reducers';
@@ -166,7 +165,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
-      dispatch(getBalance());
       dispatch(getAccounts());
     } else if (status === 'failed') {
       setShowSnackbar(true);

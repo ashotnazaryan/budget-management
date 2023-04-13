@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './rootReducer';
 import { ErrorResponse, StatusState } from 'shared/models';
 
@@ -35,12 +35,18 @@ const appSlice = createSlice({
       return initialState;
     },
     openSideBar: (state) => {
-      state.sideBarOpened = true;
+      return {
+        ...state,
+        sideBarOpened: true
+      };
     },
     closeSidebar: (state) => {
-      state.sideBarOpened = false;
+      return {
+        ...state,
+        sideBarOpened: false
+      };
     },
-    setLoading: (state, action) => {
+    setAppStatus: (state, action: PayloadAction<StatusState>) => {
       return {
         ...state,
         status: action.payload
@@ -55,14 +61,14 @@ const appSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(eraseUserData.rejected, (state, action) => {
+      .addCase(eraseUserData.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           error: action.payload,
           status: 'failed'
         };
       })
-      .addCase(eraseUserData.fulfilled, (state) => {
+      .addCase(eraseUserData.fulfilled, () => {
         return {
           ...initialState,
           status: 'succeeded'
@@ -73,5 +79,5 @@ const appSlice = createSlice({
 
 export const selectApp = (state: RootState): AppState => state.app;
 
-export const { resetApp, setLoading, openSideBar, closeSidebar } = appSlice.actions;
+export const { resetApp, setAppStatus, openSideBar, closeSidebar } = appSlice.actions;
 export default appSlice.reducer;

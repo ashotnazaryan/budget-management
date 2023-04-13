@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { StatusState, Summary, SummaryDTO } from 'shared/models';
@@ -68,7 +68,7 @@ export const summarySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getSummary.fulfilled, (state, action) => {
+      .addCase(getSummary.fulfilled, (state, action: PayloadAction<Summary>) => {
         return {
           ...state,
           ...action.payload,
@@ -87,7 +87,7 @@ export const summarySlice = createSlice({
           balanceStatus: 'failed'
         };
       })
-      .addCase(getBalance.fulfilled, (state, action) => {
+      .addCase(getBalance.fulfilled, (state, action: PayloadAction<Summary['balance']>) => {
         return {
           ...state,
           balance: action.payload,

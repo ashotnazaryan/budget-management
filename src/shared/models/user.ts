@@ -1,19 +1,13 @@
 export interface UserDTO {
-  email: string;
-  family_name: string;
-  given_name: string;
   id: string;
-  locale: string;
-  name: string;
-  picture: string;
-  verified_email: boolean;
+  userId: string;
+  fullName: string;
+  avatar: string;
 }
 
 export interface User {
   id: string;
-  email: string;
-  lastName: string;
-  firstName: string;
+  userId: string;
   fullName: string;
   avatar: string;
 }

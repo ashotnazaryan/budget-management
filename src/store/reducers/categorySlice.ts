@@ -1,9 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Category, CategoryDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapCategories, mapCategory } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
+import { getSummary } from './summarySlice';
+import { getTransactions } from './transactionSlice';
 
 export interface CategoryState {
   categories: Category[];
@@ -72,6 +74,8 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
 
       if (response?.data) {
         dispatch(getCategories());
+        dispatch(getSummary());
+        dispatch(getTransactions());
       }
     } catch (error: any) {
       console.error(error);
@@ -104,14 +108,14 @@ export const categorySlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getCategories.fulfilled, (state, action) => {
+      .addCase(getCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
         return {
           ...state,
           categories: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getCategory.fulfilled, (state, action) => {
+      .addCase(getCategory.fulfilled, (state, action: PayloadAction<Category>) => {
         return {
           ...state,
           currentCategory: action.payload
@@ -123,7 +127,7 @@ export const categorySlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(createCategory.rejected, (state, action) => {
+      .addCase(createCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           status: 'failed',
@@ -142,7 +146,7 @@ export const categorySlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(editCategory.rejected, (state, action) => {
+      .addCase(editCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           status: 'failed',

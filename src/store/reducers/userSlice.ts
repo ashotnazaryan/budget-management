@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Auth, StatusState, User, UserDTO } from 'shared/models';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ErrorResponse, StatusState, User, UserDTO } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 import { RootState } from './rootReducer';
 
@@ -9,20 +9,29 @@ export interface UserState extends User {
 }
 
 const initialState: UserState = {
-  status: 'idle',
   id: '',
-  firstName: '',
-  lastName: '',
+  userId: '',
   fullName: '',
   avatar: '',
-  email: '',
+  status: 'idle',
 };
 
-export const getUserInfo = createAsyncThunk('user/getUserInfo', async (token: Auth['accessToken']): Promise<User> => {
-  const response = await axios.get<UserDTO>(`${process.env.REACT_APP_GOOGLE_OAUTH_BASE_URL}userinfo?access_token=${token}`);
+export const getUserInfo = createAsyncThunk<User, void, { rejectValue: ErrorResponse }>(
+  'user/getUserInfo',
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.get<UserDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/user`);
 
-  return mapUser(response?.data);
-});
+      if (response?.data) {
+        return mapUser(response.data);
+      }
+
+      return initialState;
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
 
 export const userSlice = createSlice({
   name: 'user',
@@ -46,7 +55,7 @@ export const userSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getUserInfo.fulfilled, (state, action) => {
+      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<User>) => {
         return {
           ...state,
           ...action.payload,

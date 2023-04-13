@@ -39,7 +39,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const { palette } = useTheme();
   const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const fullName = `${user.firstName} ${user.lastName}`;
   const avatar = user.avatar;
 
   const close = (): void => {
@@ -72,7 +71,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           >
             <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${palette.primary.main}` }} columnSpacing={2}>
               <Grid item xs={11}>
-                <UserBalanceInfo fullName={fullName} avatar={avatar} currency={symbol} balance={balance} />
+                <UserBalanceInfo fullName={user.fullName} avatar={avatar} currency={symbol} balance={balance} />
               </Grid>
               <Grid item xs={1}>
                 <IconButton edge='start' color='primary' onClick={close}>

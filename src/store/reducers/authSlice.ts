@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Auth, AuthDTO, StatusState } from 'shared/models';
 import { getFromLocalStorage, removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
@@ -55,7 +55,7 @@ export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', asyn
   }
 });
 
-export const logout = createAsyncThunk('auth/logout', async (param, { dispatch }): Promise<void> => {
+export const logout = createAsyncThunk('auth/logout', async (_, { dispatch }): Promise<void> => {
   await axios.get<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
 
   removeFromLocalStorage(AUTH_KEY);
@@ -84,7 +84,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getUserToken.fulfilled, (state, action) => {
+      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<Auth>) => {
         return {
           ...state,
           ...action.payload,
@@ -103,7 +103,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getNewAccessToken.fulfilled, (state, action) => {
+      .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<Auth>) => {
         return {
           ...state,
           ...action.payload,
@@ -122,7 +122,7 @@ export const authSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(logout.fulfilled, () => {
         return {
           ...initialState,
           status: 'succeeded'

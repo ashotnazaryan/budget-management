@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, editAccount, getAccount, getBalance, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
+import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
 import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
@@ -105,7 +105,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
-      dispatch(getBalance());
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }

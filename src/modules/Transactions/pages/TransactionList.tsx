@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
-import { useAppSelector } from 'store';
-import { selectCurrency, selectTransaction } from 'store/reducers';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getTransactions, selectCurrency, selectTransaction } from 'store/reducers';
 import { Transaction as TransactionModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
@@ -13,9 +13,16 @@ import Transaction from '../components/Transaction';
 interface TransactionListProps { }
 
 const TransactionList: React.FC<TransactionListProps> = () => {
+  const dispatch = useAppDispatch();
   const { symbol } = useAppSelector(selectCurrency);
   const { transactions, status } = useAppSelector(selectTransaction);
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (status === 'idle') {
+      dispatch(getTransactions());
+    }
+  }, [dispatch, status]);
 
   const handleTransactionClick = ({ id, name }: TransactionModel): void => {
     navigate(`${ROUTES.transactions.path}/edit/${name}`, { state: { id } });

@@ -1,10 +1,13 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ErrorResponse, Setting, SettingDTO, StatusState } from 'shared/models';
 import { CURRENCIES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
-import { resetApp, setLoading } from './appSlice';
+import { resetApp, setAppStatus } from './appSlice';
+import { getBalance, getSummary } from './summarySlice';
+import { getTransactions } from './transactionSlice';
+import { getAccounts } from './accountSlice';
 
 export interface SettingState extends Setting {
   status: StatusState;
@@ -21,25 +24,29 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
   try {
     const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
 
-    dispatch(setLoading(false));
+    dispatch(setAppStatus('succeeded'));
 
     return mapSettings(response?.data);
   } catch (error) {
     console.error(error);
-    dispatch(setLoading(false));
+    dispatch(setAppStatus('succeeded'));
     return {} as Setting;
   }
 });
 
 export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?], { rejectValue: ErrorResponse }>(
   'setting/addSetting',
-  async ([setting, isGlobalLoading], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([setting, isAppLoading], { dispatch, rejectWithValue }): Promise<any> => {
     try {
       await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
       dispatch(getSettings());
+      dispatch(getSummary());
+      dispatch(getTransactions());
+      dispatch(getAccounts());
+      dispatch(getBalance());
 
-      if (isGlobalLoading) {
-        dispatch(setLoading(true));
+      if (isAppLoading) {
+        dispatch(setAppStatus('loading'));
       }
     } catch (error: any) {
       console.error(error);
@@ -59,13 +66,13 @@ export const settingSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(getSettings.rejected, (state) => {
+      .addCase(getSettings.rejected, () => {
         return {
           ...initialState,
           status: 'failed'
         };
       })
-      .addCase(getSettings.fulfilled, (state, action) => {
+      .addCase(getSettings.fulfilled, (state, action: PayloadAction<Setting>) => {
         return {
           ...state,
           ...action.payload,

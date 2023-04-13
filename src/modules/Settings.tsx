@@ -15,19 +15,16 @@ import { Account, Currency } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
-import Snackbar from 'shared/components/Snackbar';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
   const { defaultCurrency: { iso }, showDecimals, isDarkTheme, defaultAccount = '' } = useAppSelector(selectSettings);
-  const { id } = useAppSelector(selectUser);
+  const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -35,10 +32,6 @@ const Settings: React.FC = () => {
 
   const handleCloseDialog = (): void => {
     setDialogOpened(false);
-  };
-
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
   };
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
@@ -62,17 +55,15 @@ const Settings: React.FC = () => {
   };
 
   const deleteUserData = (): void => {
-    setFormSubmitted(true);
-    dispatch(eraseUserData(id));
+    dispatch(eraseUserData(userId));
   };
 
   React.useEffect(() => {
-    if (status === 'succeeded' && formSubmitted) {
+    if (status === 'succeeded') {
       setDialogOpened(false);
-      setShowSnackbar(true);
       dispatch(getAccounts());
     }
-  }, [status, dispatch, formSubmitted]);
+  }, [status, dispatch]);
 
   return (
     <Box flexGrow={1}>
@@ -159,7 +150,6 @@ const Settings: React.FC = () => {
           Are you sure you want to delete all the data? This action cannot be undone.
         </Typography>
       </Dialog>
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text='All user data has been erased' type='success' />
     </Box>
   );
 };

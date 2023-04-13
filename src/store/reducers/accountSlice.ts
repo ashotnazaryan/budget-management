@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
@@ -6,6 +6,7 @@ import { mapAccount, mapAccounts } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 import { getSummary } from './summarySlice';
+import { getTransactions } from './transactionSlice';
 
 export interface AccountState {
   accounts: Account[];
@@ -53,7 +54,6 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
     }
   });
 
-// TODO: create error mechanism for all axios requests
 export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: ErrorResponse }>(
   'accounts/createAccount',
   async (account, { dispatch, rejectWithValue }): Promise<any> => {
@@ -62,7 +62,6 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
 
       if (response?.data) {
         dispatch(getAccounts());
-        dispatch(getSummary());
       }
     } catch (error: any) {
       console.error(error);
@@ -79,6 +78,7 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
       if (response?.data) {
         dispatch(getAccounts());
         dispatch(getSummary());
+        dispatch(getTransactions());
       }
     } catch (error: any) {
       console.error(error);
@@ -111,14 +111,14 @@ export const accountSlice = createSlice({
           status: 'failed'
         };
       })
-      .addCase(getAccounts.fulfilled, (state, action) => {
+      .addCase(getAccounts.fulfilled, (state, action: PayloadAction<Account[]>) => {
         return {
           ...state,
           accounts: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getAccount.fulfilled, (state, action) => {
+      .addCase(getAccount.fulfilled, (state, action: PayloadAction<Account>) => {
         return {
           ...state,
           currentAccount: action.payload
@@ -130,7 +130,7 @@ export const accountSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(createAccount.rejected, (state, action) => {
+      .addCase(createAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           status: 'failed',
@@ -149,7 +149,7 @@ export const accountSlice = createSlice({
           status: 'loading'
         };
       })
-      .addCase(editAccount.rejected, (state, action) => {
+      .addCase(editAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           status: 'failed',

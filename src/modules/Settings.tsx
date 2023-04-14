@@ -40,27 +40,27 @@ const Settings: React.FC = () => {
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
 
-    dispatch(addSetting([{ defaultCurrency: isoCode }]));
+    dispatch(addSetting([{ defaultCurrency: isoCode }, false, false]));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-    dispatch(addSetting([{ showDecimals: checked }]));
+    dispatch(addSetting([{ showDecimals: checked }, false, true]));
   };
 
   const handleAccountChange = (event: SelectChangeEvent): void => {
     const accountId = event.target.value as Account['id'];
 
-    dispatch(addSetting([{ defaultAccount: accountId }]));
+    dispatch(addSetting([{ defaultAccount: accountId }, false, false]));
   };
 
   const handleThemeChange = (): void => {
-    dispatch(addSetting([{ isDarkTheme: !isDarkTheme }, true]));
+    dispatch(addSetting([{ isDarkTheme: !isDarkTheme }, true, false]));
   };
 
   const handleChangeLanguage = (event: SelectChangeEvent) => {
     const language = event.target.value as Language['iso'];
 
-    dispatch(addSetting([{ language }]));
+    dispatch(addSetting([{ language }, false, false]));
     i18n.changeLanguage(language);
   };
 

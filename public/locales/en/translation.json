@@ -52,6 +52,7 @@
     "PAGE_TITLE": "Accounts",
     "NEW_ACCOUNT": "New account",
     "EDIT_ACCOUNT": "Edit account",
+    "EMPTY_TEXT": "No accounts available",
     "ERRORS": {
       "REQUIRED_BALANCE": "Balance is required",
       "INVALID_BALANCE": "Invalid balance",
@@ -64,6 +65,7 @@
     "PAGE_TITLE": "Categories",
     "NEW_CATEGORY": "New category",
     "EDIT_CATEGORY": "Edit category",
+    "EMPTY_TEXT": "No categories available",
     "ERRORS": {
       "REQUIRED_NAME": "Name is required",
       "REQUIRED_ICON": "Icon is required",
@@ -74,6 +76,7 @@
     "PAGE_TITLE": "Transactions",
     "NEW_TRANSACTION": "New transaction",
     "EDIT_TRANSACTION": "Edit transaction",
+    "EMPTY_TEXT": "No transactions available",
     "ERRORS": {
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",

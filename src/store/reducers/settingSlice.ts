@@ -35,17 +35,19 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
   }
 });
 
-export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?], { rejectValue: ErrorResponse }>(
+export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?, boolean?], { rejectValue: ErrorResponse }>(
   'setting/addSetting',
-  async ([setting, isAppLoading], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }): Promise<any> => {
     try {
       await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
       dispatch(getSettings());
-      // TODO: call only when decimal changes/data erases
-      dispatch(getSummary());
-      dispatch(getTransactions());
-      dispatch(getAccounts());
-      dispatch(getBalance());
+
+      if (shouldFetchAllData) {
+        dispatch(getSummary());
+        dispatch(getTransactions());
+        dispatch(getAccounts());
+        dispatch(getBalance());
+      }
 
       if (isAppLoading) {
         dispatch(setAppStatus('loading'));

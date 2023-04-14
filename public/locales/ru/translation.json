@@ -52,6 +52,7 @@
     "PAGE_TITLE": "Счета",
     "NEW_ACCOUNT": "Новый счет",
     "EDIT_ACCOUNT": "Изменить счет",
+    "EMPTY_TEXT": "Нет счетов",
     "ERRORS": {
       "REQUIRED_BALANCE": "Баланс обязателен",
       "INVALID_BALANCE": "Неверный баланс",
@@ -64,6 +65,7 @@
     "PAGE_TITLE": "Категории",
     "NEW_CATEGORY": "Новая категория",
     "EDIT_CATEGORY": "Изменить категорию",
+    "EMPTY_TEXT": "Нет категорий",
     "ERRORS": {
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
@@ -74,6 +76,7 @@
     "PAGE_TITLE": "Транзакции",
     "NEW_TRANSACTION": "Новая транзакция",
     "EDIT_TRANSACTION": "Изменить транзакцию",
+    "EMPTY_TEXT": "Нет транзакций",
     "ERRORS": {
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма",

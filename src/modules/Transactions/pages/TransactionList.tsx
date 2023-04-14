@@ -37,7 +37,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
     }
 
     if (!transactions?.length) {
-      return <EmptyState text='No transactions available' />;
+      return <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT')!} />;
     }
 
     return (

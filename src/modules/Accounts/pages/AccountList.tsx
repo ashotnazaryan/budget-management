@@ -42,7 +42,7 @@ const AccountList: React.FC<AccountListProps> = () => {
     }
 
     if (!accounts?.length) {
-      return <EmptyState text='No accounts available' />;
+      return <EmptyState text={t('ACCOUNTS.EMPTY_TEXT')!} />;
     }
 
     return (

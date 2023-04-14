@@ -75,10 +75,6 @@ const Settings: React.FC = () => {
     }
   }, [status, dispatch]);
 
-  React.useEffect(() => {
-    i18n.changeLanguage(language.iso);
-  }, [language, i18n]);
-
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('SETTINGS.PAGE_TITLE')} />

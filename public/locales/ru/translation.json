@@ -33,7 +33,7 @@
   },
   "DASHBOARD": {
     "SUMMARY": "Сумма",
-    "TOTAL_INCOME": "Общая прибыль",
+    "TOTAL_INCOME": "Общий доход",
     "TOTAL_EXPENSES": "Общие расходы",
     "REMAINING_BALANCE": "Остаток"
   },

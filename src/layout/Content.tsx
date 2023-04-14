@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
@@ -7,6 +8,7 @@ import {
   getUserInfo,
   getSettings,
   selectApp,
+  selectSettings,
 } from 'store/reducers';
 import Header from './Header';
 import SideBar from './SideBar';
@@ -20,11 +22,17 @@ const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   const dispatch = useAppDispatch();
   const { palette: { info: { light } } } = useTheme();
   const { status } = useAppSelector(selectApp);
+  const { language } = useAppSelector(selectSettings);
+  const { i18n } = useTranslation();
 
   React.useEffect(() => {
     dispatch(getUserInfo());
     dispatch(getSettings());
   }, [dispatch]);
+
+  React.useEffect(() => {
+    i18n.changeLanguage(language.iso);
+  }, [language, i18n]);
 
   const getContent = (): React.ReactElement => {
     if (status === 'idle' || status === 'loading') {

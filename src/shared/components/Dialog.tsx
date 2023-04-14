@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import { useTheme } from '@mui/material/styles';
@@ -16,8 +17,9 @@ type DialogProps<T = any> = {
   onAction?: (data: T) => void;
 } & MuiDialogProps
 
-const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButtonText = 'OK', withActions = true, loading = false, onClose, onAction, children, ...props }) => {
+const Dialog: React.FC<DialogProps> = ({ cancelButtonText, actionButtonText, withActions = true, loading = false, onClose, onAction, children, ...props }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const handleOnAction = (data: DialogProps['data']): void => {
     if (onAction) {
@@ -38,12 +40,17 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText = 'Cancel', actionButt
       </StyledDialogContent>
       {withActions && (
         <DialogActions>
-          <Button onClick={onClose}>{cancelButtonText}</Button>
-          <Button variant='contained' loading={loading} onClick={handleOnAction} autoFocus>{actionButtonText}</Button>
+          <Button onClick={onClose}>{t(cancelButtonText!)}</Button>
+          <Button variant='contained' loading={loading} onClick={handleOnAction} autoFocus>{t(actionButtonText!)}</Button>
         </DialogActions>
       )}
     </MuiDialog>
   );
+};
+
+Dialog.defaultProps = {
+  cancelButtonText: 'COMMON.CANCEL',
+  actionButtonText: 'COMMON.OK'
 };
 
 export default Dialog;

@@ -1,0 +1,66 @@
+{
+  "COMMON": {
+    "YES": "Yes",
+    "NO": "No",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "EXPENSE": "Expense",
+    "INCOME": "Income",
+    "BACK": "Back",
+    "AMOUNT": "Amount",
+    "ACCOUNT": "Account",
+    "CATEGORY": "Category",
+    "DATE": "Date",
+    "NAME": "Name",
+    "BALANCE": "Balance",
+    "CURRENCY": "Currency",
+    "ICON": "Icon",
+    "TYPE": "Type"
+  },
+  "SIDEBAR": {
+    "LOGOUT": "Logout",
+    "LOGOUT_DIALOG_TITLE": "Logout",
+    "LOGOUT_DIALOG_CONFIRM": "Are you sure you want to logout?"
+  },
+  "ROUTES": {
+    "LOGIN": "Login",
+    "HOME": "Home",
+    "DASHBOARD": "Dashboard",
+    "SETTINGS": "Settings",
+    "CATEGORIES": "Categories",
+    "ACCOUNTS": "Accounts",
+    "TRANSACTIONS": "Transactions"
+  },
+  "DASHBOARD": {
+    "SUMMARY": "Summary",
+    "TOTAL_INCOME": "Total income",
+    "TOTAL_EXPENSES": "Total expenses",
+    "REMAINING_BALANCE": "Remaining balance"
+  },
+  "SETTINGS": {
+    "PAGE_TITLE": "Settings",
+    "DEFAULT_CURRENCY": "Default currency",
+    "DEFAULT_ACCOUNT": "Default account",
+    "LANGUAGE": "Language",
+    "SHOW_DECIMALS": "Show decimals (e.g. 1.23)",
+    "DARK_THEME": "Dark theme",
+    "ERASE_USER_DATA": "Erase user data",
+    "ERASE_USER_DATA_DIALOG_CONFIRM": "Are you sure you want to delete all the data? This action cannot be undone.",
+    "ERASE_USER_DATA_DIALOG_TITLE": "Delete all data"
+  },
+  "ACCOUNTS": {
+    "PAGE_TITLE": "Accounts",
+    "NEW_ACCOUNT": "New account",
+    "EDIT_ACCOUNT": "Edit account"
+  },
+  "CATEGORIES": {
+    "PAGE_TITLE": "Categories",
+    "NEW_CATEGORY": "New category",
+    "EDIT_CATEGORY": "Edit category"
+  },
+  "TRANSACTIONS": {
+    "PAGE_TITLE": "Transactions",
+    "NEW_TRANSACTION": "New transaction",
+    "EDIT_TRANSACTION": "Edit transaction"
+  }
+}

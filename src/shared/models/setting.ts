@@ -1,4 +1,5 @@
 import { Account, AccountDTO } from './account';
+import { Language } from './language';
 
 export interface Currency {
   iso: 'USD' | 'EUR' | 'PLN' | 'UAH' | 'AMD';
@@ -9,6 +10,7 @@ export interface Currency {
 export interface SettingDTO {
   showDecimals: boolean;
   isDarkTheme: boolean;
+  language: Language['iso'],
   defaultCurrency: Currency['iso'];
   defaultAccount?: AccountDTO['id'];
 }
@@ -16,6 +18,7 @@ export interface SettingDTO {
 export interface Setting {
   showDecimals: boolean;
   isDarkTheme: boolean;
+  language: Language;
   defaultCurrency: Currency;
   defaultAccount?: Account['id'];
 }

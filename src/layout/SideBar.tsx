@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Drawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -17,8 +18,6 @@ import CategoryIcon from '@mui/icons-material/Category';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { ROUTES } from 'shared/constants';
-import Dialog from 'shared/components/Dialog';
 import {
   closeSidebar,
   selectUser,
@@ -27,6 +26,8 @@ import {
   selectApp,
   selectSummary
 } from 'store/reducers';
+import { ROUTES } from 'shared/constants';
+import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 
 interface SideBarProps extends MuiDrawerProps { }
@@ -39,6 +40,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const { palette } = useTheme();
   const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const { t } = useTranslation();
   const avatar = user.avatar;
 
   const close = (): void => {
@@ -85,7 +87,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                   <ListItemText>
                     <Link to={ROUTES.dashboard.path}>
                       <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {ROUTES.dashboard.name}
+                        {t(ROUTES.dashboard.name)}
                       </Button>
                     </Link>
                   </ListItemText>
@@ -94,7 +96,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                   <ListItemText>
                     <Link to={ROUTES.accounts.path}>
                       <Button fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {ROUTES.accounts.name}
+                        {t(ROUTES.accounts.name)}
                       </Button>
                     </Link>
                   </ListItemText>
@@ -103,7 +105,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                   <ListItemText>
                     <Link to={ROUTES.categories.path}>
                       <Button fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {ROUTES.categories.name}
+                        {t(ROUTES.categories.name)}
                       </Button>
                     </Link>
                   </ListItemText>
@@ -112,7 +114,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                   <ListItemText>
                     <Link to={ROUTES.settings.path}>
                       <Button fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {ROUTES.settings.name}
+                        {t(ROUTES.settings.name)}
                       </Button>
                     </Link>
                   </ListItemText>
@@ -121,7 +123,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
               <ListItem onClick={handleOpenDialog} sx={{ padding: 0 }}>
                 <ListItemText>
                   <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
-                    Logout
+                    {t('SIDEBAR.LOGOUT')}
                   </Button>
                 </ListItemText>
               </ListItem>
@@ -129,9 +131,16 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           </Drawer>
         </Grid>
       </Grid>
-      <Dialog title='Logout' actionButtonText='Yes' open={dialogOpened} onClose={handleCloseDialog} onAction={handleLogout} fullWidth maxWidth='xs'>
+      <Dialog
+        fullWidth
+        maxWidth='xs'
+        title={t('SIDEBAR.LOGOUT_DIALOG_TITLE')!}
+        actionButtonText={t('COMMON.YES')!}
+        open={dialogOpened}
+        onClose={handleCloseDialog}
+        onAction={handleLogout}>
         <Typography variant='subtitle1'>
-          Are you sure you want to logout?
+          {t('SIDEBAR.LOGOUT_DIALOG_CONFIRM')}
         </Typography>
       </Dialog>
     </>

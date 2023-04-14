@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import Box from '@mui/material/Box';
 import MuiTabs from '@mui/material/Tabs';
@@ -62,6 +63,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
   const helper = transactionHelper();
+  const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const transactionId = state?.id || null;
@@ -127,7 +129,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? 'New transaction' : 'Edit transaction';
+    return mode === 'create' ? t('TRANSACTIONS.NEW_TRANSACTION') : t('TRANSACTIONS.EDIT_TRANSACTION');
   };
 
   const setFormValues = React.useCallback(() => {
@@ -194,7 +196,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               <MuiTabs {...field} value={field.value} onChange={handleTabChange} sx={{ marginBottom: 3 }}>
                 {
                   tabs.map(({ value, label }) => (
-                    <MuiTab key={value} label={label} />
+                    <MuiTab key={value} label={t(label)} />
                   ))
                 }
               </MuiTabs>
@@ -205,7 +207,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             <FormInput
               focused
               fullWidth
-              label='Amount'
+              label={t('COMMON.AMOUNT')}
               type='number'
               name={TransactionField.amount}
               rules={{
@@ -228,7 +230,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             }}
             render={({ field, fieldState: { error } }) => (
               <>
-                <InputLabel>Account</InputLabel>
+                <InputLabel>{t('COMMON.ACCOUNT')}</InputLabel>
                 <Select
                   fullWidth
                   variant='outlined'
@@ -253,10 +255,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             control={control}
             name={TransactionField.createdAt}
             render={({ field }) => (
-              <DatePicker label='Date' value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
+              <DatePicker label={t('COMMON.DATE')} value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
             )}
           />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Category</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.CATEGORY')}</Typography>
           <Controller
             control={control}
             name={TransactionField.categoryId}
@@ -287,7 +289,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
         </Grid>
       </FormProvider>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>Save</Button>
+        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>{t('COMMON.SAVE')}</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

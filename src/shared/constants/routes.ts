@@ -2,31 +2,31 @@ import { AppRoute } from 'shared/models';
 
 export const ROUTES: AppRoute = {
   home: {
-    name: 'Home',
+    name: 'ROUTES.HOME',
     path: '/'
   },
   dashboard: {
-    name: 'Dashboard',
+    name: 'ROUTES.DASHBOARD',
     path: '/dashboard'
   },
   settings: {
-    name: 'Settings',
+    name: 'ROUTES.SETTINGS',
     path: '/settings'
   },
   categories: {
-    name: 'Categories',
+    name: 'ROUTES.CATEGORIES',
     path: '/categories'
   },
   accounts: {
-    name: 'Accounts',
+    name: 'ROUTES.ACCOUNTS',
     path: '/accounts'
   },
   transactions: {
-    name: 'Transactions',
-    path: '/transactions'
+    name: 'ROUTES.TRANSACTIONS',
+    path: '/translations'
   },
   login: {
-    name: 'Login',
+    name: 'ROUTES.LOGIN',
     path: '/login',
   }
 };

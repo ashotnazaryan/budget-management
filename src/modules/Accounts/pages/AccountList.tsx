@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -19,6 +20,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   const dispatch = useAppDispatch();
   const { accounts, status } = useAppSelector(selectAccount);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (status === 'idle') {
@@ -63,7 +65,7 @@ const AccountList: React.FC<AccountListProps> = () => {
 
   return (
     <Box flexGrow={1}>
-      <PageTitle text='Accounts' />
+      <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
       {content}
     </Box>
   );

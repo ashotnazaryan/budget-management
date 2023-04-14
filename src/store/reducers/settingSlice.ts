@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ErrorResponse, Setting, SettingDTO, StatusState } from 'shared/models';
-import { CURRENCIES } from 'shared/constants';
+import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setAppStatus } from './appSlice';
@@ -17,6 +17,7 @@ const initialState: SettingState = {
   defaultCurrency: CURRENCIES[0],
   showDecimals: false,
   isDarkTheme: false,
+  language: LANGUAGES[0],
   status: 'idle'
 };
 
@@ -40,6 +41,7 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?]
     try {
       await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
       dispatch(getSettings());
+      // TODO: call only when decimal changes/data erases
       dispatch(getSummary());
       dispatch(getTransactions());
       dispatch(getAccounts());

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -37,6 +38,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
   const helper = accountHelper();
+  const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const accountId = state?.id || null;
@@ -80,7 +82,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? 'New account' : 'Edit account';
+    return mode === 'create' ? t('ACCOUNTS.NEW_ACCOUNT') : t('ACCOUNTS.EDIT_ACCOUNT');
   };
 
   const setFormValues = React.useCallback(() => {
@@ -127,7 +129,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         <FormProvider {...methods}>
           <FormInput
             focused
-            label='Name'
+            label={t('COMMON.NAME')}
             name={AccountField.name}
             rules={{
               required: {
@@ -140,7 +142,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             }}
           />
           <FormInput
-            label='Balance'
+            label={t('COMMON.BALANCE')}
             type='number'
             name={AccountField.balance}
             rules={{
@@ -165,7 +167,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             }}
             render={({ field, fieldState: { error } }) => (
               <Select
-                label='Currency'
+                label={t('COMMON.CURRENCY')}
                 variant='outlined'
                 value={field.value}
                 onChange={handleCurrencyChange}
@@ -176,7 +178,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
               </Select>
             )}
           />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Icon</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
           <Controller
             control={control}
             name={AccountField.icon}
@@ -201,7 +203,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>Save</Button>
+        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>{t('COMMON.SAVE')}</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -10,21 +11,23 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
-import { CURRENCIES } from 'shared/constants';
-import { Account, Currency } from 'shared/models';
+import { CURRENCIES, LANGUAGES } from 'shared/constants';
+import { Account, Currency, Language } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, defaultAccount = '' } = useAppSelector(selectSettings);
+  const languages = LANGUAGES;
+  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, language, defaultAccount = '' } = useAppSelector(selectSettings);
   const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const { i18n, t } = useTranslation();
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -54,6 +57,13 @@ const Settings: React.FC = () => {
     dispatch(addSetting([{ isDarkTheme: !isDarkTheme }, true]));
   };
 
+  const handleChangeLanguage = (event: SelectChangeEvent) => {
+    const language = event.target.value as Language['iso'];
+
+    dispatch(addSetting([{ language }]));
+    i18n.changeLanguage(language);
+  };
+
   const deleteUserData = (): void => {
     dispatch(eraseUserData(userId));
   };
@@ -65,12 +75,16 @@ const Settings: React.FC = () => {
     }
   }, [status, dispatch]);
 
+  React.useEffect(() => {
+    i18n.changeLanguage(language.iso);
+  }, [language, i18n]);
+
   return (
     <Box flexGrow={1}>
-      <PageTitle text='Settings' />
+      <PageTitle text={t('SETTINGS.PAGE_TITLE')} />
       <Grid container rowGap={4}>
         <Grid item xs={12}>
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default currency</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.DEFAULT_CURRENCY')}</Typography>
           <FormControl fullWidth>
             <Select
               variant='outlined'
@@ -84,7 +98,7 @@ const Settings: React.FC = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>Default account</Typography>
+          <Typography color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.DEFAULT_ACCOUNT')}</Typography>
           <FormControl fullWidth>
             <Select
               variant='outlined'
@@ -98,6 +112,20 @@ const Settings: React.FC = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
+          <Typography color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.LANGUAGE')}</Typography>
+          <FormControl fullWidth>
+            <Select
+              variant='outlined'
+              value={language.iso || i18n.language}
+              onChange={handleChangeLanguage}
+            >
+              {languages.map(({ iso, displayName }) => (
+                <MenuItem value={iso} key={iso}>{displayName}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
           <FormControlLabel
             control={
               <Switch
@@ -105,7 +133,7 @@ const Settings: React.FC = () => {
                 onChange={handleDecimalsChange}
               />}
             label={
-              <Typography color={contrastText}>Show decimals (e.g. 1.23)</Typography>
+              <Typography color={contrastText}>{t('SETTINGS.SHOW_DECIMALS')}</Typography>
             }
             labelPlacement='start'
             sx={{
@@ -123,7 +151,7 @@ const Settings: React.FC = () => {
                 onChange={handleThemeChange}
               />}
             label={
-              <Typography color={contrastText}>Dark theme</Typography>
+              <Typography color={contrastText}>{t('SETTINGS.DARK_THEME')}</Typography>
             }
             labelPlacement='start'
             sx={{
@@ -134,20 +162,20 @@ const Settings: React.FC = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button color='secondary' variant='contained' onClick={handleOpenDialog}>Erase user data</Button>
+          <Button color='secondary' variant='contained' onClick={handleOpenDialog}>{t('SETTINGS.ERASE_USER_DATA')}</Button>
         </Grid>
       </Grid>
       <Dialog
         fullWidth
         maxWidth='xs'
-        title='Delete all data'
-        actionButtonText='Yes'
+        title={t('SETTINGS.ERASE_USER_DATA_DIALOG_TITLE')!}
+        actionButtonText={t('COMMON.YES')!}
         open={dialogOpened}
         onClose={handleCloseDialog}
         onAction={deleteUserData}
       >
         <Typography variant='subtitle1'>
-          Are you sure you want to delete all the data? This action cannot be undone.
+          {t('SETTINGS.ERASE_USER_DATA_DIALOG_CONFIRM')}
         </Typography>
       </Dialog>
     </Box>

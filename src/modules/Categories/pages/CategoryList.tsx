@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -23,6 +24,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const { categories, status } = useAppSelector(selectCategory);
   const navigate = useNavigate();
   const { palette } = useTheme();
+  const { t } = useTranslation();
   const [categoryType, setCategoryType] = React.useState<number>(0);
 
   React.useEffect(() => {
@@ -76,7 +78,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
   return (
     <Box flexGrow={1}>
-      <PageTitle text='Categories' />
+      <PageTitle text={t('CATEGORIES.PAGE_TITLE')} />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
       {content}
     </Box>

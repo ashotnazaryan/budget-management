@@ -51,16 +51,34 @@
   "ACCOUNTS": {
     "PAGE_TITLE": "Accounts",
     "NEW_ACCOUNT": "New account",
-    "EDIT_ACCOUNT": "Edit account"
+    "EDIT_ACCOUNT": "Edit account",
+    "ERRORS": {
+      "REQUIRED_BALANCE": "Balance is required",
+      "INVALID_BALANCE": "Invalid balance",
+      "REQUIRED_NAME": "Name is required",
+      "REQUIRED_ICON": "Icon is required",
+      "REQUIRED_CURRENCY": "Currency is required"
+    }
   },
   "CATEGORIES": {
     "PAGE_TITLE": "Categories",
     "NEW_CATEGORY": "New category",
-    "EDIT_CATEGORY": "Edit category"
+    "EDIT_CATEGORY": "Edit category",
+    "ERRORS": {
+      "REQUIRED_NAME": "Name is required",
+      "REQUIRED_ICON": "Icon is required",
+      "REQUIRED_TYPE": "Type is required"
+    }
   },
   "TRANSACTIONS": {
     "PAGE_TITLE": "Transactions",
     "NEW_TRANSACTION": "New transaction",
-    "EDIT_TRANSACTION": "Edit transaction"
+    "EDIT_TRANSACTION": "Edit transaction",
+    "ERRORS": {
+      "REQUIRED_AMOUNT": "Amount is required",
+      "INVALID_AMOUNT": "Invalid amount",
+      "REQUIRED_CATEGORY": "Category is required",
+      "REQUIRED_ACCOUNT": "Account is required"
+    }
   }
 }

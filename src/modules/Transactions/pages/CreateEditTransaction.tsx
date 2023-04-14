@@ -213,11 +213,11 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               rules={{
                 required: {
                   value: true,
-                  message: helper.amount.required?.message
+                  message: t(helper.amount.required!.message)
                 },
                 pattern: {
                   value: regex,
-                  message: helper.amount.pattern?.message
+                  message: t(helper.amount.pattern!.message)
                 }
               }}
             />
@@ -247,7 +247,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                     </MenuItem>
                   ))}
                 </Select>
-                {error && <FormHelperText error>{helper.accountId[error.type]?.message}</FormHelperText>}
+                {error && <FormHelperText error>{t(helper.accountId[error.type]!.message)}</FormHelperText>}
               </>
             )}
           />
@@ -282,7 +282,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                       </Grid>
                     )
                 }
-                {error && <FormHelperText error>{helper.categoryId[error.type]?.message}</FormHelperText>}
+                {error && <FormHelperText error>{t(helper.categoryId[error.type]!.message)}</FormHelperText>}
               </>
             )}
           />

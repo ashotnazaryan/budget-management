@@ -55,7 +55,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     }
 
     if (!categories?.length) {
-      return <EmptyState text='No categories available' />;
+      return <EmptyState text={t('CATEGORIES.EMPTY_TEXT')!} />;
     }
 
     return (

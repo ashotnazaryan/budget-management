@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -21,6 +22,7 @@ interface SummaryProps {
 
 const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
   const { palette: { primary: { main, dark, light, contrastText }, error } } = useTheme();
+  const { t } = useTranslation();
 
   const onAddTransaction = (): void => {
     addTransaction();
@@ -38,20 +40,20 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
       <Grid container>
         <Grid item xs={12}>
           <Typography color={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center', marginBottom: 4 }}>
-            Summary
+            {t('DASHBOARD.SUMMARY')}
           </Typography>
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
-              Total income
+              {t('DASHBOARD.TOTAL_INCOME')}
             </Typography>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
-              Total expenses
+              {t('DASHBOARD.TOTAL_EXPENSES')}
             </Typography>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
           </Grid>
@@ -59,7 +61,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
             <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
-              Remaining balance
+              {t('DASHBOARD.REMAINING_BALANCE')}
             </Typography>
             <Typography fontSize={{ sm: 26, xs: 22 }} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
           </Box>

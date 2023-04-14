@@ -1,0 +1,66 @@
+{
+  "COMMON": {
+    "YES": "Да",
+    "NO": "Нет",
+    "CANCEL": "Отмена",
+    "SAVE": "Сохранить",
+    "EXPENSE": "Расход",
+    "INCOME": "Доход",
+    "BACK": "Назад",
+    "AMOUNT": "Сумма",
+    "ACCOUNT": "Счет",
+    "CATEGORY": "Категория",
+    "DATE": "Дата",
+    "NAME": "Название",
+    "BALANCE": "Баланс",
+    "CURRENCY": "Валюта",
+    "ICON": "Иконка",
+    "TYPE": "Тип"
+  },
+  "SIDEBAR": {
+    "LOGOUT": "Выход",
+    "LOGOUT_DIALOG_TITLE": "Выход",
+    "LOGOUT_DIALOG_CONFIRM": "Вы точно хотите выйти?"
+  },
+  "ROUTES": {
+    "LOGIN": "Вход",
+    "HOME": "Дом",
+    "DASHBOARD": "Панель",
+    "SETTINGS": "Настройки",
+    "CATEGORIES": "Категории",
+    "ACCOUNTS": "Счета",
+    "TRANSACTIONS": "Транзакции"
+  },
+  "DASHBOARD": {
+    "SUMMARY": "Сумма",
+    "TOTAL_INCOME": "Общая прибыль",
+    "TOTAL_EXPENSES": "Общие расходы",
+    "REMAINING_BALANCE": "Остаток"
+  },
+  "SETTINGS": {
+    "PAGE_TITLE": "Настройки",
+    "DEFAULT_CURRENCY": "Валюта по умолчанию",
+    "DEFAULT_ACCOUNT": "Счет по умолчанию",
+    "LANGUAGE": "Язык",
+    "SHOW_DECIMALS": "Показать дроби (например 1,23)",
+    "DARK_THEME": "Темная тема",
+    "ERASE_USER_DATA": "Удалить данные пользователя",
+    "ERASE_USER_DATA_DIALOG_CONFIRM": "Вы уверены, что хотите удалить все данные? Это действие не может быть отменено.",
+    "ERASE_USER_DATA_DIALOG_TITLE": "Удалить все данные"
+  },
+  "ACCOUNTS": {
+    "PAGE_TITLE": "Счета",
+    "NEW_ACCOUNT": "Новый счет",
+    "EDIT_ACCOUNT": "Изменить счет"
+  },
+  "CATEGORIES": {
+    "PAGE_TITLE": "Категории",
+    "NEW_CATEGORY": "Новая категория",
+    "EDIT_CATEGORY": "Изменить категорию"
+  },
+  "TRANSACTIONS": {
+    "PAGE_TITLE": "Транзакции",
+    "NEW_TRANSACTION": "Новая транзакция",
+    "EDIT_TRANSACTION": "Изменить транзакцию"
+  }
+}

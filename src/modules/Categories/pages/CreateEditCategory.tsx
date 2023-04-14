@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -35,6 +36,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
   const helper = categoryHelper();
+  const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const categoryId = state?.id || null;
@@ -89,7 +91,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? 'New category' : 'Edit category';
+    return mode === 'create' ? t('CATEGORIES.NEW_CATEGORY') : t('CATEGORIES.EDIT_CATEGORY');
   };
 
   React.useEffect(() => {
@@ -118,7 +120,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         <FormProvider {...methods}>
           <FormInput
             focused
-            label='Name'
+            label={t('COMMON.NAME')}
             name={CategoryField.name}
             rules={{
               required: {
@@ -130,7 +132,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               marginBottom: 4
             }}
           />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Type</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
           <Controller
             control={control}
             name={CategoryField.type}
@@ -142,7 +144,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               <RadioGroup row>
                 <FormControlLabel value={field.value}
                   label={
-                    <Typography color={contrastText}>Expense</Typography>
+                    <Typography color={contrastText}>{t('COMMON.EXPENSE')}</Typography>
                   }
                   control={
                     <Radio
@@ -154,7 +156,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                 />
                 <FormControlLabel value={field.value}
                   label={
-                    <Typography color={contrastText}>Income</Typography>
+                    <Typography color={contrastText}>{t('COMMON.INCOME')}</Typography>
                   }
                   control={
                     <Radio
@@ -167,7 +169,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               </RadioGroup>
             )}
           />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>Icon</Typography>
+          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
           <Controller
             control={control}
             name={CategoryField.icon}
@@ -192,7 +194,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         </FormProvider>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>Save</Button>
+        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>{t('COMMON.SAVE')}</Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
     </Box>

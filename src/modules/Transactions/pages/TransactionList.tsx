@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -10,6 +11,7 @@ import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import EmptyState from 'shared/components/EmptyState';
 import Transaction from '../components/Transaction';
+
 interface TransactionListProps { }
 
 const TransactionList: React.FC<TransactionListProps> = () => {
@@ -17,6 +19,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
   const { symbol } = useAppSelector(selectCurrency);
   const { transactions, status } = useAppSelector(selectTransaction);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (status === 'idle') {
@@ -54,7 +57,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
 
   return (
     <Box flexGrow={1}>
-      <PageTitle text='Transactions' />
+      <PageTitle text={t('TRANSACTIONS.PAGE_TITLE')} />
       {content}
     </Box>
   );

@@ -51,16 +51,34 @@
   "ACCOUNTS": {
     "PAGE_TITLE": "Счета",
     "NEW_ACCOUNT": "Новый счет",
-    "EDIT_ACCOUNT": "Изменить счет"
+    "EDIT_ACCOUNT": "Изменить счет",
+    "ERRORS": {
+      "REQUIRED_BALANCE": "Баланс обязателен",
+      "INVALID_BALANCE": "Неверный баланс",
+      "REQUIRED_NAME": "Название обязательно",
+      "REQUIRED_ICON": "Иконка обязательна",
+      "REQUIRED_CURRENCY": "Валюта обязательна"
+    }
   },
   "CATEGORIES": {
     "PAGE_TITLE": "Категории",
     "NEW_CATEGORY": "Новая категория",
-    "EDIT_CATEGORY": "Изменить категорию"
+    "EDIT_CATEGORY": "Изменить категорию",
+    "ERRORS": {
+      "REQUIRED_NAME": "Название обязательно",
+      "REQUIRED_ICON": "Иконка обязательна",
+      "REQUIRED_TYPE": "Тип обязательный"
+    }
   },
   "TRANSACTIONS": {
     "PAGE_TITLE": "Транзакции",
     "NEW_TRANSACTION": "Новая транзакция",
-    "EDIT_TRANSACTION": "Изменить транзакцию"
+    "EDIT_TRANSACTION": "Изменить транзакцию",
+    "ERRORS": {
+      "REQUIRED_AMOUNT": "Сумма обязательна",
+      "INVALID_AMOUNT": "Неверная сумма",
+      "REQUIRED_CATEGORY": "Категория обязательна",
+      "REQUIRED_ACCOUNT": "Счет обязателен"
+    }
   }
 }

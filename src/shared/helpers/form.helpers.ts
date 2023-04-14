@@ -4,20 +4,20 @@ import { AccountField, CategoryField, ErrorType, TransactionField } from 'shared
 export const transactionHelper = (): { [key in TransactionField]: ErrorType } => ({
   [TransactionField.amount]: {
     required: {
-      message: 'Amount is required'
+      message: 'TRANSACTIONS.ERRORS.REQUIRED_AMOUNT'
     },
     pattern: {
-      message: 'Invalid amount'
+      message: 'TRANSACTIONS.ERRORS.INVALID_AMOUNT'
     }
   },
   [TransactionField.categoryId]: {
     required: {
-      message: 'Category is required'
+      message: 'TRANSACTIONS.ERRORS.REQUIRED_CATEGORY'
     }
   },
   [TransactionField.accountId]: {
     required: {
-      message: 'Account is required'
+      message: 'TRANSACTIONS.ERRORS.REQUIRED_ACCOUNT'
     }
   },
   [TransactionField.icon]: {},
@@ -28,25 +28,25 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
 export const accountHelper = (): { [key in AccountField]: ErrorType } => ({
   [AccountField.balance]: {
     required: {
-      message: 'Balance is required'
+      message: 'ACCOUNTS.ERRORS.REQUIRED_BALANCE'
     },
     pattern: {
-      message: 'Invalid amount'
+      message: 'ACCOUNTS.ERRORS.INVALID_BALANCE'
     }
   },
   [AccountField.icon]: {
     required: {
-      message: 'Icon is required'
+      message: 'ACCOUNTS.ERRORS.REQUIRED_ICON'
     }
   },
   [AccountField.name]: {
     required: {
-      message: 'Name is required'
+      message: 'ACCOUNTS.ERRORS.REQUIRED_NAME'
     }
   },
   [AccountField.currencyIso]: {
     required: {
-      message: 'Currency is required'
+      message: 'ACCOUNTS.ERRORS.REQUIRED_CURRENCY'
     }
   }
 });
@@ -54,17 +54,17 @@ export const accountHelper = (): { [key in AccountField]: ErrorType } => ({
 export const categoryHelper = (): { [key in CategoryField]: ErrorType } => ({
   [CategoryField.icon]: {
     required: {
-      message: 'Icon is required'
+      message: 'CATEGORIES.ERRORS.REQUIRED_ICON'
     }
   },
   [CategoryField.name]: {
     required: {
-      message: 'Name is required'
+      message: 'CATEGORIES.ERRORS.REQUIRED_NAME'
     }
   },
   [CategoryField.type]: {
     required: {
-      message: 'Category type is required'
+      message: 'CATEGORIES.ERRORS.REQUIRED_TYPE'
     }
   }
 });

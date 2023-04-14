@@ -134,7 +134,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             rules={{
               required: {
                 value: true,
-                message: helper.name.required?.message
+                message: t(helper.name.required!.message)
               },
             }}
             sx={{
@@ -148,11 +148,11 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             rules={{
               required: {
                 value: true,
-                message: helper.balance.required?.message
+                message: t(helper.balance.required!.message)
               },
               pattern: {
                 value: regex,
-                message: helper.balance.pattern?.message
+                message: t(helper.balance.pattern!.message)
               }
             }}
             sx={{
@@ -196,7 +196,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                     ))
                   }
                 </Grid>
-                {error && <FormHelperText error>{helper.icon[error.type]?.message}</FormHelperText>}
+                {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
               </>
             )}
           />

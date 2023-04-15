@@ -1,20 +1,23 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
-import { CategoryType, Currency, Transaction as TransactionModel } from 'shared/models';
+import { CategoryType, Transaction as TransactionModel } from 'shared/models';
+import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface TransactionProps {
   data: TransactionModel;
-  symbol: Currency['symbol'];
   onClick?: (data: TransactionModel) => void;
 }
 
-const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
+const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText }, error } } = useTheme();
-  const { name, icon, accountName, accountIcon, createdAt, amount, type } = data;
+  const { name, nameKey, icon, accountName, accountIcon, createdAt, amount, currencyIso, type } = data;
+  const symbol = getCurrencySymbolByIsoCode(currencyIso);
+  const { t } = useTranslation();
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -29,7 +32,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, symbol, onClick }) => {
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>
         <Grid item xs={3}>
-          <Ellipsis text={name} color={contrastText} />
+          <Ellipsis text={nameKey ? t(nameKey) : name} color={contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
           <Ellipsis text={`${symbol}${amount}`} color={type === CategoryType.expense ? error.main : contrastText} />

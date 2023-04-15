@@ -60,9 +60,9 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
     return (
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => type === categoryType).map(({ name, type, icon, id }) => (
+        {categories.filter(({ type }) => type === categoryType).map(({ name, nameKey, type, icon, id }) => (
           <Grid item key={id}>
-            <CategoryIcon id={id} name={name} type={type} icon={icon} onClick={handleCategoryIconClick} />
+            <CategoryIcon id={id} name={nameKey ? t(nameKey) : name} type={type} icon={icon} onClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>

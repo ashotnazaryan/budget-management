@@ -12,6 +12,7 @@ export interface CategoryDTO {
   type: CategoryType;
   icon: IconType;
   isDefaultCategory?: boolean;
+  nameKey?: string;
 }
 
 export interface Category {
@@ -20,4 +21,5 @@ export interface Category {
   type: CategoryType;
   icon: IconType;
   isDefaultCategory?: boolean;
+  nameKey?: string;
 }

@@ -20,6 +20,11 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
       message: 'TRANSACTIONS.ERRORS.REQUIRED_ACCOUNT'
     }
   },
+  [TransactionField.currencyIso]: {
+    required: {
+      message: 'TRANSACTIONS.ERRORS.REQUIRED_CURRENCY'
+    }
+  },
   [TransactionField.icon]: {},
   [TransactionField.type]: {},
   [TransactionField.createdAt]: {}

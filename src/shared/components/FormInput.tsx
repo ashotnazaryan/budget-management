@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { TextFieldProps } from '@mui/material/TextField';
+import FormHelperText from '@mui/material/FormHelperText';
+import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { StyledTextField } from './FormInput.styles';
 
@@ -23,15 +25,16 @@ const FormInput: React.FC<FormInputProps> = ({ name, rules = {}, ...props }) => 
       name={name}
       rules={rules}
       render={({ field, fieldState: { error } }) => (
-        <StyledTextField
-          {...field}
-          {...props}
-          theme={theme}
-          error={!!errors[name]}
-          helperText={
-            errors[name] && error?.message
-          }
-        />
+        <Box position='relative'>
+          <StyledTextField
+            fullWidth
+            {...field}
+            {...props}
+            theme={theme}
+            error={!!errors[name]}
+          />
+          {errors[name] && <FormHelperText sx={{ position: 'absolute' }} error>{error?.message}</FormHelperText>}
+        </Box>
       )}
     />
   );

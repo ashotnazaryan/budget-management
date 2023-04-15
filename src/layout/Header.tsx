@@ -15,14 +15,14 @@ interface HeaderProps { }
 
 const Header: React.FC<HeaderProps> = () => {
   const dispatch = useAppDispatch();
-  const { palette: { primary: { contrastText, dark } } } = useTheme();
+  const { palette: { primary: { contrastText, main } } } = useTheme();
 
   const showSideBar = (): void => {
     dispatch(openSideBar());
   };
 
   return (
-    <AppBar position='static' sx={{ backgroundColor: dark }}>
+    <AppBar position='static' sx={{ backgroundColor: main }}>
       <Toolbar variant='dense' sx={{ paddingX: 3 }}>
         <Grid container alignItems='center' justifyContent='space-between'>
           <Grid item>

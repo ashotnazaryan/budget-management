@@ -10,7 +10,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: LANGUAGES[0].iso,
-    debug: process.env.NODE_ENV === 'development',
+    debug: false,
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],

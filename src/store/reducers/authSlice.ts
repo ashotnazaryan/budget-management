@@ -11,10 +11,10 @@ export interface AuthState extends Auth {
 }
 
 const initialState: AuthState = {
-  status: 'idle',
   accessToken: '',
   refreshToken: '',
-  userId: ''
+  userId: '',
+  status: 'idle'
 };
 
 export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {

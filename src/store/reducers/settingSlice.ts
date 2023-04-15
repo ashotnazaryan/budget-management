@@ -40,17 +40,18 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
   async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }): Promise<any> => {
     try {
       await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
-      dispatch(getSettings());
+
+      if (isAppLoading) {
+        dispatch(setAppStatus('loading'));
+      }
+
+      await dispatch(getSettings());
 
       if (shouldFetchAllData) {
         dispatch(getSummary());
         dispatch(getTransactions());
         dispatch(getAccounts());
         dispatch(getBalance());
-      }
-
-      if (isAppLoading) {
-        dispatch(setAppStatus('loading'));
       }
     } catch (error: any) {
       console.error(error);

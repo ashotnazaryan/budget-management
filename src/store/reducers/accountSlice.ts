@@ -62,6 +62,7 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
 
       if (response?.data) {
         dispatch(getAccounts());
+        dispatch(getSummary());
       }
     } catch (error: any) {
       console.error(error);
@@ -170,6 +171,7 @@ export const accountSlice = createSlice({
 
 export const selectAccount = (state: RootState): AccountState => state.account;
 export const selectAccountStatus = (state: RootState): AccountState['status'] => state.account.status;
+export const selectAccountError = (state: RootState): AccountState['error'] => state.account.error;
 export const selectCurrentAccount = (state: RootState): AccountState['currentAccount'] => state.account.currentAccount;
 
 export const { resetCurrentAccount } = accountSlice.actions;

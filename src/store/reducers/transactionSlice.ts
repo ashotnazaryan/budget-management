@@ -43,7 +43,9 @@ export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id']
       const response = await axios.get<TransactionDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`);
 
       if (response?.data) {
-        return mapTransaction(response.data);
+        const { showDecimals } = store.getState().setting;
+
+        return mapTransaction(response.data, showDecimals);
       }
 
       return {} as Transaction;

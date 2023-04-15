@@ -37,7 +37,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     setCategoryType(value);
   };
 
-  const handleCategoryIconClick = ({ id, name }: { id: Category['id'], name: Category['name'] }): void => {
+  const handleCategoryIconClick = ({ id, name }: Category): void => {
     navigate(`${ROUTES.categories.path}/edit/${name}`, { state: { id } });
   };
 
@@ -47,6 +47,13 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
   const getIconColor = (): string => {
     return categoryType === CategoryType.expense ? palette.secondary.main : palette.primary.main;
+  };
+
+  const getCategoryData = (data: Category): Category => {
+    return {
+      ...data,
+      name: data.nameKey ? t(data.nameKey) : data.name
+    };
   };
 
   const getContent = (): React.ReactElement => {
@@ -60,9 +67,9 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
     return (
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => type === categoryType).map(({ name, nameKey, type, icon, id }) => (
-          <Grid item key={id}>
-            <CategoryIcon id={id} name={nameKey ? t(nameKey) : name} type={type} icon={icon} onClick={handleCategoryIconClick} />
+        {categories.filter(({ type }) => type === categoryType).map((category) => (
+          <Grid item key={category.id}>
+            <CategoryIcon data={getCategoryData(category)} onClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>

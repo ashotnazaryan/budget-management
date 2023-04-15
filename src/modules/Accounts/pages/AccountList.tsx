@@ -32,8 +32,15 @@ const AccountList: React.FC<AccountListProps> = () => {
     navigate(`${ROUTES.accounts.path}/new`);
   };
 
-  const handleAccountItemClick = ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }): void => {
+  const handleAccountItemClick = ({ id, name }: AccountModel): void => {
     navigate(`${ROUTES.accounts.path}/edit/${name}`, { state: { id } });
+  };
+
+  const getAccountData = (data: AccountModel): AccountModel => {
+    return {
+      ...data,
+      name: data.nameKey ? t(data.nameKey) : data.name
+    };
   };
 
   const getContent = (): React.ReactElement => {
@@ -47,9 +54,9 @@ const AccountList: React.FC<AccountListProps> = () => {
 
     return (
       <Grid container rowGap={2} sx={{ marginTop: 4 }}>
-        {accounts.map(({ name, nameKey, icon, id, balance, currencySymbol }) => (
-          <Grid item key={id} xs={12}>
-            <Account id={id} name={nameKey ? t(nameKey) : name} balance={balance} icon={icon} symbol={currencySymbol} onClick={handleAccountItemClick} />
+        {accounts.map((account) => (
+          <Grid item key={account.id} xs={12}>
+            <Account data={getAccountData(account)} onClick={handleAccountItemClick} />
           </Grid>
         ))}
         <Grid item xs={12} display='flex' justifyContent='flex-end'>

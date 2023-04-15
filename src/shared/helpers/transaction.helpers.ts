@@ -12,7 +12,7 @@ export const mapTransaction = (transaction: TransactionDTO, showDecimals = false
   return {
     ...transaction,
     amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
-    percentValue: `${transaction.percentValue}%`,
+    percentValue: transaction.percentValue ? `${transaction.percentValue}%` : undefined,
     createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
     icon: transaction.icon as IconType
   };

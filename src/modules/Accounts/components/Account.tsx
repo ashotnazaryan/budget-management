@@ -8,21 +8,17 @@ import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface AccountProps {
-  // TODO: refactor this component to accept the full account object as an input
-  id: AccountModel['id'];
-  name: AccountModel['name'];
-  icon: AccountModel['icon'];
-  balance: AccountModel['balance'];
-  symbol: AccountModel['currencySymbol'];
-  onClick?: ({ id, name }: { id: AccountModel['id'], name: AccountModel['name'] }) => void;
+  data: AccountModel;
+  onClick?: (data: AccountModel) => void;
 }
 
-const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onClick }) => {
+const Account: React.FC<AccountProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText }, error } } = useTheme();
+  const { name, icon, balance, currencySymbol } = data;
 
   const onAccountClick = (): void => {
     if (onClick) {
-      onClick({ id, name });
+      onClick(data);
     }
   };
 
@@ -43,7 +39,7 @@ const Account: React.FC<AccountProps> = ({ id, name, icon, balance, symbol, onCl
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={isPositiveString(balance) ? contrastText : error.main} text={`${symbol}${balance}`} />
+          <Ellipsis color={isPositiveString(balance) ? contrastText : error.main} text={`${currencySymbol}${balance}`} />
         </Grid>
       </Grid>
     </Paper>

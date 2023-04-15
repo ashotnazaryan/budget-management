@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
@@ -15,9 +14,8 @@ interface TransactionProps {
 
 const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText }, error } } = useTheme();
-  const { name, nameKey, icon, accountName, accountIcon, createdAt, amount, currencyIso, type } = data;
+  const { name, icon, accountName, accountIcon, createdAt, amount, currencyIso, type } = data;
   const symbol = getCurrencySymbolByIsoCode(currencyIso);
-  const { t } = useTranslation();
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -32,7 +30,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>
         <Grid item xs={3}>
-          <Ellipsis text={nameKey ? t(nameKey) : name} color={contrastText} />
+          <Ellipsis text={name} color={contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
           <Ellipsis text={`${symbol}${amount}`} color={type === CategoryType.expense ? error.main : contrastText} />

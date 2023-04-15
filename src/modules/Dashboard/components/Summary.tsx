@@ -28,6 +28,13 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
     addTransaction();
   };
 
+  const getCategoryTransactionData = (data: Transaction): Transaction => {
+    return {
+      ...data,
+      name: data.nameKey ? t(data.nameKey) : data.name
+    };
+  };
+
   return (
     <Box
       sx={{
@@ -72,9 +79,9 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
           </IconButton>
         </Grid>
         {
-          transactions.map(({ categoryId, name, nameKey, amount, icon, percentValue }) => (
-            <Grid item xs={12} key={categoryId}>
-              <CategoryTransaction name={nameKey ? t(nameKey) : name} amount={amount} currency={currencySymbol} value={percentValue} icon={icon} />
+          transactions.map((transaction) => (
+            <Grid item xs={12} key={transaction.categoryId}>
+              <CategoryTransaction data={getCategoryTransactionData(transaction)} />
             </Grid>
           ))
         }

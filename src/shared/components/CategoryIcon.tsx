@@ -1,29 +1,24 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import { CategoryType, IconType } from 'shared/models';
+import { Category, CategoryType } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Typography from '@mui/material/Typography';
 
 interface CategoryIconProps {
-  id: string;
-  name: string;
-  type: CategoryType;
-  icon: IconType;
-  nameKey?: string;
+  data: Category;
   selected?: string;
-  onClick?: ({ id, name, icon }:
-    { id: CategoryIconProps['id'], name: CategoryIconProps['name'], nameKey: CategoryIconProps['nameKey'], icon: CategoryIconProps['icon'] }) => void;
+  onClick?: (data: Category) => void;
 }
 
-// TODO: make this component generic
-const CategoryIcon: React.FC<CategoryIconProps> = ({ id, selected, name, nameKey, type, icon, onClick }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ data, selected, onClick }) => {
   const { palette: { primary, secondary, info } } = useTheme();
+  const { id, name, icon, type } = data;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
   const onCategoryClick = (): void => {
     if (onClick) {
-      onClick({ icon, id, name, nameKey });
+      onClick(data);
     }
   };
 

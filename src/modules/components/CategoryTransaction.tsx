@@ -2,24 +2,23 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
-import { Currency, Transaction } from 'shared/models';
+import { Transaction } from 'shared/models';
+import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import Ellipsis from 'shared/components/Ellipsis';
 import Icon from 'shared/components/Icon';
 
 interface CategoryTransactionProps {
-  name: Transaction['name'];
-  amount: Transaction['amount'];
-  currency: Currency['symbol'];
-  icon: Transaction['icon'];
+  data: Transaction;
   showPercentage?: boolean;
-  value?: Transaction['percentValue'];
 }
 
-const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ name, amount, currency, icon, showPercentage = true, value = '' }) => {
+const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPercentage = true }) => {
+  const { name, icon, amount, currencyIso, percentValue = '' } = data;
+  const symbol = getCurrencySymbolByIsoCode(currencyIso);
   const { palette: { primary: { dark, light, contrastText } } } = useTheme();
 
   const getBGColor = () => {
-    const percentageValue = parseInt(value);
+    const percentageValue = parseInt(percentValue);
 
     return `linear-gradient(to right, ${dark} 0%, ${dark} calc(${percentageValue}%), ${light} calc(${percentageValue}%), ${light} 100%)`;
   };
@@ -45,10 +44,10 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ name, amount,
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
-          {showPercentage && <Ellipsis color={contrastText} text={value} />}
+          {showPercentage && <Ellipsis color={contrastText} text={percentValue} />}
         </Grid>
         <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={contrastText} text={`${currency}${amount}`} />
+          <Ellipsis color={contrastText} text={`${symbol}${amount}`} />
         </Grid>
       </Grid>
     </Box>

@@ -30,6 +30,14 @@ const TransactionList: React.FC<TransactionListProps> = () => {
     navigate(`${ROUTES.transactions.path}/edit/${name}`, { state: { id } });
   };
 
+  const getTransactionData = (data: TransactionModel): TransactionModel => {
+    return {
+      ...data,
+      name: data.nameKey ? t(data.nameKey) : data.name,
+      accountName: data.accountNameKey ? t(data.accountNameKey) : data.accountName
+    };
+  };
+
   const getContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
@@ -44,7 +52,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
         {
           transactions.map((transaction) => (
             <Grid item key={transaction.id} xs={12}>
-              <Transaction data={transaction} onClick={handleTransactionClick} />
+              <Transaction data={getTransactionData(transaction)} onClick={handleTransactionClick} />
             </Grid>
           ))
         }

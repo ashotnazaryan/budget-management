@@ -97,6 +97,13 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     return `${symbol}${balance}`;
   };
 
+  const getCategoryData = (data: CategoryModel): CategoryModel => {
+    return {
+      ...data,
+      name: data.nameKey ? t(data.nameKey) : data.name
+    };
+  };
+
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
   };
@@ -105,7 +112,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setValue(TransactionField.type, selectedTab);
   };
 
-  const handleCategoryIconClick = ({ id, name, nameKey, icon }: { id: CategoryModel['id'], name: CategoryModel['name'], nameKey: CategoryModel['nameKey'], icon: CategoryModel['icon'] }): void => {
+  const handleCategoryIconClick = ({ id, name, nameKey, icon }: CategoryModel): void => {
     setValue(TransactionField.categoryId, id, { shouldValidate: true });
     setValue(TransactionField.icon, icon);
     setValue('name', name, { shouldValidate: true });
@@ -322,9 +329,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 <>
                   <Grid container {...field} columnGap={4} rowGap={4}>
                     {
-                      categories.filter(({ type }) => type === watchType).map(({ id, name, nameKey, type, icon }) => (
-                        <Grid item key={`${name}-${icon}`}>
-                          <CategoryIcon id={id} name={nameKey ? t(nameKey) : name} nameKey={nameKey} type={type} selected={field.value} icon={icon} onClick={handleCategoryIconClick} />
+                      categories.filter(({ type }) => type === watchType).map((category) => (
+                        <Grid item key={category.id}>
+                          <CategoryIcon data={getCategoryData(category)} selected={field.value} onClick={handleCategoryIconClick} />
                         </Grid>
                       ))
                     }

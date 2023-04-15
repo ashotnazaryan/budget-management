@@ -8,6 +8,7 @@ export interface AccountDTO {
   currencyIso: Currency['iso'];
   icon: IconType;
   isDefaultAccount?: boolean;
+  nameKey?: string;
 }
 
 export interface Account {
@@ -18,4 +19,5 @@ export interface Account {
   currencySymbol: Currency['symbol'];
   icon: IconType;
   isDefaultAccount?: boolean;
+  nameKey?: string;
 }

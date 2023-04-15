@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
+import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth } from 'store/reducers';
 import { getFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
-import { getUserToken, selectAuth } from 'store/reducers';
 import Content from './Content';
 import Loading from './Loading';
 
 export const ProtectedLayout = () => {
-  const { status } = useAppSelector(selectAuth);
+  const { status: authStatus } = useAppSelector(selectAuth);
+  const { status: appStatus } = useAppSelector(selectApp);
   const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const outlet = useOutlet();
   const dispatch = useAppDispatch();
@@ -20,7 +21,18 @@ export const ProtectedLayout = () => {
     }
   }, [dispatch, accessToken]);
 
-  if (!accessToken && (status === 'idle' || status === 'loading')) {
+  React.useEffect(() => {
+    if (accessToken) {
+      dispatch(getUserInfo());
+      dispatch(getSettings());
+    }
+  }, [dispatch, accessToken]);
+
+  if (!accessToken && (authStatus === 'idle' || authStatus === 'loading')) {
+    return <Loading />;
+  }
+
+  if (accessToken && (appStatus === 'idle' || appStatus === 'loading')) {
     return <Loading />;
   }
 

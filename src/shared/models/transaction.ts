@@ -2,6 +2,7 @@ import { Account, AccountDTO } from './account';
 import { Auth } from './auth';
 import { Category, CategoryType } from './category';
 import { IconType } from './icon';
+import { Currency } from './setting';
 
 export interface TransactionDTO {
   id: string;
@@ -9,7 +10,9 @@ export interface TransactionDTO {
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
+  nameKey?: string;
   amount: number;
+  currencyIso: Currency['iso'];
   createdAt: Date;
   icon: string;
   accountId: AccountDTO['id'];
@@ -24,7 +27,9 @@ export interface Transaction {
   categoryId: Category['id'];
   type: CategoryType;
   name: Category['name'];
+  nameKey?: string;
   amount: string;
+  currencyIso: Currency['iso'];
   createdAt: string;
   icon: IconType;
   accountId: Account['id'];

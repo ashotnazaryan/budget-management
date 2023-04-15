@@ -11,7 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory } from 'store/reducers';
+import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory, selectCategoryError } from 'store/reducers';
 import { CATEGORY_ICONS_LIST, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
 import { categoryHelper } from 'shared/helpers';
@@ -31,7 +31,8 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
-  const { status, error = { message: '' } } = useAppSelector(selectCategory);
+  const { status } = useAppSelector(selectCategory);
+  const error = useAppSelector(selectCategoryError);
   const category = useAppSelector(selectCurrentCategory);
   const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
@@ -113,91 +114,104 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     setFormValues();
   }, [setFormValues]);
 
+  React.useEffect(() => {
+    return () => {
+      resetForm();
+    };
+  }, [resetForm]);
+
   return (
-    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
+    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
-      <Box flexGrow={1} display='flex' flexDirection='column'>
-        <FormProvider {...methods}>
-          <FormInput
-            focused
-            label={t('COMMON.NAME')}
-            name={CategoryField.name}
-            rules={{
-              required: {
-                value: true,
-                message: t(helper.name.required!.message)
-              },
-            }}
-            sx={{
-              marginBottom: 4
-            }}
-          />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
-          <Controller
-            control={control}
-            name={CategoryField.type}
-            rules={{
-              required: true
-            }}
-            render={({ field, fieldState: { error } }) => (
-              // TODO: move to a shared components
-              <RadioGroup row>
-                <FormControlLabel value={field.value}
-                  label={
-                    <Typography color={contrastText}>{t('COMMON.EXPENSE')}</Typography>
-                  }
-                  control={
-                    <Radio
-                      checked={field.value === 0}
-                      onChange={handleCategoryTypeChange}
-                      value={0}
-                    />
-                  }
-                />
-                <FormControlLabel value={field.value}
-                  label={
-                    <Typography color={contrastText}>{t('COMMON.INCOME')}</Typography>
-                  }
-                  control={
-                    <Radio
-                      checked={field.value === 1}
-                      onChange={handleCategoryTypeChange}
-                      value={1}
-                    />
-                  }
-                />
-              </RadioGroup>
-            )}
-          />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-          <Controller
-            control={control}
-            name={CategoryField.icon}
-            rules={{
-              required: true
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                  {
-                    icons.map(({ name }) => (
-                      <Grid item key={name}>
-                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
-                      </Grid>
-                    ))
-                  }
-                </Grid>
-                {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-              </>
-            )}
-          />
-        </FormProvider>
-      </Box>
+      <FormProvider {...methods}>
+        <Grid container flexGrow={1} rowGap={4}>
+          <Grid item xs={12}>
+            <FormInput
+              focused
+              label={t('COMMON.NAME')}
+              name={CategoryField.name}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.name.required!.message)
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
+            <Controller
+              control={control}
+              name={CategoryField.type}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                // TODO: move to a shared components
+                <RadioGroup row>
+                  <FormControlLabel value={field.value}
+                    label={
+                      <Typography color={contrastText}>{t('COMMON.EXPENSE')}</Typography>
+                    }
+                    control={
+                      <Radio
+                        checked={field.value === 0}
+                        onChange={handleCategoryTypeChange}
+                        value={0}
+                      />
+                    }
+                  />
+                  <FormControlLabel value={field.value}
+                    label={
+                      <Typography color={contrastText}>{t('COMMON.INCOME')}</Typography>
+                    }
+                    control={
+                      <Radio
+                        checked={field.value === 1}
+                        onChange={handleCategoryTypeChange}
+                        value={1}
+                      />
+                    }
+                  />
+                </RadioGroup>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
+            <Controller
+              control={control}
+              name={CategoryField.icon}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                    {
+                      icons.map(({ name }) => (
+                        <Grid item key={name}>
+                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
+                </>
+              )}
+            />
+          </Grid>
+        </Grid>
+      </FormProvider>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>{t('COMMON.SAVE')}</Button>
+        <Button type='submit' variant='contained' loading={loading}
+          sx={{ width: { sm: 'auto', xs: '100%' } }}
+          onClick={handleSubmit(handleFormSubmit)}>
+          {t('COMMON.SAVE')}
+        </Button>
       </Box>
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
-    </Box>
+      <Snackbar type='error' text={error?.messageKey ? t(error.messageKey) : error?.message || ''} open={showSnackbar} onClose={handleSnackbarClose} />
+    </Box >
   );
 };
 

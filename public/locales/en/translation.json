@@ -44,21 +44,25 @@
     "LANGUAGE": "Language",
     "SHOW_DECIMALS": "Show decimals (e.g. 1.23)",
     "DARK_THEME": "Dark theme",
-    "ERASE_USER_DATA": "Erase user data",
-    "ERASE_USER_DATA_DIALOG_CONFIRM": "Are you sure you want to delete all the data? This action cannot be undone.",
-    "ERASE_USER_DATA_DIALOG_TITLE": "Delete all data"
+    "RESET": "Reset",
+    "RESET_DIALOG_CONFIRM": "Are you sure you want to delete all the data? This action cannot be undone.",
+    "RESET_DIALOG_TITLE": "Delete all data"
   },
   "ACCOUNTS": {
     "PAGE_TITLE": "Accounts",
     "NEW_ACCOUNT": "New account",
     "EDIT_ACCOUNT": "Edit account",
     "EMPTY_TEXT": "No accounts available",
+    "ITEMS": {
+      "WALLET": "Wallet"
+    },
     "ERRORS": {
       "REQUIRED_BALANCE": "Balance is required",
       "INVALID_BALANCE": "Invalid balance",
       "REQUIRED_NAME": "Name is required",
       "REQUIRED_ICON": "Icon is required",
-      "REQUIRED_CURRENCY": "Currency is required"
+      "REQUIRED_CURRENCY": "Currency is required",
+      "ACCOUNT_EXISTS": "Account already exists"
     }
   },
   "CATEGORIES": {
@@ -66,10 +70,20 @@
     "NEW_CATEGORY": "New category",
     "EDIT_CATEGORY": "Edit category",
     "EMPTY_TEXT": "No categories available",
+    "ITEMS": {
+      "RENT": "Rent",
+      "GROCERIES": "Groceries",
+      "MEDIA": "Media",
+      "TRANSPORTATION": "Transportation",
+      "OTHER_EXPENSE": "Other",
+      "SALARY": "Salary",
+      "OTHER_INCOME": "Other"
+    },
     "ERRORS": {
       "REQUIRED_NAME": "Name is required",
       "REQUIRED_ICON": "Icon is required",
-      "REQUIRED_TYPE": "Type is required"
+      "REQUIRED_TYPE": "Type is required",
+      "CATEGORY_EXISTS": "Category already exists"
     }
   },
   "TRANSACTIONS": {
@@ -80,6 +94,7 @@
     "ERRORS": {
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",
+      "REQUIRED_CURRENCY": "Currency is required",
       "REQUIRED_CATEGORY": "Category is required",
       "REQUIRED_ACCOUNT": "Account is required"
     }

@@ -24,7 +24,8 @@ import {
   selectSettings,
   logout,
   selectApp,
-  selectSummary
+  selectSummary,
+  getBalance
 } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
 import Dialog from 'shared/components/Dialog';
@@ -60,6 +61,10 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
     dispatch(logout());
   };
 
+  React.useEffect(() => {
+    dispatch(getBalance());
+  }, [dispatch]);
+
   return (
     <>
       <Grid container justifyContent='flex-start' alignItems='center'>
@@ -86,7 +91,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.dashboard.path}>
-                      <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
+                      <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
                         {t(ROUTES.dashboard.name)}
                       </Button>
                     </Link>
@@ -95,7 +100,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.accounts.path}>
-                      <Button fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
+                      <Button fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
                         {t(ROUTES.accounts.name)}
                       </Button>
                     </Link>
@@ -104,7 +109,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.categories.path}>
-                      <Button fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
+                      <Button fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
                         {t(ROUTES.categories.name)}
                       </Button>
                     </Link>
@@ -113,7 +118,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.settings.path}>
-                      <Button fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
+                      <Button fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
                         {t(ROUTES.settings.name)}
                       </Button>
                     </Link>

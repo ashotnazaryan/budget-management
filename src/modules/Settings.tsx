@@ -101,8 +101,8 @@ const Settings: React.FC = () => {
               value={accounts.length ? defaultAccount : ''}
               onChange={handleAccountChange}
             >
-              {accounts.map(({ id, name }) => (
-                <MenuItem value={id} key={id}>{name}</MenuItem>
+              {accounts.map(({ id, name, nameKey }) => (
+                <MenuItem value={id} key={id}>{nameKey ? t(nameKey) : name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -158,20 +158,20 @@ const Settings: React.FC = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button color='secondary' variant='contained' onClick={handleOpenDialog}>{t('SETTINGS.ERASE_USER_DATA')}</Button>
+          <Button color='secondary' variant='contained' sx={{ width: { sm: 'auto', xs: '100%' } }} onClick={handleOpenDialog}>{t('SETTINGS.RESET')}</Button>
         </Grid>
       </Grid>
       <Dialog
         fullWidth
         maxWidth='xs'
-        title={t('SETTINGS.ERASE_USER_DATA_DIALOG_TITLE')!}
+        title={t('SETTINGS.RESET_DIALOG_TITLE')!}
         actionButtonText={t('COMMON.YES')!}
         open={dialogOpened}
         onClose={handleCloseDialog}
         onAction={deleteUserData}
       >
         <Typography variant='subtitle1'>
-          {t('SETTINGS.ERASE_USER_DATA_DIALOG_CONFIRM')}
+          {t('SETTINGS.RESET_DIALOG_CONFIRM')}
         </Typography>
       </Dialog>
     </Box>

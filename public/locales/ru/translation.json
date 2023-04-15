@@ -44,21 +44,25 @@
     "LANGUAGE": "Язык",
     "SHOW_DECIMALS": "Показать дроби (например 1,23)",
     "DARK_THEME": "Темная тема",
-    "ERASE_USER_DATA": "Удалить данные пользователя",
-    "ERASE_USER_DATA_DIALOG_CONFIRM": "Вы уверены, что хотите удалить все данные? Это действие не может быть отменено.",
-    "ERASE_USER_DATA_DIALOG_TITLE": "Удалить все данные"
+    "RESET": "Сброс",
+    "RESET_DIALOG_CONFIRM": "Вы уверены, что хотите удалить все данные? Это действие не может быть отменено.",
+    "RESET_DIALOG_TITLE": "Удалить все данные"
   },
   "ACCOUNTS": {
     "PAGE_TITLE": "Счета",
     "NEW_ACCOUNT": "Новый счет",
     "EDIT_ACCOUNT": "Изменить счет",
     "EMPTY_TEXT": "Нет счетов",
+    "ITEMS": {
+      "WALLET": "Кошелек"
+    },
     "ERRORS": {
       "REQUIRED_BALANCE": "Баланс обязателен",
       "INVALID_BALANCE": "Неверный баланс",
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
-      "REQUIRED_CURRENCY": "Валюта обязательна"
+      "REQUIRED_CURRENCY": "Валюта обязательна",
+      "ACCOUNT_EXISTS": "Счет уже существует"
     }
   },
   "CATEGORIES": {
@@ -66,10 +70,20 @@
     "NEW_CATEGORY": "Новая категория",
     "EDIT_CATEGORY": "Изменить категорию",
     "EMPTY_TEXT": "Нет категорий",
+    "ITEMS": {
+      "RENT": "Аренда",
+      "GROCERIES": "Продукты",
+      "MEDIA": "Коммунальные",
+      "TRANSPORTATION": "Транспорт",
+      "OTHER_EXPENSE": "Другое",
+      "SALARY": "Зарплата",
+      "OTHER_INCOME": "Другое"
+    },
     "ERRORS": {
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
-      "REQUIRED_TYPE": "Тип обязательный"
+      "REQUIRED_TYPE": "Тип обязательный",
+      "CATEGORY_EXISTS": "Категория уже существует"
     }
   },
   "TRANSACTIONS": {
@@ -80,6 +94,7 @@
     "ERRORS": {
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма",
+      "REQUIRED_CURRENCY": "Валюта обязательна",
       "REQUIRED_CATEGORY": "Категория обязательна",
       "REQUIRED_ACCOUNT": "Счет обязателен"
     }

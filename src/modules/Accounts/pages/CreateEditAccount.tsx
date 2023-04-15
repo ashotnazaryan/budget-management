@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectCurrentAccount, selectSettings } from 'store/reducers';
+import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectAccountError, selectCurrentAccount, selectSettings } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
 import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
@@ -33,7 +33,8 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const { state } = useLocation();
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
-  const { status, error = { message: '' } } = useAppSelector(selectAccount);
+  const { status } = useAppSelector(selectAccount);
+  const error = useAppSelector(selectAccountError);
   const account = useAppSelector(selectCurrentAccount);
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
@@ -122,90 +123,103 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setFormValues();
   }, [setFormValues]);
 
+  React.useEffect(() => {
+    return () => {
+      resetForm();
+    };
+  }, [resetForm]);
+
   return (
-    <Box display='flex' flexDirection='column' component='form' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
+    <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
-      <Box flexGrow={1} display='flex' flexDirection='column'>
-        <FormProvider {...methods}>
-          <FormInput
-            focused
-            label={t('COMMON.NAME')}
-            name={AccountField.name}
-            rules={{
-              required: {
-                value: true,
-                message: t(helper.name.required!.message)
-              },
-            }}
-            sx={{
-              marginBottom: 4
-            }}
-          />
-          <FormInput
-            label={t('COMMON.BALANCE')}
-            type='number'
-            name={AccountField.balance}
-            rules={{
-              required: {
-                value: true,
-                message: t(helper.balance.required!.message)
-              },
-              pattern: {
-                value: regex,
-                message: t(helper.balance.pattern!.message)
-              }
-            }}
-            sx={{
-              marginBottom: 4
-            }}
-          />
-          <Controller
-            control={control}
-            name={AccountField.currencyIso}
-            rules={{
-              required: true
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <Select
-                label={t('COMMON.CURRENCY')}
-                variant='outlined'
-                value={field.value}
-                onChange={handleCurrencyChange}
-              >
-                {currencies.map(({ iso, name, symbol }) => (
-                  <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-          <Controller
-            control={control}
-            name={AccountField.icon}
-            rules={{
-              required: true
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                  {
-                    icons.map(({ name }) => (
-                      <Grid item key={name}>
-                        <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
-                      </Grid>
-                    ))
-                  }
-                </Grid>
-                {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-              </>
-            )}
-          />
-        </FormProvider>
-      </Box>
+      <FormProvider {...methods}>
+        <Grid container flexGrow={1} rowGap={2}>
+          <Grid item xs={12}>
+            <FormInput
+              focused
+              label={t('COMMON.NAME')}
+              name={AccountField.name}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.name.required!.message)
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.BALANCE')}
+              type='number'
+              name={AccountField.balance}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.balance.required!.message)
+                },
+                pattern: {
+                  value: regex,
+                  message: t(helper.balance.pattern!.message)
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Controller
+              control={control}
+              name={AccountField.currencyIso}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Select
+                  fullWidth
+                  label={t('COMMON.CURRENCY')}
+                  variant='outlined'
+                  value={field.value}
+                  onChange={handleCurrencyChange}
+                >
+                  {currencies.map(({ iso, name, symbol }) => (
+                    <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
+            <Controller
+              control={control}
+              name={AccountField.icon}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                    {
+                      icons.map(({ name }) => (
+                        <Grid item key={name}>
+                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
+                </>
+              )}
+            />
+          </Grid>
+        </Grid>
+      </FormProvider>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>{t('COMMON.SAVE')}</Button>
+        <Button type='submit' variant='contained' loading={loading}
+          sx={{ width: { sm: 'auto', xs: '100%' } }}
+          onClick={handleSubmit(handleFormSubmit)}>
+          {t('COMMON.SAVE')}
+        </Button>
       </Box>
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
+      <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
     </Box>
   );
 };

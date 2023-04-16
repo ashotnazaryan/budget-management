@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleAddTransaction = (): void => {
-    navigate(`${ROUTES.transactions.path}/new`);
+    navigate(`${ROUTES.transactions.path}/new`, { state: { categoryType } });
   };
 
   const getContent = (): React.ReactElement => {

@@ -23,7 +23,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    if (status === 'idle') {
+    if (status === 'idle' || status === 'failed') {
       dispatch(getAccounts());
     }
   }, [dispatch, status]);

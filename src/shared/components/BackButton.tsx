@@ -12,6 +12,7 @@ const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
     <Button
       {...props}
       color='primary'
+      variant='outlined'
       onClick={props.onClick}
       startIcon={<ArrowBackIcon />}>
       {t('COMMON.BACK')}

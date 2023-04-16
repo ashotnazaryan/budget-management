@@ -57,7 +57,7 @@
       "WALLET": "Кошелек"
     },
     "ERRORS": {
-      "REQUIRED_BALANCE": "Баланс обязателен",
+      "REQUIRED_BALANCE": "Баланс обязательный",
       "INVALID_BALANCE": "Неверный баланс",
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
@@ -96,7 +96,8 @@
       "INVALID_AMOUNT": "Неверная сумма",
       "REQUIRED_CURRENCY": "Валюта обязательна",
       "REQUIRED_CATEGORY": "Категория обязательна",
-      "REQUIRED_ACCOUNT": "Счет обязателен"
+      "REQUIRED_ACCOUNT": "Счет обязательный",
+      "REQUIRED_TYPE": "Тип обязательный"
     }
   }
 }

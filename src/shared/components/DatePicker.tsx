@@ -17,7 +17,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, ...props }) =>
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
+      <DemoContainer sx={{ paddingTop: 2 }} components={['DatePicker']}>
         <MuiDatePicker {...props} value={dayjs(value)} onChange={onDateChange} />
       </DemoContainer>
     </LocalizationProvider>

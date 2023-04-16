@@ -13,9 +13,11 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { Account, Currency, Language } from 'shared/models';
+import { getCurrencySymbolByIsoCode, isPositiveString } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
+import Ellipsis from 'shared/components/Ellipsis';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
@@ -25,9 +27,21 @@ const Settings: React.FC = () => {
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
-  const { palette: { info: { contrastText } } } = useTheme();
+  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { i18n, t } = useTranslation();
+
+  const getAccountValue = (accountId: Account['id']): string => {
+    const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
+
+    return nameKey ? t(nameKey) : name;
+  };
+
+  const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
+    const symbol = getCurrencySymbolByIsoCode(iso);
+
+    return `${symbol}${balance}`;
+  };
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -80,7 +94,7 @@ const Settings: React.FC = () => {
       <PageTitle text={t('SETTINGS.PAGE_TITLE')} />
       <Grid container rowGap={4}>
         <Grid item xs={12}>
-          <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.DEFAULT_CURRENCY')}</Typography>
+          <Typography variant='subtitle1' color={contrastText}>{t('SETTINGS.DEFAULT_CURRENCY')}</Typography>
           <FormControl fullWidth>
             <Select
               variant='outlined'
@@ -94,21 +108,27 @@ const Settings: React.FC = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.DEFAULT_ACCOUNT')}</Typography>
+          <Typography color={contrastText}>{t('SETTINGS.DEFAULT_ACCOUNT')}</Typography>
           <FormControl fullWidth>
             <Select
               variant='outlined'
               value={accounts.length ? defaultAccount : ''}
               onChange={handleAccountChange}
+              renderValue={(value) => (
+                <Ellipsis text={getAccountValue(value)} />
+              )}
             >
-              {accounts.map(({ id, name, nameKey }) => (
-                <MenuItem value={id} key={id}>{nameKey ? t(nameKey) : name}</MenuItem>
+              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography color={contrastText} sx={{ marginY: 2 }}>{t('SETTINGS.LANGUAGE')}</Typography>
+          <Typography color={contrastText}>{t('SETTINGS.LANGUAGE')}</Typography>
           <FormControl fullWidth>
             <Select
               variant='outlined'

@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+import { RadioOption } from 'shared/components/FormRadioGroup';
 import { CURRENCIES } from 'shared/constants';
 import { Currency } from 'shared/models';
 
@@ -22,4 +24,14 @@ export const isPositiveString = (value: string): boolean => {
 
 export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Currency['symbol'] => {
   return CURRENCIES.find(({ iso }) => iso === currencyIso)?.symbol || CURRENCIES[0].symbol;
+};
+
+export const mapCategoryTypesWithTranslations = (categoryTabs: RadioOption[], t: TFunction<'translation'>
+): RadioOption[] => {
+  return categoryTabs.map((categoryTab) => {
+    return {
+      ...categoryTab,
+      label: t(categoryTab.label)
+    };
+  });
 };

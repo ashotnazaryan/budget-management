@@ -28,7 +28,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const [categoryType, setCategoryType] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (status === 'idle') {
+    if (status === 'idle' || status === 'failed') {
       dispatch(getCategories());
     }
   }, [dispatch, status]);
@@ -42,7 +42,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   };
 
   const openNewCategoryPage = (): void => {
-    navigate(`${ROUTES.categories.path}/new`);
+    navigate(`${ROUTES.categories.path}/new`, { state: { categoryType } });
   };
 
   const getIconColor = (): string => {

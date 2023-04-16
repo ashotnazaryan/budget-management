@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
-import { mapTransaction, mapTransactions } from 'shared/helpers/transaction.helpers';
+import { mapTransaction, mapTransactions } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { getSummary } from './summarySlice';
 import { resetApp } from './appSlice';

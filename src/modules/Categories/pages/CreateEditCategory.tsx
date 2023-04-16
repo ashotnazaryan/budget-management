@@ -5,21 +5,19 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory, selectCategoryError } from 'store/reducers';
-import { CATEGORY_ICONS_LIST, ROUTES } from 'shared/constants';
+import { CATEGORY_ICONS_LIST, CATEGORY_TABS, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
-import { categoryHelper } from 'shared/helpers';
+import { categoryHelper, mapCategoryTypesWithTranslations } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
+import FormRadioGroup from 'shared/components/FormRadioGroup';
 
 interface NewCategoryProps {
   mode: 'create' | 'edit';
@@ -28,6 +26,7 @@ interface NewCategoryProps {
 const icons = CATEGORY_ICONS_LIST;
 
 const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
+  const categoryTabs = CATEGORY_TABS;
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
@@ -40,10 +39,11 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const categoryId = state?.id || null;
+  const categoryId = state?.id as string;
+  const categoryType = state?.categoryType as CategoryType;
 
   const defaultValues: Partial<CategoryDTO> = {
-    type: CategoryType.expense,
+    type: String(categoryType) as unknown as number,
     name: '',
   };
 
@@ -53,14 +53,15 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { setValue, handleSubmit, control } = methods;
+  const { setValue, handleSubmit, control, watch } = methods;
+  const watchType = Number(watch(CategoryField.type));
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
     setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
   };
 
-  const handleCategoryTypeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const type = Number(event.target.value) as CategoryType;
+  const handleCategoryTypeChange = (value: string): void => {
+    const type = Number(value) as CategoryType;
 
     setValue(CategoryField.type, type, { shouldValidate: true });
   };
@@ -72,7 +73,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
 
   const setFormValues = React.useCallback(() => {
     if (category) {
-      setValue(CategoryField.type, category.type);
+      setValue(CategoryField.type, String(category.type) as unknown as number);
       setValue(CategoryField.name, category.name);
       setValue(CategoryField.icon, category.icon);
     }
@@ -123,86 +124,64 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
-      <FormProvider {...methods}>
-        <Grid container flexGrow={1} rowGap={4}>
-          <Grid item xs={12}>
-            <FormInput
-              focused
-              label={t('COMMON.NAME')}
-              name={CategoryField.name}
-              rules={{
-                required: {
-                  value: true,
-                  message: t(helper.name.required!.message)
-                },
-              }}
-            />
+      <Box flexGrow={1}>
+        <FormProvider {...methods}>
+          <Grid container rowGap={5}>
+            <Grid item xs={12}>
+              <FormInput
+                label={t('COMMON.NAME')}
+                name={CategoryField.name}
+                rules={{
+                  required: {
+                    value: true,
+                    message: t(helper.name.required!.message)
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
+              <FormRadioGroup
+                name={CategoryField.type}
+                rules={{
+                  required: {
+                    value: true,
+                    message: t(helper.type.required!.message)
+                  }
+                }}
+                options={mapCategoryTypesWithTranslations(categoryTabs, t)}
+                labelColor={contrastText}
+                value={watchType}
+                onRadioChange={handleCategoryTypeChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
+              <Controller
+                control={control}
+                name={CategoryField.icon}
+                rules={{
+                  required: true
+                }}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                      {
+                        icons.map(({ name }) => (
+                          <Grid item key={name}>
+                            <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                          </Grid>
+                        ))
+                      }
+                    </Grid>
+                    {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
+                  </>
+                )}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
-            <Controller
-              control={control}
-              name={CategoryField.type}
-              rules={{
-                required: true
-              }}
-              render={({ field, fieldState: { error } }) => (
-                // TODO: move to a shared components
-                <RadioGroup row>
-                  <FormControlLabel value={field.value}
-                    label={
-                      <Typography color={contrastText}>{t('COMMON.EXPENSE')}</Typography>
-                    }
-                    control={
-                      <Radio
-                        checked={field.value === 0}
-                        onChange={handleCategoryTypeChange}
-                        value={0}
-                      />
-                    }
-                  />
-                  <FormControlLabel value={field.value}
-                    label={
-                      <Typography color={contrastText}>{t('COMMON.INCOME')}</Typography>
-                    }
-                    control={
-                      <Radio
-                        checked={field.value === 1}
-                        onChange={handleCategoryTypeChange}
-                        value={1}
-                      />
-                    }
-                  />
-                </RadioGroup>
-              )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-            <Controller
-              control={control}
-              name={CategoryField.icon}
-              rules={{
-                required: true
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                    {
-                      icons.map(({ name }) => (
-                        <Grid item key={name}>
-                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
-                        </Grid>
-                      ))
-                    }
-                  </Grid>
-                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-                </>
-              )}
-            />
-          </Grid>
-        </Grid>
-      </FormProvider>
+        </FormProvider>
+      </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button type='submit' variant='contained' loading={loading}
           sx={{ width: { sm: 'auto', xs: '100%' } }}

@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import GoogleIcon from '@mui/icons-material/Google';
 import { useTheme } from '@mui/material/styles';
 import FormInput from 'shared/components/FormInput';
 
@@ -50,7 +51,7 @@ const Login: React.FC = () => {
               <Box display='flex' flexDirection='column'
                 sx={{ paddingLeft: { sm: 4 }, rowGap: 1 }}
               >
-                <Button color='secondary' variant='contained' onClick={() => googleLogin()}>
+                <Button variant='outlined' startIcon={<GoogleIcon />} onClick={googleLogin}>
                   Google
                 </Button>
               </Box>

@@ -28,7 +28,7 @@ import {
   deleteTransaction
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
-import { CATEGORY_TABS, CURRENCIES, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
+import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { getCurrencySymbolByIsoCode, isPositiveString, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
@@ -48,7 +48,6 @@ interface CreateEditTransactionProps {
 const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const categoryTabs = CATEGORY_TABS;
-  const currencies = CURRENCIES;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -57,7 +56,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { status, deleteStatus, error = { message: '' } } = useAppSelector(selectTransaction);
   const { accounts } = useAppSelector(selectAccount);
   const accountStatus = useAppSelector(selectAccountStatus);
-  const { defaultAccount = '', defaultCurrency } = useAppSelector(selectSettings);
+  const { defaultAccount = '' } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
@@ -74,7 +73,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
   const defaultValues: Partial<TransactionDTO> = {
     amount: '' as unknown as number,
-    currencyIso: defaultCurrency.iso,
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
@@ -89,7 +87,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
   const { setValue, handleSubmit, control, watch } = methods;
   const watchType = watch(TransactionField.type);
-  const watchCurrency = watch(TransactionField.currencyIso);
   const watchAccount = watch(TransactionField.accountId);
 
   const getAccountValue = (accountId: Account['id']): string => {
@@ -136,12 +133,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setValue(TransactionField.createdAt, value!.toDate(), { shouldValidate: true });
   };
 
-  const handleCurrencyChange = (event: SelectChangeEvent): void => {
-    const isoCode = event.target.value as Currency['iso'];
-
-    setValue(TransactionField.currencyIso, isoCode, { shouldValidate: true });
-  };
-
   const handleFormSubmit = (data: TransactionDTO): void => {
     const mappedData: TransactionDTO = {
       ...data,
@@ -176,7 +167,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.accountId, transaction.accountId);
       setValue(TransactionField.icon, transaction.icon);
       setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
-      setValue(TransactionField.currencyIso, transaction.currencyIso);
       setValue(TransactionField.type, String(transaction.type) as unknown as number);
       setValue(TransactionField.createdAt, transaction.createdAt as unknown as Date);
       setValue('name', transaction.name);
@@ -225,9 +215,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [transactionId, isEditMode, dispatch]);
 
   React.useEffect(() => {
-    setValue(TransactionField.currencyIso, defaultCurrency.iso);
     setValue(TransactionField.accountId, defaultAccount);
-  }, [setValue, defaultAccount, defaultCurrency]);
+  }, [setValue, defaultAccount]);
 
   React.useEffect(() => {
     setFormValues();
@@ -262,25 +251,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               />
             </Grid>
             <Grid item container xs={12} columnSpacing={2} rowGap={3} display='flex' alignItems='flex-end'>
-              <Grid item sm={4} xs={12}>
-                <FormSelect
-                  label={t('COMMON.CURRENCY')}
-                  name={TransactionField.currencyIso}
-                  value={watchCurrency || defaultCurrency.iso}
-                  onChange={handleCurrencyChange}
-                  rules={{
-                    required: {
-                      value: true,
-                      message: t(helper.currencyIso.required!.message)
-                    }
-                  }}
-                >
-                  {currencies.map(({ iso, name, symbol }) => (
-                    <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-                  ))}
-                </FormSelect>
-              </Grid>
-              <Grid item sm={8} xs={12}>
+              <Grid item xs={12}>
                 <FormInput
                   label={t('COMMON.AMOUNT')}
                   type='number'

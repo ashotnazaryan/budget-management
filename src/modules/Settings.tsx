@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { addSetting, selectSettings, eraseUserData, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
+import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { Account, Currency, Language } from 'shared/models';
 import { getCurrencySymbolByIsoCode, isPositiveString } from 'shared/helpers';
@@ -79,7 +79,7 @@ const Settings: React.FC = () => {
   };
 
   const deleteUserData = (): void => {
-    dispatch(eraseUserData(userId));
+    dispatch(reset(userId));
   };
 
   React.useEffect(() => {

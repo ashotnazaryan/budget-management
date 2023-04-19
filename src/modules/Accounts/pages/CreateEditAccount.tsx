@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectAccountError, selectCurrentAccount, selectSettings } from 'store/reducers';
+import { createAccount, deleteAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectAccountError, selectCurrentAccount, selectSettings } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
 import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
@@ -20,6 +20,7 @@ import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
 import FormSelect from 'shared/components/FormSelect';
+import Dialog from 'shared/components/Dialog';
 
 interface CreateEditAccountProps {
   mode: 'create' | 'edit';
@@ -34,16 +35,20 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const { state } = useLocation();
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
-  const { status } = useAppSelector(selectAccount);
+  const { status, deleteStatus } = useAppSelector(selectAccount);
   const error = useAppSelector(selectAccountError);
   const account = useAppSelector(selectCurrentAccount);
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const helper = accountHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const accountId = state?.id || null;
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const accountId = state?.id as AccountDTO['id'];
+  const isEditMode = mode === 'edit';
 
   const defaultValues: Partial<AccountDTO> = {
     balance: 0,
@@ -70,14 +75,19 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setValue(AccountField.currencyIso, iso, { shouldValidate: true });
   };
 
-  const handleFormSubmit = async (data: AccountDTO): Promise<void> => {
+  const handleFormSubmit = (data: AccountDTO): void => {
     const mappedData: AccountDTO = {
       ...data,
       balance: Number(data.balance)
     };
 
-    mode === 'create' ? dispatch(createAccount(mappedData)) : dispatch(editAccount([accountId, mappedData]));
+    isEditMode ? dispatch(editAccount([accountId, mappedData])) : dispatch(createAccount(mappedData));
     setFormSubmitted(true);
+  };
+
+  const handleDeleteAccount = (): void => {
+    dispatch(deleteAccount(accountId));
+    setDeleteClicked(true);
   };
 
   const handleSnackbarClose = (): void => {
@@ -85,7 +95,15 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? t('ACCOUNTS.NEW_ACCOUNT') : t('ACCOUNTS.EDIT_ACCOUNT');
+    return isEditMode ? t('ACCOUNTS.EDIT_ACCOUNT') : t('ACCOUNTS.NEW_ACCOUNT');
+  };
+
+  const handleOpenDialog = (): void => {
+    setDialogOpened(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setDialogOpened(false);
   };
 
   const setFormValues = React.useCallback(() => {
@@ -113,13 +131,19 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
-  }, [goBack, loading, status, formSubmitted, dispatch]);
+  }, [goBack, status, formSubmitted]);
 
   React.useEffect(() => {
-    if (accountId && mode === 'edit') {
+    if (deleteStatus === 'succeeded' && deleteClicked) {
+      goBack();
+    }
+  }, [goBack, deleteStatus, deleteClicked]);
+
+  React.useEffect(() => {
+    if (accountId && isEditMode) {
       dispatch(getAccount(accountId));
     }
-  }, [accountId, mode, dispatch]);
+  }, [accountId, isEditMode, dispatch]);
 
   React.useEffect(() => {
     setFormValues();
@@ -139,7 +163,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
           <Grid container rowGap={7}>
             <Grid item xs={12}>
               <FormInput
-                focused
                 label={t('COMMON.NAME')}
                 name={AccountField.name}
                 rules={{
@@ -209,6 +232,14 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                 )}
               />
             </Grid>
+            {isEditMode && (
+              <Grid item xs={12}>
+                <Button color='secondary' variant='contained'
+                  onClick={handleOpenDialog}>
+                  {t('COMMON.DELETE')}
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </FormProvider>
       </Box>
@@ -220,6 +251,20 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         </Button>
       </Box>
       <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
+      <Dialog
+        fullWidth
+        maxWidth='xs'
+        title={t('ACCOUNTS.DELETE_DIALOG_TITLE')!}
+        actionButtonText={t('COMMON.YES')!}
+        open={dialogOpened}
+        loading={deleteLoading}
+        onClose={handleCloseDialog}
+        onAction={handleDeleteAccount}
+      >
+        <Typography variant='subtitle1'>
+          {t('ACCOUNTS.DELETE_DIALOG_CONFIRM')}
+        </Typography>
+      </Dialog>
     </Box>
   );
 };

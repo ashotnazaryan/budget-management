@@ -6,17 +6,21 @@ import { mapTransaction, mapTransactions } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { getSummary } from './summarySlice';
 import { resetApp } from './appSlice';
+import { getAccounts } from './accountSlice';
 
 export interface TransactionState {
   transactions: Transaction[];
   status: StatusState;
+  deleteStatus: StatusState;
   currentTransaction?: Transaction;
   error?: ErrorResponse;
 }
 
 const initialState: TransactionState = {
   transactions: [],
-  status: 'idle'
+  status: 'idle',
+  // TODO: create other statuses
+  deleteStatus: 'idle'
 };
 
 export const getTransactions = createAsyncThunk('transactions/getTransactions', async (): Promise<Transaction[]> => {
@@ -78,9 +82,24 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
       const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`, transaction);
 
       if (response?.data) {
-        dispatch(getSummary());
         dispatch(getTransactions());
+        dispatch(getSummary());
       }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
+
+export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rejectValue: ErrorResponse }>(
+  'transactions/deleteTransaction',
+  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`);
+
+      dispatch(getTransactions());
+      dispatch(getSummary());
+      dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
       return rejectWithValue(error.error);
@@ -161,6 +180,25 @@ export const transactionSlice = createSlice({
         return {
           ...state,
           status: 'succeeded'
+        };
+      })
+      .addCase(deleteTransaction.pending, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'loading'
+        };
+      })
+      .addCase(deleteTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+        return {
+          ...state,
+          deleteStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(deleteTransaction.fulfilled, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'succeeded'
         };
       })
       .addCase(resetApp, () => {

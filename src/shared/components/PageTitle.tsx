@@ -20,7 +20,7 @@ const PageTitle: React.FC<PageTitleProps> = ({ text, withBackButton = false, onB
   };
 
   return (
-    <Box display='flex' alignItems='center' sx={{ marginBottom: 5, position: 'relative' }}>
+    <Box display='flex' alignItems='center' sx={{ marginTop: 2, marginBottom: 5, position: 'relative' }}>
       {withBackButton && <BackButton onClick={onClick} sx={{ position: 'absolute', left: 0, fontSize: { sm: 15, xs: 12 } }} />}
       <Typography
         color={contrastText}

@@ -24,7 +24,8 @@ import {
   resetCurrentTransaction,
   editTransaction,
   selectCategoryStatus,
-  selectAccountStatus
+  selectAccountStatus,
+  deleteTransaction
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
 import { CATEGORY_TABS, CURRENCIES, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
@@ -38,6 +39,7 @@ import Ellipsis from 'shared/components/Ellipsis';
 import DatePicker from 'shared/components/DatePicker';
 import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
+import Dialog from 'shared/components/Dialog';
 
 interface CreateEditTransactionProps {
   mode: 'create' | 'edit';
@@ -52,19 +54,23 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { state } = useLocation();
   const { categories } = useAppSelector(selectCategory);
   const categoryStatus = useAppSelector(selectCategoryStatus);
-  const { status, error = { message: '' } } = useAppSelector(selectTransaction);
+  const { status, deleteStatus, error = { message: '' } } = useAppSelector(selectTransaction);
   const { accounts } = useAppSelector(selectAccount);
   const accountStatus = useAppSelector(selectAccountStatus);
   const { defaultAccount = '', defaultCurrency } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
   const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const helper = transactionHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const transactionId = state?.id as string;
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const transactionId = state?.id as TransactionDTO['id'];
   const categoryType = state?.categoryType as CategoryType || CategoryType.expense;
+  const isEditMode = mode === 'edit';
 
   const defaultValues: Partial<TransactionDTO> = {
     amount: '' as unknown as number,
@@ -143,12 +149,25 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       type: Number(data.type)
     };
 
-    mode === 'create' ? dispatch(addTransaction(mappedData)) : dispatch(editTransaction([transactionId, mappedData]));
+    isEditMode ? dispatch(editTransaction([transactionId, mappedData])) : dispatch(addTransaction(mappedData));
     setFormSubmitted(true);
   };
 
+  const handleDeleteTransaction = (): void => {
+    dispatch(deleteTransaction(transactionId));
+    setDeleteClicked(true);
+  };
+
+  const handleOpenDialog = (): void => {
+    setDialogOpened(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setDialogOpened(false);
+  };
+
   const getTitle = (): string => {
-    return mode === 'create' ? t('TRANSACTIONS.NEW_TRANSACTION') : t('TRANSACTIONS.EDIT_TRANSACTION');
+    return isEditMode ? t('TRANSACTIONS.EDIT_TRANSACTION') : t('TRANSACTIONS.NEW_TRANSACTION');
   };
 
   const setFormValues = React.useCallback(() => {
@@ -169,9 +188,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
-    navigate(`${mode === 'create' ? ROUTES.dashboard.path : ROUTES.transactions.path}`);
+    navigate(`${isEditMode ? ROUTES.transactions.path : ROUTES.dashboard.path}`);
     resetForm();
-  }, [navigate, resetForm, mode]);
+  }, [navigate, resetForm, isEditMode]);
 
   React.useEffect(() => {
     if (categoryStatus === 'idle') {
@@ -191,13 +210,19 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
-  }, [goBack, loading, status, formSubmitted, dispatch]);
+  }, [dispatch, goBack, status, formSubmitted]);
 
   React.useEffect(() => {
-    if (transactionId && mode === 'edit') {
+    if (deleteStatus === 'succeeded' && deleteClicked) {
+      goBack();
+    }
+  }, [goBack, deleteStatus, deleteClicked]);
+
+  React.useEffect(() => {
+    if (transactionId && isEditMode) {
       dispatch(getTransaction(transactionId));
     }
-  }, [transactionId, mode, dispatch]);
+  }, [transactionId, isEditMode, dispatch]);
 
   React.useEffect(() => {
     setValue(TransactionField.currencyIso, defaultCurrency.iso);
@@ -330,6 +355,14 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 )}
               />
             </Grid>
+            {isEditMode && (
+              <Grid item xs={12}>
+                <Button color='secondary' variant='contained'
+                  onClick={handleOpenDialog}>
+                  {t('COMMON.DELETE')}
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </FormProvider>
       </Box>
@@ -341,6 +374,20 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
         </Button>
       </Box>
       <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
+      <Dialog
+        fullWidth
+        maxWidth='xs'
+        title={t('TRANSACTIONS.DELETE_DIALOG_TITLE')!}
+        actionButtonText={t('COMMON.YES')!}
+        open={dialogOpened}
+        loading={deleteLoading}
+        onClose={handleCloseDialog}
+        onAction={handleDeleteTransaction}
+      >
+        <Typography variant='subtitle1'>
+          {t('TRANSACTIONS.DELETE_DIALOG_CONFIRM')}
+        </Typography>
+      </Dialog>
     </Box>
   );
 };

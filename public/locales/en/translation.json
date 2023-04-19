@@ -100,7 +100,6 @@
     "ERRORS": {
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",
-      "REQUIRED_CURRENCY": "Currency is required",
       "REQUIRED_CATEGORY": "Category is required",
       "REQUIRED_ACCOUNT": "Account is required",
       "REQUIRED_TYPE": "Type is required"

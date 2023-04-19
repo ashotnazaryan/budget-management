@@ -100,7 +100,6 @@
     "ERRORS": {
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма",
-      "REQUIRED_CURRENCY": "Валюта обязательна",
       "REQUIRED_CATEGORY": "Категория обязательна",
       "REQUIRED_ACCOUNT": "Счет обязательный",
       "REQUIRED_TYPE": "Тип обязательный"

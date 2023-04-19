@@ -3,7 +3,6 @@ import { FieldError } from 'react-hook-form';
 /* eslint-disable no-unused-vars */
 export enum TransactionField {
   amount = 'amount',
-  currencyIso = 'currencyIso',
   categoryId = 'categoryId',
   type = 'type',
   icon = 'icon',

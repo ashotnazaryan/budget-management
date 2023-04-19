@@ -14,11 +14,11 @@ const initialState: AppState = {
   status: 'idle'
 };
 
-export const eraseUserData = createAsyncThunk<void, string, { rejectValue: ErrorResponse }>(
-  'app/eraseUserData',
+export const reset = createAsyncThunk<void, string, { rejectValue: ErrorResponse }>(
+  'app/reset',
   async (userId, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/${userId}/delete-all`);
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/${userId}/reset`);
 
       dispatch(resetApp());
     } catch (error: any) {
@@ -55,20 +55,20 @@ const appSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(eraseUserData.pending, (state) => {
+      .addCase(reset.pending, (state) => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(eraseUserData.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(reset.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
           error: action.payload,
           status: 'failed'
         };
       })
-      .addCase(eraseUserData.fulfilled, () => {
+      .addCase(reset.fulfilled, () => {
         return {
           ...initialState,
           status: 'succeeded'

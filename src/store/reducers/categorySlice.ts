@@ -10,13 +10,16 @@ import { getTransactions } from './transactionSlice';
 export interface CategoryState {
   categories: Category[];
   status: StatusState;
+  deleteStatus: StatusState;
   currentCategory?: Category;
   error?: ErrorResponse;
 }
 
 const initialState: CategoryState = {
+  categories: [],
   status: 'idle',
-  categories: []
+  // TODO: create other statuses
+  deleteStatus: 'idle'
 };
 
 export const getCategories = createAsyncThunk<Category[], void>('categories/getCategories', async (): Promise<Category[]> => {
@@ -77,6 +80,21 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
         dispatch(getSummary());
         dispatch(getTransactions());
       }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
+
+export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectValue: ErrorResponse }>(
+  'categories/deleteCategory',
+  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`);
+
+      dispatch(getCategories());
+      dispatch(getSummary());
+      dispatch(getTransactions());
     } catch (error: any) {
       console.error(error);
       return rejectWithValue(error.error);
@@ -157,6 +175,25 @@ export const categorySlice = createSlice({
         return {
           ...state,
           status: 'succeeded'
+        };
+      })
+      .addCase(deleteCategory.pending, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'loading'
+        };
+      })
+      .addCase(deleteCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+        return {
+          ...state,
+          deleteStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(deleteCategory.fulfilled, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'succeeded'
         };
       })
       .addCase(resetApp, () => {

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory, selectCategoryError } from 'store/reducers';
+import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory, selectCategoryError, deleteCategory } from 'store/reducers';
 import { CATEGORY_ICONS_LIST, CATEGORY_TABS, ROUTES } from 'shared/constants';
 import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
 import { categoryHelper, mapCategoryTypesWithTranslations } from 'shared/helpers';
@@ -18,6 +18,7 @@ import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
+import Dialog from 'shared/components/Dialog';
 
 interface NewCategoryProps {
   mode: 'create' | 'edit';
@@ -30,17 +31,21 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector(selectCategory);
+  const { status, deleteStatus } = useAppSelector(selectCategory);
   const error = useAppSelector(selectCategoryError);
   const category = useAppSelector(selectCurrentCategory);
   const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const helper = categoryHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const categoryId = state?.id as string;
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const categoryId = state?.id as CategoryDTO['id'];
   const categoryType = state?.categoryType as CategoryType;
+  const isEditMode = mode === 'edit';
 
   const defaultValues: Partial<CategoryDTO> = {
     type: String(categoryType) as unknown as number,
@@ -67,8 +72,21 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   };
 
   const handleFormSubmit = (data: CategoryDTO): void => {
-    mode === 'create' ? dispatch(createCategory(data)) : dispatch(editCategory([categoryId, data]));
+    isEditMode ? dispatch(editCategory([categoryId, data])) : dispatch(createCategory(data));
     setFormSubmitted(true);
+  };
+
+  const handleDeleteCategory = (): void => {
+    dispatch(deleteCategory(categoryId));
+    setDeleteClicked(true);
+  };
+
+  const handleOpenDialog = (): void => {
+    setDialogOpened(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setDialogOpened(false);
   };
 
   const setFormValues = React.useCallback(() => {
@@ -93,7 +111,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return mode === 'create' ? t('CATEGORIES.NEW_CATEGORY') : t('CATEGORIES.EDIT_CATEGORY');
+    return isEditMode ? t('CATEGORIES.EDIT_CATEGORY') : t('CATEGORIES.NEW_CATEGORY');
   };
 
   React.useEffect(() => {
@@ -103,13 +121,19 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     } else if (status === 'failed') {
       setShowSnackbar(true);
     }
-  }, [goBack, loading, status, formSubmitted]);
+  }, [goBack, status, formSubmitted]);
 
   React.useEffect(() => {
-    if (categoryId && mode === 'edit') {
+    if (deleteStatus === 'succeeded' && deleteClicked) {
+      goBack();
+    }
+  }, [goBack, deleteStatus, deleteClicked]);
+
+  React.useEffect(() => {
+    if (categoryId && isEditMode) {
       dispatch(getCategory(categoryId));
     }
-  }, [categoryId, mode, dispatch]);
+  }, [categoryId, isEditMode, dispatch]);
 
   React.useEffect(() => {
     setFormValues();
@@ -179,6 +203,14 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                 )}
               />
             </Grid>
+            {isEditMode && (
+              <Grid item xs={12}>
+                <Button color='secondary' variant='contained'
+                  onClick={handleOpenDialog}>
+                  {t('COMMON.DELETE')}
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </FormProvider>
       </Box>
@@ -190,6 +222,20 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         </Button>
       </Box>
       <Snackbar type='error' text={error?.messageKey ? t(error.messageKey) : error?.message || ''} open={showSnackbar} onClose={handleSnackbarClose} />
+      <Dialog
+        fullWidth
+        maxWidth='xs'
+        title={t('CATEGORIES.DELETE_DIALOG_TITLE')!}
+        actionButtonText={t('COMMON.YES')!}
+        open={dialogOpened}
+        loading={deleteLoading}
+        onClose={handleCloseDialog}
+        onAction={handleDeleteCategory}
+      >
+        <Typography variant='subtitle1'>
+          {t('CATEGORIES.DELETE_DIALOG_CONFIRM')}
+        </Typography>
+      </Dialog>
     </Box >
   );
 };

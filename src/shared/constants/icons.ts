@@ -18,6 +18,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import SavingsIcon from '@mui/icons-material/Savings';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import GoogleIcon from '@mui/icons-material/Google';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const CATEGORY_ICONS: IconTypes = {
@@ -46,7 +47,8 @@ export const ACCOUNT_ICONS: IconTypes = {
 };
 
 export const OTHER_ICONS: IconTypes = {
-  [IconType.plus]: AddIcon
+  [IconType.plus]: AddIcon,
+  [IconType.google]: GoogleIcon
 };
 
 export const ALL_ICONS: IconTypes = {

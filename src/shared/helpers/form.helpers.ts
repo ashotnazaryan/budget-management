@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { AccountField, CategoryField, ErrorType, TransactionField } from 'shared/models';
+import { AccountField, CategoryField, ErrorType, TransactionField, TransferField } from 'shared/models';
 
 export const transactionHelper = (): { [key in TransactionField]: ErrorType } => ({
   [TransactionField.amount]: {
@@ -26,7 +26,8 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
     }
   },
   [TransactionField.icon]: {},
-  [TransactionField.createdAt]: {}
+  [TransactionField.createdAt]: {},
+  [TransactionField.note]: {}
 });
 
 export const accountHelper = (): { [key in AccountField]: ErrorType } => ({
@@ -71,4 +72,26 @@ export const categoryHelper = (): { [key in CategoryField]: ErrorType } => ({
       message: 'CATEGORIES.ERRORS.REQUIRED_TYPE'
     }
   }
+});
+
+export const transferHelper = (): { [key in TransferField]: ErrorType } => ({
+  [TransferField.fromAccount]: {
+    required: {
+      message: 'ACCOUNTS.ERRORS.REQUIRED_FROM_ACCOUNT'
+    }
+  },
+  [TransferField.toAccount]: {
+    required: {
+      message: 'ACCOUNTS.ERRORS.REQUIRED_TO_ACCOUNT'
+    }
+  },
+  [TransferField.amount]: {
+    required: {
+      message: 'ACCOUNTS.ERRORS.REQUIRED_AMOUNT'
+    },
+    pattern: {
+      message: 'ACCOUNTS.ERRORS.INVALID_AMOUNT'
+    }
+  },
+  [TransferField.createdAt]: {},
 });

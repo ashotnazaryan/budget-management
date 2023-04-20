@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/system/Box';
 import { useAppSelector } from 'store';
+import { selectSettings } from 'store/reducers';
 import { lightTheme, darkTheme } from 'core/theme.config';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
 import { ROUTES } from 'shared/constants';
@@ -12,7 +13,7 @@ import Settings from './Settings';
 import Transactions from './Transactions/Transactions';
 import Categories from './Categories/Categories';
 import Accounts from './Accounts/Accounts';
-import { selectSettings } from 'store/reducers';
+import Transfers from './Transfers/Transfers';
 
 const App: React.FC = () => {
   const { isDarkTheme } = useAppSelector(selectSettings);
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path={`${ROUTES.transactions.path}/*`} element={<Transactions />} />
             <Route path={`${ROUTES.categories.path}/*`} element={<Categories />} />
             <Route path={`${ROUTES.accounts.path}/*`} element={<Accounts />} />
+            <Route path={`${ROUTES.transfers.path}/*`} element={<Transfers />} />
             <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
           </Route>
         </Routes>

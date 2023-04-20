@@ -7,7 +7,8 @@ export enum TransactionField {
   type = 'type',
   icon = 'icon',
   accountId = 'accountId',
-  createdAt = 'createdAt'
+  createdAt = 'createdAt',
+  note = 'note'
 }
 
 export enum AccountField {
@@ -21,6 +22,13 @@ export enum CategoryField {
   icon = 'icon',
   name = 'name',
   type = 'type'
+}
+
+export enum TransferField {
+  fromAccount = 'fromAccount',
+  toAccount = 'toAccount',
+  amount = 'amount',
+  createdAt = 'createdAt'
 }
 
 type FieldErrorType = FieldError['type'];

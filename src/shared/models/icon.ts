@@ -26,6 +26,7 @@ export enum IconType {
   savings = 'savings',
   // Other icons
   plus = 'plus',
+  google = 'google'
 }
 
 export interface Icon {

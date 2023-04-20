@@ -16,7 +16,10 @@
     "BALANCE": "Баланс",
     "CURRENCY": "Валюта",
     "ICON": "Иконка",
-    "TYPE": "Тип"
+    "TYPE": "Тип",
+    "NOTE": "Записка",
+    "FROM": "С",
+    "TO": "К"
   },
   "SIDEBAR": {
     "LOGOUT": "Выход",
@@ -30,6 +33,7 @@
     "SETTINGS": "Настройки",
     "CATEGORIES": "Категории",
     "ACCOUNTS": "Счета",
+    "TRANSFERS": "Трансферы",
     "TRANSACTIONS": "Транзакции"
   },
   "DASHBOARD": {
@@ -53,7 +57,11 @@
     "PAGE_TITLE": "Счета",
     "NEW_ACCOUNT": "Новый счет",
     "EDIT_ACCOUNT": "Изменить счет",
+    "NEW_TRANSFER": "Новый трансфер",
+    "EDIT_TRANSFER": "Изменить трансфер",
     "EMPTY_TEXT": "Нет счетов",
+    "FROM_ACCOUNT": "Из счета",
+    "TO_ACCOUNT": "К счету",
     "ITEMS": {
       "WALLET": "Кошелек"
     },
@@ -63,7 +71,11 @@
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
       "REQUIRED_CURRENCY": "Валюта обязательна",
-      "ACCOUNT_EXISTS": "Счет уже существует"
+      "ACCOUNT_EXISTS": "Счет уже существует",
+      "REQUIRED_FROM_ACCOUNT": "От счета обязательно",
+      "REQUIRED_TO_ACCOUNT": "К счету обязательно",
+      "REQUIRED_AMOUNT": "Сумма обязательна",
+      "INVALID_AMOUNT": "Неверная сумма"
     },
     "DELETE_DIALOG_TITLE": "Удалить счет",
     "DELETE_DIALOG_CONFIRM": "Вы уверены, что хотите удалить этот счет? Это действие повлечет за собой удаление всех транзакций выполненных этим счетом."

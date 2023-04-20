@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
-import { isPositiveString } from 'shared/helpers';
+import { Currency } from 'shared/models';
 import Ellipsis from 'shared/components/Ellipsis';
+import Balance from 'shared/components/Balance';
 
 interface UserBalanceInfoProps {
   fullName: string;
   balance: string;
-  currency: string;
+  currencySymbol: Currency['symbol'];
   avatar?: string;
 }
 
-const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, fullName = '', balance = '0' }) => {
-  const { palette: { primary: { main }, info: { contrastText }, error } } = useTheme();
-  const { t } = useTranslation();
+const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbol, fullName = '', balance = '0' }) => {
+  const { palette: { primary: { main } } } = useTheme();
 
   return (
     <Grid container alignItems='center' columnSpacing={2}>
@@ -27,7 +26,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currency, ful
           <Ellipsis text={fullName} sx={{ fontSize: { sm: 18, xs: 16 } }} />
         </Grid>
         <Grid item xs={12}>
-          <Ellipsis text={`${t('COMMON.BALANCE')}: ${currency}${balance}`} color={isPositiveString(balance) ? contrastText : error.main} />
+          <Balance balance={balance} currencySymbol={currencySymbol} />
         </Grid>
       </Grid>
     </Grid>

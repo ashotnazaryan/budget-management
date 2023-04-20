@@ -76,7 +76,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: new Date()
+    createdAt: new Date(),
+    note: ''
   };
 
   const methods = useForm<TransactionDTO>({
@@ -89,12 +90,14 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const watchType = watch(TransactionField.type);
   const watchAccount = watch(TransactionField.accountId);
 
+  // TODO: move to account.hrlpers
   const getAccountValue = (accountId: Account['id']): string => {
     const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
 
     return nameKey ? t(nameKey) : name;
   };
 
+  // TODO: move to account.hrlpers
   const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
     const symbol = getCurrencySymbolByIsoCode(iso);
 
@@ -169,6 +172,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
       setValue(TransactionField.type, String(transaction.type) as unknown as number);
       setValue(TransactionField.createdAt, transaction.createdAt as unknown as Date);
+      setValue(TransactionField.note, transaction.note);
       setValue('name', transaction.name);
     }
   }, [transaction, setValue]);
@@ -250,26 +254,25 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 onRadioChange={handleCategoryTypeChange}
               />
             </Grid>
-            <Grid item container xs={12} columnSpacing={2} rowGap={3} display='flex' alignItems='flex-end'>
-              <Grid item xs={12}>
-                <FormInput
-                  label={t('COMMON.AMOUNT')}
-                  type='number'
-                  name={TransactionField.amount}
-                  rules={{
-                    required: {
-                      value: true,
-                      message: t(helper.amount.required!.message)
-                    },
-                    pattern: {
-                      value: regex,
-                      message: t(helper.amount.pattern!.message)
-                    }
-                  }}
-                />
-              </Grid>
+            <Grid item xs={12}>
+              <FormInput
+                label={t('COMMON.AMOUNT')}
+                type='number'
+                name={TransactionField.amount}
+                rules={{
+                  required: {
+                    value: true,
+                    message: t(helper.amount.required!.message)
+                  },
+                  pattern: {
+                    value: regex,
+                    message: t(helper.amount.pattern!.message)
+                  }
+                }}
+              />
             </Grid>
             <Grid item xs={12}>
+              {/* TODO: move this component to shared */}
               <FormSelect
                 label={t('COMMON.ACCOUNT')}
                 name={TransactionField.accountId}
@@ -300,6 +303,12 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 render={({ field }) => (
                   <DatePicker label={t('COMMON.DATE')} value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
                 )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormInput
+                label={t('COMMON.NOTE')}
+                name={TransactionField.note}
               />
             </Grid>
             <Grid item xs={12}>

@@ -6,6 +6,7 @@ export * from './user';
 export * from './auth';
 export * from './category';
 export * from './account';
+export * from './transfer';
 export * from './form';
 export * from './icon';
 export * from './common';

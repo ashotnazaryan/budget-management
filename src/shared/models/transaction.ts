@@ -20,6 +20,7 @@ export interface TransactionDTO {
   accountNameKey: AccountDTO['nameKey'];
   accountIcon: AccountDTO['icon'];
   percentValue?: number;
+  note?: string;
 }
 
 export interface Transaction {
@@ -38,4 +39,5 @@ export interface Transaction {
   accountNameKey: AccountDTO['nameKey'];
   accountIcon: Account['icon'];
   percentValue?: string;
+  note?: string;
 }

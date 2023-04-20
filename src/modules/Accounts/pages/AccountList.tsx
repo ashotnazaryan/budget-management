@@ -7,11 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'store';
 import { IconType, Account as AccountModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';
-import { getAccounts, selectAccount } from 'store/reducers';
+import { getAccounts, getBalance, selectAccount, selectSettings, selectSummary } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import EmptyState from 'shared/components/EmptyState';
+import Balance from 'shared/components/Balance';
 import Account from '../components/Account';
 
 interface AccountListProps { }
@@ -19,6 +20,8 @@ interface AccountListProps { }
 const AccountList: React.FC<AccountListProps> = () => {
   const dispatch = useAppDispatch();
   const { accounts, status } = useAppSelector(selectAccount);
+  const { balance } = useAppSelector(selectSummary);
+  const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -32,6 +35,10 @@ const AccountList: React.FC<AccountListProps> = () => {
     navigate(`${ROUTES.accounts.path}/new`);
   };
 
+  const openAccountTransferPage = (): void => {
+    navigate(`${ROUTES.transfers.path}/new`);
+  };
+
   const handleAccountItemClick = ({ id, name }: AccountModel): void => {
     navigate(`${ROUTES.accounts.path}/edit/${name}`, { state: { id } });
   };
@@ -42,6 +49,10 @@ const AccountList: React.FC<AccountListProps> = () => {
       name: data.nameKey ? t(data.nameKey) : data.name
     };
   };
+
+  React.useEffect(() => {
+    dispatch(getBalance());
+  }, [dispatch]);
 
   const getContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
@@ -73,6 +84,18 @@ const AccountList: React.FC<AccountListProps> = () => {
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
+      <Grid container display='flex' justifyContent='center'>
+        <Grid container item alignItems='center' sm={4} xs={12}>
+          <Grid item xs={10}>
+            <Balance balance={balance} currencySymbol={symbol} />
+          </Grid>
+          <Grid item xs={2} display='flex' justifyContent='flex-end'>
+            <IconButton color='primary' onClick={openAccountTransferPage}>
+              <Icon name={IconType.currencyExchange}></Icon>
+            </IconButton>
+          </Grid>
+        </Grid>
+      </Grid>
       {content}
     </Box>
   );

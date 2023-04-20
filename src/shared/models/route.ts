@@ -6,6 +6,7 @@ export enum RouteKey {
   transactions = 'transactions',
   categories = 'categories',
   accounts = 'accounts',
+  transfers = 'transfers',
   login = 'login'
 }
 

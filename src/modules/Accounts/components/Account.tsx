@@ -3,9 +3,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import { Account as AccountModel } from 'shared/models';
-import { isPositiveString } from 'shared/helpers';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
+import Balance from 'shared/components/Balance';
 
 interface AccountProps {
   data: AccountModel;
@@ -13,7 +13,7 @@ interface AccountProps {
 }
 
 const Account: React.FC<AccountProps> = ({ data, onClick }) => {
-  const { palette: { primary: { main, contrastText }, error } } = useTheme();
+  const { palette: { primary: { main, contrastText } } } = useTheme();
   const { name, icon, balance, currencySymbol } = data;
 
   const onAccountClick = (): void => {
@@ -39,7 +39,7 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={isPositiveString(balance) ? contrastText : error.main} text={`${currencySymbol}${balance}`} />
+          <Balance balance={balance} currencySymbol={currencySymbol} />
         </Grid>
       </Grid>
     </Paper>

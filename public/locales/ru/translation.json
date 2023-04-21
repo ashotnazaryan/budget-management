@@ -17,7 +17,7 @@
     "CURRENCY": "Валюта",
     "ICON": "Иконка",
     "TYPE": "Тип",
-    "NOTE": "Записка",
+    "NOTE": "Заметка",
     "FROM": "С",
     "TO": "К"
   },
@@ -72,7 +72,7 @@
       "REQUIRED_ICON": "Иконка обязательна",
       "REQUIRED_CURRENCY": "Валюта обязательна",
       "ACCOUNT_EXISTS": "Счет уже существует",
-      "REQUIRED_FROM_ACCOUNT": "От счета обязательно",
+      "REQUIRED_FROM_ACCOUNT": "Из счета обязательно",
       "REQUIRED_TO_ACCOUNT": "К счету обязательно",
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма"
@@ -118,5 +118,11 @@
     },
     "DELETE_DIALOG_TITLE": "Удалить транзакцию",
     "DELETE_DIALOG_CONFIRM": "Вы уверены что хотите удалить эту транзакцию?"
+  },
+  "TRANSFERS": {
+    "PAGE_TITLE": "Трансферы",
+    "NEW_TRANSFER": "Новый трансфер",
+    "TRANSFER_HISTORY": "История трансферов",
+    "EMPTY_TEXT": "Нет трансферов"
   }
 }

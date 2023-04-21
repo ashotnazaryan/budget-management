@@ -59,7 +59,7 @@
     "EDIT_ACCOUNT": "Edit account",
     "NEW_TRANSFER": "New transfer",
     "EDIT_TRANSFER": "Edit transfer",
-    "EMPTY_TEXT": "No accounts available",
+    "EMPTY_TEXT": "No account is available",
     "FROM_ACCOUNT": "From account",
     "TO_ACCOUNT": "To account",
     "ITEMS": {
@@ -85,7 +85,7 @@
     "PAGE_TITLE": "Categories",
     "NEW_CATEGORY": "New category",
     "EDIT_CATEGORY": "Edit category",
-    "EMPTY_TEXT": "No categories available",
+    "EMPTY_TEXT": "No category is available",
     "ITEMS": {
       "RENT": "Rent",
       "GROCERIES": "Groceries",
@@ -108,7 +108,7 @@
     "PAGE_TITLE": "Transactions",
     "NEW_TRANSACTION": "New transaction",
     "EDIT_TRANSACTION": "Edit transaction",
-    "EMPTY_TEXT": "No transactions available",
+    "EMPTY_TEXT": "No transaction is available",
     "ERRORS": {
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",
@@ -118,5 +118,11 @@
     },
     "DELETE_DIALOG_TITLE": "Delete transaction",
     "DELETE_DIALOG_CONFIRM": "Are you sure you want to delete this transaction?"
+  },
+  "TRANSFERS": {
+    "PAGE_TITLE": "Transfers",
+    "NEW_TRANSFER": "New transfer",
+    "TRANSFER_HISTORY": "Transfer history",
+    "EMPTY_TEXT": "No transfer is available"
   }
 }

@@ -10,4 +10,8 @@ const Ellipsis: React.FC<EllipsisProps> = ({ text, ...props }) => {
   );
 };
 
+Ellipsis.defaultProps = {
+  fontSize: { sm: 16, xs: 14 }
+};
+
 export default Ellipsis;

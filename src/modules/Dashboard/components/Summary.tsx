@@ -8,8 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@mui/material/styles';
 import { Currency, Transaction } from 'shared/models';
-import { isPositiveString } from 'shared/helpers';
 import CategoryTransaction from '../../components/CategoryTransaction';
+import Balance from 'shared/components/Balance';
 
 interface SummaryProps {
   incomes: string;
@@ -21,7 +21,7 @@ interface SummaryProps {
 }
 
 const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
-  const { palette: { primary: { main, dark, light, contrastText }, error } } = useTheme();
+  const { palette: { primary: { main, dark, light, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
   const onAddTransaction = (): void => {
@@ -70,7 +70,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
               {t('DASHBOARD.REMAINING_BALANCE')}
             </Typography>
-            <Typography fontSize={{ sm: 26, xs: 22 }} color={isPositiveString(balance) ? contrastText : error.main} sx={{ textAlign: 'center' }}>{currencySymbol}{balance}</Typography>
+            <Balance balance={balance} currencySymbol={currencySymbol} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

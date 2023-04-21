@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { IconType, Account as AccountModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';
@@ -13,6 +14,7 @@ import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
 import EmptyState from 'shared/components/EmptyState';
 import Balance from 'shared/components/Balance';
+import Ellipsis from 'shared/components/Ellipsis';
 import Account from '../components/Account';
 
 interface AccountListProps { }
@@ -23,6 +25,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   const { balance } = useAppSelector(selectSummary);
   const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const navigate = useNavigate();
+  const { palette: { info: { contrastText } } } = useTheme();
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -37,6 +40,10 @@ const AccountList: React.FC<AccountListProps> = () => {
 
   const openAccountTransferPage = (): void => {
     navigate(`${ROUTES.transfers.path}/new`);
+  };
+
+  const openTransferListPage = (): void => {
+    navigate(`${ROUTES.transfers.path}`);
   };
 
   const handleAccountItemClick = ({ id, name }: AccountModel): void => {
@@ -86,13 +93,21 @@ const AccountList: React.FC<AccountListProps> = () => {
       <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
       <Grid container display='flex' justifyContent='center'>
         <Grid container item alignItems='center' sm={4} xs={12}>
-          <Grid item xs={10}>
+          <Grid item xs={12} display='flex' justifyContent='center' alignItems='center'>
+            <Ellipsis text={t('COMMON.BALANCE')} color={contrastText} sx={{ marginRight: 1 }} />
             <Balance balance={balance} currencySymbol={symbol} />
           </Grid>
-          <Grid item xs={2} display='flex' justifyContent='flex-end'>
-            <IconButton color='primary' onClick={openAccountTransferPage}>
-              <Icon name={IconType.currencyExchange}></Icon>
-            </IconButton>
+          <Grid container item>
+            <Grid item xs={6} display='flex' justifyContent='center'>
+              <IconButton color='primary' onClick={openAccountTransferPage}>
+                <Icon name={IconType.currencyExchange}></Icon>
+              </IconButton>
+            </Grid>
+            <Grid item xs={6} display='flex' justifyContent='center'>
+              <IconButton color='primary' onClick={openTransferListPage}>
+                <Icon name={IconType.history}></Icon>
+              </IconButton>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

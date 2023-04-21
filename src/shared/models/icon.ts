@@ -24,6 +24,7 @@ export enum IconType {
   sell = 'sell',
   house = 'house',
   savings = 'savings',
+  history = 'history',
   // Other icons
   plus = 'plus',
   google = 'google'

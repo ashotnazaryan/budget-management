@@ -5,21 +5,20 @@ import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { createTransfer, getAccounts, selectAccount, selectAccountStatus, selectTransfer } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { Account, Currency, TransferDTO, TransferField } from 'shared/models';
-import { transferHelper, getCurrencySymbolByIsoCode, isPositiveString } from 'shared/helpers';
+import { Account, TransferDTO, TransferField } from 'shared/models';
+import { transferHelper, getCurrencySymbolByIsoCode } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
 import Ellipsis from 'shared/components/Ellipsis';
 import FormInput from 'shared/components/FormInput';
 import DatePicker from 'shared/components/DatePicker';
+import Balance from 'shared/components/Balance';
 
 interface CreateEditTransferProps {
   mode: 'create' | 'edit';
@@ -35,7 +34,6 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const loading = status === 'loading';
   const helper = transferHelper();
   const { t } = useTranslation();
-  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const isEditMode = mode === 'edit';
 
@@ -89,13 +87,6 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     return nameKey ? t(nameKey) : name;
   };
 
-  // TODO: move to account.hrlpers
-  const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
-    const symbol = getCurrencySymbolByIsoCode(iso);
-
-    return `${symbol}${balance}`;
-  };
-
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.accounts.path}`);
   }, [navigate]);
@@ -139,7 +130,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                   <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
                   </MenuItem>
                 ))}
               </FormSelect>
@@ -164,7 +155,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                   <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
                   </MenuItem>
                 ))}
               </FormSelect>

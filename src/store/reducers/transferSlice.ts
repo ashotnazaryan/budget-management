@@ -19,14 +19,16 @@ const initialState: TransferState = {
   status: 'idle'
 };
 
-export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (): Promise<Transfer[]> => {
+export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (_, { dispatch }): Promise<Transfer[]> => {
   try {
     const response = await axios.get<TransferDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers`);
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;
+      await dispatch(getAccounts());
+      const { accounts } = store.getState().account;
 
-      return mapTransfers(response.data, showDecimals);
+      return mapTransfers(response.data, accounts, showDecimals);
     }
 
     return [];
@@ -43,6 +45,7 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
       const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/transfer`, transfer);
 
       if (response?.data) {
+        dispatch(getTransfers());
         dispatch(getAccounts());
         dispatch(getSummary());
       }
@@ -73,7 +76,7 @@ export const transferSlice = createSlice({
       .addCase(getTransfers.fulfilled, (state, action: PayloadAction<Transfer[]>) => {
         return {
           ...state,
-          accounts: action.payload,
+          transfers: action.payload,
           status: 'succeeded'
         };
       })

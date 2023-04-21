@@ -10,8 +10,8 @@ export interface TransferDTO {
 
 export interface Transfer {
   id: string;
-  fromAccount: Account['id'];
-  toAccount: Account['id'];
+  fromAccount: Account;
+  toAccount: Account;
   amount: string;
   createdAt: string;
 }

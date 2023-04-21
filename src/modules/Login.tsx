@@ -3,11 +3,12 @@ import { useForm, FormProvider } from 'react-hook-form';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import GoogleIcon from '@mui/icons-material/Google';
 import { useTheme } from '@mui/material/styles';
+import { IconType } from 'shared/models';
 import FormInput from 'shared/components/FormInput';
+import Button from 'shared/components/Button';
+import Icon from 'shared/components/Icon';
 
 const Login: React.FC = () => {
   const methods = useForm();
@@ -51,7 +52,7 @@ const Login: React.FC = () => {
               <Box display='flex' flexDirection='column'
                 sx={{ paddingLeft: { sm: 4 }, rowGap: 1 }}
               >
-                <Button variant='outlined' startIcon={<GoogleIcon />} onClick={googleLogin}>
+                <Button variant='outlined' startIcon={<Icon name={IconType.google} />} onClick={googleLogin}>
                   Google
                 </Button>
               </Box>

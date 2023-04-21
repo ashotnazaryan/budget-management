@@ -27,9 +27,9 @@ import {
   selectAccountStatus,
   deleteTransaction
 } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, Currency } from 'shared/models';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { getCurrencySymbolByIsoCode, isPositiveString, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
+import { getCurrencySymbolByIsoCode, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
@@ -40,6 +40,7 @@ import DatePicker from 'shared/components/DatePicker';
 import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
+import Balance from 'shared/components/Balance';
 
 interface CreateEditTransactionProps {
   mode: 'create' | 'edit';
@@ -58,7 +59,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const accountStatus = useAppSelector(selectAccountStatus);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
-  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
+  const { palette: { info: { contrastText }} } = useTheme();
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const helper = transactionHelper();
@@ -95,13 +96,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
 
     return nameKey ? t(nameKey) : name;
-  };
-
-  // TODO: move to account.hrlpers
-  const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
-    const symbol = getCurrencySymbolByIsoCode(iso);
-
-    return `${symbol}${balance}`;
   };
 
   const getCategoryData = (data: CategoryModel): CategoryModel => {
@@ -291,7 +285,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                   <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
                   </MenuItem>
                 ))}
               </FormSelect>

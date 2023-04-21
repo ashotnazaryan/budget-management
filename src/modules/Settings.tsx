@@ -13,11 +13,12 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { Account, Currency, Language } from 'shared/models';
-import { getCurrencySymbolByIsoCode, isPositiveString } from 'shared/helpers';
+import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
 import Ellipsis from 'shared/components/Ellipsis';
+import Balance from 'shared/components/Balance';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
@@ -27,7 +28,7 @@ const Settings: React.FC = () => {
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
-  const { palette: { info: { contrastText }, error: { main } } } = useTheme();
+  const { palette: { info: { contrastText }} } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { i18n, t } = useTranslation();
 
@@ -35,12 +36,6 @@ const Settings: React.FC = () => {
     const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
 
     return nameKey ? t(nameKey) : name;
-  };
-
-  const getAccountBalanceText = (balance: Account['balance'], iso: Currency['iso']): string => {
-    const symbol = getCurrencySymbolByIsoCode(iso);
-
-    return `${symbol}${balance}`;
   };
 
   const handleOpenDialog = (): void => {
@@ -121,7 +116,7 @@ const Settings: React.FC = () => {
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
-                  <Typography color={isPositiveString(balance) ? contrastText : main}>{getAccountBalanceText(balance, currencyIso)}</Typography>
+                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
                 </MenuItem>
               ))}
             </Select>

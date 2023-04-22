@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
   const tabs = TABS;
   const navigate = useNavigate();
   const { symbol } = useAppSelector(selectCurrency);
-  const { incomes, expenses, balance, categoryExpenseTransactions, categoryIncomeTransactions, status } = useAppSelector(selectSummary);
+  const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
   const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
       <Summary
         incomes={incomes}
         expenses={expenses}
-        balance={balance}
+        profit={profit}
         currencySymbol={symbol}
         transactions={transactions}
         addTransaction={handleAddTransaction}

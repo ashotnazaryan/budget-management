@@ -23,16 +23,16 @@ const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
   return (
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
       <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 30, cursor: 'pointer' }}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Ellipsis text={fromAccount.name} color={contrastText} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Ellipsis text={toAccount.name} color={contrastText} />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Ellipsis text={amount} color={contrastText} />
         </Grid>
-        <Grid item xs={2} display='flex' justifyContent='flex-end'>
+        <Grid item xs={3} display='flex' justifyContent='flex-end'>
           <Ellipsis text={createdAt} color={contrastText} />
         </Grid>
       </Grid>

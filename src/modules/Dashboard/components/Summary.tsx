@@ -14,13 +14,13 @@ import Balance from 'shared/components/Balance';
 interface SummaryProps {
   incomes: string;
   expenses: string;
-  balance: string;
+  profit: string;
   currencySymbol: Currency['symbol'];
   transactions: Transaction[];
   addTransaction: () => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencySymbol, transactions, addTransaction }) => {
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySymbol, transactions, addTransaction }) => {
   const { palette: { primary: { main, dark, light, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
@@ -70,7 +70,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, balance, currencyS
             <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
               {t('DASHBOARD.REMAINING_BALANCE')}
             </Typography>
-            <Balance balance={balance} currencySymbol={currencySymbol} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
+            <Balance balance={profit} currencySymbol={currencySymbol} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

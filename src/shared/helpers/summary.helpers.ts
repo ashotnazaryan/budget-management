@@ -11,6 +11,7 @@ export const mapSummary = (summary: SummaryDTO, showDecimals = false): Summary =
     ...summary,
     incomes: mapNumberToCurrencyString(summary.incomes, showDecimals),
     expenses: mapNumberToCurrencyString(summary.expenses, showDecimals),
+    profit: mapNumberToCurrencyString(summary.profit, showDecimals),
     balance: mapNumberToCurrencyString(summary.balance, showDecimals),
     categoryExpenseTransactions: summary.categoryExpenseTransactions.map((transaction) => ({
       ...transaction,

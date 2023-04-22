@@ -19,6 +19,7 @@ import Ellipsis from 'shared/components/Ellipsis';
 import FormInput from 'shared/components/FormInput';
 import DatePicker from 'shared/components/DatePicker';
 import Balance from 'shared/components/Balance';
+import Snackbar from 'shared/components/Snackbar';
 
 interface CreateEditTransferProps {
   mode: 'create' | 'edit';
@@ -35,6 +36,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const helper = transferHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const isEditMode = mode === 'edit';
 
   const defaultValues: Partial<TransferDTO> = {
@@ -54,6 +56,10 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const watchFromAccount = watch(TransferField.fromAccount);
   const watchToAccount = watch(TransferField.toAccount);
 
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+  };
+
   const handleFromAccountChange = (event: SelectChangeEvent<Account['id']>) => {
     setValue(TransferField.fromAccount, event.target.value, { shouldValidate: true });
   };
@@ -67,6 +73,12 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   };
 
   const handleFormSubmit = (data: TransferDTO): void => {
+    if (watchFromAccount === watchToAccount) {
+      setShowSnackbar(true);
+
+      return;
+    }
+
     const mappedData: TransferDTO = {
       ...data,
       amount: Number(data.amount)
@@ -99,8 +111,11 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
-      goBack();
       dispatch(getAccounts());
+      goBack();
+      setShowSnackbar(false);
+    } else if (status === 'failed') {
+      setShowSnackbar(true);
     }
   }, [dispatch, goBack, status, formSubmitted]);
 
@@ -196,6 +211,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           {t('COMMON.SAVE')}
         </Button>
       </Box>
+      <Snackbar type='error' open={showSnackbar} text='You cannot transfer between same accounts' onClose={handleSnackbarClose} />
     </Box>
   );
 };

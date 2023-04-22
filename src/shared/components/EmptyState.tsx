@@ -12,7 +12,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ text = 'No data available' }) =
 
   return (
     <Box display='flex' justifyContent='center'>
-      <Ellipsis color={contrastText} text={text} sx={{ fontSize: { sm: 20, xs: 16 } }} />
+      <Ellipsis color={contrastText} text={text} sx={{ fontSize: { sm: 18, xs: 16 } }} />
     </Box>
   );
 };

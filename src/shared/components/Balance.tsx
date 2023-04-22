@@ -8,17 +8,19 @@ import { Currency } from 'shared/models';
 type BalanceProps = {
   balance: string;
   currencySymbol: Currency['symbol'];
+  positiveColor?: string;
 } & TypographyProps
 
-const Balance: React.FC<BalanceProps> = ({ currencySymbol, balance = '0', ...props }) => {
+const Balance: React.FC<BalanceProps> = ({ currencySymbol, balance = '0', positiveColor, ...props }) => {
   const { palette: { info: { contrastText }, error } } = useTheme();
+  const positiveBalanceColor = positiveColor || contrastText;
 
   const getText = (): string => {
     return `${currencySymbol}${balance}`;
   };
 
   return (
-    <Ellipsis text={getText()} color={isPositiveString(balance) ? contrastText : error.main} fontSize={props.fontSize} sx={{ ...props.sx }} />
+    <Ellipsis text={getText()} color={isPositiveString(balance) ? positiveBalanceColor : error.main} fontSize={props.fontSize} sx={{ ...props.sx }} />
   );
 };
 

@@ -14,6 +14,7 @@ export interface SummaryState extends Summary {
 const initialState: SummaryState = {
   incomes: '0',
   expenses: '0',
+  profit: '0',
   balance: '0',
   categoryExpenseTransactions: [],
   categoryIncomeTransactions: [],

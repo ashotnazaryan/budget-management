@@ -15,7 +15,7 @@ interface UserBalanceInfoProps {
 }
 
 const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbol, fullName = '', balance = '0' }) => {
-  const { palette: { primary: { main } } } = useTheme();
+  const { palette: { secondary: { main } } } = useTheme();
   const { t } = useTranslation();
 
   return (
@@ -25,7 +25,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbo
       </Grid>
       <Grid item container xs={8}>
         <Grid item xs={12}>
-          <Ellipsis text={fullName} sx={{ fontSize: { sm: 18, xs: 16 } }} />
+          <Ellipsis text={fullName} sx={{ fontSize: 18 }} />
         </Grid>
         <Grid item xs={12} display='flex' alignItems='center'>
           <Ellipsis text={t('COMMON.BALANCE')} sx={{ fontSize: { sm: 16, xs: 14 }, marginRight: 1 }} />

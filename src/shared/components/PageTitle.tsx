@@ -23,9 +23,7 @@ const PageTitle: React.FC<PageTitleProps> = ({ text, withBackButton = false, onB
     <Box display='flex' alignItems='center' sx={{ marginTop: 2, marginBottom: 5, position: 'relative' }}>
       {withBackButton && <BackButton onClick={onClick}
         sx={{
-          position: 'absolute',
-          left: 0,
-          minWidth: { sm: 90, xs: 60 },
+          minWidth: { sm: 100, xs: 80 },
           fontSize: { sm: 15, xs: 12 },
           paddingX: 2
         }} />
@@ -35,7 +33,7 @@ const PageTitle: React.FC<PageTitleProps> = ({ text, withBackButton = false, onB
         sx={{
           textAlign: 'center',
           width: '100%',
-          fontSize: { sm: 21, xs: 18 },
+          fontSize: { sm: 19, xs: 16 },
           fontWeight: 'bold'
         }}
         {...props}>

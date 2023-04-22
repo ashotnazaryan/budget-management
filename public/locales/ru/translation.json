@@ -71,11 +71,7 @@
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
       "REQUIRED_CURRENCY": "Валюта обязательна",
-      "ACCOUNT_EXISTS": "Счет уже существует",
-      "REQUIRED_FROM_ACCOUNT": "Из счета обязательно",
-      "REQUIRED_TO_ACCOUNT": "К счету обязательно",
-      "REQUIRED_AMOUNT": "Сумма обязательна",
-      "INVALID_AMOUNT": "Неверная сумма"
+      "ACCOUNT_EXISTS": "Счет уже существует"
     },
     "DELETE_DIALOG_TITLE": "Удалить счет",
     "DELETE_DIALOG_CONFIRM": "Вы уверены, что хотите удалить этот счет? Это действие повлечет за собой удаление всех транзакций выполненных этим счетом."
@@ -123,6 +119,13 @@
     "PAGE_TITLE": "Трансферы",
     "NEW_TRANSFER": "Новый трансфер",
     "TRANSFER_HISTORY": "История трансферов",
-    "EMPTY_TEXT": "Нет трансферов"
+    "EMPTY_TEXT": "Нет трансферов",
+    "ERRORS": {
+      "REQUIRED_FROM_ACCOUNT": "Из счета обязательно",
+      "REQUIRED_TO_ACCOUNT": "К счету обязательно",
+      "REQUIRED_AMOUNT": "Сумма обязательна",
+      "INVALID_AMOUNT": "Неверная сумма",
+      "SAME_ACCOUNT": "Вы не можете делать трансфер между одним и тем же счетом."
+    }
   }
 }

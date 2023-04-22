@@ -211,7 +211,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           {t('COMMON.SAVE')}
         </Button>
       </Box>
-      <Snackbar type='error' open={showSnackbar} text='You cannot transfer between same accounts' onClose={handleSnackbarClose} />
+      <Snackbar type='error' open={showSnackbar} text={t('TRANSFERS.ERRORS.SAME_ACCOUNT')} onClose={handleSnackbarClose} />
     </Box>
   );
 };

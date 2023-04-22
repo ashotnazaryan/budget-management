@@ -71,11 +71,7 @@
       "REQUIRED_NAME": "Name is required",
       "REQUIRED_ICON": "Icon is required",
       "REQUIRED_CURRENCY": "Currency is required",
-      "ACCOUNT_EXISTS": "Account already exists",
-      "REQUIRED_FROM_ACCOUNT": "From account is required",
-      "REQUIRED_TO_ACCOUNT": "To account is required",
-      "REQUIRED_AMOUNT": "Amount is required",
-      "INVALID_AMOUNT": "Invalid amount"
+      "ACCOUNT_EXISTS": "Account already exists"
     },
     "DELETE_DIALOG_TITLE": "Delete account",
     "DELETE_DIALOG_CONFIRM": "Are you sure you want to delete this account? This will remove all transactions made under this account.",
@@ -123,6 +119,13 @@
     "PAGE_TITLE": "Transfers",
     "NEW_TRANSFER": "New transfer",
     "TRANSFER_HISTORY": "Transfer history",
-    "EMPTY_TEXT": "No transfer is available"
+    "EMPTY_TEXT": "No transfer is available",
+    "ERRORS": {
+      "REQUIRED_FROM_ACCOUNT": "From account is required",
+      "REQUIRED_TO_ACCOUNT": "To account is required",
+      "REQUIRED_AMOUNT": "Amount is required",
+      "INVALID_AMOUNT": "Invalid amount",
+      "SAME_ACCOUNT": "You cannot transfer between same accounts."
+    }
   }
 }

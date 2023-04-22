@@ -77,20 +77,20 @@ export const categoryHelper = (): { [key in CategoryField]: ErrorType } => ({
 export const transferHelper = (): { [key in TransferField]: ErrorType } => ({
   [TransferField.fromAccount]: {
     required: {
-      message: 'ACCOUNTS.ERRORS.REQUIRED_FROM_ACCOUNT'
+      message: 'TRANSFERS.ERRORS.REQUIRED_FROM_ACCOUNT'
     }
   },
   [TransferField.toAccount]: {
     required: {
-      message: 'ACCOUNTS.ERRORS.REQUIRED_TO_ACCOUNT'
+      message: 'TRANSFERS.ERRORS.REQUIRED_TO_ACCOUNT'
     }
   },
   [TransferField.amount]: {
     required: {
-      message: 'ACCOUNTS.ERRORS.REQUIRED_AMOUNT'
+      message: 'TRANSFERS.ERRORS.REQUIRED_AMOUNT'
     },
     pattern: {
-      message: 'ACCOUNTS.ERRORS.INVALID_AMOUNT'
+      message: 'TRANSFERS.ERRORS.INVALID_AMOUNT'
     }
   },
   [TransferField.createdAt]: {},

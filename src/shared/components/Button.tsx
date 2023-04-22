@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ loading = false, ...props }) => {
     <MuiButton
       {...props}
       endIcon={icon}
-      disabled={loading}
+      disabled={loading || props.disabled}
       sx={{
         minWidth: { sm: 120, xs: 90 },
         fontSize: 16,

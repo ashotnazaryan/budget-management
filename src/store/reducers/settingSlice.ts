@@ -13,10 +13,12 @@ export interface SettingState extends Setting {
   status: StatusState;
 }
 
+const isBrowserDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
 const initialState: SettingState = {
   defaultCurrency: CURRENCIES[0],
   showDecimals: false,
-  isDarkTheme: false,
+  isDarkTheme: isBrowserDarkMode,
   language: LANGUAGES[0],
   status: 'idle'
 };

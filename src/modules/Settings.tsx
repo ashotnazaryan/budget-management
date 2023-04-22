@@ -28,7 +28,7 @@ const Settings: React.FC = () => {
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
-  const { palette: { info: { contrastText }} } = useTheme();
+  const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { i18n, t } = useTranslation();
 

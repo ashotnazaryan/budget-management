@@ -1,8 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
-import { StatusState, Summary, SummaryDTO } from 'shared/models';
-import { mapBalance, mapSummary } from 'shared/helpers';
+import { Period, StatusState, Summary, SummaryDTO } from 'shared/models';
+import { getQueryParamByPeriod, mapBalance, mapSummary } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 
@@ -22,9 +22,12 @@ const initialState: SummaryState = {
   balanceStatus: 'idle'
 };
 
-export const getSummary = createAsyncThunk('summary/getSummary', async (): Promise<Summary> => {
+export const getSummary = createAsyncThunk('summary/getSummary', async (period?: Period): Promise<Summary> => {
+  const { defaultPeriod } = store.getState().setting;
+  const queryParams = getQueryParamByPeriod(period || defaultPeriod);
+  
   try {
-    const response = await axios.get<SummaryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary`);
+    const response = await axios.get<SummaryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary${queryParams}`);
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;

@@ -19,7 +19,12 @@
     "TYPE": "Тип",
     "NOTE": "Заметка",
     "FROM": "С",
-    "TO": "К"
+    "TO": "К",
+    "DAY": "День",
+    "WEEK": "Неделя",
+    "MONTH": "Месяц",
+    "YEAR": "Год",
+    "ALL_TIME": "Все время"
   },
   "SIDEBAR": {
     "LOGOUT": "Выход",
@@ -40,12 +45,13 @@
     "SUMMARY": "Сумма",
     "TOTAL_INCOME": "Общий доход",
     "TOTAL_EXPENSES": "Общие расходы",
-    "REMAINING_BALANCE": "Остаток"
+    "PROFIT": "Прибыль"
   },
   "SETTINGS": {
     "PAGE_TITLE": "Настройки",
     "DEFAULT_CURRENCY": "Валюта по умолчанию",
     "DEFAULT_ACCOUNT": "Счет по умолчанию",
+    "DEFAULT_PERIOD": "Период по умолчанию",
     "LANGUAGE": "Язык",
     "SHOW_DECIMALS": "Показать дроби (например 1,23)",
     "DARK_THEME": "Темная тема",

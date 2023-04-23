@@ -7,9 +7,10 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@mui/material/styles';
-import { Currency, Transaction } from 'shared/models';
+import { Currency, Period, Transaction } from 'shared/models';
 import CategoryTransaction from '../../components/CategoryTransaction';
 import Balance from 'shared/components/Balance';
+import PeriodFilters from './PeriodFilters';
 
 interface SummaryProps {
   incomes: string;
@@ -17,16 +18,14 @@ interface SummaryProps {
   profit: string;
   currencySymbol: Currency['symbol'];
   transactions: Transaction[];
-  addTransaction: () => void;
+  period: Period;
+  onAddTransaction: () => void;
+  onFilter: (period: Period) => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySymbol, transactions, addTransaction }) => {
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySymbol, transactions, period, onAddTransaction, onFilter }) => {
   const { palette: { primary: { main, dark, light, contrastText } } } = useTheme();
   const { t } = useTranslation();
-
-  const onAddTransaction = (): void => {
-    addTransaction();
-  };
 
   const getCategoryTransactionData = (data: Transaction): Transaction => {
     return {
@@ -50,6 +49,9 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySy
             {t('DASHBOARD.SUMMARY')}
           </Typography>
         </Grid>
+        <Grid container display='flex' justifyContent='center' sx={{ marginBottom: 2 }}>
+          <PeriodFilters selectedPeriod={period} onFilter={onFilter} />
+        </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
@@ -68,7 +70,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySy
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
             <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
-              {t('DASHBOARD.REMAINING_BALANCE')}
+              {t('DASHBOARD.PROFIT')}
             </Typography>
             <Balance balance={profit} currencySymbol={currencySymbol} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>

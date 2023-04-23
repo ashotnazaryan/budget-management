@@ -34,7 +34,8 @@ const PageTitle: React.FC<PageTitleProps> = ({ text, withBackButton = false, onB
           textAlign: 'center',
           width: '100%',
           fontSize: { sm: 19, xs: 16 },
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          paddingRight: withBackButton ? { sm: '100px', xs: 0 } : 0
         }}
         {...props}>
         {text}

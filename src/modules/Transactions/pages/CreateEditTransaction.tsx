@@ -36,7 +36,7 @@ import Snackbar from 'shared/components/Snackbar';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import Ellipsis from 'shared/components/Ellipsis';
-import DatePicker from 'shared/components/DatePicker';
+import FormDatePicker from 'shared/components/FormDatePicker';
 import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
@@ -59,7 +59,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const accountStatus = useAppSelector(selectAccountStatus);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
-  const { palette: { info: { contrastText }} } = useTheme();
+  const { palette: { info: { contrastText } } } = useTheme();
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const helper = transactionHelper();
@@ -77,7 +77,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: new Date(),
+    createdAt: dayjs() as unknown as Date,
     note: ''
   };
 
@@ -90,6 +90,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { setValue, handleSubmit, control, watch } = methods;
   const watchType = watch(TransactionField.type);
   const watchAccount = watch(TransactionField.accountId);
+  const watchCreatedAt = watch(TransactionField.createdAt);
 
   // TODO: move to account.hrlpers
   const getAccountValue = (accountId: Account['id']): string => {
@@ -231,7 +232,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
         <FormProvider {...methods}>
-          <Grid container rowGap={5}>
+          <Grid container rowGap={6}>
             <Grid item xs={12}>
               <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
               <FormRadioGroup
@@ -291,12 +292,19 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               </FormSelect>
             </Grid>
             <Grid item xs={12}>
-              <Controller
-                control={control}
+              <FormDatePicker
                 name={TransactionField.createdAt}
-                render={({ field }) => (
-                  <DatePicker label={t('COMMON.DATE')} value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
-                )}
+                label={t('COMMON.DATE')}
+                value={dayjs(watchCreatedAt)}
+                maxDate={dayjs()}
+                rules={{
+                  required: true,
+                  validate: {
+                    maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                  }
+                }}
+                onChange={handleDatePickerChange}
+                sx={{ width: '100%' }}
               />
             </Grid>
             <Grid item xs={12}>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import dayjs, { Dayjs } from 'dayjs';
 import Box from '@mui/material/Box';
@@ -17,7 +17,7 @@ import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
 import Ellipsis from 'shared/components/Ellipsis';
 import FormInput from 'shared/components/FormInput';
-import DatePicker from 'shared/components/DatePicker';
+import FormDatePicker from 'shared/components/FormDatePicker';
 import Balance from 'shared/components/Balance';
 import Snackbar from 'shared/components/Snackbar';
 
@@ -43,7 +43,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     fromAccount: '',
     toAccount: '',
     amount: '' as unknown as number,
-    createdAt: new Date()
+    createdAt: dayjs() as unknown as Date
   };
 
   const methods = useForm<TransferDTO>({
@@ -52,9 +52,10 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { control, handleSubmit, setValue, watch } = methods;
+  const { handleSubmit, setValue, watch } = methods;
   const watchFromAccount = watch(TransferField.fromAccount);
   const watchToAccount = watch(TransferField.toAccount);
+  const watchCreatedAt = watch(TransferField.createdAt);
 
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
@@ -193,12 +194,19 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Controller
-                control={control}
+              <FormDatePicker
                 name={TransferField.createdAt}
-                render={({ field }) => (
-                  <DatePicker label={t('COMMON.DATE')} value={dayjs(field.value)} onChange={handleDatePickerChange} sx={{ width: '100%' }} />
-                )}
+                label={t('COMMON.DATE')}
+                value={dayjs(watchCreatedAt)}
+                maxDate={dayjs()}
+                rules={{
+                  required: true,
+                  validate: {
+                    maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                  }
+                }}
+                onChange={handleDatePickerChange}
+                sx={{ width: '100%' }}
               />
             </Grid>
           </Grid>

@@ -19,7 +19,12 @@
     "TYPE": "Type",
     "NOTE": "Note",
     "FROM": "From",
-    "TO": "To"
+    "TO": "To",
+    "DAY": "Day",
+    "WEEK": "Week",
+    "MONTH": "Month",
+    "YEAR": "Year",
+    "ALL_TIME": "All time"
   },
   "SIDEBAR": {
     "LOGOUT": "Logout",
@@ -40,12 +45,13 @@
     "SUMMARY": "Summary",
     "TOTAL_INCOME": "Total income",
     "TOTAL_EXPENSES": "Total expenses",
-    "REMAINING_BALANCE": "Remaining balance"
+    "PROFIT": "Profit"
   },
   "SETTINGS": {
     "PAGE_TITLE": "Settings",
     "DEFAULT_CURRENCY": "Default currency",
     "DEFAULT_ACCOUNT": "Default account",
+    "DEFAULT_PERIOD": "Default period",
     "LANGUAGE": "Language",
     "SHOW_DECIMALS": "Show decimals (e.g. 1.23)",
     "DARK_THEME": "Dark theme",

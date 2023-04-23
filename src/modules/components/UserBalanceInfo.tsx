@@ -20,7 +20,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbo
 
   return (
     <Grid container alignItems='center' columnSpacing={2}>
-      <Grid item xs={4}>
+      <Grid item>
         <Avatar alt={fullName} src={avatar} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${main}` }} />
       </Grid>
       <Grid item container xs={8}>
@@ -28,7 +28,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbo
           <Ellipsis text={fullName} sx={{ fontSize: 18 }} />
         </Grid>
         <Grid item xs={12} display='flex' alignItems='center'>
-          <Ellipsis text={t('COMMON.BALANCE')} sx={{ fontSize: { sm: 16, xs: 14 }, marginRight: 1 }} />
+          <Ellipsis text={t('COMMON.BALANCE')} sx={{ fontSize: 16, marginRight: 1 }} />
           <Balance balance={balance} currencySymbol={currencySymbol} />
         </Grid>
       </Grid>

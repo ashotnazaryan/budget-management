@@ -1,7 +1,50 @@
+import dayjs from 'dayjs';
 import { TFunction } from 'i18next';
-import { RadioOption } from 'shared/components/FormRadioGroup';
 import { CURRENCIES } from 'shared/constants';
-import { Currency } from 'shared/models';
+import { Currency, DateRange, Period } from 'shared/models';
+import { RadioOption } from 'shared/components/FormRadioGroup';
+
+const getDateRangeForPeriod = (period: Period): DateRange => {
+  const now = dayjs();
+
+  switch (period) {
+  case Period.day:
+    return {
+      fromDate: now.startOf('day'),
+      toDate: now.endOf('day'),
+    };
+
+  case Period.week:
+    return {
+      fromDate: now.startOf('week'),
+      toDate: now.endOf('week'),
+    };
+
+  case Period.month:
+    return {
+      fromDate: now.startOf('month'),
+      toDate: now.endOf('month'),
+    };
+
+  case Period.year:
+    return {
+      fromDate: now.startOf('year'),
+      toDate: now.endOf('year'),
+    };
+
+  case Period.allTime:
+    return {
+      fromDate: dayjs(new Date(0)),
+      toDate: now,
+    };
+
+  default:
+    return {
+      fromDate: dayjs(new Date(0)),
+      toDate: now,
+    };
+  }
+};
 
 export const mapNumberToCurrencyString = (value: number, showDecimals = false): string => {
   if (value === null || value === undefined) {
@@ -19,7 +62,7 @@ export const mapCurrencyStringToNumber = (value: string): number => {
 };
 
 export const isPositiveString = (value: string): boolean => {
-  return parseInt(value) >= 0;
+  return parseFloat(value) >= 0;
 };
 
 export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Currency['symbol'] => {
@@ -34,4 +77,10 @@ export const mapCategoryTypesWithTranslations = (categoryTabs: RadioOption[], t:
       label: t(categoryTab.label)
     };
   });
+};
+
+export const getQueryParamByPeriod = (period: Period): string => {
+  const { fromDate, toDate } = getDateRangeForPeriod(period);
+
+  return `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`;
 };

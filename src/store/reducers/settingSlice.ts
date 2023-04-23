@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { ErrorResponse, Setting, SettingDTO, StatusState } from 'shared/models';
+import { ErrorResponse, Period, Setting, SettingDTO, StatusState } from 'shared/models';
 import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
@@ -17,6 +17,7 @@ const isBrowserDarkMode = window.matchMedia && window.matchMedia('(prefers-color
 
 const initialState: SettingState = {
   defaultCurrency: CURRENCIES[0],
+  defaultPeriod: Period.month,
   showDecimals: false,
   isDarkTheme: isBrowserDarkMode,
   language: LANGUAGES[0],

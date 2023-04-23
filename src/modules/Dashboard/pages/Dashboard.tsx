@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { CategoryType } from 'shared/models';
+import { CategoryType, Period } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
-import { selectSummary, selectCurrency, getSummary } from 'store/reducers';
+import { selectSummary, selectCurrency, getSummary, selectSettings } from 'store/reducers';
 import Summary from '../components/Summary';
 
 const Dashboard: React.FC = () => {
@@ -14,8 +14,10 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { symbol } = useAppSelector(selectCurrency);
   const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status } = useAppSelector(selectSummary);
+  const { defaultPeriod } = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
+  const [filterPeriod, setFilterPeriod] = React.useState<Period>(defaultPeriod);
   const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
 
   React.useEffect(() => {
@@ -32,6 +34,11 @@ const Dashboard: React.FC = () => {
     navigate(`${ROUTES.transactions.path}/new`, { state: { categoryType } });
   };
 
+  const handleFilter = (period: Period): void => {
+    dispatch(getSummary(period));
+    setFilterPeriod(period);
+  };
+
   const getContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
@@ -44,7 +51,9 @@ const Dashboard: React.FC = () => {
         profit={profit}
         currencySymbol={symbol}
         transactions={transactions}
-        addTransaction={handleAddTransaction}
+        period={filterPeriod}
+        onAddTransaction={handleAddTransaction}
+        onFilter={handleFilter}
       />
     );
   };

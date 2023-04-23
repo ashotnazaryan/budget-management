@@ -11,8 +11,8 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
-import { CURRENCIES, LANGUAGES } from 'shared/constants';
-import { Account, Currency, Language } from 'shared/models';
+import { CURRENCIES, LANGUAGES, PERIOD_OPTIONS } from 'shared/constants';
+import { Account, Currency, Language, Period } from 'shared/models';
 import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
@@ -23,7 +23,8 @@ import Balance from 'shared/components/Balance';
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
   const languages = LANGUAGES;
-  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, language, defaultAccount = '' } = useAppSelector(selectSettings);
+  const periodOptions = PERIOD_OPTIONS;
+  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, language, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
   const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts } = useAppSelector(selectAccount);
@@ -60,6 +61,12 @@ const Settings: React.FC = () => {
     const accountId = event.target.value as Account['id'];
 
     dispatch(addSetting([{ defaultAccount: accountId }, false, false]));
+  };
+
+  const handlePeriodChange = (event: SelectChangeEvent): void => {
+    const period = event.target.value as Period;
+
+    dispatch(addSetting([{ defaultPeriod: period }, false, true]));
   };
 
   const handleThemeChange = (): void => {
@@ -118,6 +125,20 @@ const Settings: React.FC = () => {
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
                   <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
                 </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color={contrastText}>{t('SETTINGS.DEFAULT_PERIOD')}</Typography>
+          <FormControl fullWidth>
+            <Select
+              variant='outlined'
+              value={defaultPeriod}
+              onChange={handlePeriodChange}
+            >
+              {periodOptions.map(({ value, label }) => (
+                <MenuItem value={value} key={value}>{t(label)}</MenuItem>
               ))}
             </Select>
           </FormControl>

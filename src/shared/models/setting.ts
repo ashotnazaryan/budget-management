@@ -1,4 +1,5 @@
 import { Account, AccountDTO } from './account';
+import { Period } from './common';
 import { Language } from './language';
 
 export interface Currency {
@@ -12,6 +13,7 @@ export interface SettingDTO {
   isDarkTheme: boolean;
   language: Language['iso'],
   defaultCurrency: Currency['iso'];
+  defaultPeriod: Period;
   defaultAccount?: AccountDTO['id'];
 }
 
@@ -20,5 +22,6 @@ export interface Setting {
   isDarkTheme: boolean;
   language: Language;
   defaultCurrency: Currency;
+  defaultPeriod: Period;
   defaultAccount?: Account['id'];
 }

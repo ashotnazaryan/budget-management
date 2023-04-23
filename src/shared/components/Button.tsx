@@ -3,9 +3,9 @@ import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTheme } from '@mui/material/styles';
 
-export type ButtonProps = { loading?: boolean; } & MuiButtonProps;
+export type ButtonProps = { loading?: boolean; capitalize?: boolean } & MuiButtonProps;
 
-const Button: React.FC<ButtonProps> = ({ loading = false, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ loading = false, capitalize = true, ...props }) => {
   const { palette: { primary: { contrastText } } } = useTheme();
 
   const loadingIcon = (): React.ReactNode => {
@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({ loading = false, ...props }) => {
       sx={{
         minWidth: { sm: 120, xs: 90 },
         fontSize: 16,
+        textTransform: capitalize ? 'uppercase' : 'none',
         '& .MuiButton-endIcon': {
           margin: 0
         },

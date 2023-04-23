@@ -25,7 +25,7 @@ const Balance: React.FC<BalanceProps> = ({ currencySymbol, balance = '0', positi
 };
 
 Balance.defaultProps = {
-  fontSize: { sm: 16, xs: 14 }
+  fontSize: 16
 };
 
 export default Balance;

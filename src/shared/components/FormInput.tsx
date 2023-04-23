@@ -8,7 +8,7 @@ import { StyledTextField } from './FormInput.styles';
 
 type FormInputProps = {
   name: string;
-  rules?: any;
+  rules?: any; // TODO: fix any type
 } & TextFieldProps;
 
 const FormInput: React.FC<FormInputProps> = ({ name, rules = {}, ...props }) => {

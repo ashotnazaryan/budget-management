@@ -13,7 +13,7 @@ export interface SelectOption {
 type FormSelectProps = {
   name: string;
   label: string;
-  rules?: any;
+  rules?: any; // TODO: fix any type
 } & SelectProps<SelectOption['value']>;
 
 const FormSelect: React.FC<FormSelectProps> = ({ name, label, rules = {}, children, ...props }) => {

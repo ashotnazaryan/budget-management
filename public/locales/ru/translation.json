@@ -116,7 +116,8 @@
       "INVALID_AMOUNT": "Неверная сумма",
       "REQUIRED_CATEGORY": "Категория обязательна",
       "REQUIRED_ACCOUNT": "Счет обязательный",
-      "REQUIRED_TYPE": "Тип обязательный"
+      "REQUIRED_TYPE": "Тип обязательный",
+      "FUTURE_DATE": "Выбранная дата не может быть в будущем."
     },
     "DELETE_DIALOG_TITLE": "Удалить транзакцию",
     "DELETE_DIALOG_CONFIRM": "Вы уверены что хотите удалить эту транзакцию?"

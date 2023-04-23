@@ -25,8 +25,12 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
       message: 'TRANSACTIONS.ERRORS.REQUIRED_TYPE'
     }
   },
+  [TransactionField.createdAt]: {
+    max: {
+      message: 'TRANSACTIONS.ERRORS.FUTURE_DATE'
+    }
+  },
   [TransactionField.icon]: {},
-  [TransactionField.createdAt]: {},
   [TransactionField.note]: {}
 });
 

@@ -26,7 +26,8 @@ const initialState: SummaryState = {
 
 export const getSummary = createAsyncThunk('summary/getSummary', async (period?: Period): Promise<Summary> => {
   const { defaultPeriod } = store.getState().setting;
-  const queryParams = getQueryParamByPeriod(period || defaultPeriod);
+  const { activePeriodFilter } = store.getState().summary;
+  const queryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
   
   try {
     const response = await axios.get<SummaryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary${queryParams}`);

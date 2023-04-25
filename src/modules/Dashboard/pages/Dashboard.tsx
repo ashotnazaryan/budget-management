@@ -6,25 +6,23 @@ import { CategoryType, Period } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
-import { selectSummary, selectCurrency, getSummary, selectSettings } from 'store/reducers';
+import { selectSummary, selectCurrency, getSummary, setActivePeriodFilter } from 'store/reducers';
 import Summary from '../components/Summary';
 
 const Dashboard: React.FC = () => {
   const tabs = TABS;
   const navigate = useNavigate();
   const { symbol } = useAppSelector(selectCurrency);
-  const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status } = useAppSelector(selectSummary);
-  const { defaultPeriod } = useAppSelector(selectSettings);
+  const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status, activePeriodFilter } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
-  const [filterPeriod, setFilterPeriod] = React.useState<Period>(defaultPeriod);
   const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
 
   React.useEffect(() => {
     if (status === 'idle') {
-      dispatch(getSummary());
+      dispatch(getSummary(activePeriodFilter));
     }
-  }, [dispatch, status]);
+  }, [dispatch, status, activePeriodFilter]);
 
   const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
     setCategoryType(value);
@@ -36,7 +34,7 @@ const Dashboard: React.FC = () => {
 
   const handleFilter = (period: Period): void => {
     dispatch(getSummary(period));
-    setFilterPeriod(period);
+    dispatch(setActivePeriodFilter(period));
   };
 
   const getContent = (): React.ReactElement => {
@@ -51,7 +49,7 @@ const Dashboard: React.FC = () => {
         profit={profit}
         currencySymbol={symbol}
         transactions={transactions}
-        period={filterPeriod}
+        period={activePeriodFilter}
         onAddTransaction={handleAddTransaction}
         onFilter={handleFilter}
       />

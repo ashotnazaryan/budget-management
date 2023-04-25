@@ -5,7 +5,7 @@ import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setAppStatus } from './appSlice';
-import { getBalance, getSummary } from './summarySlice';
+import { getBalance, resetSummaryStatus, setActivePeriodFilter } from './summarySlice';
 import { getTransactions } from './transactionSlice';
 import { getAccounts } from './accountSlice';
 
@@ -18,7 +18,7 @@ const isBrowserDarkMode = window.matchMedia && window.matchMedia('(prefers-color
 const initialState: SettingState = {
   defaultCurrency: CURRENCIES[0],
   defaultPeriod: Period.month,
-  showDecimals: false,
+  showDecimals: true,
   isDarkTheme: isBrowserDarkMode,
   language: LANGUAGES[0],
   status: 'idle'
@@ -29,6 +29,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
     const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
 
     dispatch(setAppStatus('succeeded'));
+    dispatch(setActivePeriodFilter(response?.data.defaultPeriod));
 
     return mapSettings(response?.data);
   } catch (error) {
@@ -51,7 +52,9 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
       await dispatch(getSettings());
 
       if (shouldFetchAllData) {
-        dispatch(getSummary());
+        dispatch(resetSummaryStatus());
+        // TODO: try to reset each state
+        // dispatch(getSummary());
         dispatch(getTransactions());
         dispatch(getAccounts());
         dispatch(getBalance());

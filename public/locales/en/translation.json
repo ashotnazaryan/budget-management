@@ -41,6 +41,11 @@
     "TRANSFERS": "Transfers",
     "TRANSACTIONS": "Transactions"
   },
+  "LOGIN": {
+    "LOCAL_PROVIDER_TITLE": "Вход в аккаунт",
+    "ANOTHER_PROVIDER_TITLE": "Вход с другим провайдером",
+    "LOGIN": "Вход"
+  },
   "DASHBOARD": {
     "SUMMARY": "Summary",
     "TOTAL_INCOME": "Total income",
@@ -133,6 +138,8 @@
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",
       "SAME_ACCOUNT": "You cannot transfer between same accounts."
-    }
+    },
+    "DELETE_DIALOG_TITLE": "Delete transfer",
+    "DELETE_DIALOG_CONFIRM": "Are you sure you want to delete this transfer? Accounts' balances will be recalculated."
   }
 }

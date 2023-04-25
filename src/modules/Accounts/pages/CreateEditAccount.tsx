@@ -39,14 +39,14 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const error = useAppSelector(selectAccountError);
   const account = useAppSelector(selectCurrentAccount);
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
-  const loading = status === 'loading';
-  const deleteLoading = deleteStatus === 'loading';
   const helper = accountHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const accountId = state?.id as AccountDTO['id'];
   const isEditMode = mode === 'edit';
 
@@ -128,7 +128,9 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
-    } else if (status === 'failed') {
+    }
+
+    if (status === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
   }, [goBack, status, formSubmitted]);

@@ -35,14 +35,14 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const error = useAppSelector(selectCategoryError);
   const category = useAppSelector(selectCurrentCategory);
   const { palette: { info: { contrastText } } } = useTheme();
-  const loading = status === 'loading';
-  const deleteLoading = deleteStatus === 'loading';
   const helper = categoryHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const categoryId = state?.id as CategoryDTO['id'];
   const categoryType = state?.categoryType as CategoryType;
   const isEditMode = mode === 'edit';
@@ -118,7 +118,9 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     if (status === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
-    } else if (status === 'failed') {
+    }
+
+    if (status === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
   }, [goBack, status, formSubmitted]);

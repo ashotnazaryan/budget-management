@@ -60,14 +60,13 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { defaultAccount = '' } = useAppSelector(selectSettings);
   const transaction = useAppSelector(selectCurrentTransaction);
   const { palette: { info: { contrastText } } } = useTheme();
-  const loading = status === 'loading';
-  const deleteLoading = deleteStatus === 'loading';
   const helper = transactionHelper();
   const { t } = useTranslation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false); const loading = status === 'loading';
+  const deleteLoading = deleteStatus === 'loading';
   const transactionId = state?.id as TransactionDTO['id'];
   const categoryType = state?.categoryType as CategoryType || CategoryType.expense;
   const isEditMode = mode === 'edit';
@@ -77,7 +76,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: dayjs() as unknown as Date,
+    createdAt: new Date(),
     note: ''
   };
 
@@ -196,7 +195,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       goBack();
       setShowSnackbar(false);
       dispatch(getAccounts());
-    } else if (status === 'failed') {
+    }
+
+    if (status === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
   }, [dispatch, goBack, status, formSubmitted]);
@@ -232,7 +233,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
         <FormProvider {...methods}>
-          <Grid container rowGap={6}>
+          <Grid container rowGap={7}>
             <Grid item xs={12}>
               <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
               <FormRadioGroup

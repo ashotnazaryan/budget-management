@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -13,6 +14,7 @@ import Icon from 'shared/components/Icon';
 const Login: React.FC = () => {
   const methods = useForm();
   const { palette: { info: { main } } } = useTheme();
+  const { t } = useTranslation();
 
   const googleLogin = () => {
     window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/google`, '_self');
@@ -31,11 +33,11 @@ const Login: React.FC = () => {
                 <Typography variant='subtitle2'
                   sx={{ textAlign: 'center', marginBottom: { sm: 2, xs: 4 }, }}
                 >
-                  Log into your account
+                  {t('LOGIN.LOCAL_PROVIDER_TITLE')}
                 </Typography>
                 <FormInput label='Email' type='email' name='email' required disabled sx={{ mb: 4 }} />
                 <FormInput type='password' label='Password' name='password' required disabled sx={{ mb: 4 }} />
-                <Button disabled variant='contained'>Login</Button>
+                <Button disabled variant='contained'>{t('LOGIN.LOGIN')}</Button>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -47,7 +49,7 @@ const Login: React.FC = () => {
                   textAlign: 'center',
                 }}
               >
-                Log in with another provider
+                {t('LOGIN.ANOTHER_PROVIDER_TITLE')}
               </Typography>
               <Box display='flex' flexDirection='column'
                 sx={{ paddingLeft: { sm: 4 }, rowGap: 1 }}

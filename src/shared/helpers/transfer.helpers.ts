@@ -4,14 +4,14 @@ import { mapNumberToCurrencyString } from './common.helpers';
 
 export const mapTransfers = (transfers: TransferDTO[], accounts: Account[], showDecimals = false): Transfer[] => {
   return transfers.map((transfer) => {
-    const fromAccount = accounts.find(({ id }) => id === transfer.fromAccount)!;
-    const toAccount = accounts.find(({ id }) => id === transfer.toAccount)!;
-
-    return mapTransfer(transfer, fromAccount, toAccount, showDecimals);
+    return mapTransfer(transfer, accounts, showDecimals);
   });
 };
 
-export const mapTransfer = (transfer: TransferDTO, from: Account, to: Account, showDecimals = false): Transfer => {
+export const mapTransfer = (transfer: TransferDTO, accounts: Account[], showDecimals = false): Transfer => {
+  const from = accounts.find(({ id }) => id === transfer.fromAccount)!;
+  const to = accounts.find(({ id }) => id === transfer.toAccount)!;
+
   return {
     ...transfer,
     fromAccount: from,

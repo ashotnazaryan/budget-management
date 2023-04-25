@@ -2,20 +2,23 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { store } from 'store';
 import { ErrorResponse, StatusState, Transfer, TransferDTO } from 'shared/models';
-import { mapTransfers } from 'shared/helpers';
+import { mapTransfer, mapTransfers } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
-import { getSummary } from './summarySlice';
 import { getAccounts } from './accountSlice';
 
 export interface TransferState {
   transfers: Transfer[];
   status: StatusState;
+  deleteStatus: StatusState;
+  currentTransfer?: Transfer;
   error?: ErrorResponse;
 }
 
 const initialState: TransferState = {
   transfers: [],
+  // TODO: create other statuses
+  deleteStatus: 'idle',
   status: 'idle'
 };
 
@@ -38,6 +41,26 @@ export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTra
   }
 });
 
+export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejectValue: ErrorResponse }>(
+  'transfers/getTransfer',
+  async (id): Promise<Transfer> => {
+    try {
+      const response = await axios.get<TransferDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`);
+
+      if (response?.data) {
+        const { showDecimals } = store.getState().setting;
+        const { accounts } = store.getState().account;
+
+        return mapTransfer(response.data, accounts, showDecimals);
+      }
+
+      return {} as Transfer;
+    } catch (error) {
+      console.error(error);
+      return {} as Transfer;
+    }
+  });
+
 export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue: ErrorResponse }>(
   'transfers/createTransfer',
   async (transfer, { dispatch, rejectWithValue }): Promise<any> => {
@@ -47,8 +70,37 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
       if (response?.data) {
         dispatch(getTransfers());
         dispatch(getAccounts());
-        dispatch(getSummary());
       }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
+
+export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<TransferDTO, 'id'>], { rejectValue: ErrorResponse }>(
+  'transfers/editTransfer',
+  async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`, account);
+
+      if (response?.data) {
+        dispatch(getTransfers());
+        dispatch(getAccounts());
+      }
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error.error);
+    }
+  });
+
+export const deleteTransfer = createAsyncThunk<void, Transfer['id'], { rejectValue: ErrorResponse }>(
+  'transfers/deleteTransfer',
+  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`);
+
+      dispatch(getTransfers());
+      dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
       return rejectWithValue(error.error);
@@ -58,7 +110,14 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
 export const transferSlice = createSlice({
   name: 'transfers',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCurrentTransfer(state) {
+      return {
+        ...state,
+        currentTransfer: undefined
+      };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getTransfers.pending, (state) => {
@@ -80,22 +139,67 @@ export const transferSlice = createSlice({
           status: 'succeeded'
         };
       })
+      .addCase(getTransfer.fulfilled, (state, action: PayloadAction<Transfer>) => {
+        return {
+          ...state,
+          currentTransfer: action.payload
+        };
+      })
       .addCase(createTransfer.pending, (state) => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(createTransfer.rejected, (state) => {
+      .addCase(createTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
         return {
           ...state,
-          status: 'failed'
+          status: 'failed',
+          error: action.payload
         };
       })
       .addCase(createTransfer.fulfilled, (state) => {
         return {
           ...state,
           status: 'succeeded'
+        };
+      })
+      .addCase(editTransfer.pending, (state) => {
+        return {
+          ...state,
+          status: 'loading'
+        };
+      })
+      .addCase(editTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+        return {
+          ...state,
+          status: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(editTransfer.fulfilled, (state) => {
+        return {
+          ...state,
+          status: 'succeeded'
+        };
+      })
+      .addCase(deleteTransfer.pending, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'loading'
+        };
+      })
+      .addCase(deleteTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+        return {
+          ...state,
+          deleteStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(deleteTransfer.fulfilled, (state) => {
+        return {
+          ...state,
+          deleteStatus: 'succeeded'
         };
       })
       .addCase(resetApp, () => {
@@ -107,5 +211,7 @@ export const transferSlice = createSlice({
 export const selectTransfer = (state: RootState): TransferState => state.transfer;
 export const selectTransferStatus = (state: RootState): TransferState['status'] => state.transfer.status;
 export const selectTransferError = (state: RootState): TransferState['error'] => state.transfer.error;
+export const selectCurrentTransfer = (state: RootState): TransferState['currentTransfer'] => state.transfer.currentTransfer;
 
+export const { resetCurrentTransfer } = transferSlice.actions;
 export default transferSlice.reducer;

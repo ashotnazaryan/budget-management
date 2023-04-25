@@ -11,6 +11,7 @@ const Transfers: React.FC<TransfersProps> = () => {
     <Routes>
       <Route path='/' element={<TransferList />} />
       <Route path='/new' element={<CreateEditTransfer mode='create' />} />
+      <Route path='/edit/:id' element={<CreateEditTransfer mode='edit' />} />
       <Route path='*' element={<Navigate to={ROUTES.transfers.path} replace />} />
     </Routes>
   );

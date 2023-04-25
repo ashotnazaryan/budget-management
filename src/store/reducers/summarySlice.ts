@@ -9,6 +9,7 @@ import { resetApp } from './appSlice';
 export interface SummaryState extends Summary {
   status: StatusState;
   balanceStatus: StatusState;
+  activePeriodFilter: Period;
 }
 
 const initialState: SummaryState = {
@@ -18,6 +19,7 @@ const initialState: SummaryState = {
   balance: '0',
   categoryExpenseTransactions: [],
   categoryIncomeTransactions: [],
+  activePeriodFilter: Period.month,
   status: 'idle',
   balanceStatus: 'idle'
 };
@@ -57,7 +59,20 @@ export const getBalance = createAsyncThunk('summary/getBalance', async (): Promi
 export const summarySlice = createSlice({
   name: 'summary',
   initialState,
-  reducers: {},
+  reducers: {
+    setActivePeriodFilter(state, action: PayloadAction<Period>) {
+      return {
+        ...state,
+        activePeriodFilter: action.payload
+      };
+    },
+    resetSummaryStatus(state) {
+      return {
+        ...state,
+        status: initialState.status
+      };
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getSummary.pending, (state) => {
@@ -107,4 +122,5 @@ export const summarySlice = createSlice({
 export const selectSummary = (state: RootState): SummaryState => state.summary;
 export const selectBalance = (state: RootState): SummaryState['balance'] => state.summary.balance;
 
+export const { setActivePeriodFilter, resetSummaryStatus } = summarySlice.actions;
 export default summarySlice.reducer;

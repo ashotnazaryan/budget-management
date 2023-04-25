@@ -41,6 +41,11 @@
     "TRANSFERS": "Трансферы",
     "TRANSACTIONS": "Транзакции"
   },
+  "LOGIN": {
+    "LOCAL_PROVIDER_TITLE": "Log into your account",
+    "ANOTHER_PROVIDER_TITLE": "Log in with another provider",
+    "LOGIN": "Login"
+  },
   "DASHBOARD": {
     "SUMMARY": "Сумма",
     "TOTAL_INCOME": "Общий доход",
@@ -133,6 +138,8 @@
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма",
       "SAME_ACCOUNT": "Вы не можете делать трансфер между одним и тем же счетом."
-    }
+    },
+    "DELETE_DIALOG_TITLE": "Удалить трансфер",
+    "DELETE_DIALOG_CONFIRM": "Вы уверены что хотите удалить этот трансфер? Баланс счетов будет пересчитан."
   }
 }

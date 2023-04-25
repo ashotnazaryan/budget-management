@@ -20,7 +20,7 @@ interface AccountListProps { }
 const AccountList: React.FC<AccountListProps> = () => {
   const dispatch = useAppDispatch();
   const { accounts, status } = useAppSelector(selectAccount);
-  const { balance } = useAppSelector(selectSummary);
+  const { balance, balanceStatus } = useAppSelector(selectSummary);
   const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -47,8 +47,10 @@ const AccountList: React.FC<AccountListProps> = () => {
   };
 
   React.useEffect(() => {
-    dispatch(getBalance());
-  }, [dispatch]);
+    if (balanceStatus === 'idle' || balanceStatus === 'failed') {
+      dispatch(getBalance());
+    }
+  }, [dispatch, balanceStatus]);
 
   const getContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {

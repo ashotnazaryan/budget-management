@@ -34,6 +34,11 @@ const TransferList: React.FC<TransferListProps> = () => {
     navigate(`${ROUTES.accounts.path}`);
   };
 
+  const handleTransferItemClick = ({ id, fromAccount, toAccount }: TransferModel): void => {
+    const urlParam = `${fromAccount.name}-${toAccount.name}`;
+    navigate(`${ROUTES.transfers.path}/edit/${urlParam}`, { state: { id } });
+  };
+
   React.useEffect(() => {
     if (status === 'idle' || status === 'failed') {
       dispatch(getTransfers());
@@ -54,7 +59,7 @@ const TransferList: React.FC<TransferListProps> = () => {
         {
           transfers.map((transfer) => (
             <Grid item key={transfer.id} xs={12}>
-              <Transfer data={getTransferData(transfer)} />
+              <Transfer data={getTransferData(transfer)} onClick={handleTransferItemClick} />
             </Grid>
           ))
         }

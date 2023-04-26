@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'store';
 import { IconType, Account as AccountModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';
-import { getAccounts, getBalance, selectAccount, selectSettings, selectSummary } from 'store/reducers';
+import { getAccounts, getBalance, selectAccount, selectSummary } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
@@ -21,7 +21,6 @@ const AccountList: React.FC<AccountListProps> = () => {
   const dispatch = useAppDispatch();
   const { accounts, status } = useAppSelector(selectAccount);
   const { balance, balanceStatus } = useAppSelector(selectSummary);
-  const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -80,7 +79,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
-      <TransferButtons balance={balance} currencySymbol={symbol} sx={{ marginBottom: 4 }} />
+      <TransferButtons balance={balance} sx={{ marginBottom: 4 }} />
       {renderContent()}
     </Box>
   );

@@ -3,18 +3,16 @@ import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
-import { Currency } from 'shared/models';
 import Ellipsis from 'shared/components/Ellipsis';
 import Balance from 'shared/components/Balance';
 
 interface UserBalanceInfoProps {
   fullName: string;
   balance: string;
-  currencySymbol: Currency['symbol'];
   avatar?: string;
 }
 
-const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbol, fullName = '', balance = '0' }) => {
+const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, fullName = '', balance = '0' }) => {
   const { palette: { secondary: { main } } } = useTheme();
   const { t } = useTranslation();
 
@@ -29,7 +27,7 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, currencySymbo
         </Grid>
         <Grid item xs={12} display='flex' alignItems='center'>
           <Ellipsis text={t('COMMON.BALANCE')} sx={{ fontSize: 16, marginRight: 1 }} />
-          <Balance balance={balance} currencySymbol={currencySymbol} />
+          <Balance balance={balance} />
         </Grid>
       </Grid>
     </Grid>

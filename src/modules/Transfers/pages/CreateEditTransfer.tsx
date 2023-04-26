@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { createTransfer, deleteTransfer, editTransfer, getAccounts, getTransfer, resetCurrentTransfer, selectAccount, selectAccountStatus, selectCurrentTransfer, selectTransfer, selectTransferError } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, TransferDTO, TransferField } from 'shared/models';
-import { transferHelper, getCurrencySymbolByIsoCode, mapCurrencyStringToNumber } from 'shared/helpers';
+import { transferHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
@@ -208,7 +208,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
-                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                  <Balance balance={balance} />
                 </MenuItem>
               ))}
             </FormSelect>
@@ -233,7 +233,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
-                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                  <Balance balance={balance} />
                 </MenuItem>
               ))}
             </FormSelect>

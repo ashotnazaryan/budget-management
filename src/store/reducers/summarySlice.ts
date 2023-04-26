@@ -28,14 +28,14 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (period?:
   const { defaultPeriod } = store.getState().setting;
   const { activePeriodFilter } = store.getState().summary;
   const queryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
-  
+
   try {
     const response = await axios.get<SummaryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary${queryParams}`);
 
     if (response?.data) {
-      const { showDecimals } = store.getState().setting;
+      const { defaultCurrency: { iso }, showDecimals } = store.getState().setting;
 
-      return mapSummary(response.data, showDecimals);
+      return mapSummary(response.data, iso, showDecimals);
     }
 
     return {} as Summary;
@@ -48,9 +48,9 @@ export const getSummary = createAsyncThunk('summary/getSummary', async (period?:
 export const getBalance = createAsyncThunk('summary/getBalance', async (): Promise<Summary['balance']> => {
   try {
     const response = await axios.get<SummaryDTO['balance']>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/summary/balance`);
-    const { showDecimals } = store.getState().setting;
+    const { defaultCurrency, showDecimals } = store.getState().setting;
 
-    return mapBalance(response.data, showDecimals) || '0';
+    return mapBalance(response.data, defaultCurrency.iso, showDecimals) || '0';
   } catch (error) {
     console.error(error);
     return '0';
@@ -61,13 +61,13 @@ export const summarySlice = createSlice({
   name: 'summary',
   initialState,
   reducers: {
-    setActivePeriodFilter(state, action: PayloadAction<Period>) {
+    setActivePeriodFilter(state, action: PayloadAction<Period>): SummaryState {
       return {
         ...state,
         activePeriodFilter: action.payload
       };
     },
-    resetSummaryStatus(state) {
+    resetSummaryStatus(state): SummaryState {
       return {
         ...state,
         status: initialState.status
@@ -76,45 +76,45 @@ export const summarySlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getSummary.pending, (state) => {
+      .addCase(getSummary.pending, (state): SummaryState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getSummary.rejected, (state) => {
+      .addCase(getSummary.rejected, (state): SummaryState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getSummary.fulfilled, (state, action: PayloadAction<Summary>) => {
+      .addCase(getSummary.fulfilled, (state, action: PayloadAction<Summary>): SummaryState => {
         return {
           ...state,
           ...action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getBalance.pending, (state) => {
+      .addCase(getBalance.pending, (state): SummaryState => {
         return {
           ...state,
           balanceStatus: 'loading'
         };
       })
-      .addCase(getBalance.rejected, (state) => {
+      .addCase(getBalance.rejected, (state): SummaryState => {
         return {
           ...state,
           balanceStatus: 'failed'
         };
       })
-      .addCase(getBalance.fulfilled, (state, action: PayloadAction<Summary['balance']>) => {
+      .addCase(getBalance.fulfilled, (state, action: PayloadAction<Summary['balance']>): SummaryState => {
         return {
           ...state,
           balance: action.payload,
           balanceStatus: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): SummaryState => {
         return initialState;
       });
   }

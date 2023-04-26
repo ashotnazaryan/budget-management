@@ -9,11 +9,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
+import date from 'core/date';
 import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LANGUAGES, PERIOD_OPTIONS } from 'shared/constants';
 import { Account, Currency, Language, Period } from 'shared/models';
-import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
@@ -50,7 +50,7 @@ const Settings: React.FC = () => {
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
     const isoCode = event.target.value as Currency['iso'];
 
-    dispatch(addSetting([{ defaultCurrency: isoCode }, false, false]));
+    dispatch(addSetting([{ defaultCurrency: isoCode }, false, true]));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
@@ -76,7 +76,8 @@ const Settings: React.FC = () => {
   const handleChangeLanguage = (event: SelectChangeEvent) => {
     const language = event.target.value as Language['iso'];
 
-    dispatch(addSetting([{ language }, false, false]));
+    dispatch(addSetting([{ language }, false, true]));
+    date().setLocale(language);
     i18n.changeLanguage(language);
   };
 
@@ -128,7 +129,7 @@ const Settings: React.FC = () => {
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
-                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                  <Balance balance={balance} />
                 </MenuItem>
               ))}
             </Select>

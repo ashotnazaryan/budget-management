@@ -46,7 +46,7 @@ const Login: React.FC = () => {
           sx={{ rowGap: 1 }}
         >
           <Button
-            variant='outlined'
+            variant='contained'
             capitalize={false}
             startIcon={<Icon name={IconType.google} />}
             onClick={googleLogin}

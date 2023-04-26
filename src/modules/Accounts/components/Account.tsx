@@ -14,7 +14,7 @@ interface AccountProps {
 
 const Account: React.FC<AccountProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = useTheme();
-  const { name, icon, balance, currencySymbol } = data;
+  const { name, icon, balance } = data;
 
   const onAccountClick = (): void => {
     if (onClick) {
@@ -39,7 +39,7 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
-          <Balance balance={balance} currencySymbol={currencySymbol} positiveColor={contrastText} />
+          <Balance balance={balance} positiveColor={contrastText} />
         </Grid>
       </Grid>
     </Paper>

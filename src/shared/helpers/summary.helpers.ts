@@ -1,35 +1,36 @@
-import dayjs from 'dayjs';
-import { SummaryDTO, Summary, IconType } from 'shared/models';
+import date from 'core/date';
+import { SummaryDTO, Summary, IconType, Currency } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
+import { DATE_FORMAT } from 'shared/constants';
 
-export const mapSummary = (summary: SummaryDTO, showDecimals = false): Summary => {
+export const mapSummary = (summary: SummaryDTO, currencyIso: Currency['iso'], showDecimals = false): Summary => {
   if (!summary) {
     return {} as Summary;
   }
 
   return {
     ...summary,
-    incomes: mapNumberToCurrencyString(summary.incomes, showDecimals),
-    expenses: mapNumberToCurrencyString(summary.expenses, showDecimals),
-    profit: mapNumberToCurrencyString(summary.profit, showDecimals),
-    balance: mapNumberToCurrencyString(summary.balance, showDecimals),
+    incomes: mapNumberToCurrencyString(summary.incomes, currencyIso, showDecimals),
+    expenses: mapNumberToCurrencyString(summary.expenses, currencyIso, showDecimals),
+    profit: mapNumberToCurrencyString(summary.profit, currencyIso, showDecimals),
+    balance: mapNumberToCurrencyString(summary.balance, currencyIso, showDecimals),
     categoryExpenseTransactions: summary.categoryExpenseTransactions.map((transaction) => ({
       ...transaction,
-      amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
+      amount: mapNumberToCurrencyString(transaction.amount, currencyIso, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
+      createdAt: date(transaction.createdAt).format(DATE_FORMAT),
       icon: transaction.icon as IconType
     })),
     categoryIncomeTransactions: summary.categoryIncomeTransactions.map((transaction) => ({
       ...transaction,
-      amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
+      amount: mapNumberToCurrencyString(transaction.amount, currencyIso, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
+      createdAt: date(transaction.createdAt).format(DATE_FORMAT),
       icon: transaction.icon as IconType
     }))
   };
 };
 
-export const mapBalance = (balance: SummaryDTO['balance'], showDecimals = false): Summary['balance'] => {
-  return mapNumberToCurrencyString(balance, showDecimals);
+export const mapBalance = (balance: SummaryDTO['balance'], currencyIso: Currency['iso'], showDecimals = false): Summary['balance'] => {
+  return mapNumberToCurrencyString(balance, currencyIso, showDecimals);
 };

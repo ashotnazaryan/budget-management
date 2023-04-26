@@ -30,7 +30,7 @@ import {
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { getCurrencySymbolByIsoCode, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
+import { mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
@@ -297,7 +297,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Ellipsis text={nameKey ? t(nameKey) : name} />
-                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                  <Balance balance={balance} />
                 </MenuItem>
               ))}
             </FormSelect>

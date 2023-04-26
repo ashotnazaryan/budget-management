@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@mui/material/styles';
-import { Currency, Period, Transaction } from 'shared/models';
+import { Period, Transaction } from 'shared/models';
 import CategoryTransaction from '../../components/CategoryTransaction';
 import Balance from 'shared/components/Balance';
 import PeriodFilters from './PeriodFilters';
@@ -16,14 +16,13 @@ interface SummaryProps {
   incomes: string;
   expenses: string;
   profit: string;
-  currencySymbol: Currency['symbol'];
   transactions: Transaction[];
   period: Period;
   onAddTransaction: () => void;
   onFilter: (period: Period) => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySymbol, transactions, period, onAddTransaction, onFilter }) => {
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactions, period, onAddTransaction, onFilter }) => {
   const { palette: { primary: { main, dark, light, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
@@ -57,14 +56,14 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySy
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               {t('DASHBOARD.TOTAL_INCOME')}
             </Typography>
-            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{incomes}</Typography>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
             <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>
               {t('DASHBOARD.TOTAL_EXPENSES')}
             </Typography>
-            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{currencySymbol}{expenses}</Typography>
+            <Typography color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{expenses}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={12}>
@@ -72,7 +71,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, currencySy
             <Typography color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>
               {t('DASHBOARD.PROFIT')}
             </Typography>
-            <Balance balance={profit} currencySymbol={currencySymbol} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
+            <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>

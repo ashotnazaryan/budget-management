@@ -45,7 +45,7 @@ const TransferList: React.FC<TransferListProps> = () => {
     }
   }, [dispatch, status]);
 
-  const getContent = (): React.ReactElement => {
+  const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
@@ -67,12 +67,10 @@ const TransferList: React.FC<TransferListProps> = () => {
     );
   };
 
-  const content = getContent();
-
   return (
     <Box flexGrow={1}>
       <PageTitle withBackButton text={t('TRANSFERS.PAGE_TITLE')} onBackButtonClick={goBack} />
-      {content}
+      {renderContent()}
     </Box>
   );
 };

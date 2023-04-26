@@ -56,7 +56,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     };
   };
 
-  const getContent = (): React.ReactElement => {
+  const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
@@ -81,13 +81,11 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     );
   };
 
-  const content = getContent();
-
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('CATEGORIES.PAGE_TITLE')} />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
-      {content}
+      {renderContent()}
     </Box>
   );
 };

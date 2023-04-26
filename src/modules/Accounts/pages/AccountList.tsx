@@ -52,7 +52,7 @@ const AccountList: React.FC<AccountListProps> = () => {
     }
   }, [dispatch, balanceStatus]);
 
-  const getContent = (): React.ReactElement => {
+  const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
@@ -77,13 +77,11 @@ const AccountList: React.FC<AccountListProps> = () => {
     );
   };
 
-  const content = getContent();
-
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
       <TransferButtons balance={balance} currencySymbol={symbol} sx={{ marginBottom: 4 }} />
-      {content}
+      {renderContent()}
     </Box>
   );
 };

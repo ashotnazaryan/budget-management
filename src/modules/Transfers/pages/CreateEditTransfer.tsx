@@ -22,6 +22,8 @@ import FormDatePicker from 'shared/components/FormDatePicker';
 import Balance from 'shared/components/Balance';
 import Snackbar from 'shared/components/Snackbar';
 import Dialog from 'shared/components/Dialog';
+import Skeleton from 'shared/components/Skeleton';
+import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditTransferProps {
   mode: 'create' | 'edit';
@@ -31,7 +33,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status, deleteStatus } = useAppSelector(selectTransfer);
+  const { status, currentStatus, deleteStatus } = useAppSelector(selectTransfer);
   const error = useAppSelector(selectTransferError);
   const transfer = useAppSelector(selectCurrentTransfer);
   const { accounts } = useAppSelector(selectAccount);
@@ -174,105 +176,119 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     };
   }, [resetForm]);
 
+  const renderContent = (): React.ReactElement => {
+    if (currentStatus === 'loading') {
+      return <Skeleton />;
+    }
+
+    if (isEditMode && (!transfer || !transferId)) {
+      return <EmptyState text={t('TRANSFERS.EMPTY_TEXT_RENDER_CONTENT')} />;
+    }
+
+    return (
+      <FormProvider {...methods}>
+        <Grid container rowGap={6} columnSpacing={2}>
+          <Grid item sm={6} xs={12}>
+            {/* TODO: move this component to shared */}
+            <FormSelect
+              label={t('ACCOUNTS.FROM_ACCOUNT')}
+              name={TransferField.fromAccount}
+              value={watchFromAccount}
+              onChange={handleFromAccountChange}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.fromAccount.required!.message)
+                }
+              }}
+              renderValue={(value) => (
+                <Ellipsis text={getAccountValue(value)} />
+              )}
+            >
+              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                </MenuItem>
+              ))}
+            </FormSelect>
+          </Grid>
+          <Grid item sm={6} xs={12}>
+            {/* TODO: move this component to shared */}
+            <FormSelect
+              label={t('ACCOUNTS.TO_ACCOUNT')}
+              name={TransferField.toAccount}
+              value={watchToAccount}
+              onChange={handleToAccountChange}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.toAccount.required!.message)
+                }
+              }}
+              renderValue={(value) => (
+                <Ellipsis text={getAccountValue(value)} />
+              )}
+            >
+              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                </MenuItem>
+              ))}
+            </FormSelect>
+          </Grid>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.AMOUNT')}
+              type='number'
+              name={TransferField.amount}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.amount.required!.message)
+                },
+                pattern: {
+                  value: regex,
+                  message: t(helper.amount.pattern!.message)
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormDatePicker
+              name={TransferField.createdAt}
+              label={t('COMMON.DATE')}
+              value={dayjs(watchCreatedAt)}
+              maxDate={dayjs()}
+              rules={{
+                required: true,
+                validate: {
+                  maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                }
+              }}
+              onChange={handleDatePickerChange}
+              sx={{ width: '100%' }}
+            />
+          </Grid>
+          {isEditMode && (
+            <Grid item xs={12}>
+              <Button color='secondary' variant='contained'
+                onClick={handleOpenDialog}>
+                {t('COMMON.DELETE')}
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </FormProvider>
+    );
+  };
+
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
-        <FormProvider {...methods}>
-          <Grid container rowGap={6} columnSpacing={2}>
-            <Grid item sm={6} xs={12}>
-              {/* TODO: move this component to shared */}
-              <FormSelect
-                label={t('ACCOUNTS.FROM_ACCOUNT')}
-                name={TransferField.fromAccount}
-                value={watchFromAccount}
-                onChange={handleFromAccountChange}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.fromAccount.required!.message)
-                  }
-                }}
-                renderValue={(value) => (
-                  <Ellipsis text={getAccountValue(value)} />
-                )}
-              >
-                {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
-                  <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            </Grid>
-            <Grid item sm={6} xs={12}>
-              {/* TODO: move this component to shared */}
-              <FormSelect
-                label={t('ACCOUNTS.TO_ACCOUNT')}
-                name={TransferField.toAccount}
-                value={watchToAccount}
-                onChange={handleToAccountChange}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.toAccount.required!.message)
-                  }
-                }}
-                renderValue={(value) => (
-                  <Ellipsis text={getAccountValue(value)} />
-                )}
-              >
-                {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
-                  <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            </Grid>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.AMOUNT')}
-                type='number'
-                name={TransferField.amount}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.amount.required!.message)
-                  },
-                  pattern: {
-                    value: regex,
-                    message: t(helper.amount.pattern!.message)
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormDatePicker
-                name={TransferField.createdAt}
-                label={t('COMMON.DATE')}
-                value={dayjs(watchCreatedAt)}
-                maxDate={dayjs()}
-                rules={{
-                  required: true,
-                  validate: {
-                    maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
-                  }
-                }}
-                onChange={handleDatePickerChange}
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-            {isEditMode && (
-              <Grid item xs={12}>
-                <Button color='secondary' variant='contained'
-                  onClick={handleOpenDialog}>
-                  {t('COMMON.DELETE')}
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </FormProvider>
+        {renderContent()}
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button type='submit' variant='contained' loading={loading}

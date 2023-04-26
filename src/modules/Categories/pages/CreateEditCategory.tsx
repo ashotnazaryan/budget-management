@@ -19,6 +19,8 @@ import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
+import Skeleton from 'shared/components/Skeleton';
+import EmptyState from 'shared/components/EmptyState';
 
 interface NewCategoryProps {
   mode: 'create' | 'edit';
@@ -31,7 +33,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
-  const { status, deleteStatus } = useAppSelector(selectCategory);
+  const { status, deleteStatus, currentStatus } = useAppSelector(selectCategory);
   const error = useAppSelector(selectCategoryError);
   const category = useAppSelector(selectCurrentCategory);
   const { palette: { info: { contrastText } } } = useTheme();
@@ -147,74 +149,88 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     };
   }, [resetForm]);
 
+  const renderContent = (): React.ReactElement => {
+    if (currentStatus === 'loading') {
+      return <Skeleton />;
+    }
+
+    if (isEditMode && (!category || !categoryId)) {
+      return <EmptyState text={t('CATEGORIES.EMPTY_TEXT_RENDER_CONTENT')} />;
+    }
+
+    return (
+      <FormProvider {...methods}>
+        <Grid container rowGap={5}>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.NAME')}
+              name={CategoryField.name}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.name.required!.message)
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
+            <FormRadioGroup
+              name={CategoryField.type}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.type.required!.message)
+                }
+              }}
+              options={mapCategoryTypesWithTranslations(categoryTabs, t)}
+              labelColor={contrastText}
+              value={watchType}
+              onRadioChange={handleCategoryTypeChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
+            <Controller
+              control={control}
+              name={CategoryField.icon}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                    {
+                      icons.map(({ name }) => (
+                        <Grid item key={name}>
+                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
+                </>
+              )}
+            />
+          </Grid>
+          {isEditMode && (
+            <Grid item xs={12}>
+              <Button color='secondary' variant='contained'
+                onClick={handleOpenDialog}>
+                {t('COMMON.DELETE')}
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </FormProvider>
+    );
+  };
+
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
-        <FormProvider {...methods}>
-          <Grid container rowGap={5}>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.NAME')}
-                name={CategoryField.name}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.name.required!.message)
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
-              <FormRadioGroup
-                name={CategoryField.type}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.type.required!.message)
-                  }
-                }}
-                options={mapCategoryTypesWithTranslations(categoryTabs, t)}
-                labelColor={contrastText}
-                value={watchType}
-                onRadioChange={handleCategoryTypeChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-              <Controller
-                control={control}
-                name={CategoryField.icon}
-                rules={{
-                  required: true
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <>
-                    <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                      {
-                        icons.map(({ name }) => (
-                          <Grid item key={name}>
-                            <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
-                    {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-                  </>
-                )}
-              />
-            </Grid>
-            {isEditMode && (
-              <Grid item xs={12}>
-                <Button color='secondary' variant='contained'
-                  onClick={handleOpenDialog}>
-                  {t('COMMON.DELETE')}
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </FormProvider>
+        {renderContent()}
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button type='submit' variant='contained' loading={loading}

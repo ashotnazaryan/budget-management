@@ -27,7 +27,7 @@ const Settings: React.FC = () => {
   const { defaultCurrency: { iso }, showDecimals, isDarkTheme, language, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
   const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
-  const { accounts } = useAppSelector(selectAccount);
+  const { accounts, status: accountStatus } = useAppSelector(selectAccount);
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
@@ -87,9 +87,14 @@ const Settings: React.FC = () => {
   React.useEffect(() => {
     if (status === 'succeeded') {
       setDialogOpened(false);
-      dispatch(getAccounts());
     }
   }, [status, dispatch]);
+
+  React.useEffect(() => {
+    if (accountStatus === 'idle' || accountStatus === 'failed') {
+      dispatch(getAccounts());
+    }
+  }, [dispatch, accountStatus]);
 
   return (
     <Box flexGrow={1}>

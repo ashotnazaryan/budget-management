@@ -11,15 +11,16 @@ export interface TransferState {
   transfers: Transfer[];
   status: StatusState;
   deleteStatus: StatusState;
+  currentStatus: StatusState;
   currentTransfer?: Transfer;
   error?: ErrorResponse;
 }
 
 const initialState: TransferState = {
   transfers: [],
-  // TODO: create other statuses
-  deleteStatus: 'idle',
-  status: 'idle'
+  status: 'idle',
+  currentStatus: 'idle',
+  deleteStatus: 'idle'
 };
 
 export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (_, { dispatch }): Promise<Transfer[]> => {
@@ -111,98 +112,113 @@ export const transferSlice = createSlice({
   name: 'transfers',
   initialState,
   reducers: {
-    resetCurrentTransfer(state) {
+    resetCurrentTransfer(state): TransferState {
       return {
         ...state,
-        currentTransfer: undefined
+        currentTransfer: initialState.currentTransfer,
+        currentStatus: initialState.currentStatus
       };
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(getTransfers.pending, (state) => {
+      .addCase(getTransfers.pending, (state): TransferState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getTransfers.rejected, (state) => {
+      .addCase(getTransfers.rejected, (state): TransferState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getTransfers.fulfilled, (state, action: PayloadAction<Transfer[]>) => {
+      .addCase(getTransfers.fulfilled, (state, action: PayloadAction<Transfer[]>): TransferState => {
         return {
           ...state,
           transfers: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getTransfer.fulfilled, (state, action: PayloadAction<Transfer>) => {
+      .addCase(getTransfer.pending, (state): TransferState => {
         return {
           ...state,
-          currentTransfer: action.payload
+          currentStatus: 'loading'
         };
       })
-      .addCase(createTransfer.pending, (state) => {
+      .addCase(getTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransferState => {
+        return {
+          ...state,
+          currentStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(getTransfer.fulfilled, (state, action: PayloadAction<Transfer>): TransferState => {
+        return {
+          ...state,
+          currentTransfer: action.payload,
+          currentStatus: 'succeeded'
+        };
+      })
+      .addCase(createTransfer.pending, (state): TransferState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(createTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(createTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransferState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(createTransfer.fulfilled, (state) => {
+      .addCase(createTransfer.fulfilled, (state): TransferState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(editTransfer.pending, (state) => {
+      .addCase(editTransfer.pending, (state): TransferState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(editTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(editTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransferState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(editTransfer.fulfilled, (state) => {
+      .addCase(editTransfer.fulfilled, (state): TransferState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(deleteTransfer.pending, (state) => {
+      .addCase(deleteTransfer.pending, (state): TransferState => {
         return {
           ...state,
           deleteStatus: 'loading'
         };
       })
-      .addCase(deleteTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(deleteTransfer.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransferState => {
         return {
           ...state,
           deleteStatus: 'failed',
           error: action.payload
         };
       })
-      .addCase(deleteTransfer.fulfilled, (state) => {
+      .addCase(deleteTransfer.fulfilled, (state): TransferState => {
         return {
           ...state,
           deleteStatus: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): TransferState => {
         return initialState;
       });
   }

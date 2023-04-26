@@ -12,6 +12,7 @@ export interface AccountState {
   accounts: Account[];
   status: StatusState;
   deleteStatus: StatusState;
+  currentStatus: StatusState;
   currentAccount?: Account;
   error?: ErrorResponse;
 }
@@ -19,7 +20,7 @@ export interface AccountState {
 const initialState: AccountState = {
   accounts: [],
   status: 'idle',
-  // TODO: create other statuses
+  currentStatus: 'idle',
   deleteStatus: 'idle'
 };
 
@@ -111,98 +112,113 @@ export const accountSlice = createSlice({
   name: 'accounts',
   initialState,
   reducers: {
-    resetCurrentAccount(state) {
+    resetCurrentAccount(state): AccountState {
       return {
         ...state,
-        currentAccount: undefined
+        currentAccount: initialState.currentAccount,
+        currentStatus: initialState.currentStatus
       };
-    },
+    }
   },
   extraReducers(builder) {
     builder
-      .addCase(getAccounts.pending, (state) => {
+      .addCase(getAccounts.pending, (state): AccountState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getAccounts.rejected, (state) => {
+      .addCase(getAccounts.rejected, (state): AccountState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getAccounts.fulfilled, (state, action: PayloadAction<Account[]>) => {
+      .addCase(getAccounts.fulfilled, (state, action: PayloadAction<Account[]>): AccountState => {
         return {
           ...state,
           accounts: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getAccount.fulfilled, (state, action: PayloadAction<Account>) => {
+      .addCase(getAccount.pending, (state): AccountState => {
         return {
           ...state,
-          currentAccount: action.payload
+          currentStatus: 'loading'
         };
       })
-      .addCase(createAccount.pending, (state) => {
+      .addCase(getAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
+        return {
+          ...state,
+          currentStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(getAccount.fulfilled, (state, action: PayloadAction<Account>): AccountState => {
+        return {
+          ...state,
+          currentAccount: action.payload,
+          currentStatus: 'succeeded'
+        };
+      })
+      .addCase(createAccount.pending, (state): AccountState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(createAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(createAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(createAccount.fulfilled, (state) => {
+      .addCase(createAccount.fulfilled, (state): AccountState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(editAccount.pending, (state) => {
+      .addCase(editAccount.pending, (state): AccountState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(editAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(editAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(editAccount.fulfilled, (state) => {
+      .addCase(editAccount.fulfilled, (state): AccountState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(deleteAccount.pending, (state) => {
+      .addCase(deleteAccount.pending, (state): AccountState => {
         return {
           ...state,
           deleteStatus: 'loading'
         };
       })
-      .addCase(deleteAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(deleteAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
           deleteStatus: 'failed',
           error: action.payload
         };
       })
-      .addCase(deleteAccount.fulfilled, (state) => {
+      .addCase(deleteAccount.fulfilled, (state): AccountState => {
         return {
           ...state,
           deleteStatus: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): AccountState => {
         return initialState;
       });
   }

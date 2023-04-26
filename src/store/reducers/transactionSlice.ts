@@ -12,6 +12,7 @@ export interface TransactionState {
   transactions: Transaction[];
   status: StatusState;
   deleteStatus: StatusState;
+  currentStatus: StatusState;
   currentTransaction?: Transaction;
   error?: ErrorResponse;
 }
@@ -19,7 +20,7 @@ export interface TransactionState {
 const initialState: TransactionState = {
   transactions: [],
   status: 'idle',
-  // TODO: create other statuses
+  currentStatus: 'idle',
   deleteStatus: 'idle'
 };
 
@@ -110,104 +111,121 @@ export const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
-    resetCurrentTransaction(state) {
+    resetCurrentTransaction(state): TransactionState {
       return {
         ...state,
-        currentTransaction: undefined
+        currentTransaction: initialState.currentTransaction,
+        currentStatus: initialState.currentStatus
       };
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(getTransactions.pending, (state) => {
+      .addCase(getTransactions.pending, (state): TransactionState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getTransactions.rejected, (state) => {
+      .addCase(getTransactions.rejected, (state): TransactionState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getTransactions.fulfilled, (state, action: PayloadAction<Transaction[]>) => {
+      .addCase(getTransactions.fulfilled, (state, action: PayloadAction<Transaction[]>): TransactionState => {
         return {
           ...state,
           transactions: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getTransaction.fulfilled, (state, action: PayloadAction<Transaction>) => {
+      .addCase(getTransaction.pending, (state): TransactionState => {
         return {
           ...state,
-          currentTransaction: action.payload
+          currentStatus: 'loading'
         };
       })
-      .addCase(addTransaction.pending, (state) => {
+      .addCase(getTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
+        return {
+          ...state,
+          currentStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(getTransaction.fulfilled, (state, action: PayloadAction<Transaction>): TransactionState => {
+        return {
+          ...state,
+          currentTransaction: action.payload,
+          currentStatus: 'succeeded'
+        };
+      })
+      .addCase(addTransaction.pending, (state): TransactionState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(addTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(addTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
           error: action.payload,
           status: 'failed'
         };
       })
-      .addCase(addTransaction.fulfilled, (state) => {
+      .addCase(addTransaction.fulfilled, (state): TransactionState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(editTransaction.pending, (state) => {
+      .addCase(editTransaction.pending, (state): TransactionState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(editTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(editTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(editTransaction.fulfilled, (state) => {
+      .addCase(editTransaction.fulfilled, (state): TransactionState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(deleteTransaction.pending, (state) => {
+      .addCase(deleteTransaction.pending, (state): TransactionState => {
         return {
           ...state,
           deleteStatus: 'loading'
         };
       })
-      .addCase(deleteTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(deleteTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
           deleteStatus: 'failed',
           error: action.payload
         };
       })
-      .addCase(deleteTransaction.fulfilled, (state) => {
+      .addCase(deleteTransaction.fulfilled, (state): TransactionState => {
         return {
           ...state,
           deleteStatus: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): TransactionState => {
         return initialState;
       });
   }
 });
 
 export const selectTransaction = (state: RootState): TransactionState => state.transaction;
+export const selectTransactionStatus = (state: RootState): TransactionState['status'] => state.transaction.status;
+export const selectTransactionError = (state: RootState): TransactionState['error'] => state.transaction.error;
 export const selectCurrentTransaction = (state: RootState): TransactionState['currentTransaction'] => state.transaction.currentTransaction;
 
 export const { resetCurrentTransaction } = transactionSlice.actions;

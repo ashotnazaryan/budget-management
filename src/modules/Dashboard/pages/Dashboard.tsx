@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
     dispatch(setActivePeriodFilter(period));
   };
 
-  const getContent = (): React.ReactElement => {
+  const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
@@ -56,12 +56,10 @@ const Dashboard: React.FC = () => {
     );
   };
 
-  const content = getContent();
-
   return (
     <Box sx={{ flexGrow: 1, paddingY: 1 }}>
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
-      {content}
+      {renderContent()}
     </Box>
   );
 };

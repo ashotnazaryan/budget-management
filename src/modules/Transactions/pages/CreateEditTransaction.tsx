@@ -25,7 +25,8 @@ import {
   editTransaction,
   selectCategoryStatus,
   selectAccountStatus,
-  deleteTransaction
+  deleteTransaction,
+  selectTransactionError
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
@@ -41,6 +42,8 @@ import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
 import Balance from 'shared/components/Balance';
+import Skeleton from 'shared/components/Skeleton';
+import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditTransactionProps {
   mode: 'create' | 'edit';
@@ -54,7 +57,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { state } = useLocation();
   const { categories } = useAppSelector(selectCategory);
   const categoryStatus = useAppSelector(selectCategoryStatus);
-  const { status, deleteStatus, error = { message: '' } } = useAppSelector(selectTransaction);
+  const { status, currentStatus, deleteStatus } = useAppSelector(selectTransaction);
+  const error = useAppSelector(selectTransactionError);
   const { accounts } = useAppSelector(selectAccount);
   const accountStatus = useAppSelector(selectAccountStatus);
   const { defaultAccount = '' } = useAppSelector(selectSettings);
@@ -228,126 +232,140 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     };
   }, [resetForm]);
 
+  const renderContent = (): React.ReactElement => {
+    if (currentStatus === 'loading') {
+      return <Skeleton />;
+    }
+
+    if (isEditMode && (!transaction || !transactionId)) {
+      return <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT_RENDER_CONTENT')} />;
+    }
+
+    return (
+      <FormProvider {...methods}>
+        <Grid container rowGap={7}>
+          <Grid item xs={12}>
+            <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
+            <FormRadioGroup
+              name={TransactionField.type}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.type.required!.message)
+                }
+              }}
+              options={mapCategoryTypesWithTranslations(categoryTabs, t)}
+              labelColor={contrastText}
+              value={watchType}
+              onRadioChange={handleCategoryTypeChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.AMOUNT')}
+              type='number'
+              name={TransactionField.amount}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.amount.required!.message)
+                },
+                pattern: {
+                  value: regex,
+                  message: t(helper.amount.pattern!.message)
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            {/* TODO: move this component to shared */}
+            <FormSelect
+              label={t('COMMON.ACCOUNT')}
+              name={TransactionField.accountId}
+              value={accounts.length ? (watchAccount || defaultAccount) : ''}
+              onChange={handleAccountChange}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.accountId.required!.message)
+                }
+              }}
+              renderValue={(value) => (
+                <Ellipsis text={getAccountValue(value)} />
+              )}
+            >
+              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
+                </MenuItem>
+              ))}
+            </FormSelect>
+          </Grid>
+          <Grid item xs={12}>
+            <FormDatePicker
+              name={TransactionField.createdAt}
+              label={t('COMMON.DATE')}
+              value={dayjs(watchCreatedAt)}
+              maxDate={dayjs()}
+              rules={{
+                required: true,
+                validate: {
+                  maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                }
+              }}
+              onChange={handleDatePickerChange}
+              sx={{ width: '100%' }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.NOTE')}
+              name={TransactionField.note}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.CATEGORY')}</Typography>
+            <Controller
+              control={control}
+              name={TransactionField.categoryId}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Grid container {...field} columnGap={4} rowGap={4}>
+                    {
+                      categories.filter(({ type }) => type === Number(watchType)).map((category) => (
+                        <Grid item key={category.id}>
+                          <CategoryIcon data={getCategoryData(category)} selected={field.value} onClick={handleCategoryIconClick} />
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+                  {error && <FormHelperText error>{t(helper.categoryId[error.type]!.message)}</FormHelperText>}
+                </>
+              )}
+            />
+          </Grid>
+          {isEditMode && (
+            <Grid item xs={12}>
+              <Button color='secondary' variant='contained'
+                onClick={handleOpenDialog}>
+                {t('COMMON.DELETE')}
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </FormProvider>
+    );
+  };
+
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
-        <FormProvider {...methods}>
-          <Grid container rowGap={7}>
-            <Grid item xs={12}>
-              <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
-              <FormRadioGroup
-                name={TransactionField.type}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.type.required!.message)
-                  }
-                }}
-                options={mapCategoryTypesWithTranslations(categoryTabs, t)}
-                labelColor={contrastText}
-                value={watchType}
-                onRadioChange={handleCategoryTypeChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.AMOUNT')}
-                type='number'
-                name={TransactionField.amount}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.amount.required!.message)
-                  },
-                  pattern: {
-                    value: regex,
-                    message: t(helper.amount.pattern!.message)
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {/* TODO: move this component to shared */}
-              <FormSelect
-                label={t('COMMON.ACCOUNT')}
-                name={TransactionField.accountId}
-                value={accounts.length ? (watchAccount || defaultAccount) : ''}
-                onChange={handleAccountChange}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.accountId.required!.message)
-                  }
-                }}
-                renderValue={(value) => (
-                  <Ellipsis text={getAccountValue(value)} />
-                )}
-              >
-                {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
-                  <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Ellipsis text={nameKey ? t(nameKey) : name} />
-                    <Balance balance={balance} currencySymbol={getCurrencySymbolByIsoCode(currencyIso)} />
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            </Grid>
-            <Grid item xs={12}>
-              <FormDatePicker
-                name={TransactionField.createdAt}
-                label={t('COMMON.DATE')}
-                value={dayjs(watchCreatedAt)}
-                maxDate={dayjs()}
-                rules={{
-                  required: true,
-                  validate: {
-                    maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
-                  }
-                }}
-                onChange={handleDatePickerChange}
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.NOTE')}
-                name={TransactionField.note}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.CATEGORY')}</Typography>
-              <Controller
-                control={control}
-                name={TransactionField.categoryId}
-                rules={{
-                  required: true
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <>
-                    <Grid container {...field} columnGap={4} rowGap={4}>
-                      {
-                        categories.filter(({ type }) => type === Number(watchType)).map((category) => (
-                          <Grid item key={category.id}>
-                            <CategoryIcon data={getCategoryData(category)} selected={field.value} onClick={handleCategoryIconClick} />
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
-                    {error && <FormHelperText error>{t(helper.categoryId[error.type]!.message)}</FormHelperText>}
-                  </>
-                )}
-              />
-            </Grid>
-            {isEditMode && (
-              <Grid item xs={12}>
-                <Button color='secondary' variant='contained'
-                  onClick={handleOpenDialog}>
-                  {t('COMMON.DELETE')}
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </FormProvider>
+        {renderContent()}
       </Box>
       <Box display='flex' alignItems='center' justifyContent='flex-end' marginY={3}>
         <Button type='submit' variant='contained' loading={loading}
@@ -356,7 +374,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           {t('COMMON.SAVE')}
         </Button>
       </Box>
-      <Snackbar open={showSnackbar} onClose={handleSnackbarClose} text={error.message} type='error' />
+      <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth
         maxWidth='xs'

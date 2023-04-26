@@ -34,7 +34,7 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, currencySymb
         <Ellipsis text={t('COMMON.BALANCE')} color={contrastText} fontSize={18} sx={{ marginRight: 1 }} />
         <Balance balance={balance} currencySymbol={currencySymbol} fontSize={18} />
       </Grid>
-      <Grid container item display='flex' justifyContent='space-between' columnSpacing={2} rowGap={2}>
+      <Grid container item display='flex' justifyContent='space-between' rowGap={2}>
         <Grid item sm={6} xs={12} display='flex' justifyContent='center'>
           <Button
             color='secondary'

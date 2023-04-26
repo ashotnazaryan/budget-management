@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Grid';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch } from 'store';
-import { ROUTES } from 'shared/constants';
 import { openSideBar } from 'store/reducers';
+import { ROUTES } from 'shared/constants';
 
 interface HeaderProps { }
 
 const Header: React.FC<HeaderProps> = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { palette: { primary: { contrastText, main } } } = useTheme();
 
   const showSideBar = (): void => {
@@ -24,13 +27,20 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <AppBar position='static' sx={{ backgroundColor: main }}>
       <Toolbar variant='dense' sx={{ paddingX: 3 }}>
-        <Grid container alignItems='center' justifyContent='space-between'>
-          <Grid item>
+        <Grid container alignItems='center'>
+          <Grid item xs={1} display='flex' justifyContent='flex-start'>
             <IconButton edge='start' onClick={showSideBar}>
               <MenuIcon sx={{ color: contrastText }} />
             </IconButton>
           </Grid>
-          <Grid item>
+          <Grid item xs={10} display='flex' justifyContent='center'>
+            <Link to={ROUTES.dashboard.path}>
+              <Typography component='div' color={contrastText} sx={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+                {t('PRODUCT_NAME')}
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid item xs={1} display='flex' justifyContent='flex-end'>
             <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
               <IconButton edge='end'>
                 <ListAltIcon sx={{ color: contrastText }} />

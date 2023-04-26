@@ -11,6 +11,7 @@ export interface CategoryState {
   categories: Category[];
   status: StatusState;
   deleteStatus: StatusState;
+  currentStatus: StatusState;
   currentCategory?: Category;
   error?: ErrorResponse;
 }
@@ -18,7 +19,7 @@ export interface CategoryState {
 const initialState: CategoryState = {
   categories: [],
   status: 'idle',
-  // TODO: create other statuses
+  currentStatus: 'idle',
   deleteStatus: 'idle'
 };
 
@@ -105,98 +106,113 @@ export const categorySlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    resetCurrentCategory(state) {
+    resetCurrentCategory(state): CategoryState {
       return {
         ...state,
-        currentCategory: undefined
+        currentCategory: initialState.currentCategory,
+        currentStatus: initialState.currentStatus
       };
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(getCategories.pending, (state) => {
+      .addCase(getCategories.pending, (state): CategoryState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getCategories.rejected, (state) => {
+      .addCase(getCategories.rejected, (state): CategoryState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
+      .addCase(getCategories.fulfilled, (state, action: PayloadAction<Category[]>): CategoryState => {
         return {
           ...state,
           categories: action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getCategory.fulfilled, (state, action: PayloadAction<Category>) => {
+      .addCase(getCategory.pending, (state): CategoryState => {
         return {
           ...state,
-          currentCategory: action.payload
+          currentStatus: 'loading'
         };
       })
-      .addCase(createCategory.pending, (state) => {
+      .addCase(getCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
+        return {
+          ...state,
+          currentStatus: 'failed',
+          error: action.payload
+        };
+      })
+      .addCase(getCategory.fulfilled, (state, action: PayloadAction<Category>): CategoryState => {
+        return {
+          ...state,
+          currentCategory: action.payload,
+          currentStatus: 'succeeded'
+        };
+      })
+      .addCase(createCategory.pending, (state): CategoryState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(createCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(createCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(createCategory.fulfilled, (state) => {
+      .addCase(createCategory.fulfilled, (state): CategoryState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(editCategory.pending, (state) => {
+      .addCase(editCategory.pending, (state): CategoryState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(editCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(editCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
           status: 'failed',
           error: action.payload
         };
       })
-      .addCase(editCategory.fulfilled, (state) => {
+      .addCase(editCategory.fulfilled, (state): CategoryState => {
         return {
           ...state,
           status: 'succeeded'
         };
       })
-      .addCase(deleteCategory.pending, (state) => {
+      .addCase(deleteCategory.pending, (state): CategoryState => {
         return {
           ...state,
           deleteStatus: 'loading'
         };
       })
-      .addCase(deleteCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(deleteCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
           deleteStatus: 'failed',
           error: action.payload
         };
       })
-      .addCase(deleteCategory.fulfilled, (state) => {
+      .addCase(deleteCategory.fulfilled, (state): CategoryState => {
         return {
           ...state,
           deleteStatus: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): CategoryState => {
         return initialState;
       });
   }

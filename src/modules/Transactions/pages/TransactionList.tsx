@@ -38,7 +38,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
     };
   };
 
-  const getContent = (): React.ReactElement => {
+  const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
       return <Skeleton />;
     }
@@ -60,12 +60,10 @@ const TransactionList: React.FC<TransactionListProps> = () => {
     );
   };
 
-  const content = getContent();
-
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('TRANSACTIONS.PAGE_TITLE')} />
-      {content}
+      {renderContent()}
     </Box>
   );
 };

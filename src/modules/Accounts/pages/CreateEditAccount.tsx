@@ -21,6 +21,8 @@ import Snackbar from 'shared/components/Snackbar';
 import AccountIcon from 'shared/components/AccountIcon';
 import FormSelect from 'shared/components/FormSelect';
 import Dialog from 'shared/components/Dialog';
+import Skeleton from 'shared/components/Skeleton';
+import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditAccountProps {
   mode: 'create' | 'edit';
@@ -35,7 +37,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const { state } = useLocation();
   const dispatch = useAppDispatch();
   const { palette: { info: { contrastText } } } = useTheme();
-  const { status, deleteStatus } = useAppSelector(selectAccount);
+  const { status, currentStatus, deleteStatus } = useAppSelector(selectAccount);
   const error = useAppSelector(selectAccountError);
   const account = useAppSelector(selectCurrentAccount);
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
@@ -157,93 +159,107 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     };
   }, [resetForm]);
 
+  const renderContent = (): React.ReactElement => {
+    if (currentStatus === 'loading') {
+      return <Skeleton />;
+    }
+
+    if (isEditMode && (!account || !accountId)) {
+      return <EmptyState text={t('ACCOUNTS.EMPTY_TEXT_RENDER_CONTENT')} />;
+    }
+
+    return (
+      <FormProvider {...methods}>
+        <Grid container rowGap={7}>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.NAME')}
+              name={AccountField.name}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.name.required!.message)
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormInput
+              label={t('COMMON.BALANCE')}
+              type='number'
+              name={AccountField.balance}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.balance.required!.message)
+                },
+                pattern: {
+                  value: regex,
+                  message: t(helper.balance.pattern!.message)
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormSelect
+              label={t('COMMON.CURRENCY')}
+              name={AccountField.currencyIso}
+              value={watchCurrency}
+              onChange={handleCurrencyChange}
+              rules={{
+                required: {
+                  value: true,
+                  message: t(helper.currencyIso.required!.message)
+                }
+              }}
+            >
+              {currencies.map(({ iso, name, symbol }) => (
+                <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+              ))}
+            </FormSelect>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
+            <Controller
+              control={control}
+              name={AccountField.icon}
+              rules={{
+                required: true
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                    {
+                      icons.map(({ name }) => (
+                        <Grid item key={name}>
+                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
+                </>
+              )}
+            />
+          </Grid>
+          {isEditMode && (
+            <Grid item xs={12}>
+              <Button color='secondary' variant='contained'
+                onClick={handleOpenDialog}>
+                {t('COMMON.DELETE')}
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </FormProvider>
+    );
+  };
+
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
       <Box flexGrow={1}>
-        <FormProvider {...methods}>
-          <Grid container rowGap={7}>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.NAME')}
-                name={AccountField.name}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.name.required!.message)
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormInput
-                label={t('COMMON.BALANCE')}
-                type='number'
-                name={AccountField.balance}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.balance.required!.message)
-                  },
-                  pattern: {
-                    value: regex,
-                    message: t(helper.balance.pattern!.message)
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormSelect
-                label={t('COMMON.CURRENCY')}
-                name={AccountField.currencyIso}
-                value={watchCurrency}
-                onChange={handleCurrencyChange}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t(helper.currencyIso.required!.message)
-                  }
-                }}
-              >
-                {currencies.map(({ iso, name, symbol }) => (
-                  <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
-                ))}
-              </FormSelect>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-              <Controller
-                control={control}
-                name={AccountField.icon}
-                rules={{
-                  required: true
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <>
-                    <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                      {
-                        icons.map(({ name }) => (
-                          <Grid item key={name}>
-                            <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
-                    {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-                  </>
-                )}
-              />
-            </Grid>
-            {isEditMode && (
-              <Grid item xs={12}>
-                <Button color='secondary' variant='contained'
-                  onClick={handleOpenDialog}>
-                  {t('COMMON.DELETE')}
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </FormProvider>
+        {renderContent()}
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
         <Button type='submit' variant='contained' loading={loading}

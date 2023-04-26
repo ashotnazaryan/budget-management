@@ -1,4 +1,5 @@
 {
+  "PRODUCT_NAME": "Управление Бюджетом",
   "COMMON": {
     "YES": "Да",
     "NO": "Нет",
@@ -42,9 +43,8 @@
     "TRANSACTIONS": "Транзакции"
   },
   "LOGIN": {
-    "LOCAL_PROVIDER_TITLE": "Log into your account",
-    "ANOTHER_PROVIDER_TITLE": "Log in with another provider",
-    "LOGIN": "Login"
+    "TITLE": "Вход",
+    "BUTTON_PREFIX": "Продолжить с"
   },
   "DASHBOARD": {
     "SUMMARY": "Сумма",
@@ -71,6 +71,7 @@
     "NEW_TRANSFER": "Новый трансфер",
     "EDIT_TRANSFER": "Изменить трансфер",
     "EMPTY_TEXT": "Нет счетов",
+    "EMPTY_TEXT_RENDER_CONTENT": "Счет не найден",
     "FROM_ACCOUNT": "Из счета",
     "TO_ACCOUNT": "К счету",
     "ITEMS": {
@@ -92,6 +93,7 @@
     "NEW_CATEGORY": "Новая категория",
     "EDIT_CATEGORY": "Изменить категорию",
     "EMPTY_TEXT": "Нет категорий",
+    "EMPTY_TEXT_RENDER_CONTENT": "Категория не найдена",
     "ITEMS": {
       "RENT": "Аренда",
       "GROCERIES": "Продукты",
@@ -116,6 +118,7 @@
     "NEW_TRANSACTION": "Новая транзакция",
     "EDIT_TRANSACTION": "Изменить транзакцию",
     "EMPTY_TEXT": "Нет транзакций",
+    "EMPTY_TEXT_RENDER_CONTENT": "Транзакция не найдена",
     "ERRORS": {
       "REQUIRED_AMOUNT": "Сумма обязательна",
       "INVALID_AMOUNT": "Неверная сумма",
@@ -132,6 +135,7 @@
     "NEW_TRANSFER": "Новый трансфер",
     "TRANSFER_HISTORY": "История трансферов",
     "EMPTY_TEXT": "Нет трансферов",
+    "EMPTY_TEXT_RENDER_CONTENT": "Трансфер не найден",
     "ERRORS": {
       "REQUIRED_FROM_ACCOUNT": "Из счета обязательно",
       "REQUIRED_TO_ACCOUNT": "К счету обязательно",

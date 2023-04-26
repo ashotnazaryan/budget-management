@@ -1,4 +1,5 @@
 {
+  "PRODUCT_NAME": "Budget Management",
   "COMMON": {
     "YES": "Yes",
     "NO": "No",
@@ -42,9 +43,8 @@
     "TRANSACTIONS": "Transactions"
   },
   "LOGIN": {
-    "LOCAL_PROVIDER_TITLE": "Вход в аккаунт",
-    "ANOTHER_PROVIDER_TITLE": "Вход с другим провайдером",
-    "LOGIN": "Вход"
+    "TITLE": "Sign in",
+    "BUTTON_PREFIX": "Continue with"
   },
   "DASHBOARD": {
     "SUMMARY": "Summary",
@@ -71,6 +71,7 @@
     "NEW_TRANSFER": "New transfer",
     "EDIT_TRANSFER": "Edit transfer",
     "EMPTY_TEXT": "No account is available",
+    "EMPTY_TEXT_RENDER_CONTENT": "Account not found",
     "FROM_ACCOUNT": "From account",
     "TO_ACCOUNT": "To account",
     "ITEMS": {
@@ -93,6 +94,7 @@
     "NEW_CATEGORY": "New category",
     "EDIT_CATEGORY": "Edit category",
     "EMPTY_TEXT": "No category is available",
+    "EMPTY_TEXT_RENDER_CONTENT": "Category not found",
     "ITEMS": {
       "RENT": "Rent",
       "GROCERIES": "Groceries",
@@ -116,6 +118,7 @@
     "NEW_TRANSACTION": "New transaction",
     "EDIT_TRANSACTION": "Edit transaction",
     "EMPTY_TEXT": "No transaction is available",
+    "EMPTY_TEXT_RENDER_CONTENT": "Transaction not found",
     "ERRORS": {
       "REQUIRED_AMOUNT": "Amount is required",
       "INVALID_AMOUNT": "Invalid amount",
@@ -132,6 +135,7 @@
     "NEW_TRANSFER": "New transfer",
     "TRANSFER_HISTORY": "Transfer history",
     "EMPTY_TEXT": "No transfer is available",
+    "EMPTY_TEXT_RENDER_CONTENT": "Transfer not found",
     "ERRORS": {
       "REQUIRED_FROM_ACCOUNT": "From account is required",
       "REQUIRED_TO_ACCOUNT": "To account is required",

@@ -1,13 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import date from 'core/date';
 import { ErrorResponse, Period, Setting, SettingDTO, StatusState } from 'shared/models';
 import { CURRENCIES, LANGUAGES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setAppStatus } from './appSlice';
 import { getBalance, resetSummaryStatus, setActivePeriodFilter } from './summarySlice';
-import { getTransactions } from './transactionSlice';
-import { getAccounts } from './accountSlice';
+import { resetTransactionStatus } from './transactionSlice';
+import { resetAccountStatus } from './accountSlice';
 
 export interface SettingState extends Setting {
   status: StatusState;
@@ -30,6 +31,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
 
     dispatch(setAppStatus('succeeded'));
     dispatch(setActivePeriodFilter(response?.data.defaultPeriod));
+    date().setLocale(response?.data.language);
 
     return mapSettings(response?.data);
   } catch (error) {
@@ -53,10 +55,8 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
 
       if (shouldFetchAllData) {
         dispatch(resetSummaryStatus());
-        // TODO: try to reset each state
-        // dispatch(getSummary());
-        dispatch(getTransactions());
-        dispatch(getAccounts());
+        dispatch(resetTransactionStatus());
+        dispatch(resetAccountStatus());
         dispatch(getBalance());
       }
     } catch (error: any) {
@@ -71,26 +71,26 @@ export const settingSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getSettings.pending, (state) => {
+      .addCase(getSettings.pending, (state): SettingState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getSettings.rejected, () => {
+      .addCase(getSettings.rejected, (): SettingState => {
         return {
           ...initialState,
           status: 'failed'
         };
       })
-      .addCase(getSettings.fulfilled, (state, action: PayloadAction<Setting>) => {
+      .addCase(getSettings.fulfilled, (state, action: PayloadAction<Setting>): SettingState => {
         return {
           ...state,
           ...action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(resetApp, () => {
+      .addCase(resetApp, (): SettingState => {
         return initialState;
       });
   }

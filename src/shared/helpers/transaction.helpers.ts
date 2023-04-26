@@ -1,6 +1,7 @@
-import dayjs from 'dayjs';
+import date from 'core/date';
 import { IconType, Transaction, TransactionDTO } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
+import { DATE_FORMAT } from 'shared/constants';
 
 export const mapTransactions = (transactions: TransactionDTO[], showDecimals = false): Transaction[] => {
   return transactions.map((transaction) => {
@@ -11,9 +12,9 @@ export const mapTransactions = (transactions: TransactionDTO[], showDecimals = f
 export const mapTransaction = (transaction: TransactionDTO, showDecimals = false): Transaction => {
   return {
     ...transaction,
-    amount: mapNumberToCurrencyString(transaction.amount, showDecimals),
+    amount: mapNumberToCurrencyString(transaction.amount, transaction.currencyIso, showDecimals),
     percentValue: transaction.percentValue ? `${transaction.percentValue}%` : undefined,
-    createdAt: dayjs(transaction.createdAt).format('MMM D, YYYY'),
+    createdAt: date(transaction.createdAt).format(DATE_FORMAT),
     icon: transaction.icon as IconType
   };
 };

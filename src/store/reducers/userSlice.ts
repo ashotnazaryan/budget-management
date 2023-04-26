@@ -37,25 +37,25 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    removeUser: () => {
+    removeUser: (): UserState => {
       return initialState;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(getUserInfo.pending, (state) => {
+      .addCase(getUserInfo.pending, (state): UserState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getUserInfo.rejected, (state) => {
+      .addCase(getUserInfo.rejected, (state): UserState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(getUserInfo.fulfilled, (state, action: PayloadAction<User>): UserState => {
         return {
           ...state,
           ...action.payload,

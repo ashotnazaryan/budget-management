@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import { CategoryType, Transaction as TransactionModel } from 'shared/models';
-import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
 
@@ -14,8 +13,7 @@ interface TransactionProps {
 
 const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText }, error } } = useTheme();
-  const { name, icon, accountName, accountIcon, createdAt, amount, currencyIso, type } = data;
-  const symbol = getCurrencySymbolByIsoCode(currencyIso);
+  const { name, icon, accountName, accountIcon, createdAt, amount, type } = data;
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -33,7 +31,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
           <Ellipsis text={name} color={contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={`${symbol}${amount}`} color={type === CategoryType.expense ? error.main : contrastText} />
+          <Ellipsis text={amount} color={type === CategoryType.expense ? error.main : contrastText} />
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
           <Ellipsis text={accountName} color={contrastText} />

@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { Transaction } from 'shared/models';
-import { getCurrencySymbolByIsoCode } from 'shared/helpers';
 import Ellipsis from 'shared/components/Ellipsis';
 import Icon from 'shared/components/Icon';
 
@@ -13,8 +12,7 @@ interface CategoryTransactionProps {
 }
 
 const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPercentage = true }) => {
-  const { name, icon, amount, currencyIso, percentValue = '' } = data;
-  const symbol = getCurrencySymbolByIsoCode(currencyIso);
+  const { name, icon, amount, percentValue = '' } = data;
   const { palette: { primary: { dark, light, contrastText } } } = useTheme();
 
   const getBGColor = () => {
@@ -47,7 +45,7 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
           {showPercentage && <Ellipsis color={contrastText} text={percentValue} />}
         </Grid>
         <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={contrastText} text={`${symbol}${amount}`} />
+          <Ellipsis color={contrastText} text={amount} />
         </Grid>
       </Grid>
     </Box>

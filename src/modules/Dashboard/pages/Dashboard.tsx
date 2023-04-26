@@ -6,13 +6,12 @@ import { CategoryType, Period } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
-import { selectSummary, selectCurrency, getSummary, setActivePeriodFilter } from 'store/reducers';
+import { selectSummary, getSummary, setActivePeriodFilter } from 'store/reducers';
 import Summary from '../components/Summary';
 
 const Dashboard: React.FC = () => {
   const tabs = TABS;
   const navigate = useNavigate();
-  const { symbol } = useAppSelector(selectCurrency);
   const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status, activePeriodFilter } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
   const [categoryType, setCategoryType] = React.useState<number>(0);
@@ -47,7 +46,6 @@ const Dashboard: React.FC = () => {
         incomes={incomes}
         expenses={expenses}
         profit={profit}
-        currencySymbol={symbol}
         transactions={transactions}
         period={activePeriodFilter}
         onAddTransaction={handleAddTransaction}

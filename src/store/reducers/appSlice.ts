@@ -31,22 +31,22 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    resetApp(state) {
+    resetApp(): AppState {
       return initialState;
     },
-    openSideBar: (state) => {
+    openSideBar: (state): AppState => {
       return {
         ...state,
         sideBarOpened: true
       };
     },
-    closeSidebar: (state) => {
+    closeSidebar: (state): AppState => {
       return {
         ...state,
         sideBarOpened: false
       };
     },
-    setAppStatus: (state, action: PayloadAction<StatusState>) => {
+    setAppStatus: (state, action: PayloadAction<StatusState>): AppState => {
       return {
         ...state,
         status: action.payload
@@ -55,20 +55,20 @@ const appSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(reset.pending, (state) => {
+      .addCase(reset.pending, (state): AppState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(reset.rejected, (state, action: PayloadAction<ErrorResponse | undefined>) => {
+      .addCase(reset.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AppState => {
         return {
           ...state,
           error: action.payload,
           status: 'failed'
         };
       })
-      .addCase(reset.fulfilled, () => {
+      .addCase(reset.fulfilled, (): AppState => {
         return {
           ...initialState,
           status: 'succeeded'

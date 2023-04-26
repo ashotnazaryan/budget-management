@@ -66,63 +66,63 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    removeAuth: () => {
+    removeAuth: (): AuthState => {
       return initialState;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(getUserToken.pending, (state) => {
+      .addCase(getUserToken.pending, (state): AuthState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getUserToken.rejected, (state) => {
+      .addCase(getUserToken.rejected, (state): AuthState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<Auth>) => {
+      .addCase(getUserToken.fulfilled, (state, action: PayloadAction<Auth>): AuthState => {
         return {
           ...state,
           ...action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(getNewAccessToken.pending, (state) => {
+      .addCase(getNewAccessToken.pending, (state): AuthState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getNewAccessToken.rejected, (state) => {
+      .addCase(getNewAccessToken.rejected, (state): AuthState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<Auth>) => {
+      .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<Auth>): AuthState => {
         return {
           ...state,
           ...action.payload,
           status: 'succeeded'
         };
       })
-      .addCase(logout.pending, (state) => {
+      .addCase(logout.pending, (state): AuthState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(logout.rejected, (state) => {
+      .addCase(logout.rejected, (state): AuthState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(logout.fulfilled, () => {
+      .addCase(logout.fulfilled, (): AuthState => {
         return {
           ...initialState,
           status: 'succeeded'

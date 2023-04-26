@@ -1,6 +1,7 @@
-import dayjs from 'dayjs';
+import date from 'core/date';
 import { Account, Transfer, TransferDTO } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
+import { DATE_FORMAT } from 'shared/constants';
 
 export const mapTransfers = (transfers: TransferDTO[], accounts: Account[], showDecimals = false): Transfer[] => {
   return transfers.map((transfer) => {
@@ -16,7 +17,7 @@ export const mapTransfer = (transfer: TransferDTO, accounts: Account[], showDeci
     ...transfer,
     fromAccount: from,
     toAccount: to,
-    createdAt: dayjs(transfer.createdAt).format('MMM D, YYYY'), // TODO: move date format to shared constants
-    amount: mapNumberToCurrencyString(transfer.amount, showDecimals),
+    createdAt: date(transfer.createdAt).format(DATE_FORMAT),
+    amount: mapNumberToCurrencyString(transfer.amount, from.currencyIso, showDecimals),
   };
 };

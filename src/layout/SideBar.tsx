@@ -21,7 +21,6 @@ import { useAppDispatch, useAppSelector } from 'store';
 import {
   closeSidebar,
   selectUser,
-  selectSettings,
   logout,
   selectApp,
   selectSummary,
@@ -39,7 +38,6 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
   const user = useAppSelector(selectUser);
   const { balance } = useAppSelector(selectSummary);
   const { palette: { secondary: { main } } } = useTheme();
-  const { defaultCurrency: { symbol } } = useAppSelector(selectSettings);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { t } = useTranslation();
   const avatar = user.avatar;
@@ -78,7 +76,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
           >
             <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${main}` }} columnSpacing={2}>
               <Grid item xs={11}>
-                <UserBalanceInfo fullName={user.fullName} avatar={avatar} currencySymbol={symbol} balance={balance} />
+                <UserBalanceInfo fullName={user.fullName} avatar={avatar} balance={balance} />
               </Grid>
               <Grid item xs={1}>
                 <IconButton edge='start' color='secondary' onClick={close}>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Grid, { GridProps } from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
-import { Currency, IconType, Summary } from 'shared/models';
+import { IconType, Summary } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
@@ -12,10 +12,9 @@ import Button from 'shared/components/Button';
 
 type TransferButtonsProps = {
   balance: Summary['balance'];
-  currencySymbol: Currency['symbol'];
 } & GridProps
 
-const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, currencySymbol, ...props }) => {
+const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) => {
   const { palette: { info: { contrastText } } } = useTheme();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -32,7 +31,7 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, currencySymb
     <Grid container rowGap={2} sx={{ ...props.sx }}>
       <Grid item xs={12} display='flex' justifyContent='center' alignItems='center'>
         <Ellipsis text={t('COMMON.BALANCE')} color={contrastText} fontSize={18} sx={{ marginRight: 1 }} />
-        <Balance balance={balance} currencySymbol={currencySymbol} fontSize={18} />
+        <Balance balance={balance} fontSize={18} />
       </Grid>
       <Grid container item display='flex' justifyContent='space-between' rowGap={2}>
         <Grid item sm={6} xs={12} display='flex' justifyContent='center'>

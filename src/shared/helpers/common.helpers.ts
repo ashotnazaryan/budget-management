@@ -1,11 +1,11 @@
-import dayjs from 'dayjs';
 import { TFunction } from 'i18next';
+import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
 import { Currency, DateRange, Period } from 'shared/models';
 import { RadioOption } from 'shared/components/FormRadioGroup';
 
 const getDateRangeForPeriod = (period: Period): DateRange => {
-  const now = dayjs();
+  const now = date();
 
   switch (period) {
   case Period.day:
@@ -34,25 +34,30 @@ const getDateRangeForPeriod = (period: Period): DateRange => {
 
   case Period.allTime:
     return {
-      fromDate: dayjs(new Date(0)),
+      fromDate: date(new Date(0)),
       toDate: now,
     };
 
   default:
     return {
-      fromDate: dayjs(new Date(0)),
+      fromDate: date(new Date(0)),
       toDate: now,
     };
   }
 };
 
-export const mapNumberToCurrencyString = (value: number, showDecimals = false): string => {
+export const mapNumberToCurrencyString = (value: number, currency: Currency['iso'], showDecimals = false): string => {
   if (value === null || value === undefined) {
     return showDecimals ? '0.00' : '0';
   }
 
   const decimals = showDecimals ? 2 : 0;
-  const currencyString = value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  const currencyString = value.toLocaleString('en-US', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+    currency,
+    style: 'currency'
+  });
 
   return currencyString;
 };
@@ -62,7 +67,7 @@ export const mapCurrencyStringToNumber = (value: string): number => {
 };
 
 export const isPositiveString = (value: string): boolean => {
-  return parseFloat(value) >= 0;
+  return parseFloat(value.replace(/[^0-9.-]+/g, '')) >= 0;
 };
 
 export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Currency['symbol'] => {

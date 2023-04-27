@@ -12,19 +12,18 @@ import { useTheme } from '@mui/material/styles';
 import date from 'core/date';
 import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
-import { CURRENCIES, LANGUAGES, PERIOD_OPTIONS } from 'shared/constants';
-import { Account, Currency, Language, Period } from 'shared/models';
+import { CURRENCIES, LOCALES, PERIOD_OPTIONS } from 'shared/constants';
+import { Account, Currency, Locale, Period } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
-import Ellipsis from 'shared/components/Ellipsis';
 import Balance from 'shared/components/Balance';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
-  const languages = LANGUAGES;
+  const locales = LOCALES;
   const periodOptions = PERIOD_OPTIONS;
-  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, language, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
+  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, locale, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
   const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts, status: accountStatus } = useAppSelector(selectAccount);
@@ -74,11 +73,11 @@ const Settings: React.FC = () => {
   };
 
   const handleChangeLanguage = (event: SelectChangeEvent) => {
-    const language = event.target.value as Language['iso'];
+    const locale = event.target.value as Locale['iso'];
 
-    dispatch(addSetting([{ language }, false, true]));
-    date().setLocale(language);
-    i18n.changeLanguage(language);
+    dispatch(addSetting([{ locale }, false, true]));
+    date().setLocale(locale);
+    i18n.changeLanguage(locale);
   };
 
   const deleteUserData = (): void => {
@@ -123,12 +122,12 @@ const Settings: React.FC = () => {
               value={accounts.length ? defaultAccount : ''}
               onChange={handleAccountChange}
               renderValue={(value) => (
-                <Ellipsis text={getAccountValue(value)} />
+                <Typography>{getAccountValue(value)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+              {accounts.map(({ id, name, nameKey, balance }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
                   <Balance balance={balance} />
                 </MenuItem>
               ))}
@@ -154,10 +153,10 @@ const Settings: React.FC = () => {
           <FormControl fullWidth>
             <Select
               variant='outlined'
-              value={language.iso || i18n.language}
+              value={locale.iso || i18n.language}
               onChange={handleChangeLanguage}
             >
-              {languages.map(({ iso, displayName }) => (
+              {locales.map(({ iso, displayName }) => (
                 <MenuItem value={iso} key={iso}>{displayName}</MenuItem>
               ))}
             </Select>

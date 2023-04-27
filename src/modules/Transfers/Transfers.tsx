@@ -4,9 +4,7 @@ import { ROUTES } from 'shared/constants';
 import CreateEditTransfer from './pages/CreateEditTransfer';
 import TransferList from './pages/TransferList';
 
-interface TransfersProps { }
-
-const Transfers: React.FC<TransfersProps> = () => {
+const Transfers: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<TransferList />} />

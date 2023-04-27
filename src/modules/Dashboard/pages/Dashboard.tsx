@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton />;
+      return <Skeleton type='summary' />;
     }
 
     return (

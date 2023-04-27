@@ -14,12 +14,12 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ children }: ContentProps) => {
   const { palette: { info: { light } } } = useTheme();
-  const { language } = useAppSelector(selectSettings);
+  const { locale } = useAppSelector(selectSettings);
   const { i18n } = useTranslation();
 
   React.useEffect(() => {
-    i18n.changeLanguage(language.iso);
-  }, [language, i18n]);
+    i18n.changeLanguage(locale.iso);
+  }, [locale, i18n]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1} sx={{ overflowX: 'hidden', backgroundColor: light }}>

@@ -53,7 +53,7 @@ const AccountList: React.FC<AccountListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton />;
+      return <Skeleton type='list' />;
     }
 
     if (!accounts?.length) {

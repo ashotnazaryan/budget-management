@@ -10,4 +10,4 @@ export * from './transfer';
 export * from './form';
 export * from './icon';
 export * from './common';
-export * from './language';
+export * from './locale';

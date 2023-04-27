@@ -110,12 +110,12 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
 
   const setFormValues = React.useCallback(() => {
     if (account) {
-      setValue(AccountField.name, account.name);
+      setValue(AccountField.name, account.nameKey ? t(account.nameKey) : account.name);
       setValue(AccountField.icon, account.icon);
       setValue(AccountField.balance, mapCurrencyStringToNumber(account.balance));
       setValue(AccountField.currencyIso, account.currencyIso);
     }
-  }, [account, setValue]);
+  }, [account, setValue, t]);
 
   const resetForm = React.useCallback(() => {
     dispatch(resetCurrentAccount());
@@ -161,7 +161,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
-      return <Skeleton />;
+      return <Skeleton type='form' />;
     }
 
     if (isEditMode && (!account || !accountId)) {

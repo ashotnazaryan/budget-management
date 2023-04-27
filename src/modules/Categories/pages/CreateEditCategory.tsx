@@ -94,10 +94,10 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const setFormValues = React.useCallback(() => {
     if (category) {
       setValue(CategoryField.type, String(category.type) as unknown as number);
-      setValue(CategoryField.name, category.name);
+      setValue(CategoryField.name, category.nameKey ? t(category.nameKey) : category.name);
       setValue(CategoryField.icon, category.icon);
     }
-  }, [category, setValue]);
+  }, [category, setValue, t]);
 
   const resetForm = React.useCallback(() => {
     dispatch(resetCurrentCategory());
@@ -151,7 +151,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
-      return <Skeleton />;
+      return <Skeleton type='form' />;
     }
 
     if (isEditMode && (!category || !categoryId)) {

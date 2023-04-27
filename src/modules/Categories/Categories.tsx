@@ -4,9 +4,7 @@ import { ROUTES } from 'shared/constants';
 import CategoryList from './pages/CategoryList';
 import CreateEditCategory from './pages/CreateEditCategory';
 
-interface CategoriesProps { }
-
-const Categories: React.FC<CategoriesProps> = () => {
+const Categories: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<CategoryList />} />

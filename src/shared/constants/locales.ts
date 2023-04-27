@@ -1,6 +1,6 @@
-import { Language } from 'shared/models';
+import { Locale } from 'shared/models';
 
-export const LANGUAGES: Language[] = [
+export const LOCALES: Locale[] = [
   {
     iso: 'en',
     displayName: 'English'

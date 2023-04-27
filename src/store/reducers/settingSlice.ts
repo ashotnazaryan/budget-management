@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import date from 'core/date';
 import { ErrorResponse, Period, Setting, SettingDTO, StatusState } from 'shared/models';
-import { CURRENCIES, LANGUAGES } from 'shared/constants';
+import { CURRENCIES, LOCALES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setAppStatus } from './appSlice';
@@ -21,7 +21,7 @@ const initialState: SettingState = {
   defaultPeriod: Period.month,
   showDecimals: true,
   isDarkTheme: isBrowserDarkMode,
-  language: LANGUAGES[0],
+  locale: LOCALES[0],
   status: 'idle'
 };
 
@@ -31,7 +31,7 @@ export const getSettings = createAsyncThunk('setting/getSettings', async (_, { d
 
     dispatch(setAppStatus('succeeded'));
     dispatch(setActivePeriodFilter(response?.data.defaultPeriod));
-    date().setLocale(response?.data.language);
+    date().setLocale(response?.data.locale);
 
     return mapSettings(response?.data);
   } catch (error) {

@@ -9,7 +9,7 @@ import Button from 'shared/components/Button';
 import Icon from 'shared/components/Icon';
 
 const Login: React.FC = () => {
-  const { palette: { info: { main } } } = useTheme();
+  const { palette: { info: { main, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
   const googleLogin = () => {
@@ -37,6 +37,7 @@ const Login: React.FC = () => {
           backgroundColor: main
         }}>
         <Typography
+          color={contrastText}
           fontSize={{ sm: 24, xs: 20 }}
           sx={{ textAlign: 'center' }}
         >

@@ -40,7 +40,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton />;
+      return <Skeleton type='list' />;
     }
 
     if (!transactions?.length) {

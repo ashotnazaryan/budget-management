@@ -4,9 +4,7 @@ import { ROUTES } from 'shared/constants';
 import AccountList from './pages/AccountList';
 import CreateEditAccount from './pages/CreateEditAccount';
 
-interface AccountsProps { }
-
-const Accounts: React.FC<AccountsProps> = () => {
+const Accounts: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<AccountList />} />

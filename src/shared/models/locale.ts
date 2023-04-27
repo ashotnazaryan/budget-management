@@ -1,4 +1,4 @@
-export interface Language {
+export interface Locale {
   iso: 'en' | 'ru';
   displayName: string;
 }

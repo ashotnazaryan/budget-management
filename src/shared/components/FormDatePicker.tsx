@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Dayjs } from 'dayjs';
+import { LocalizedDate } from 'core/date';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -13,7 +13,7 @@ type FormDatePickerProps = {
   name: string;
   label: string;
   rules?: any; // TODO: fix any type
-} & MuiDatePickerProps<Dayjs>;
+} & MuiDatePickerProps<LocalizedDate>;
 
 const FormDatePicker: React.FC<FormDatePickerProps> = ({ name, label, rules = {}, ...props }) => {
   const {

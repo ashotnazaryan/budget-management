@@ -1,17 +1,21 @@
 import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
-import { Language } from 'shared/models';
+import { Locale } from 'shared/models';
+import { LOCALES } from 'shared/constants';
 
-interface LocalizedDate extends Dayjs {
-  setLocale(locale: Language['iso']): Dayjs;
+export interface LocalizedDate extends Dayjs {
+  setLocale(locale?: Locale['iso']): Dayjs;
 }
 
 const date = (date?: dayjs.ConfigType): LocalizedDate => {
+  dayjs.extend(customParseFormat);
+
   const instance = dayjs(date) as LocalizedDate;
 
-  instance.setLocale = (locale: Language['iso']): Dayjs => {
-    dayjs.locale(locale);
+  instance.setLocale = (locale?: Locale['iso']): Dayjs => {
+    locale ? dayjs.locale(locale) : dayjs.locale(LOCALES[0].iso);
 
     return instance;
   };

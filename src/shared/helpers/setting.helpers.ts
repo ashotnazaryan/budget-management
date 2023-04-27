@@ -1,9 +1,9 @@
-import { CURRENCIES, LANGUAGES } from 'shared/constants';
+import { CURRENCIES, LOCALES } from 'shared/constants';
 import { Setting, SettingDTO } from 'shared/models';
 
 export const mapSettings = (setting: SettingDTO): Setting => {
   const fullCurrency = CURRENCIES.find(({ iso }) => iso === setting.defaultCurrency) || CURRENCIES[0];
-  const fullLanguage = LANGUAGES.find(({ iso }) => iso === setting.language) || LANGUAGES[0];
+  const fullLocale = LOCALES.find(({ iso }) => iso === setting.locale) || LOCALES[0];
 
   return {
     ...setting,
@@ -12,9 +12,9 @@ export const mapSettings = (setting: SettingDTO): Setting => {
       name: fullCurrency.name,
       symbol: fullCurrency.symbol
     },
-    language: {
-      iso: setting.language,
-      displayName: fullLanguage.displayName
+    locale: {
+      iso: setting.locale,
+      displayName: fullLocale.displayName
     }
   };
 };

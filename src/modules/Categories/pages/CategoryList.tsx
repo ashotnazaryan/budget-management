@@ -58,7 +58,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton />;
+      return <Skeleton type='list' />;
     }
 
     if (!categories?.length) {

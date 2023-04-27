@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import dayjs, { Dayjs } from 'dayjs';
+import date, { LocalizedDate } from 'core/date';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -36,7 +36,6 @@ import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
 import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
-import Ellipsis from 'shared/components/Ellipsis';
 import FormDatePicker from 'shared/components/FormDatePicker';
 import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
@@ -80,7 +79,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: new Date(),
+    createdAt: isEditMode ? null as unknown as Date : new Date(),
     note: ''
   };
 
@@ -130,7 +129,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setValue(TransactionField.accountId, event.target.value, { shouldValidate: true });
   };
 
-  const handleDatePickerChange = (value: Dayjs | null): void => {
+  const handleDatePickerChange = (value: LocalizedDate | null): void => {
     setValue(TransactionField.createdAt, value!.toDate(), { shouldValidate: true });
   };
 
@@ -169,7 +168,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.icon, transaction.icon);
       setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
       setValue(TransactionField.type, String(transaction.type) as unknown as number);
-      setValue(TransactionField.createdAt, transaction.createdAt as unknown as Date);
+      setValue(TransactionField.createdAt, date(transaction.createdAt).setLocale().toDate());
       setValue(TransactionField.note, transaction.note);
       setValue('name', transaction.name);
     }
@@ -234,7 +233,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
-      return <Skeleton />;
+      return <Skeleton type='form' />;
     }
 
     if (isEditMode && (!transaction || !transactionId)) {
@@ -291,12 +290,12 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 }
               }}
               renderValue={(value) => (
-                <Ellipsis text={getAccountValue(value)} />
+                <Typography>{getAccountValue(value)}</Typography>
               )}
             >
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
                   <Balance balance={balance} />
                 </MenuItem>
               ))}
@@ -306,12 +305,12 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             <FormDatePicker
               name={TransactionField.createdAt}
               label={t('COMMON.DATE')}
-              value={dayjs(watchCreatedAt)}
-              maxDate={dayjs()}
+              value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
+              maxDate={date()}
               rules={{
                 required: true,
                 validate: {
-                  maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                  maxDate: (value: string) => date(value) <= date() || t(helper.createdAt.max!.message)
                 }
               }}
               onChange={handleDatePickerChange}

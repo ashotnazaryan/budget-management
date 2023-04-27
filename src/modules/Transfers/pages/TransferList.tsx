@@ -47,7 +47,7 @@ const TransferList: React.FC<TransferListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton />;
+      return <Skeleton type='list' />;
     }
 
     if (!transfers?.length) {

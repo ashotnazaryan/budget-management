@@ -2,21 +2,32 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import dayjs, { Dayjs } from 'dayjs';
+import date, { LocalizedDate } from 'core/date';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createTransfer, deleteTransfer, editTransfer, getAccounts, getTransfer, resetCurrentTransfer, selectAccount, selectAccountStatus, selectCurrentTransfer, selectTransfer, selectTransferError } from 'store/reducers';
+import {
+  createTransfer,
+  deleteTransfer,
+  editTransfer,
+  getAccounts,
+  getTransfer,
+  resetCurrentTransfer,
+  selectAccount,
+  selectAccountStatus,
+  selectCurrentTransfer,
+  selectTransfer,
+  selectTransferError
+} from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, TransferDTO, TransferField } from 'shared/models';
 import { transferHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
-import Ellipsis from 'shared/components/Ellipsis';
 import FormInput from 'shared/components/FormInput';
 import FormDatePicker from 'shared/components/FormDatePicker';
 import Balance from 'shared/components/Balance';
@@ -54,7 +65,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     fromAccount: '',
     toAccount: '',
     amount: '' as unknown as number,
-    createdAt: new Date()
+    createdAt: isEditMode ? null as unknown as Date : new Date(),
   };
 
   const methods = useForm<TransferDTO>({
@@ -80,7 +91,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     setValue(TransferField.toAccount, event.target.value, { shouldValidate: true });
   };
 
-  const handleDatePickerChange = (value: Dayjs | null): void => {
+  const handleDatePickerChange = (value: LocalizedDate | null): void => {
     setValue(TransferField.createdAt, value!.toDate(), { shouldValidate: true });
   };
 
@@ -116,7 +127,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
       setValue(TransferField.fromAccount, transfer.fromAccount?.id);
       setValue(TransferField.toAccount, transfer.toAccount?.id);
       setValue(TransferField.amount, mapCurrencyStringToNumber(transfer.amount));
-      setValue(TransferField.createdAt, transfer.createdAt as unknown as Date);
+      setValue(TransferField.createdAt, date(transfer.createdAt).setLocale().toDate());
     }
   }, [transfer, setValue]);
 
@@ -178,7 +189,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
-      return <Skeleton />;
+      return <Skeleton type='form' />;
     }
 
     if (isEditMode && (!transfer || !transferId)) {
@@ -202,12 +213,12 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 }
               }}
               renderValue={(value) => (
-                <Ellipsis text={getAccountValue(value)} />
+                <Typography>{getAccountValue(value)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+              {accounts.map(({ id, name, nameKey, balance }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
                   <Balance balance={balance} />
                 </MenuItem>
               ))}
@@ -227,12 +238,12 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 }
               }}
               renderValue={(value) => (
-                <Ellipsis text={getAccountValue(value)} />
+                <Typography>{getAccountValue(value)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
+              {accounts.map(({ id, name, nameKey, balance }) => (
                 <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Ellipsis text={nameKey ? t(nameKey) : name} />
+                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
                   <Balance balance={balance} />
                 </MenuItem>
               ))}
@@ -259,12 +270,12 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
             <FormDatePicker
               name={TransferField.createdAt}
               label={t('COMMON.DATE')}
-              value={dayjs(watchCreatedAt)}
-              maxDate={dayjs()}
+              value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
+              maxDate={date()}
               rules={{
                 required: true,
                 validate: {
-                  maxDate: (value: string) => dayjs(value) <= dayjs() || t(helper.createdAt.max!.message)
+                  maxDate: (value: string) => date(value) <= date() || t(helper.createdAt.max!.message)
                 }
               }}
               onChange={handleDatePickerChange}

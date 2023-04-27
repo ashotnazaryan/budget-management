@@ -4,9 +4,7 @@ import { ROUTES } from 'shared/constants';
 import TransactionList from './pages/TransactionList';
 import CreateEditTransaction from './pages/CreateEditTransaction';
 
-interface TransactionsProps { }
-
-const Transactions: React.FC<TransactionsProps> = () => {
+const Transactions: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<TransactionList />} />

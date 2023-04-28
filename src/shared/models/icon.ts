@@ -27,7 +27,10 @@ export enum IconType {
   history = 'history',
   // Other icons
   plus = 'plus',
-  google = 'google'
+  google = 'google',
+  arrowBack = 'arrowBack',
+  edit = 'edit',
+  delete = 'delete'
 }
 
 export interface Icon {

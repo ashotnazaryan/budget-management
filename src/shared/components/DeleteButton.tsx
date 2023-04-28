@@ -3,21 +3,21 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { IconType } from 'shared/models';
 import Icon from './Icon';
 
-type BackButtonProps = IconButtonProps;
+type DeleteButtonProps = IconButtonProps;
 
-const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
+const DeleteButton: React.FC<DeleteButtonProps> = ({ ...props }) => {
   return (
     <IconButton
       {...props}
-      color='primary'
+      color='secondary'
       size='small'
       sx={{
         ...props.sx,
       }}
       onClick={props.onClick}>
-      <Icon name={IconType.arrowBack}></Icon>
+      <Icon name={IconType.delete}></Icon>
     </IconButton>
   );
 };
 
-export default BackButton;
+export default DeleteButton;

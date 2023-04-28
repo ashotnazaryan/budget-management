@@ -3,6 +3,12 @@ import { Dayjs } from 'dayjs';
 /* eslint-disable no-unused-vars */
 export type StatusState = 'idle' | 'loading' | 'succeeded' | 'failed';
 
+export enum ManageMode {
+  create = 'create',
+  view = 'view',
+  edit = 'edit'
+}
+
 export enum Period {
   day = 'day',
   week = 'week',

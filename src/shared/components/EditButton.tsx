@@ -3,9 +3,9 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { IconType } from 'shared/models';
 import Icon from './Icon';
 
-type BackButtonProps = IconButtonProps;
+type EditButtonProps = IconButtonProps;
 
-const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
+const EditButton: React.FC<EditButtonProps> = ({ ...props }) => {
   return (
     <IconButton
       {...props}
@@ -15,9 +15,9 @@ const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
         ...props.sx,
       }}
       onClick={props.onClick}>
-      <Icon name={IconType.arrowBack}></Icon>
+      <Icon name={IconType.edit}></Icon>
     </IconButton>
   );
 };
 
-export default BackButton;
+export default EditButton;

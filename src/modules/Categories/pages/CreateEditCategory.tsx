@@ -8,28 +8,36 @@ import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createCategory, editCategory, getCategory, selectCategory, selectCurrentCategory, resetCurrentCategory, selectCategoryError, deleteCategory } from 'store/reducers';
+import {
+  createCategory,
+  editCategory,
+  getCategory,
+  selectCategory,
+  selectCurrentCategory,
+  resetCurrentCategory,
+  selectCategoryError,
+  deleteCategory
+} from 'store/reducers';
 import { CATEGORY_ICONS_LIST, CATEGORY_TABS, ROUTES } from 'shared/constants';
-import { CategoryDTO, CategoryField, CategoryType, IconType } from 'shared/models';
+import { Category, CategoryDTO, CategoryField, CategoryType, IconType, ManageMode } from 'shared/models';
 import { categoryHelper, mapCategoryTypesWithTranslations } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
-import AccountIcon from 'shared/components/AccountIcon';
+import ItemIcon from 'shared/components/ItemIcon';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 
 interface NewCategoryProps {
-  mode: 'create' | 'edit';
+  mode: ManageMode;
 }
-
-const icons = CATEGORY_ICONS_LIST;
 
 const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const categoryTabs = CATEGORY_TABS;
+  const icons = CATEGORY_ICONS_LIST;
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
@@ -47,23 +55,29 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const deleteLoading = deleteStatus === 'loading';
   const categoryId = state?.id as CategoryDTO['id'];
   const categoryType = state?.categoryType as CategoryType;
-  const isEditMode = mode === 'edit';
+  const isCreateMode = mode === ManageMode.create;
+  const isEditMode = mode === ManageMode.edit;
+  const isViewMode = mode === ManageMode.view;
 
-  const defaultValues: Partial<CategoryDTO> = {
+  const defaultValues: Partial<Category> = {
     type: String(categoryType) as unknown as number,
     name: '',
   };
 
-  const methods = useForm<CategoryDTO>({
+  const methods = useForm<Category>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch } = methods;
+  const { setValue, handleSubmit, control, watch, reset } = methods;
   const watchType = Number(watch(CategoryField.type));
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
+    if (isViewMode) {
+      return;
+    }
+
     setValue(CategoryField.icon, id as IconType, { shouldValidate: true });
   };
 
@@ -73,9 +87,24 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     setValue(CategoryField.type, type, { shouldValidate: true });
   };
 
-  const handleFormSubmit = (data: CategoryDTO): void => {
+  const handleFormSubmit = (data: Category): void => {
     isEditMode ? dispatch(editCategory([categoryId, data])) : dispatch(createCategory(data));
     setFormSubmitted(true);
+  };
+
+  const cancel = (): void => {
+    const initialFormValues: Partial<Category> = category
+      ? {
+        ...category,
+        type: String(category.type) as unknown as Category['type']
+      }
+      : defaultValues;
+
+    reset(initialFormValues);
+
+    isEditMode
+      ? navigate(`${ROUTES.categories.path}/view/${category!.name}`, { state: { id: categoryId } })
+      : navigate(ROUTES.categories.path);
   };
 
   const handleDeleteCategory = (): void => {
@@ -91,6 +120,29 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     setDialogOpened(false);
   };
 
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+    setDeleteClicked(false);
+  };
+
+  const getTitle = (): string => {
+    if (isCreateMode) {
+      return t('CATEGORIES.NEW_CATEGORY');
+    } else if (category && (isEditMode || isViewMode)) {
+      return category.nameKey ? t(category.nameKey) : category.name;
+    }
+
+    return '';
+  };
+
+  const handleEditButtonClick = (): void => {
+    if (isEditMode) {
+      return;
+    }
+
+    navigate(`${ROUTES.categories.path}/edit/${category!.name}`, { state: { id: categoryId } });
+  };
+
   const setFormValues = React.useCallback(() => {
     if (category) {
       setValue(CategoryField.type, String(category.type) as unknown as number);
@@ -99,22 +151,14 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     }
   }, [category, setValue, t]);
 
-  const resetForm = React.useCallback(() => {
+  const resetCategory = React.useCallback(() => {
     dispatch(resetCurrentCategory());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.categories.path}`);
-    resetForm();
-  }, [navigate, resetForm]);
-
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
-  };
-
-  const getTitle = (): string => {
-    return isEditMode ? t('CATEGORIES.EDIT_CATEGORY') : t('CATEGORIES.NEW_CATEGORY');
-  };
+    resetCategory();
+  }, [navigate, resetCategory]);
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
@@ -131,13 +175,18 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
       goBack();
     }
+
+    if (deleteStatus === 'failed' && deleteClicked) {
+      setShowSnackbar(true);
+      setDialogOpened(false);
+    }
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (categoryId && isEditMode) {
+    if (categoryId && currentStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
       dispatch(getCategory(categoryId));
     }
-  }, [categoryId, isEditMode, dispatch]);
+  }, [categoryId, isEditMode, isViewMode, currentStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setFormValues();
@@ -145,16 +194,16 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
 
   React.useEffect(() => {
     return () => {
-      resetForm();
+      resetCategory();
     };
-  }, [resetForm]);
+  }, [resetCategory]);
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
-    if (isEditMode && (!category || !categoryId)) {
+    if (!isCreateMode && (!category || !categoryId)) {
       return <EmptyState text={t('CATEGORIES.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 
@@ -163,6 +212,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         <Grid container rowGap={5}>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.NAME')}
               name={CategoryField.name}
               rules={{
@@ -176,6 +226,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
           <Grid item xs={12}>
             <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
             <FormRadioGroup
+              disabled={isViewMode}
               name={CategoryField.type}
               rules={{
                 required: {
@@ -203,7 +254,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                     {
                       icons.map(({ name }) => (
                         <Grid item key={name}>
-                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                          <ItemIcon selected={field.value} id={name} icon={name} size={50} disabled={isViewMode} onClick={handleAccountIconClick} />
                         </Grid>
                       ))
                     }
@@ -213,14 +264,6 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
               )}
             />
           </Grid>
-          {isEditMode && (
-            <Grid item xs={12}>
-              <Button color='secondary' variant='contained'
-                onClick={handleOpenDialog}>
-                {t('COMMON.DELETE')}
-              </Button>
-            </Grid>
-          )}
         </Grid>
       </FormProvider>
     );
@@ -228,17 +271,34 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
+      <PageTitle
+        withBackButton
+        withEditButton={isViewMode}
+        withDeleteButton={isEditMode}
+        text={getTitle()}
+        onBackButtonClick={goBack}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleOpenDialog}
+      />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading}
-          sx={{ width: { sm: 'auto', xs: '100%' } }}
-          onClick={handleSubmit(handleFormSubmit)}>
-          {t('COMMON.SAVE')}
-        </Button>
-      </Box>
+      {!isViewMode && (
+        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 3 }}>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth color='secondary' variant='outlined'
+              onClick={cancel}>
+              {t('COMMON.CANCEL')}
+            </Button>
+          </Grid>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth type='submit' variant='contained' loading={loading}
+              onClick={handleSubmit(handleFormSubmit)}>
+              {t('COMMON.SAVE')}
+            </Button>
+          </Grid>
+        </Grid>
+      )}
       <Snackbar type='error' text={error?.messageKey ? t(error.messageKey) : error?.message || ''} open={showSnackbar} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth

@@ -94,11 +94,15 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const watchAccount = watch(TransactionField.accountId);
   const watchCreatedAt = watch(TransactionField.createdAt);
 
-  // TODO: move to account.hrlpers
+  // TODO: move to account.helpers
   const getAccountValue = (accountId: Account['id']): string => {
-    const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
+    const account = accounts.find(({ id }) => id === accountId);
 
-    return nameKey ? t(nameKey) : name;
+    if (!account) {
+      return '';
+    }
+
+    return account.nameKey ? t(account.nameKey) : account.name;
   };
 
   const getCategoryData = (data: CategoryModel): CategoryModel => {

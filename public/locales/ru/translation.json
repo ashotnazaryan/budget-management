@@ -68,6 +68,7 @@
     "PAGE_TITLE": "Счета",
     "NEW_ACCOUNT": "Новый счет",
     "EDIT_ACCOUNT": "Изменить счет",
+    "VIEW_ACCOUNT": "Посмотреть счет",
     "NEW_TRANSFER": "Новый трансфер",
     "EDIT_TRANSFER": "Изменить трансфер",
     "EMPTY_TEXT": "Нет счетов",
@@ -83,7 +84,8 @@
       "REQUIRED_NAME": "Название обязательно",
       "REQUIRED_ICON": "Иконка обязательна",
       "REQUIRED_CURRENCY": "Валюта обязательна",
-      "ACCOUNT_EXISTS": "Счет уже существует"
+      "ACCOUNT_EXISTS": "Счет уже существует",
+      "DELETE_DEFAULT_ACCOUNT": "Вы не можете удалить счет по умолчанию."
     },
     "DELETE_DIALOG_TITLE": "Удалить счет",
     "DELETE_DIALOG_CONFIRM": "Вы уверены, что хотите удалить этот счет? Это действие повлечет за собой удаление всех транзакций выполненных этим счетом."
@@ -92,6 +94,7 @@
     "PAGE_TITLE": "Категории",
     "NEW_CATEGORY": "Новая категория",
     "EDIT_CATEGORY": "Изменить категорию",
+    "VIEW_CATEGORY": "Посмотреть категорию",
     "EMPTY_TEXT": "Нет категорий",
     "EMPTY_TEXT_RENDER_CONTENT": "Категория не найдена",
     "ITEMS": {

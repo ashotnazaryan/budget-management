@@ -17,10 +17,11 @@ type FormRadioGroupProps = {
   options: RadioOption[];
   labelColor?: string;
   rules?: any;
+  disabled?: boolean;
   onRadioChange: (checkedValue: RadioOption['value']) => void;
 } & RadioGroupProps;
 
-const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelColor, rules = {}, onRadioChange, ...props }) => {
+const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelColor, rules = {}, disabled, onRadioChange, ...props }) => {
   const {
     control,
     formState: { errors }
@@ -49,6 +50,7 @@ const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelCol
                 }
                 control={
                   <Radio
+                    disabled={disabled}
                     checked={field.value === value}
                     onChange={onChange}
                     value={value}

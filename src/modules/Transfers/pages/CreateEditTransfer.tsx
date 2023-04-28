@@ -135,7 +135,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     dispatch(resetCurrentTransfer());
   }, [dispatch]);
 
-  // TODO: move to account.hrlpers
+  // TODO: move to account.helpers
   const getAccountValue = (accountId: Account['id']): string => {
     const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
 
@@ -202,6 +202,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           <Grid item sm={6} xs={12}>
             {/* TODO: move this component to shared */}
             <FormSelect
+              disabled={isEditMode}
               label={t('ACCOUNTS.FROM_ACCOUNT')}
               name={TransferField.fromAccount}
               value={watchFromAccount}
@@ -227,6 +228,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           <Grid item sm={6} xs={12}>
             {/* TODO: move this component to shared */}
             <FormSelect
+              disabled={isEditMode}
               label={t('ACCOUNTS.TO_ACCOUNT')}
               name={TransferField.toAccount}
               value={watchToAccount}

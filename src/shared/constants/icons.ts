@@ -20,6 +20,9 @@ import SavingsIcon from '@mui/icons-material/Savings';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import GoogleIcon from '@mui/icons-material/Google';
 import HistoryIcon from '@mui/icons-material/History';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const CATEGORY_ICONS: IconTypes = {
@@ -50,7 +53,10 @@ export const ACCOUNT_ICONS: IconTypes = {
 
 export const OTHER_ICONS: IconTypes = {
   [IconType.plus]: AddIcon,
-  [IconType.google]: GoogleIcon
+  [IconType.google]: GoogleIcon,
+  [IconType.arrowBack]: ArrowBackIcon,
+  [IconType.edit]: EditIcon,
+  [IconType.delete]: DeleteIcon
 };
 
 export const ALL_ICONS: IconTypes = {

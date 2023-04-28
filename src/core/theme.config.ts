@@ -20,6 +20,9 @@ const lightPalette: PaletteOptions = {
     light: '#f2f2f2',
     contrastText: '#000'
   },
+  action: {
+    disabled: 'rgba(0, 0, 0, 0.38)',
+  },
   contrastThreshold: 3,
   tonalOffset: 0.2
 };
@@ -46,6 +49,11 @@ const darkPalette: PaletteOptions = {
     dark: '#0d0d0d',
     contrastText: '#fff'
   },
+  action: {
+    disabled: 'rgba(255, 255, 255, 0.3)'
+  },
+  contrastThreshold: 3,
+  tonalOffset: 0.2
 };
 
 const spacing = 4;

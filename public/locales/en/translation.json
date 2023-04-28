@@ -68,6 +68,7 @@
     "PAGE_TITLE": "Accounts",
     "NEW_ACCOUNT": "New account",
     "EDIT_ACCOUNT": "Edit account",
+    "VIEW_ACCOUNT": "View account",
     "NEW_TRANSFER": "New transfer",
     "EDIT_TRANSFER": "Edit transfer",
     "EMPTY_TEXT": "No account is available",
@@ -83,7 +84,8 @@
       "REQUIRED_NAME": "Name is required",
       "REQUIRED_ICON": "Icon is required",
       "REQUIRED_CURRENCY": "Currency is required",
-      "ACCOUNT_EXISTS": "Account already exists"
+      "ACCOUNT_EXISTS": "Account already exists",
+      "DELETE_DEFAULT_ACCOUNT": "You cannot delete the default account."
     },
     "DELETE_DIALOG_TITLE": "Delete account",
     "DELETE_DIALOG_CONFIRM": "Are you sure you want to delete this account? This will remove all transactions made under this account.",
@@ -93,6 +95,7 @@
     "PAGE_TITLE": "Categories",
     "NEW_CATEGORY": "New category",
     "EDIT_CATEGORY": "Edit category",
+    "VIEW_CATEGORY": "View category",
     "EMPTY_TEXT": "No category is available",
     "EMPTY_TEXT_RENDER_CONTENT": "Category not found",
     "ITEMS": {

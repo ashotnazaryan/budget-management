@@ -10,29 +10,38 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
-import { createAccount, deleteAccount, editAccount, getAccount, resetCurrentAccount, selectAccount, selectAccountError, selectCurrentAccount, selectSettings } from 'store/reducers';
+import {
+  createAccount,
+  deleteAccount,
+  editAccount,
+  getAccount,
+  resetCurrentAccount,
+  selectAccount,
+  selectAccountError,
+  selectCurrentAccount,
+  selectSettings
+} from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { AccountDTO, AccountField, Currency, IconType } from 'shared/models';
+import { Account, AccountDTO, AccountField, Currency, IconType, ManageMode } from 'shared/models';
 import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
 import Snackbar from 'shared/components/Snackbar';
-import AccountIcon from 'shared/components/AccountIcon';
+import ItemIcon from 'shared/components/ItemIcon';
 import FormSelect from 'shared/components/FormSelect';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditAccountProps {
-  mode: 'create' | 'edit';
+  mode: ManageMode;
 }
-
-const icons = ACCOUNT_ICONS_LIST;
 
 const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const regex = NUMERIC_REGEX;
   const currencies = CURRENCIES;
+  const icons = ACCOUNT_ICONS_LIST;
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
@@ -50,24 +59,30 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const accountId = state?.id as AccountDTO['id'];
-  const isEditMode = mode === 'edit';
+  const isCreateMode = mode === ManageMode.create;
+  const isEditMode = mode === ManageMode.edit;
+  const isViewMode = mode === ManageMode.view;
 
-  const defaultValues: Partial<AccountDTO> = {
-    balance: 0,
+  const defaultValues: Partial<Account> = {
+    balance: 0 as unknown as Account['balance'],
     name: '',
     currencyIso: iso
   };
 
-  const methods = useForm<AccountDTO>({
+  const methods = useForm<Account>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch } = methods;
+  const { setValue, handleSubmit, control, watch, reset } = methods;
   const watchCurrency = watch(AccountField.currencyIso);
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
+    if (isViewMode) {
+      return;
+    }
+
     setValue(AccountField.icon, id as IconType, { shouldValidate: true });
   };
 
@@ -77,7 +92,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setValue(AccountField.currencyIso, iso, { shouldValidate: true });
   };
 
-  const handleFormSubmit = (data: AccountDTO): void => {
+  const handleFormSubmit = (data: Account): void => {
     const mappedData: AccountDTO = {
       ...data,
       balance: Number(data.balance)
@@ -87,6 +102,21 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setFormSubmitted(true);
   };
 
+  const cancel = (): void => {
+    const initialFormValues: Partial<Account> = account
+      ? {
+        ...account,
+        balance: mapCurrencyStringToNumber(account.balance) as unknown as Account['balance']
+      }
+      : defaultValues;
+
+    reset(initialFormValues);
+
+    isEditMode
+      ? navigate(`${ROUTES.accounts.path}/view/${account!.name}`, { state: { id: accountId } })
+      : navigate(ROUTES.accounts.path);
+  };
+
   const handleDeleteAccount = (): void => {
     dispatch(deleteAccount(accountId));
     setDeleteClicked(true);
@@ -94,10 +124,17 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
 
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
+    setDeleteClicked(false);
   };
 
   const getTitle = (): string => {
-    return isEditMode ? t('ACCOUNTS.EDIT_ACCOUNT') : t('ACCOUNTS.NEW_ACCOUNT');
+    if (isCreateMode) {
+      return t('ACCOUNTS.NEW_ACCOUNT');
+    } else if (account && (isEditMode || isViewMode)) {
+      return account.nameKey ? t(account.nameKey) : account.name;
+    }
+
+    return '';
   };
 
   const handleOpenDialog = (): void => {
@@ -108,23 +145,31 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setDialogOpened(false);
   };
 
+  const handleEditButtonClick = (): void => {
+    if (isEditMode) {
+      return;
+    }
+
+    navigate(`${ROUTES.accounts.path}/edit/${account!.name}`, { state: { id: accountId } });
+  };
+
   const setFormValues = React.useCallback(() => {
     if (account) {
       setValue(AccountField.name, account.nameKey ? t(account.nameKey) : account.name);
       setValue(AccountField.icon, account.icon);
-      setValue(AccountField.balance, mapCurrencyStringToNumber(account.balance));
+      setValue(AccountField.balance, mapCurrencyStringToNumber(account.balance) as unknown as Account['balance']);
       setValue(AccountField.currencyIso, account.currencyIso);
     }
   }, [account, setValue, t]);
 
-  const resetForm = React.useCallback(() => {
+  const resetAccount = React.useCallback(() => {
     dispatch(resetCurrentAccount());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.accounts.path}`);
-    resetForm();
-  }, [navigate, resetForm]);
+    resetAccount();
+  }, [navigate, resetAccount]);
 
   React.useEffect(() => {
     if (status === 'succeeded' && formSubmitted) {
@@ -141,13 +186,18 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
       goBack();
     }
+
+    if (deleteStatus === 'failed' && deleteClicked) {
+      setShowSnackbar(true);
+      setDialogOpened(false);
+    }
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (accountId && isEditMode) {
+    if (accountId && currentStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
       dispatch(getAccount(accountId));
     }
-  }, [accountId, isEditMode, dispatch]);
+  }, [accountId, isEditMode, isViewMode, currentStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setFormValues();
@@ -155,16 +205,16 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
 
   React.useEffect(() => {
     return () => {
-      resetForm();
+      resetAccount();
     };
-  }, [resetForm]);
+  }, [resetAccount]);
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
-    if (isEditMode && (!account || !accountId)) {
+    if (!isCreateMode && (!account || !accountId)) {
       return <EmptyState text={t('ACCOUNTS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 
@@ -173,6 +223,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         <Grid container rowGap={7}>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.NAME')}
               name={AccountField.name}
               rules={{
@@ -185,6 +236,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.BALANCE')}
               type='number'
               name={AccountField.balance}
@@ -202,6 +254,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormSelect
+              disabled={isViewMode}
               label={t('COMMON.CURRENCY')}
               name={AccountField.currencyIso}
               value={watchCurrency}
@@ -232,7 +285,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                     {
                       icons.map(({ name }) => (
                         <Grid item key={name}>
-                          <AccountIcon selected={field.value} id={name} icon={name} size={50} onClick={handleAccountIconClick} />
+                          <ItemIcon selected={field.value} id={name} icon={name} size={50} disabled={isViewMode} onClick={handleAccountIconClick} />
                         </Grid>
                       ))
                     }
@@ -242,14 +295,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
               )}
             />
           </Grid>
-          {isEditMode && (
-            <Grid item xs={12}>
-              <Button color='secondary' variant='contained'
-                onClick={handleOpenDialog}>
-                {t('COMMON.DELETE')}
-              </Button>
-            </Grid>
-          )}
         </Grid>
       </FormProvider>
     );
@@ -257,17 +302,34 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
+      <PageTitle
+        withBackButton
+        withEditButton={isViewMode}
+        withDeleteButton={isEditMode}
+        text={getTitle()}
+        onBackButtonClick={goBack}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleOpenDialog}
+      />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading}
-          sx={{ width: { sm: 'auto', xs: '100%' } }}
-          onClick={handleSubmit(handleFormSubmit)}>
-          {t('COMMON.SAVE')}
-        </Button>
-      </Box>
+      {!isViewMode && (
+        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 3 }}>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth color='secondary' variant='outlined'
+              onClick={cancel}>
+              {t('COMMON.CANCEL')}
+            </Button>
+          </Grid>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth type='submit' variant='contained' loading={loading}
+              onClick={handleSubmit(handleFormSubmit)}>
+              {t('COMMON.SAVE')}
+            </Button>
+          </Grid>
+        </Grid>
+      )}
       <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth

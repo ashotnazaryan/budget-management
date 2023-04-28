@@ -35,7 +35,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   };
 
   const handleAccountItemClick = ({ id, name }: AccountModel): void => {
-    navigate(`${ROUTES.accounts.path}/edit/${name}`, { state: { id } });
+    navigate(`${ROUTES.accounts.path}/view/${name}`, { state: { id } });
   };
 
   const getAccountData = (data: AccountModel): AccountModel => {

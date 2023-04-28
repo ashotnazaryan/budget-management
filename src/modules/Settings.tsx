@@ -32,10 +32,15 @@ const Settings: React.FC = () => {
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { i18n, t } = useTranslation();
 
+  // TODO: move to account.helpers
   const getAccountValue = (accountId: Account['id']): string => {
-    const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
+    const account = accounts.find(({ id }) => id === accountId);
 
-    return nameKey ? t(nameKey) : name;
+    if (!account) {
+      return '';
+    }
+
+    return account.nameKey ? t(account.nameKey) : account.name;
   };
 
   const handleOpenDialog = (): void => {

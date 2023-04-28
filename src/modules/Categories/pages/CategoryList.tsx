@@ -38,7 +38,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   };
 
   const handleCategoryIconClick = ({ id, name }: Category): void => {
-    navigate(`${ROUTES.categories.path}/edit/${name}`, { state: { id } });
+    navigate(`${ROUTES.categories.path}/view/${name}`, { state: { id } });
   };
 
   const openNewCategoryPage = (): void => {

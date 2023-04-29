@@ -71,6 +71,7 @@
     "VIEW_ACCOUNT": "Посмотреть счет",
     "NEW_TRANSFER": "Новый трансфер",
     "EDIT_TRANSFER": "Изменить трансфер",
+    "VIEW_TRANSFER": "Посмотреть трансфер",
     "EMPTY_TEXT": "Нет счетов",
     "EMPTY_TEXT_RENDER_CONTENT": "Счет не найден",
     "FROM_ACCOUNT": "Из счета",

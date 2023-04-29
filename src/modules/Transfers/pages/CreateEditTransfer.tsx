@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import date, { LocalizedDate } from 'core/date';
@@ -23,7 +23,7 @@ import {
   selectTransferError
 } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { Account, TransferDTO, TransferField } from 'shared/models';
+import { Account, ManageMode, TransferDTO, TransferField } from 'shared/models';
 import { transferHelper, mapCurrencyStringToNumber } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
@@ -37,7 +37,7 @@ import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditTransferProps {
-  mode: 'create' | 'edit';
+  mode: ManageMode;
 }
 
 const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
@@ -51,21 +51,22 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const accountStatus = useAppSelector(selectAccountStatus);
   const helper = transferHelper();
   const { t } = useTranslation();
-  const { state } = useLocation();
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
-  const transferId = state?.id as TransferDTO['id'];
-  const isEditMode = mode === 'edit';
+  const isCreateMode = mode === ManageMode.create;
+  const isEditMode = mode === ManageMode.edit;
+  const isViewMode = mode === ManageMode.view;
+  const { id } = useParams() as { id: string };
 
   const defaultValues: Partial<TransferDTO> = {
     fromAccount: '',
     toAccount: '',
     amount: '' as unknown as number,
-    createdAt: isEditMode ? null as unknown as Date : new Date(),
+    createdAt: isCreateMode ? new Date() : null as unknown as Date,
   };
 
   const methods = useForm<TransferDTO>({
@@ -74,14 +75,10 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { handleSubmit, setValue, watch } = methods;
+  const { handleSubmit, setValue, watch, reset } = methods;
   const watchFromAccount = watch(TransferField.fromAccount);
   const watchToAccount = watch(TransferField.toAccount);
   const watchCreatedAt = watch(TransferField.createdAt);
-
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
-  };
 
   const handleFromAccountChange = (event: SelectChangeEvent<Account['id']>) => {
     setValue(TransferField.fromAccount, event.target.value, { shouldValidate: true });
@@ -101,17 +98,35 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
       amount: Number(data.amount)
     };
 
-    isEditMode ? dispatch(editTransfer([transferId, mappedData])) : dispatch(createTransfer(mappedData));
+    isEditMode ? dispatch(editTransfer([id, mappedData])) : dispatch(createTransfer(mappedData));
     setFormSubmitted(true);
   };
 
+  const cancel = (): void => {
+    const initialFormValues: Partial<TransferDTO> = transfer
+      ? {
+        ...transfer,
+        amount: mapCurrencyStringToNumber(transfer.amount),
+        createdAt: date(transfer.createdAt).toDate(),
+        fromAccount: transfer.fromAccount.id,
+        toAccount: transfer.toAccount.id
+      }
+      : defaultValues;
+
+    reset(initialFormValues);
+
+    isCreateMode
+      ? navigate(ROUTES.accounts.path)
+      : navigate(`${ROUTES.transfers.path}/view/${id}`);
+  };
+
   const handleDeleteTransfer = (): void => {
-    dispatch(deleteTransfer(transferId));
+    dispatch(deleteTransfer(id));
     setDeleteClicked(true);
   };
 
   const getTitle = (): string => {
-    return isEditMode ? t('ACCOUNTS.EDIT_TRANSFER') : t('ACCOUNTS.NEW_TRANSFER');
+    return isEditMode ? t('ACCOUNTS.EDIT_TRANSFER') : (isViewMode ? t('ACCOUNTS.VIEW_TRANSFER') : t('ACCOUNTS.NEW_TRANSFER'));
   };
 
   const handleOpenDialog = (): void => {
@@ -120,6 +135,19 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   const handleCloseDialog = (): void => {
     setDialogOpened(false);
+  };
+
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+    setDeleteClicked(false);
+  };
+
+  const handleEditButtonClick = (): void => {
+    if (isEditMode) {
+      return;
+    }
+
+    navigate(`${ROUTES.transfers.path}/edit/${id}`);
   };
 
   const setFormValues = React.useCallback(() => {
@@ -131,21 +159,28 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     }
   }, [transfer, setValue]);
 
-  const resetForm = React.useCallback(() => {
+  const resetTransfer = React.useCallback(() => {
     dispatch(resetCurrentTransfer());
   }, [dispatch]);
 
   // TODO: move to account.helpers
   const getAccountValue = (accountId: Account['id']): string => {
-    const { name, nameKey } = accounts.find(({ id }) => id === accountId) as Account;
+    const account = accounts.find(({ id }) => id === accountId);
 
-    return nameKey ? t(nameKey) : name;
+    if (!account) {
+      return '';
+    }
+
+    return account.nameKey ? t(account.nameKey) : account.name;
   };
 
   const goBack = React.useCallback(() => {
-    isEditMode ? navigate(`${ROUTES.transfers.path}`) : navigate(`${ROUTES.accounts.path}`);
-    resetForm();
-  }, [navigate, isEditMode, resetForm]);
+    isCreateMode
+      ? navigate(ROUTES.accounts.path)
+      : navigate(ROUTES.transfers.path);
+
+    resetTransfer();
+  }, [navigate, isCreateMode, resetTransfer]);
 
   React.useEffect(() => {
     if (accountStatus === 'idle') {
@@ -169,13 +204,18 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
       goBack();
     }
+
+    if (deleteStatus === 'failed' && deleteClicked) {
+      setShowSnackbar(true);
+      setDialogOpened(false);
+    }
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (transferId && isEditMode) {
-      dispatch(getTransfer(transferId));
+    if (id && currentStatus === 'idle' && !isCreateMode && !deleteClicked) {
+      dispatch(getTransfer(id));
     }
-  }, [transferId, isEditMode, dispatch]);
+  }, [id, isCreateMode, currentStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setFormValues();
@@ -183,16 +223,16 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   React.useEffect(() => {
     return () => {
-      resetForm();
+      resetTransfer();
     };
-  }, [resetForm]);
+  }, [resetTransfer]);
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
-    if (isEditMode && (!transfer || !transferId)) {
+    if (!isCreateMode && (!transfer || !id)) {
       return <EmptyState text={t('TRANSFERS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 
@@ -202,7 +242,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           <Grid item sm={6} xs={12}>
             {/* TODO: move this component to shared */}
             <FormSelect
-              disabled={isEditMode}
+              disabled={!isCreateMode}
               label={t('ACCOUNTS.FROM_ACCOUNT')}
               name={TransferField.fromAccount}
               value={watchFromAccount}
@@ -228,7 +268,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           <Grid item sm={6} xs={12}>
             {/* TODO: move this component to shared */}
             <FormSelect
-              disabled={isEditMode}
+              disabled={!isCreateMode}
               label={t('ACCOUNTS.TO_ACCOUNT')}
               name={TransferField.toAccount}
               value={watchToAccount}
@@ -253,6 +293,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.AMOUNT')}
               type='number'
               name={TransferField.amount}
@@ -270,6 +311,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
+              disabled={isViewMode}
               name={TransferField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
@@ -284,14 +326,6 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               sx={{ width: '100%' }}
             />
           </Grid>
-          {isEditMode && (
-            <Grid item xs={12}>
-              <Button color='secondary' variant='contained'
-                onClick={handleOpenDialog}>
-                {t('COMMON.DELETE')}
-              </Button>
-            </Grid>
-          )}
         </Grid>
       </FormProvider>
     );
@@ -299,17 +333,34 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
+      <PageTitle
+        withBackButton
+        withEditButton={isViewMode}
+        withDeleteButton={isEditMode}
+        text={getTitle()}
+        onBackButtonClick={goBack}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleOpenDialog}
+      />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginY: 3 }}>
-        <Button type='submit' variant='contained' loading={loading}
-          sx={{ width: { sm: 'auto', xs: '100%' } }}
-          onClick={handleSubmit(handleFormSubmit)}>
-          {t('COMMON.SAVE')}
-        </Button>
-      </Box>
+      {!isViewMode && (
+        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth color='secondary' variant='outlined'
+              onClick={cancel}>
+              {t('COMMON.CANCEL')}
+            </Button>
+          </Grid>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth type='submit' variant='contained' loading={loading}
+              onClick={handleSubmit(handleFormSubmit)}>
+              {t('COMMON.SAVE')}
+            </Button>
+          </Grid>
+        </Grid>
+      )}
       <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth

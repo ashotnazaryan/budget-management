@@ -34,9 +34,8 @@ const TransferList: React.FC<TransferListProps> = () => {
     navigate(`${ROUTES.accounts.path}`);
   };
 
-  const handleTransferItemClick = ({ id, fromAccount, toAccount }: TransferModel): void => {
-    const urlParam = `${fromAccount.name}-${toAccount.name}`;
-    navigate(`${ROUTES.transfers.path}/edit/${urlParam}`, { state: { id } });
+  const handleTransferItemClick = ({ id }: TransferModel): void => {
+    navigate(`${ROUTES.transfers.path}/view/${id}`, { state: { id } });
   };
 
   React.useEffect(() => {

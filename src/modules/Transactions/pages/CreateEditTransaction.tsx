@@ -28,7 +28,7 @@ import {
   deleteTransaction,
   selectTransactionError
 } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account } from 'shared/models';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
@@ -45,7 +45,7 @@ import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 
 interface CreateEditTransactionProps {
-  mode: 'create' | 'edit';
+  mode: ManageMode;
 }
 
 const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) => {
@@ -72,14 +72,16 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const deleteLoading = deleteStatus === 'loading';
   const transactionId = state?.id as TransactionDTO['id'];
   const categoryType = state?.categoryType as CategoryType || CategoryType.expense;
-  const isEditMode = mode === 'edit';
+  const isCreateMode = mode === ManageMode.create;
+  const isEditMode = mode === ManageMode.edit;
+  const isViewMode = mode === ManageMode.view;
 
   const defaultValues: Partial<TransactionDTO> = {
     amount: '' as unknown as number,
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: isEditMode ? null as unknown as Date : new Date(),
+    createdAt: isCreateMode ? new Date() : null as unknown as Date,
     note: ''
   };
 
@@ -89,7 +91,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch } = methods;
+  const { setValue, handleSubmit, control, watch, reset } = methods;
   const watchType = watch(TransactionField.type);
   const watchAccount = watch(TransactionField.accountId);
   const watchCreatedAt = watch(TransactionField.createdAt);
@@ -112,10 +114,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     };
   };
 
-  const handleSnackbarClose = (): void => {
-    setShowSnackbar(false);
-  };
-
   const handleCategoryTypeChange = (value: string): void => {
     const type = Number(value) as CategoryType;
 
@@ -123,6 +121,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   };
 
   const handleCategoryIconClick = ({ id, name, nameKey, icon }: CategoryModel): void => {
+    if (isViewMode) {
+      return;
+    }
+
     setValue(TransactionField.categoryId, id, { shouldValidate: true });
     setValue(TransactionField.icon, icon);
     setValue('name', name, { shouldValidate: true });
@@ -148,6 +150,23 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setFormSubmitted(true);
   };
 
+  const cancel = (): void => {
+    const initialFormValues = transaction
+      ? {
+        ...transaction,
+        amount: mapCurrencyStringToNumber(transaction.amount),
+        createdAt: date(transaction.createdAt).toDate(),
+        type: String(transaction.type) as unknown as TransactionDTO['type']
+      } as Partial<TransactionDTO>
+      : defaultValues;
+
+    reset(initialFormValues);
+
+    isCreateMode
+      ? navigate(ROUTES.dashboard.path)
+      : navigate(`${ROUTES.transactions.path}/view/${transaction!.name}`, { state: { id: transactionId } });
+  };
+
   const handleDeleteTransaction = (): void => {
     dispatch(deleteTransaction(transactionId));
     setDeleteClicked(true);
@@ -161,8 +180,27 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setDialogOpened(false);
   };
 
+  const handleSnackbarClose = (): void => {
+    setShowSnackbar(false);
+    setDeleteClicked(false);
+  };
+
+  const handleEditButtonClick = (): void => {
+    if (isEditMode) {
+      return;
+    }
+
+    navigate(`${ROUTES.transactions.path}/edit/${transaction!.name}`, { state: { id: transactionId } });
+  };
+
   const getTitle = (): string => {
-    return isEditMode ? t('TRANSACTIONS.EDIT_TRANSACTION') : t('TRANSACTIONS.NEW_TRANSACTION');
+    if (isCreateMode) {
+      return t('TRANSACTIONS.NEW_TRANSACTION');
+    } else if (transaction && (isEditMode || isViewMode)) {
+      return transaction.nameKey ? t(transaction.nameKey) : transaction.name;
+    }
+
+    return '';
   };
 
   const setFormValues = React.useCallback(() => {
@@ -178,14 +216,14 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     }
   }, [transaction, setValue]);
 
-  const resetForm = React.useCallback(() => {
+  const resetTransaction = React.useCallback(() => {
     dispatch(resetCurrentTransaction());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
-    navigate(`${isEditMode ? ROUTES.transactions.path : ROUTES.dashboard.path}`);
-    resetForm();
-  }, [navigate, resetForm, isEditMode]);
+    navigate(`${isCreateMode ? ROUTES.dashboard.path : ROUTES.transactions.path}`);
+    resetTransaction();
+  }, [navigate, resetTransaction, isCreateMode]);
 
   React.useEffect(() => {
     if (categoryStatus === 'idle') {
@@ -213,13 +251,18 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     if (deleteStatus === 'succeeded' && deleteClicked) {
       goBack();
     }
+
+    if (deleteStatus === 'failed' && deleteClicked) {
+      setShowSnackbar(true);
+      setDialogOpened(false);
+    }
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (transactionId && isEditMode) {
+    if (transactionId && currentStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getTransaction(transactionId));
     }
-  }, [transactionId, isEditMode, dispatch]);
+  }, [transactionId, isCreateMode, currentStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setValue(TransactionField.accountId, defaultAccount);
@@ -231,16 +274,16 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
   React.useEffect(() => {
     return () => {
-      resetForm();
+      resetTransaction();
     };
-  }, [resetForm]);
+  }, [resetTransaction]);
 
   const renderContent = (): React.ReactElement => {
     if (currentStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
-    if (isEditMode && (!transaction || !transactionId)) {
+    if (!isCreateMode && (!transaction || !transactionId)) {
       return <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 
@@ -250,6 +293,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           <Grid item xs={12}>
             <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
             <FormRadioGroup
+              disabled={isViewMode}
               name={TransactionField.type}
               rules={{
                 required: {
@@ -265,6 +309,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.AMOUNT')}
               type='number'
               name={TransactionField.amount}
@@ -283,6 +328,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           <Grid item xs={12}>
             {/* TODO: move this component to shared */}
             <FormSelect
+              disabled={isViewMode}
               label={t('COMMON.ACCOUNT')}
               name={TransactionField.accountId}
               value={accounts.length ? (watchAccount || defaultAccount) : ''}
@@ -307,6 +353,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
+              disabled={isViewMode}
               name={TransactionField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
@@ -323,6 +370,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormInput
+              disabled={isViewMode}
               label={t('COMMON.NOTE')}
               name={TransactionField.note}
             />
@@ -341,7 +389,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                     {
                       categories.filter(({ type }) => type === Number(watchType)).map((category) => (
                         <Grid item key={category.id}>
-                          <CategoryIcon data={getCategoryData(category)} selected={field.value} onClick={handleCategoryIconClick} />
+                          <CategoryIcon data={getCategoryData(category)} selected={field.value} disabled={isViewMode} onClick={handleCategoryIconClick} />
                         </Grid>
                       ))
                     }
@@ -351,14 +399,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               )}
             />
           </Grid>
-          {isEditMode && (
-            <Grid item xs={12}>
-              <Button color='secondary' variant='contained'
-                onClick={handleOpenDialog}>
-                {t('COMMON.DELETE')}
-              </Button>
-            </Grid>
-          )}
         </Grid>
       </FormProvider>
     );
@@ -366,17 +406,34 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
-      <PageTitle withBackButton text={getTitle()} onBackButtonClick={goBack} />
+      <PageTitle
+        withBackButton
+        withEditButton={isViewMode}
+        withDeleteButton={isEditMode}
+        text={getTitle()}
+        onBackButtonClick={goBack}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleOpenDialog}
+      />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
-      <Box display='flex' alignItems='center' justifyContent='flex-end' marginY={3}>
-        <Button type='submit' variant='contained' loading={loading}
-          sx={{ width: { sm: 'auto', xs: '100%' } }}
-          onClick={handleSubmit(handleFormSubmit)}>
-          {t('COMMON.SAVE')}
-        </Button>
-      </Box>
+      {!isViewMode && (
+        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth color='secondary' variant='outlined'
+              onClick={cancel}>
+              {t('COMMON.CANCEL')}
+            </Button>
+          </Grid>
+          <Grid item sm='auto' xs={12}>
+            <Button fullWidth type='submit' variant='contained' loading={loading}
+              onClick={handleSubmit(handleFormSubmit)}>
+              {t('COMMON.SAVE')}
+            </Button>
+          </Grid>
+        </Grid>
+      )}
       <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth

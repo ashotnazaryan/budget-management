@@ -7,6 +7,7 @@ import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 import { getSummary } from './summarySlice';
 import { getTransactions } from './transactionSlice';
+import { getTransfers } from './transferSlice';
 
 export interface AccountState {
   accounts: Account[];
@@ -102,6 +103,7 @@ export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue
       dispatch(getAccounts());
       dispatch(getSummary());
       dispatch(getTransactions());
+      dispatch(getTransfers());
     } catch (error: any) {
       console.error(error);
       return rejectWithValue(error.error);

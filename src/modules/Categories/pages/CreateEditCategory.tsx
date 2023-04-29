@@ -284,7 +284,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 3 }}>
+        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button fullWidth color='secondary' variant='outlined'
               onClick={cancel}>

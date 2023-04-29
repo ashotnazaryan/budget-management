@@ -27,7 +27,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
   }, [dispatch, status]);
 
   const handleTransactionClick = ({ id, name }: TransactionModel): void => {
-    navigate(`${ROUTES.transactions.path}/edit/${name}`, { state: { id } });
+    navigate(`${ROUTES.transactions.path}/view/${name}`, { state: { id } });
   };
 
   const getTransactionData = (data: TransactionModel): TransactionModel => {

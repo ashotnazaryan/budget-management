@@ -71,6 +71,7 @@
     "VIEW_ACCOUNT": "View account",
     "NEW_TRANSFER": "New transfer",
     "EDIT_TRANSFER": "Edit transfer",
+    "VIEW_TRANSFER": "View transfer",
     "EMPTY_TEXT": "No account is available",
     "EMPTY_TEXT_RENDER_CONTENT": "Account not found",
     "FROM_ACCOUNT": "From account",

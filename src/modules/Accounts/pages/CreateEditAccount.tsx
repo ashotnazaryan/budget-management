@@ -259,8 +259,8 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                 }
               }}
             >
-              {currencies.map(({ iso, name, symbol }) => (
-                <MenuItem value={iso} key={iso}>{symbol} {name}</MenuItem>
+              {currencies.map(({ iso, name, nameKey, symbol }) => (
+                <MenuItem value={iso} key={iso}>{symbol} {nameKey ? t(nameKey) : name}</MenuItem>
               ))}
             </FormSelect>
           </Grid>

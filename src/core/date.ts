@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
+import 'dayjs/locale/pl';
 import { Locale } from 'shared/models';
 import { LOCALES } from 'shared/constants';
 

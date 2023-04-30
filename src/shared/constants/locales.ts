@@ -8,5 +8,17 @@ export const LOCALES: Locale[] = [
   {
     iso: 'ru',
     displayName: 'Русский'
+  },
+  {
+    iso: 'ua',
+    displayName: 'Українська'
+  },
+  {
+    iso: 'pl',
+    displayName: 'Polski'
+  },
+  {
+    iso: 'am',
+    displayName: 'Հայերեն'
   }
 ];

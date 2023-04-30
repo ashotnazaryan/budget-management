@@ -369,7 +369,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                     {
                       categories.filter(({ type }) => type === Number(watchType)).map((category) => (
                         <Grid item key={category.id}>
-                          <CategoryIcon data={getCategoryData(category)} selected={field.value} disabled={isViewMode} onClick={handleCategoryIconClick} />
+                          <CategoryIcon data={getCategoryData(category)} selected={field.value} disabled={isViewMode} onItemClick={handleCategoryIconClick} />
                         </Grid>
                       ))
                     }

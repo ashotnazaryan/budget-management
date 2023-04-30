@@ -3,11 +3,13 @@ import MuiSkeleton, { SkeletonProps as MuiSkeletonProps } from '@mui/material/Sk
 import Grid from '@mui/material/Grid';
 
 type SkeletonProps = {
-  type: 'list' | 'form' | 'summary'
+  type: 'list' | 'form' | 'summary' | 'circular'
 } & MuiSkeletonProps;
 
 const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
-  const getHeight = () => {
+  const isCircular = type === 'circular';
+
+  const getSize = () => {
     switch (type) {
     case 'list':
       return { firstBar: 30, secondBar: 30, thirdBar: 30 };
@@ -18,24 +20,41 @@ const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
     case 'summary':
       return { firstBar: 30, secondBar: 60, thirdBar: 120 };
 
+    case 'circular':
+      return { firstBar: 64, secondBar: 64, thirdBar: 64 };
+
     default:
       return { firstBar: 30, secondBar: 30, thirdBar: 30 };
     }
   };
 
-  return (
-    <Grid container justifyContent='center'>
-      <Grid item xs={12}>
-        <MuiSkeleton {...props} variant='rounded' height={getHeight().firstBar} />
+  return isCircular
+    ? (
+      <Grid container columnGap={4}>
+        <Grid item width={100}>
+          <MuiSkeleton {...props} variant='circular' height={getSize().firstBar} width={getSize().firstBar} />
+        </Grid>
+        <Grid item width={100}>
+          <MuiSkeleton {...props} variant='circular' height={getSize().secondBar} width={getSize().secondBar} />
+        </Grid>
+        <Grid item width={100}>
+          <MuiSkeleton {...props} variant='circular' height={getSize().thirdBar} width={getSize().firstBar} />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <MuiSkeleton {...props} variant='rounded' animation='wave' height={getHeight().secondBar} sx={{ marginTop: 3 }} />
+    )
+    : (
+      <Grid container justifyContent='center' rowGap={4}>
+        <Grid item xs={12}>
+          <MuiSkeleton {...props} variant='rounded' height={getSize().firstBar} />
+        </Grid>
+        <Grid item xs={12}>
+          <MuiSkeleton {...props} variant='rounded' animation='wave' height={getSize().secondBar} />
+        </Grid>
+        <Grid item xs={12}>
+          <MuiSkeleton {...props} variant='rounded' height={getSize().thirdBar} />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <MuiSkeleton {...props} variant='rounded' height={getHeight().thirdBar} sx={{ marginTop: 3 }} />
-      </Grid>
-    </Grid>
-  );
+    );
 };
 
 export default Skeleton;

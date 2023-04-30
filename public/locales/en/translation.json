@@ -27,6 +27,13 @@
     "YEAR": "Year",
     "ALL_TIME": "All time"
   },
+  "CURRENCIES": {
+    "USD": "US Dollar",
+    "EUR": "Euro",
+    "PLN": "Polish Zloty",
+    "UAH": "Ukrainian Hryvnia",
+    "AMD": "Armenian Dram"
+  },
   "SIDEBAR": {
     "LOGOUT": "Logout",
     "LOGOUT_DIALOG_TITLE": "Logout",

@@ -1,7 +1,6 @@
 import date from 'core/date';
 import { SummaryDTO, Summary, IconType, Currency } from 'shared/models';
 import { mapNumberToCurrencyString } from './common.helpers';
-import { DATE_FORMAT } from 'shared/constants';
 
 export const mapSummary = (summary: SummaryDTO, currencyIso: Currency['iso'], showDecimals = false): Summary => {
   if (!summary) {
@@ -18,14 +17,14 @@ export const mapSummary = (summary: SummaryDTO, currencyIso: Currency['iso'], sh
       ...transaction,
       amount: mapNumberToCurrencyString(transaction.amount, currencyIso, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: date(transaction.createdAt).format(DATE_FORMAT),
+      createdAt: date(transaction.createdAt).format(),
       icon: transaction.icon as IconType
     })),
     categoryIncomeTransactions: summary.categoryIncomeTransactions.map((transaction) => ({
       ...transaction,
       amount: mapNumberToCurrencyString(transaction.amount, currencyIso, showDecimals),
       percentValue: `${transaction.percentValue}%`,
-      createdAt: date(transaction.createdAt).format(DATE_FORMAT),
+      createdAt: date(transaction.createdAt).format(),
       icon: transaction.icon as IconType
     }))
   };

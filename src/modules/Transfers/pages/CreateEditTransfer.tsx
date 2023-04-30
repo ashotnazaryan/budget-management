@@ -23,8 +23,8 @@ import {
   selectTransferError
 } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { Account, ManageMode, TransferDTO, TransferField } from 'shared/models';
-import { transferHelper, mapCurrencyStringToNumber, getAccountLabel } from 'shared/helpers';
+import { Account, ManageMode, Transfer, TransferDTO, TransferField } from 'shared/models';
+import { transferHelper, getAccountLabel, mapCurrencyStringToInputString } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
@@ -62,14 +62,14 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const isViewMode = mode === ManageMode.view;
   const { id } = useParams() as { id: string };
 
-  const defaultValues: Partial<TransferDTO> = {
-    fromAccount: '',
-    toAccount: '',
-    amount: '' as unknown as number,
-    createdAt: isCreateMode ? new Date() : null as unknown as Date,
+  const defaultValues: Partial<Transfer> = {
+    fromAccount: {} as Account,
+    toAccount: {} as Account,
+    amount: '',
+    createdAt: isCreateMode ? date().format() : undefined,
   };
 
-  const methods = useForm<TransferDTO>({
+  const methods = useForm<Transfer>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
@@ -81,24 +81,33 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const watchCreatedAt = watch(TransferField.createdAt);
 
   const handleFromAccountChange = (event: SelectChangeEvent<Account['id']>) => {
-    setValue(TransferField.fromAccount, event.target.value, { shouldValidate: true });
+    const fromAccount = accounts.find(({ id }) => id === event.target.value);
+
+    setValue(TransferField.fromAccount, fromAccount!, { shouldValidate: true });
   };
 
   const handleToAccountChange = (event: SelectChangeEvent<Account['id']>) => {
-    setValue(TransferField.toAccount, event.target.value, { shouldValidate: true });
+    const toAccount = accounts.find(({ id }) => id === event.target.value);
+
+    setValue(TransferField.toAccount, toAccount!, { shouldValidate: true });
   };
 
   const handleDatePickerChange = (value: LocalizedDate | null): void => {
-    setValue(TransferField.createdAt, value!.toDate(), { shouldValidate: true });
+    setValue(TransferField.createdAt, value!.format(), { shouldValidate: true });
   };
 
-  const handleFormSubmit = (data: TransferDTO): void => {
+  const handleFormSubmit = (data: Transfer): void => {
     const mappedData: TransferDTO = {
       ...data,
-      amount: Number(data.amount)
+      amount: Number(data.amount),
+      fromAccount: data.fromAccount.id,
+      toAccount: data.toAccount.id,
+      createdAt: date(data.createdAt).toDate()
     };
 
-    isEditMode ? dispatch(editTransfer([id, mappedData])) : dispatch(createTransfer(mappedData));
+    isEditMode
+      ? dispatch(editTransfer([id, mappedData]))
+      : dispatch(createTransfer(mappedData));
     setFormSubmitted(true);
   };
 
@@ -142,10 +151,10 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
   const setFormValues = React.useCallback(() => {
     if (transfer) {
-      setValue(TransferField.fromAccount, transfer.fromAccount?.id);
-      setValue(TransferField.toAccount, transfer.toAccount?.id);
-      setValue(TransferField.amount, mapCurrencyStringToNumber(transfer.amount));
-      setValue(TransferField.createdAt, date(transfer.createdAt).setLocale().toDate());
+      setValue(TransferField.fromAccount, transfer.fromAccount);
+      setValue(TransferField.toAccount, transfer.toAccount);
+      setValue(TransferField.amount, mapCurrencyStringToInputString(transfer.amount));
+      setValue(TransferField.createdAt, transfer.createdAt);
     }
   }, [transfer, setValue]);
 
@@ -224,7 +233,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               disabled={!isCreateMode}
               label={t('ACCOUNTS.FROM_ACCOUNT')}
               name={TransferField.fromAccount}
-              value={watchFromAccount}
+              value={watchFromAccount.id || ''}
               onChange={handleFromAccountChange}
               rules={{
                 required: {
@@ -250,7 +259,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               disabled={!isCreateMode}
               label={t('ACCOUNTS.TO_ACCOUNT')}
               name={TransferField.toAccount}
-              value={watchToAccount}
+              value={watchToAccount.id || ''}
               onChange={handleToAccountChange}
               rules={{
                 required: {

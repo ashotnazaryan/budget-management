@@ -3,16 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getCategories, selectCategory } from 'store/reducers';
-import { Category, CategoryType, IconType } from 'shared/models';
+import { Category, IconType } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
-import Icon from 'shared/components/Icon';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import EmptyState from 'shared/components/EmptyState';
 
@@ -23,9 +20,16 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const dispatch = useAppDispatch();
   const { categories, status } = useAppSelector(selectCategory);
   const navigate = useNavigate();
-  const { palette } = useTheme();
   const { t } = useTranslation();
   const [categoryType, setCategoryType] = React.useState<number>(0);
+
+  const addIconData: Category = {
+    id: '',
+    name: 'New category',
+    nameKey: 'CATEGORIES.NEW_CATEGORY',
+    icon: IconType.plus,
+    type: categoryType
+  };
 
   React.useEffect(() => {
     if (status === 'idle' || status === 'failed') {
@@ -45,10 +49,6 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     navigate(`${ROUTES.categories.path}/new`, { state: { categoryType } });
   };
 
-  const getIconColor = (): string => {
-    return categoryType === CategoryType.expense ? palette.secondary.main : palette.primary.main;
-  };
-
   const getCategoryData = (data: Category): Category => {
     return {
       ...data,
@@ -58,7 +58,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='list' />;
+      return <Skeleton type='circular' />;
     }
 
     if (!categories?.length) {
@@ -69,13 +69,11 @@ const CategoryList: React.FC<CategoryListProps> = () => {
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
         {categories.filter(({ type }) => type === categoryType).map((category) => (
           <Grid item key={category.id}>
-            <CategoryIcon data={getCategoryData(category)} onClick={handleCategoryIconClick} />
+            <CategoryIcon data={getCategoryData(category)} onItemClick={handleCategoryIconClick} />
           </Grid>
         ))}
         <Grid item>
-          <IconButton color='primary' onClick={openNewCategoryPage} sx={{ alignSelf: 'flex-end' }}>
-            <Icon name={IconType.plus} sx={{ fontSize: 40, color: getIconColor() }}></Icon>
-          </IconButton>
+          <CategoryIcon data={getCategoryData(addIconData)} onItemClick={openNewCategoryPage} />
         </Grid>
       </Grid>
     );

@@ -58,7 +58,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='circular' />;
+      return <Skeleton type='circular' sx={{ marginTop: 1 }} />;
     }
 
     if (!categories?.length) {

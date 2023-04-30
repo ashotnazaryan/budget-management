@@ -34,17 +34,17 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
       width: '100%',
       minHeight: 40
     }}>
-      <Grid container alignItems='center'>
-        <Grid item sm={1} xs={1} display='flex'>
+      <Grid container alignItems='center' flexWrap='nowrap' columnSpacing={1}>
+        <Grid item xs='auto' display='flex'>
           {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>
-        <Grid item sm={7} xs={5} display='flex'>
+        <Grid item xs={7} display='flex'>
           <Ellipsis color={contrastText} text={name} />
         </Grid>
-        <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
+        <Grid item xs={2} display='flex' justifyContent='flex-end'>
           {showPercentage && <Ellipsis color={contrastText} text={percentValue} />}
         </Grid>
-        <Grid item sm={2} xs={3} display='flex' justifyContent='flex-end'>
+        <Grid item xs={3} display='flex' justifyContent='flex-end'>
           <Ellipsis color={contrastText} text={amount} />
         </Grid>
       </Grid>

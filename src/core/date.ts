@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
 import { Locale } from 'shared/models';
@@ -10,7 +10,7 @@ export interface LocalizedDate extends Dayjs {
 }
 
 const date = (date?: dayjs.ConfigType): LocalizedDate => {
-  dayjs.extend(customParseFormat);
+  dayjs.extend(localizedFormat);
 
   const instance = dayjs(date) as LocalizedDate;
 

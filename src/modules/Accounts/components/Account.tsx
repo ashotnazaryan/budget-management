@@ -39,7 +39,7 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
           <Ellipsis color={contrastText} text={name} />
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
-          <Balance balance={balance} positiveColor={contrastText} />
+          <Balance balance={balance} positiveColor={contrastText} fontSize={{ sm: 16, xs: 14 }} />
         </Grid>
       </Grid>
     </Paper>

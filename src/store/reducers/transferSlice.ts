@@ -29,8 +29,13 @@ export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTra
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;
-      await dispatch(getAccounts());
-      const { accounts } = store.getState().account;
+      let { accounts } = store.getState().account;
+
+      if (!accounts.length) {
+        await dispatch(getAccounts());
+
+        accounts = store.getState().account.accounts;
+      }
 
       return mapTransfers(response.data, accounts, showDecimals);
     }
@@ -44,13 +49,19 @@ export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTra
 
 export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejectValue: ErrorResponse }>(
   'transfers/getTransfer',
-  async (id): Promise<Transfer> => {
+  async (id, { dispatch }): Promise<Transfer> => {
     try {
       const response = await axios.get<TransferDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`);
 
       if (response?.data) {
         const { showDecimals } = store.getState().setting;
-        const { accounts } = store.getState().account;
+        let { accounts } = store.getState().account;
+
+        if (!accounts.length) {
+          await dispatch(getAccounts());
+
+          accounts = store.getState().account.accounts;
+        }
 
         return mapTransfer(response.data, accounts, showDecimals);
       }

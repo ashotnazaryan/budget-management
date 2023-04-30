@@ -10,6 +10,7 @@ export const mapSettings = (setting: SettingDTO): Setting => {
     defaultCurrency: {
       iso: setting.defaultCurrency,
       name: fullCurrency.name,
+      nameKey: fullCurrency.nameKey,
       symbol: fullCurrency.symbol
     },
     locale: {

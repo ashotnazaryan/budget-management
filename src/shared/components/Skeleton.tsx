@@ -8,6 +8,7 @@ type SkeletonProps = {
 
 const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
   const isCircular = type === 'circular';
+  const isForm = type === 'form';
 
   const getSize = () => {
     switch (type) {
@@ -43,7 +44,7 @@ const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
       </Grid>
     )
     : (
-      <Grid container justifyContent='center' rowGap={2}>
+      <Grid container justifyContent='center' rowGap={isForm ? 5 : 2}>
         <Grid item xs={12}>
           <MuiSkeleton {...props} variant='rounded' height={getSize().firstBar} />
         </Grid>

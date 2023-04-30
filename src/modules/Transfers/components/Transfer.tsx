@@ -2,7 +2,9 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
+import date from 'core/date';
 import { Transfer as TransferModel } from 'shared/models';
+import { DATE_FORMAT } from 'shared/constants';
 import Ellipsis from 'shared/components/Ellipsis';
 
 interface TransferProps {
@@ -13,6 +15,7 @@ interface TransferProps {
 const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = useTheme();
   const { fromAccount, toAccount, createdAt, amount } = data;
+  const formattedCreatedAt = date(createdAt).format(DATE_FORMAT);
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -33,7 +36,7 @@ const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
           <Ellipsis text={amount} color={contrastText} />
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={createdAt} color={contrastText} />
+          <Ellipsis text={formattedCreatedAt} color={contrastText} />
         </Grid>
       </Grid>
     </Paper>

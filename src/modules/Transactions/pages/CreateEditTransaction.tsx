@@ -28,9 +28,9 @@ import {
   deleteTransaction,
   selectTransactionError
 } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode } from 'shared/models';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode, Transaction } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { getAccountLabel, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
+import { getAccountLabel, mapCategoryTypesWithTranslations, mapCurrencyStringToInputString, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
@@ -76,16 +76,16 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
 
-  const defaultValues: Partial<TransactionDTO> = {
-    amount: '' as unknown as number,
+  const defaultValues: Partial<Transaction> = {
+    amount: '',
     categoryId: '',
     accountId: defaultAccount || '',
     type: String(categoryType) as unknown as number,
-    createdAt: isCreateMode ? new Date() : null as unknown as Date,
+    createdAt: isCreateMode ? date().format() : undefined,
     note: ''
   };
 
-  const methods = useForm<TransactionDTO>({
+  const methods = useForm<Transaction>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues
@@ -125,17 +125,20 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   };
 
   const handleDatePickerChange = (value: LocalizedDate | null): void => {
-    setValue(TransactionField.createdAt, value!.toDate(), { shouldValidate: true });
+    setValue(TransactionField.createdAt, value!.format(), { shouldValidate: true });
   };
 
-  const handleFormSubmit = (data: TransactionDTO): void => {
-    const mappedData: TransactionDTO = {
+  const handleFormSubmit = (data: Transaction): void => {
+    const mappedData: Omit<TransactionDTO, 'percentValue'> = {
       ...data,
       amount: Number(data.amount),
-      type: Number(data.type)
+      type: Number(data.type),
+      createdAt: date(data.createdAt).toDate()
     };
 
-    isEditMode ? dispatch(editTransaction([transactionId, mappedData])) : dispatch(addTransaction(mappedData));
+    isEditMode
+      ? dispatch(editTransaction([transactionId, mappedData]))
+      : dispatch(addTransaction(mappedData));
     setFormSubmitted(true);
   };
 
@@ -188,9 +191,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       setValue(TransactionField.categoryId, transaction.categoryId);
       setValue(TransactionField.accountId, transaction.accountId);
       setValue(TransactionField.icon, transaction.icon);
-      setValue(TransactionField.amount, mapCurrencyStringToNumber(transaction.amount));
+      setValue(TransactionField.amount, mapCurrencyStringToInputString(transaction.amount));
       setValue(TransactionField.type, String(transaction.type) as unknown as number);
-      setValue(TransactionField.createdAt, date(transaction.createdAt).setLocale().toDate());
+      setValue(TransactionField.createdAt, transaction.createdAt);
       setValue(TransactionField.note, transaction.note);
       setValue('name', transaction.name);
     }

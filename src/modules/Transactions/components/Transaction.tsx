@@ -2,9 +2,11 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
+import date from 'core/date';
 import { CategoryType, Transaction as TransactionModel } from 'shared/models';
 import Icon from 'shared/components/Icon';
 import Ellipsis from 'shared/components/Ellipsis';
+import { DATE_FORMAT } from 'shared/constants';
 
 interface TransactionProps {
   data: TransactionModel;
@@ -14,6 +16,7 @@ interface TransactionProps {
 const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText }, error } } = useTheme();
   const { name, icon, accountName, accountIcon, createdAt, amount, type } = data;
+  const formattedCreatedAt = date(createdAt).format(DATE_FORMAT);
 
   const onTransactionClick = (): void => {
     if (onClick) {
@@ -40,7 +43,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
           {accountIcon && <Icon name={accountIcon} color='primary' sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={createdAt} color={contrastText} />
+          <Ellipsis text={formattedCreatedAt} color={contrastText} />
         </Grid>
       </Grid>
     </Paper>

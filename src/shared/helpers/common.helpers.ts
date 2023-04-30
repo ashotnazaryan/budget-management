@@ -66,6 +66,10 @@ export const mapCurrencyStringToNumber = (value: string): number => {
   return Number(value.replace(/[^0-9.-]+/g, ''));
 };
 
+export const mapCurrencyStringToInputString = (value: string): string => {
+  return value.replace(/[^0-9.-]+/g, '');
+};
+
 export const isPositiveString = (value: string): boolean => {
   return parseFloat(value.replace(/[^0-9.-]+/g, '')) >= 0;
 };

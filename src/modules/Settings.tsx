@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LOCALES, PERIOD_OPTIONS } from 'shared/constants';
 import { Account, Currency, Locale, Period } from 'shared/models';
+import { getAccountLabel } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
@@ -31,17 +32,6 @@ const Settings: React.FC = () => {
   const { palette: { info: { contrastText } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { i18n, t } = useTranslation();
-
-  // TODO: move to account.helpers
-  const getAccountValue = (accountId: Account['id']): string => {
-    const account = accounts.find(({ id }) => id === accountId);
-
-    if (!account) {
-      return '';
-    }
-
-    return account.nameKey ? t(account.nameKey) : account.name;
-  };
 
   const handleOpenDialog = (): void => {
     setDialogOpened(true);
@@ -127,7 +117,7 @@ const Settings: React.FC = () => {
               value={accounts.length ? defaultAccount : ''}
               onChange={handleAccountChange}
               renderValue={(value) => (
-                <Typography>{getAccountValue(value)}</Typography>
+                <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
               {accounts.map(({ id, name, nameKey, balance }) => (

@@ -74,8 +74,7 @@ export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Curren
   return CURRENCIES.find(({ iso }) => iso === currencyIso)?.symbol || CURRENCIES[0].symbol;
 };
 
-export const mapCategoryTypesWithTranslations = (categoryTabs: RadioOption[], t: TFunction<'translation'>
-): RadioOption[] => {
+export const mapCategoryTypesWithTranslations = (categoryTabs: RadioOption[], t: TFunction): RadioOption[] => {
   return categoryTabs.map((categoryTab) => {
     return {
       ...categoryTab,

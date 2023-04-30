@@ -50,7 +50,7 @@ const TransferList: React.FC<TransferListProps> = () => {
     }
 
     if (!transfers?.length) {
-      return <EmptyState text={t('TRANSFERS.EMPTY_TEXT')!} />;
+      return <EmptyState text={t('TRANSFERS.EMPTY_TEXT')} />;
     }
 
     return (

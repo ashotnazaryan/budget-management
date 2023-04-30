@@ -5,15 +5,18 @@ import { useTheme } from '@mui/material/styles';
 import BackButton from './BackButton';
 import EditButton from './EditButton';
 import DeleteButton from './DeleteButton';
+import CancelButton from './CancelButton';
 
 type PageTitleProps = {
   text: string;
   withBackButton?: boolean;
   withEditButton?: boolean;
   withDeleteButton?: boolean;
+  withCancelButton?: boolean;
   onBackButtonClick?: () => void;
   onEditButtonClick?: () => void;
   onDeleteButtonClick?: () => void;
+  onCancelButtonClick?: () => void;
 } & TypographyProps;
 
 const PageTitle: React.FC<PageTitleProps> = ({
@@ -21,9 +24,11 @@ const PageTitle: React.FC<PageTitleProps> = ({
   withBackButton = false,
   withEditButton = false,
   withDeleteButton = false,
+  withCancelButton = false,
   onBackButtonClick,
   onEditButtonClick,
   onDeleteButtonClick,
+  onCancelButtonClick,
   ...props
 }) => {
   const { palette: { info: { contrastText } } } = useTheme();
@@ -46,6 +51,12 @@ const PageTitle: React.FC<PageTitleProps> = ({
     }
   };
 
+  const onCancelClick = (): void => {
+    if (onCancelButtonClick) {
+      onCancelButtonClick();
+    }
+  };
+
   return (
     <Box display='flex' alignItems='center' sx={{ marginTop: 2, marginBottom: 5 }}>
       {withBackButton && <BackButton onClick={onBackClick} />}
@@ -54,7 +65,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
         sx={{
           textAlign: 'center',
           width: '100%',
-          fontSize: 20,
+          fontSize: { sm: 22, xs: 18 },
           fontWeight: 'bold'
         }}
         {...props}>
@@ -62,6 +73,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
       </Typography>
       {withEditButton && <EditButton hidden={!withEditButton} onClick={onEditClick} />}
       {withDeleteButton && <DeleteButton hidden={!withDeleteButton} onClick={onDeleteClick} />}
+      {withCancelButton && <CancelButton hidden={!withCancelButton} onClick={onCancelClick} />}
     </Box>
   );
 };

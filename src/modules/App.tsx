@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/system/Box';
+import date from 'core/date';
 import { useAppSelector } from 'store';
 import { selectSettings } from 'store/reducers';
 import { lightTheme, darkTheme } from 'core/theme.config';
@@ -16,8 +18,14 @@ import Accounts from './Accounts/Accounts';
 import Transfers from './Transfers/Transfers';
 
 const App: React.FC = () => {
-  const { isDarkTheme } = useAppSelector(selectSettings);
+  const { isDarkTheme, locale: { iso } } = useAppSelector(selectSettings);
   const appTheme = isDarkTheme ? darkTheme : lightTheme;
+  const { i18n } = useTranslation();
+
+  React.useEffect(() => {
+    i18n.changeLanguage(iso);
+    date().setLocale(iso);
+  }, [iso, i18n]);
 
   return (
     <ThemeProvider theme={appTheme}>

@@ -12,10 +12,10 @@ const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
   const getSize = () => {
     switch (type) {
     case 'list':
-      return { firstBar: 30, secondBar: 30, thirdBar: 30 };
+      return { firstBar: 40, secondBar: 40, thirdBar: 40 };
 
     case 'form':
-      return { firstBar: 60, secondBar: 60, thirdBar: 60 };
+      return { firstBar: 56, secondBar: 56, thirdBar: 56 };
 
     case 'summary':
       return { firstBar: 30, secondBar: 60, thirdBar: 120 };
@@ -24,26 +24,26 @@ const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
       return { firstBar: 64, secondBar: 64, thirdBar: 64 };
 
     default:
-      return { firstBar: 30, secondBar: 30, thirdBar: 30 };
+      return { firstBar: 40, secondBar: 40, thirdBar: 40 };
     }
   };
 
   return isCircular
     ? (
       <Grid container columnGap={4}>
-        <Grid item width={100}>
+        <Grid item width={100} display='flex' justifyContent='center'>
           <MuiSkeleton {...props} variant='circular' height={getSize().firstBar} width={getSize().firstBar} />
         </Grid>
-        <Grid item width={100}>
+        <Grid item width={100} display='flex' justifyContent='center'>
           <MuiSkeleton {...props} variant='circular' height={getSize().secondBar} width={getSize().secondBar} />
         </Grid>
-        <Grid item width={100}>
+        <Grid item width={100} display='flex' justifyContent='center'>
           <MuiSkeleton {...props} variant='circular' height={getSize().thirdBar} width={getSize().firstBar} />
         </Grid>
       </Grid>
     )
     : (
-      <Grid container justifyContent='center' rowGap={4}>
+      <Grid container justifyContent='center' rowGap={2}>
         <Grid item xs={12}>
           <MuiSkeleton {...props} variant='rounded' height={getSize().firstBar} />
         </Grid>

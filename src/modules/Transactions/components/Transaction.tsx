@@ -23,7 +23,7 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
 
   return (
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
-      <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 30, cursor: 'pointer' }}>
+      <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 40, cursor: 'pointer' }}>
         <Grid item xs={1} display='flex'>
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>

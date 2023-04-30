@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import { Period } from 'shared/models';
 import Button from 'shared/components/Button';
+import Box from '@mui/material/Box';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { useTheme } from '@mui/material/styles';
+import { Period } from 'shared/models';
 
 interface PeriodFiltersProps {
   selectedPeriod: Period;
@@ -15,6 +17,7 @@ interface PeriodButton {
 }
 
 const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter }) => {
+  const { palette: { primary: { dark } } } = useTheme();
   const { t } = useTranslation();
 
   const periodButtons: PeriodButton[] = [
@@ -56,11 +59,13 @@ const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter 
   };
 
   return (
-    <ButtonGroup variant='text'>
-      {periodButtons.map(({ period, label }) => (
-        renderPeriodButton(period, label)
-      ))}
-    </ButtonGroup>
+    <Box display='flex' justifyContent='center' flexGrow={1} sx={{ backgroundColor: dark, borderRadius: 1 }}>
+      <ButtonGroup variant='text'>
+        {periodButtons.map(({ period, label }) => (
+          renderPeriodButton(period, label)
+        ))}
+      </ButtonGroup>
+    </Box>
   );
 };
 

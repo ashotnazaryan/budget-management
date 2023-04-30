@@ -54,7 +54,7 @@ const TransferList: React.FC<TransferListProps> = () => {
     }
 
     return (
-      <Grid container rowSpacing={2}>
+      <Grid container rowGap={2}>
         {
           transfers.map((transfer) => (
             <Grid item key={transfer.id} xs={12}>

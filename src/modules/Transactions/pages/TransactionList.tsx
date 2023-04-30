@@ -48,7 +48,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
     }
 
     return (
-      <Grid container rowSpacing={2}>
+      <Grid container rowGap={2}>
         {
           transactions.map((transaction) => (
             <Grid item key={transaction.id} xs={12}>

@@ -22,7 +22,7 @@ const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
 
   return (
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
-      <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 30, cursor: 'pointer' }}>
+      <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 40, cursor: 'pointer' }}>
         <Grid item xs={3}>
           <Ellipsis text={fromAccount.name} color={contrastText} />
         </Grid>

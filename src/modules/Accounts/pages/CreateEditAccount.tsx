@@ -102,15 +102,8 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     setFormSubmitted(true);
   };
 
-  const cancel = (): void => {
-    const initialFormValues: Partial<Account> = account
-      ? {
-        ...account,
-        balance: mapCurrencyStringToNumber(account.balance) as unknown as Account['balance']
-      }
-      : defaultValues;
-
-    reset(initialFormValues);
+  const handleCancelButtonClick = (): void => {
+    isCreateMode ? reset(defaultValues) : setFormValues();
 
     isEditMode
       ? navigate(`${ROUTES.accounts.path}/view/${account!.name}`, { state: { id: accountId } })
@@ -306,22 +299,18 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         withBackButton
         withEditButton={isViewMode}
         withDeleteButton={isEditMode}
+        withCancelButton={!isViewMode}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}
+        onCancelButtonClick={handleCancelButtonClick}
       />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
-          <Grid item sm='auto' xs={12}>
-            <Button fullWidth color='secondary' variant='outlined'
-              onClick={cancel}>
-              {t('COMMON.CANCEL')}
-            </Button>
-          </Grid>
+        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>

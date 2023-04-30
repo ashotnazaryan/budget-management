@@ -69,9 +69,6 @@
     "NEW_ACCOUNT": "New account",
     "EDIT_ACCOUNT": "Edit account",
     "VIEW_ACCOUNT": "View account",
-    "NEW_TRANSFER": "New transfer",
-    "EDIT_TRANSFER": "Edit transfer",
-    "VIEW_TRANSFER": "View transfer",
     "EMPTY_TEXT": "No account is available",
     "EMPTY_TEXT_RENDER_CONTENT": "Account not found",
     "FROM_ACCOUNT": "From account",
@@ -137,6 +134,8 @@
   "TRANSFERS": {
     "PAGE_TITLE": "Transfers",
     "NEW_TRANSFER": "New transfer",
+    "EDIT_TRANSFER": "Edit transfer",
+    "VIEW_TRANSFER": "View transfer",
     "TRANSFER_HISTORY": "Transfer history",
     "EMPTY_TEXT": "No transfer is available",
     "EMPTY_TEXT_RENDER_CONTENT": "Transfer not found",

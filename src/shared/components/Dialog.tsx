@@ -32,7 +32,12 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText, actionButtonText, wit
       {...props}
       onClose={onClose}
     >
-      <StyledDialogTitle theme={theme} sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.primary.contrastText }}>
+      <StyledDialogTitle
+        theme={theme}
+        sx={{
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText
+        }}>
         {props.title}
       </StyledDialogTitle>
       <StyledDialogContent theme={theme} sx={{ display: 'flex' }}>
@@ -40,7 +45,7 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText, actionButtonText, wit
       </StyledDialogContent>
       {withActions && (
         <DialogActions>
-          <Button onClick={onClose}>{t(cancelButtonText!)}</Button>
+          <Button color='secondary' variant='outlined' onClick={onClose}>{t(cancelButtonText!)}</Button>
           <Button variant='contained' loading={loading} onClick={handleOnAction} autoFocus>{t(actionButtonText!)}</Button>
         </DialogActions>
       )}

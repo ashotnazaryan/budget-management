@@ -30,7 +30,8 @@ export enum IconType {
   google = 'google',
   arrowBack = 'arrowBack',
   edit = 'edit',
-  delete = 'delete'
+  delete = 'delete',
+  cancel = 'cancel'
 }
 
 export interface Icon {

@@ -92,15 +92,8 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     setFormSubmitted(true);
   };
 
-  const cancel = (): void => {
-    const initialFormValues: Partial<Category> = category
-      ? {
-        ...category,
-        type: String(category.type) as unknown as Category['type']
-      }
-      : defaultValues;
-
-    reset(initialFormValues);
+  const handleCancelButtonClick = (): void => {
+    isCreateMode ? reset(defaultValues) : setFormValues();
 
     isEditMode
       ? navigate(`${ROUTES.categories.path}/view/${category!.name}`, { state: { id: categoryId } })
@@ -275,22 +268,18 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         withBackButton
         withEditButton={isViewMode}
         withDeleteButton={isEditMode}
+        withCancelButton={!isViewMode}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}
+        onCancelButtonClick={handleCancelButtonClick}
       />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
-          <Grid item sm='auto' xs={12}>
-            <Button fullWidth color='secondary' variant='outlined'
-              onClick={cancel}>
-              {t('COMMON.CANCEL')}
-            </Button>
-          </Grid>
+        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>

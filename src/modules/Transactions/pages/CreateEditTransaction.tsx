@@ -30,7 +30,7 @@ import {
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode } from 'shared/models';
 import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
+import { getAccountLabel, mapCategoryTypesWithTranslations, mapCurrencyStringToNumber, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
@@ -96,17 +96,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const watchAccount = watch(TransactionField.accountId);
   const watchCreatedAt = watch(TransactionField.createdAt);
 
-  // TODO: move to account.helpers
-  const getAccountValue = (accountId: Account['id']): string => {
-    const account = accounts.find(({ id }) => id === accountId);
-
-    if (!account) {
-      return '';
-    }
-
-    return account.nameKey ? t(account.nameKey) : account.name;
-  };
-
   const getCategoryData = (data: CategoryModel): CategoryModel => {
     return {
       ...data,
@@ -150,17 +139,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     setFormSubmitted(true);
   };
 
-  const cancel = (): void => {
-    const initialFormValues = transaction
-      ? {
-        ...transaction,
-        amount: mapCurrencyStringToNumber(transaction.amount),
-        createdAt: date(transaction.createdAt).toDate(),
-        type: String(transaction.type) as unknown as TransactionDTO['type']
-      } as Partial<TransactionDTO>
-      : defaultValues;
-
-    reset(initialFormValues);
+  const handleCancelButtonClick = (): void => {
+    isCreateMode ? reset(defaultValues) : setFormValues();
 
     isCreateMode
       ? navigate(ROUTES.dashboard.path)
@@ -340,7 +320,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 }
               }}
               renderValue={(value) => (
-                <Typography>{getAccountValue(value)}</Typography>
+                <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
               {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
@@ -410,22 +390,18 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
         withBackButton
         withEditButton={isViewMode}
         withDeleteButton={isEditMode}
+        withCancelButton={!isViewMode}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}
+        onCancelButtonClick={handleCancelButtonClick}
       />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
-          <Grid item sm='auto' xs={12}>
-            <Button fullWidth color='secondary' variant='outlined'
-              onClick={cancel}>
-              {t('COMMON.CANCEL')}
-            </Button>
-          </Grid>
+        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>

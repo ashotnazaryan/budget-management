@@ -23,6 +23,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const CATEGORY_ICONS: IconTypes = {
@@ -56,7 +57,8 @@ export const OTHER_ICONS: IconTypes = {
   [IconType.google]: GoogleIcon,
   [IconType.arrowBack]: ArrowBackIcon,
   [IconType.edit]: EditIcon,
-  [IconType.delete]: DeleteIcon
+  [IconType.delete]: DeleteIcon,
+  [IconType.cancel]: CloseIcon
 };
 
 export const ALL_ICONS: IconTypes = {

@@ -24,7 +24,7 @@ import {
 } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, ManageMode, TransferDTO, TransferField } from 'shared/models';
-import { transferHelper, mapCurrencyStringToNumber } from 'shared/helpers';
+import { transferHelper, mapCurrencyStringToNumber, getAccountLabel } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
@@ -102,18 +102,8 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     setFormSubmitted(true);
   };
 
-  const cancel = (): void => {
-    const initialFormValues: Partial<TransferDTO> = transfer
-      ? {
-        ...transfer,
-        amount: mapCurrencyStringToNumber(transfer.amount),
-        createdAt: date(transfer.createdAt).toDate(),
-        fromAccount: transfer.fromAccount.id,
-        toAccount: transfer.toAccount.id
-      }
-      : defaultValues;
-
-    reset(initialFormValues);
+  const handleCancelButtonClick = (): void => {
+    isCreateMode ? reset(defaultValues) : setFormValues();
 
     isCreateMode
       ? navigate(ROUTES.accounts.path)
@@ -126,7 +116,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   };
 
   const getTitle = (): string => {
-    return isEditMode ? t('ACCOUNTS.EDIT_TRANSFER') : (isViewMode ? t('ACCOUNTS.VIEW_TRANSFER') : t('ACCOUNTS.NEW_TRANSFER'));
+    return isEditMode ? t('TRANSFERS.EDIT_TRANSFER') : (isViewMode ? t('TRANSFERS.VIEW_TRANSFER') : t('TRANSFERS.NEW_TRANSFER'));
   };
 
   const handleOpenDialog = (): void => {
@@ -162,17 +152,6 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const resetTransfer = React.useCallback(() => {
     dispatch(resetCurrentTransfer());
   }, [dispatch]);
-
-  // TODO: move to account.helpers
-  const getAccountValue = (accountId: Account['id']): string => {
-    const account = accounts.find(({ id }) => id === accountId);
-
-    if (!account) {
-      return '';
-    }
-
-    return account.nameKey ? t(account.nameKey) : account.name;
-  };
 
   const goBack = React.useCallback(() => {
     isCreateMode
@@ -254,7 +233,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 }
               }}
               renderValue={(value) => (
-                <Typography>{getAccountValue(value)}</Typography>
+                <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
               {accounts.map(({ id, name, nameKey, balance }) => (
@@ -280,7 +259,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 }
               }}
               renderValue={(value) => (
-                <Typography>{getAccountValue(value)}</Typography>
+                <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
               {accounts.map(({ id, name, nameKey, balance }) => (
@@ -337,22 +316,18 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
         withBackButton
         withEditButton={isViewMode}
         withDeleteButton={isEditMode}
+        withCancelButton={!isViewMode}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}
+        onCancelButtonClick={handleCancelButtonClick}
       />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' alignItems='center' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
-          <Grid item sm='auto' xs={12}>
-            <Button fullWidth color='secondary' variant='outlined'
-              onClick={cancel}>
-              {t('COMMON.CANCEL')}
-            </Button>
-          </Grid>
+        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>

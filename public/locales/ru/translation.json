@@ -69,9 +69,6 @@
     "NEW_ACCOUNT": "Новый счет",
     "EDIT_ACCOUNT": "Изменить счет",
     "VIEW_ACCOUNT": "Посмотреть счет",
-    "NEW_TRANSFER": "Новый трансфер",
-    "EDIT_TRANSFER": "Изменить трансфер",
-    "VIEW_TRANSFER": "Посмотреть трансфер",
     "EMPTY_TEXT": "Нет счетов",
     "EMPTY_TEXT_RENDER_CONTENT": "Счет не найден",
     "FROM_ACCOUNT": "Из счета",
@@ -137,6 +134,8 @@
   "TRANSFERS": {
     "PAGE_TITLE": "Трансферы",
     "NEW_TRANSFER": "Новый трансфер",
+    "EDIT_TRANSFER": "Изменить трансфер",
+    "VIEW_TRANSFER": "Посмотреть трансфер",
     "TRANSFER_HISTORY": "История трансферов",
     "EMPTY_TEXT": "Нет трансферов",
     "EMPTY_TEXT_RENDER_CONTENT": "Трансфер не найден",

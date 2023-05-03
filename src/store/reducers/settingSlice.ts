@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import date from 'core/date';
 import { ErrorResponse, Period, Setting, SettingDTO, StatusState } from 'shared/models';
 import { CURRENCIES, LOCALES } from 'shared/constants';
@@ -27,7 +27,7 @@ const initialState: SettingState = {
 
 export const getSettings = createAsyncThunk('setting/getSettings', async (_, { dispatch }): Promise<Setting> => {
   try {
-    const response = await axios.get<SettingDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings`);
+    const response = await axios.get<SettingDTO>('settings');
 
     dispatch(setAppStatus('succeeded'));
     dispatch(setActivePeriodFilter(response?.data.defaultPeriod));
@@ -45,7 +45,7 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
   'setting/addSetting',
   async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.post<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/setting`, setting);
+      await axios.post<void>('settings/setting', setting);
 
       if (isAppLoading) {
         dispatch(setAppStatus('loading'));

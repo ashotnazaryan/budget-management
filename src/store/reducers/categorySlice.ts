@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import { Category, CategoryDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapCategories, mapCategory } from 'shared/helpers';
 import { RootState } from './rootReducer';
@@ -25,7 +25,7 @@ const initialState: CategoryState = {
 
 export const getCategories = createAsyncThunk<Category[], void>('categories/getCategories', async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<CategoryDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories`);
+    const response = await axios.get<CategoryDTO[]>('categories');
 
     if (response?.data) {
       return mapCategories(response.data);
@@ -42,7 +42,7 @@ export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejec
   'categories/getCategory',
   async (id): Promise<Category> => {
     try {
-      const response = await axios.get<CategoryDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`);
+      const response = await axios.get<CategoryDTO>(`categories/${id}`);
 
       if (response?.data) {
         return mapCategory(response.data);
@@ -59,7 +59,7 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
   'categories/createCategory',
   async (category, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/category`, category);
+      const response = await axios.post('categories/category', category);
 
       if (response?.data) {
         dispatch(getCategories());
@@ -74,7 +74,7 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
   'categories/editCategory',
   async ([id, category], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`, category);
+      const response = await axios.put(`categories/${id}`, category);
 
       if (response?.data) {
         dispatch(getCategories());
@@ -91,7 +91,7 @@ export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectVal
   'categories/deleteCategory',
   async (id, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/categories/${id}`);
+      await axios.delete(`categories/${id}`);
 
       dispatch(getCategories());
       dispatch(getSummary());

@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import { store } from 'store';
 import { ErrorResponse, StatusState, Transfer, TransferDTO } from 'shared/models';
 import { mapTransfer, mapTransfers } from 'shared/helpers';
@@ -25,7 +25,7 @@ const initialState: TransferState = {
 
 export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (_, { dispatch }): Promise<Transfer[]> => {
   try {
-    const response = await axios.get<TransferDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers`);
+    const response = await axios.get<TransferDTO[]>('transfers');
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;
@@ -51,7 +51,7 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
   'transfers/getTransfer',
   async (id, { dispatch }): Promise<Transfer> => {
     try {
-      const response = await axios.get<TransferDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`);
+      const response = await axios.get<TransferDTO>(`transfers/${id}`);
 
       if (response?.data) {
         const { showDecimals } = store.getState().setting;
@@ -77,7 +77,7 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
   'transfers/createTransfer',
   async (transfer, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/transfer`, transfer);
+      const response = await axios.post('transfers/transfer', transfer);
 
       if (response?.data) {
         dispatch(getTransfers());
@@ -93,7 +93,7 @@ export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<Transfe
   'transfers/editTransfer',
   async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`, account);
+      const response = await axios.put(`transfers/${id}`, account);
 
       if (response?.data) {
         dispatch(getTransfers());
@@ -109,7 +109,7 @@ export const deleteTransfer = createAsyncThunk<void, Transfer['id'], { rejectVal
   'transfers/deleteTransfer',
   async (id, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transfers/${id}`);
+      await axios.delete(`transfers/${id}`);
 
       dispatch(getTransfers());
       dispatch(getAccounts());

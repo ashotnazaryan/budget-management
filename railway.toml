@@ -10,10 +10,12 @@ language = "nodejs@16"
 port = "$PORT"
 
 # The build command for your app
-build = "npm install && npm run build"
+[build]
+command = "npm install && npm run build"
 
 # The command to start your app
-start = "npm start"
+[start]
+command = "npm start"
 
 # The environment variables that your app depends on
 [env]
@@ -26,5 +28,5 @@ budget-management-api = "https://budget-management-api.up.railway.app"
 
 # The files that should be ignored when deploying
 [ignore]
-directories = [ "node_modules", "build" ]
-files = [ ".env", ".env.local" ]
+directories = ["node_modules", "build"]
+files = [".env", ".env.local"]

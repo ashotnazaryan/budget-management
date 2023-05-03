@@ -10,7 +10,7 @@ language = "nodejs@16"
 port = "$PORT"
 
 [build]
-builder = "none"
+builder = "node"
 command = "npm run build"
 
 [env]

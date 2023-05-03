@@ -11,7 +11,7 @@ port = "$PORT"
 
 # The install command for your app
 [install]
-command = "npm ci                                                    "
+command = "npm cache clean --force && npm ci"
 
 # The build command for your app
 [build]

@@ -16,15 +16,8 @@ command = "npm run build"
 [env]
 INSTALL_COMMAND = "npm ci"
 START_COMMAND = "npm run start"
-
-# The environment variables that your app depends on
-[env]
 NODE_ENV = "production"
 REACT_APP_BUDGET_MANAGEMENT_API = "https://budget-management-api.up.railway.app/api"
-
-# The services that your app depends on
-[services]
-budget-management-api = "https://budget-management-api.up.railway.app"
 
 # The files that should be ignored when deploying
 [ignore]

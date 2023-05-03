@@ -9,17 +9,13 @@ language = "nodejs@16"
 # The port that your app listens on
 port = "$PORT"
 
-# The install command for your app
-[install]
-command = "npm cache clean --force && npm ci"
-
-# The build command for your app
 [build]
+builder = "none"
 command = "npm run build"
 
-# The command to start your app
-[start]
-command = "npm run start"
+[env]
+INSTALL_COMMAND = "npm ci"
+START_COMMAND = "npm run start"
 
 # The environment variables that your app depends on
 [env]

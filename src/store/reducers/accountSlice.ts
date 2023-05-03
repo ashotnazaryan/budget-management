@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import { store } from 'store';
 import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapAccount, mapAccounts } from 'shared/helpers';
@@ -27,7 +27,7 @@ const initialState: AccountState = {
 
 export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccounts', async (): Promise<Account[]> => {
   try {
-    const response = await axios.get<AccountDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts`);
+    const response = await axios.get<AccountDTO[]>('accounts');
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;
@@ -46,7 +46,7 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
   'accounts/getAccount',
   async (id): Promise<Account> => {
     try {
-      const response = await axios.get<AccountDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${id}`);
+      const response = await axios.get<AccountDTO>(`accounts/${id}`);
 
       if (response?.data) {
         const { showDecimals } = store.getState().setting;
@@ -65,7 +65,7 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
   'accounts/createAccount',
   async (account, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/account`, account);
+      const response = await axios.post('accounts/account', account);
 
       if (response?.data) {
         dispatch(getAccounts());
@@ -81,7 +81,7 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
   'accounts/editAccount',
   async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${id}`, account);
+      const response = await axios.put(`accounts/${id}`, account);
 
       if (response?.data) {
         dispatch(getAccounts());
@@ -98,7 +98,7 @@ export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue
   'accounts/deleteAccount',
   async (id, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/accounts/${id}`);
+      await axios.delete(`accounts/${id}`);
 
       dispatch(getAccounts());
       dispatch(getSummary());

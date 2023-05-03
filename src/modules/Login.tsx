@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const { palette: { info: { main, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
-  const googleLogin = () => {
+  const googleLogin = (): void => {
     window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/google`, '_self');
   };
 

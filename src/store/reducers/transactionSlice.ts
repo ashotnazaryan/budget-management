@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import { store } from 'store';
 import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
 import { mapTransaction, mapTransactions } from 'shared/helpers';
@@ -26,7 +26,7 @@ const initialState: TransactionState = {
 
 export const getTransactions = createAsyncThunk('transactions/getTransactions', async (): Promise<Transaction[]> => {
   try {
-    const response = await axios.get<TransactionDTO[]>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions`);
+    const response = await axios.get<TransactionDTO[]>('transactions');
 
     if (response?.data) {
       const { showDecimals } = store.getState().setting;
@@ -45,7 +45,7 @@ export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id']
   'transactions/getTransaction',
   async (id): Promise<Transaction> => {
     try {
-      const response = await axios.get<TransactionDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`);
+      const response = await axios.get<TransactionDTO>(`transactions/${id}`);
 
       if (response?.data) {
         const { showDecimals } = store.getState().setting;
@@ -64,7 +64,7 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
   'transactions/addTransaction',
   async (transaction, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/transaction`, transaction);
+      const response = await axios.post('transactions/transaction', transaction);
 
       if (response?.data) {
         dispatch(getSummary());
@@ -80,7 +80,7 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
   'transactions/editTransaction',
   async ([id, transaction], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`, transaction);
+      const response = await axios.put(`transactions/${id}`, transaction);
 
       if (response?.data) {
         dispatch(getTransactions());
@@ -96,7 +96,7 @@ export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rej
   'transactions/deleteTransaction',
   async (id, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/transactions/${id}`);
+      await axios.delete(`transactions/${id}`);
 
       dispatch(getTransactions());
       dispatch(getSummary());

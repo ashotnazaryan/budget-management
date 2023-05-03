@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from './rootReducer';
+import axios from 'core/axios';
 import { ErrorResponse, StatusState } from 'shared/models';
+import { RootState } from './rootReducer';
 
 interface AppState {
   status: StatusState;
@@ -18,7 +18,7 @@ export const reset = createAsyncThunk<void, string, { rejectValue: ErrorResponse
   'app/reset',
   async (userId, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/settings/${userId}/reset`);
+      await axios.delete(`settings/${userId}/reset`);
 
       dispatch(resetApp());
     } catch (error: any) {

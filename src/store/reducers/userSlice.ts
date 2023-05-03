@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'core/axios';
 import { ErrorResponse, StatusState, User, UserDTO } from 'shared/models';
 import { mapUser } from 'shared/helpers';
 import { RootState } from './rootReducer';
@@ -20,7 +20,7 @@ export const getUserInfo = createAsyncThunk<User, void, { rejectValue: ErrorResp
   'user/getUserInfo',
   async (_, { rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.get<UserDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/user`);
+      const response = await axios.get<UserDTO>('user');
 
       if (response?.data) {
         return mapUser(response.data);

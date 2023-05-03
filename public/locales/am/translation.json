@@ -54,7 +54,7 @@
     "BUTTON_PREFIX": "Շարունակել"
   },
   "DASHBOARD": {
-    "SUMMARY": "Հաշվառում",
+    "SUMMARY": "Հաշվարկ",
     "TOTAL_INCOME": "Ընդհանուր եկամուտ",
     "TOTAL_EXPENSES": "Ընդհանուր ծախսեր",
     "PROFIT": "Շահույթ"
@@ -122,7 +122,7 @@
     "DELETE_DIALOG_CONFIRM": "Դուք համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս կատեգորիան։ Բոլոր փոխանցումները կատարված այս կատեգորիայով կջնջվեն"
   },
   "TRANSACTIONS": {
-    "PAGE_TITLE": "Գործարք",
+    "PAGE_TITLE": "Գործարքներ",
     "NEW_TRANSACTION": "Նոր գործարք",
     "EDIT_TRANSACTION": "Խմբագրել գործարքը",
     "EMPTY_TEXT": "Գործարքներ չկան",

@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'core/axios';
 import { Auth, AuthDTO, StatusState } from 'shared/models';
 import { getFromLocalStorage, removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
@@ -18,7 +18,7 @@ const initialState: AuthState = {
 };
 
 export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {
-  const response = await axios.get<Auth>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/login/success`);
+  const response = await axios.get<Auth>('auth/login/success');
 
   const auth: Auth = {
     userId: response.data.userId,
@@ -33,7 +33,7 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
 
 export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
   try {
-    const response = await axios.post<AuthDTO>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/access-token`, { refreshToken });
+    const response = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
     const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
 
     if (response?.data) {
@@ -56,7 +56,7 @@ export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', asyn
 });
 
 export const logout = createAsyncThunk('auth/logout', async (_, { dispatch }): Promise<void> => {
-  await axios.get<void>(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/logout`);
+  await axios.get<void>('auth/logout');
 
   removeFromLocalStorage(AUTH_KEY);
   dispatch(resetApp());

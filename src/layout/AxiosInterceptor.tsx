@@ -1,5 +1,6 @@
 import * as React from 'react';
-import axios, { AxiosResponse, CreateAxiosDefaults } from 'axios';
+import { AxiosResponse } from 'axios'; // TODO: move this to core/axios
+import axios from 'core/axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
@@ -7,12 +8,6 @@ import { Auth } from 'shared/models';
 import { removeUser, logout } from 'store/reducers';
 
 // let retried = false;
-
-const defaultConfigs: CreateAxiosDefaults = {
-  headers: {
-    'Content-Type': 'application/json',
-  }
-};
 
 const mapResponse = (response: AxiosResponse): AxiosResponse => {
   if (response) {
@@ -26,21 +21,14 @@ const mapResponse = (response: AxiosResponse): AxiosResponse => {
   throw new Error(response);
 };
 
-axios.create(defaultConfigs);
-
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const dispatch = useAppDispatch();
-  const apiBase = process.env.REACT_APP_BUDGET_MANAGEMENT_API || '';
 
   axios.interceptors.request.use((config) => {
     const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-    if (accessToken && config.url?.includes(apiBase)) {
+    if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-
-    if (config.url?.includes(apiBase)) {
-      config.withCredentials = true;
     }
 
     return config;

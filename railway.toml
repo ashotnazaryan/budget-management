@@ -25,5 +25,6 @@ REACT_APP_BUDGET_MANAGEMENT_API = "https://budget-management-api.up.railway.app/
 budget-management-api = "https://budget-management-api.up.railway.app"
 
 # The files that should be ignored when deploying
-[build]
-ignore = ["node_modules", "build"]
+[ignore]
+directories = [ "node_modules", "build" ]
+files = [ ".env", ".env.local" ]

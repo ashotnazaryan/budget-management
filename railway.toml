@@ -9,15 +9,26 @@ language = "nodejs@16"
 # The port that your app listens on
 port = "$PORT"
 
+# The install command for your app
+[install]
+command = "npm ci"
+
+# The build command for your app
 [build]
-builder = "node"
 command = "npm run build"
 
+# The command to start your app
+[start]
+command = "npm run start"
+
+# The environment variables that your app depends on
 [env]
-INSTALL_COMMAND = "npm ci"
-START_COMMAND = "npm run start"
 NODE_ENV = "production"
 REACT_APP_BUDGET_MANAGEMENT_API = "https://budget-management-api.up.railway.app/api"
+
+# The services that your app depends on
+[services]
+budget-management-api = "https://budget-management-api.up.railway.app"
 
 # The files that should be ignored when deploying
 [ignore]

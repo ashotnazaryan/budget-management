@@ -1,0 +1,29 @@
+# This is an example Railway config file
+
+# The name of your app
+name = "budget-managementa-app"
+
+# The language and version of your app (e.g. "nodejs@14")
+language = "nodejs@16"
+
+# The port that your app listens on
+port = "$PORT"
+
+# The build command for your app
+build = "npm install && npm run build"
+
+# The command to start your app
+start = "npm start"
+
+# The environment variables that your app depends on
+[env]
+NODE_ENV = "production"
+REACT_APP_BUDGET_MANAGEMENT_API=https://budget-management-api.up.railway.app/api
+
+# The services that your app depends on
+[services]
+budget-management-api = "https://budget-management-api.up.railway.app"
+
+# The files that should be ignored when deploying
+[build]
+ignore = ["node_modules", "build"]

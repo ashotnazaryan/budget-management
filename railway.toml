@@ -3,19 +3,23 @@
 # The name of your app
 name = "budget-managementa-app"
 
-# The language and version of your app (e.g. "nodejs@14")
+# The language and version of your app
 language = "nodejs@16"
 
 # The port that your app listens on
 port = "$PORT"
 
+# The install command for your app
+[install]
+command = "npm ci                                                    "
+
 # The build command for your app
 [build]
-command = "npm install && npm run build"
+command = "npm run build"
 
 # The command to start your app
 [start]
-command = "npm start"
+command = "npm run start"
 
 # The environment variables that your app depends on
 [env]

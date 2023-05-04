@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import Ellipsis from 'shared/components/Ellipsis';
 import Balance from 'shared/components/Balance';
 

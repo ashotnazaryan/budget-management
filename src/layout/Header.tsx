@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch } from 'store';
 import { openSideBar } from 'store/reducers';
 import { ROUTES } from 'shared/constants';

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import { TabsProps as MuiTabsProps } from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
+import { useTranslation } from 'core/i18n';
 import { StyledTabs } from './Tabs.styles';
 
 export interface Tab {

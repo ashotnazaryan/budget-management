@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import Button from 'shared/components/Button';
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { Period } from 'shared/models';
+import Button from 'shared/components/Button';
 
 interface PeriodFiltersProps {
   selectedPeriod: Period;

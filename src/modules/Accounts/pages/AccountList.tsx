@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import { IconType, Account as AccountModel } from 'shared/models';
 import { ROUTES } from 'shared/constants';

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getTransactions, selectTransaction } from 'store/reducers';
 import { Transaction as TransactionModel } from 'shared/models';

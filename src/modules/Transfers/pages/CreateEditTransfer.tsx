@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import date, { LocalizedDate } from 'core/date';
+import { useTranslation } from 'core/i18n';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import MuiDialog, { DialogProps as MuiDialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import Button from './Button';
 import { StyledDialogTitle, StyledDialogContent } from './Dialog.styles';
 

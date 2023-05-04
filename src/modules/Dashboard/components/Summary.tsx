@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { Period, Transaction } from 'shared/models';
 import Balance from 'shared/components/Balance';
 import Ellipsis from 'shared/components/Ellipsis';
@@ -38,7 +38,8 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
       sx={{
         backgroundColor: main,
         paddingX: 2,
-        paddingY: 4,
+        paddingBottom: 2,
+        paddingTop: 4,
         borderRadius: 1
       }}
     >
@@ -66,18 +67,20 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
             <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
-        <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginTop: 1 }}>
+        <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginY: 1 }}>
           <IconButton onClick={onAddTransaction}>
             <AddIcon sx={{ color: contrastText }} fontSize='large' />
           </IconButton>
         </Grid>
-        {
-          transactions.map((transaction) => (
-            <Grid item xs={12} key={transaction.categoryId}>
-              <CategoryTransaction data={getCategoryTransactionData(transaction)} />
-            </Grid>
-          ))
-        }
+        <Grid container item rowGap={2}>
+          {
+            transactions.map((transaction) => (
+              <Grid item key={transaction.categoryId} xs={12}>
+                <CategoryTransaction data={getCategoryTransactionData(transaction)} />
+              </Grid>
+            ))
+          }
+        </Grid>
       </Grid>
     </Box>
   );

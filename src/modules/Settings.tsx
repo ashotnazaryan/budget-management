@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -9,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import date from 'core/date';
 import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';

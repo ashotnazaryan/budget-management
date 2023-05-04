@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { initReactI18next, useTranslation } from 'react-i18next';
+import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { LOCALES } from 'shared/constants';
@@ -20,5 +20,5 @@ i18n
     }
   });
 
-export { useTranslation };
+export { useTranslation, I18nextProvider };
 export default i18n;

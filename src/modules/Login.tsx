@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { IconType } from 'shared/models';
 import Button from 'shared/components/Button';
 import Icon from 'shared/components/Icon';

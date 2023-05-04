@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -9,6 +8,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   createAccount,

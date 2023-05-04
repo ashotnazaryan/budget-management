@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Drawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -17,6 +16,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CategoryIcon from '@mui/icons-material/Category';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   closeSidebar,

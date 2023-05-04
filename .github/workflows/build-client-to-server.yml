@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and push to budget-management-api
 on:
   push:
     branches:
@@ -27,7 +27,7 @@ jobs:
           path: destination
 
       - name: Copy Build Folder
-        run: cp -R build/ destination/client
+        run: cp -R build/. destination/client
 
       - name: Commit and Push Changes
         working-directory: ./destination

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Grid, { GridProps } from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { IconType, Summary } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import Icon from 'shared/components/Icon';

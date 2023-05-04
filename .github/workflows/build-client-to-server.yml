@@ -1,0 +1,39 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build App
+        run: npm run build
+
+      - name: Clone Destination Repository
+        uses: actions/checkout@v2
+        with:
+          repository: ashotnazaryan/budget-management-api
+          token: ${{ secrets.DESTINATION_TOKEN }}
+          ref: master
+          path: destination
+
+      - name: Copy Build Folder
+        run: cp -R build/ destination/client
+
+      - name: Commit and Push Changes
+        working-directory: ./destination
+        run: |
+          git config --global user.email "ashotnazaryan45@gmail.com"
+          git config --global user.name "anazaryan"
+          git add .
+          git commit -m "Deploy Build"
+          git push origin master

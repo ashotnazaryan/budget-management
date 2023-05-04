@@ -26,6 +26,10 @@ jobs:
           ref: master
           path: destination
 
+      - name: Delete client folder
+        run: |
+          rm -rf destination/client
+
       - name: Copy Build Folder
         run: cp -R build/. destination/client
 

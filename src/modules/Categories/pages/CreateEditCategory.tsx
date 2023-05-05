@@ -126,7 +126,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       return categoryName;
     }
 
-    return '';
+    return t('CATEGORIES.EMPTY_TITLE');
   };
 
   const handleEditButtonClick = (): void => {
@@ -267,9 +267,9 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle
         withBackButton
-        withEditButton={isViewMode}
-        withDeleteButton={isEditMode}
-        withCancelButton={!isViewMode}
+        withEditButton={isViewMode && !!category}
+        withDeleteButton={isEditMode  && !!category}
+        withCancelButton={!isViewMode  && !!category}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}

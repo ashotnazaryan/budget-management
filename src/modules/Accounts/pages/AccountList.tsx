@@ -78,8 +78,8 @@ const AccountList: React.FC<AccountListProps> = () => {
 
   return (
     <Box flexGrow={1}>
-      <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} />
-      <TransferButtons balance={balance} sx={{ marginBottom: 4 }} />
+      <TransferButtons balance={balance} sx={{ marginTop: 2, marginBottom: 4 }} />
+      <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} sx={{ marginBottom: 4 }} />
       {renderContent()}
     </Box>
   );

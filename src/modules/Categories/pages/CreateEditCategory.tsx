@@ -54,6 +54,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const categoryId = state?.id as CategoryDTO['id'];
+  const categoryName = category?.nameKey ? t(category.nameKey) : (category?.name || '');
   const categoryType = state?.categoryType as CategoryType;
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
@@ -96,7 +97,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     isCreateMode ? reset(defaultValues) : setFormValues();
 
     isEditMode
-      ? navigate(`${ROUTES.categories.path}/view/${category!.name}`, { state: { id: categoryId } })
+      ? navigate(`${ROUTES.categories.path}/view/${categoryName}`, { state: { id: categoryId } })
       : navigate(ROUTES.categories.path);
   };
 
@@ -122,7 +123,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     if (isCreateMode) {
       return t('CATEGORIES.NEW_CATEGORY');
     } else if (category && (isEditMode || isViewMode)) {
-      return category.nameKey ? t(category.nameKey) : category.name;
+      return categoryName;
     }
 
     return '';
@@ -133,7 +134,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       return;
     }
 
-    navigate(`${ROUTES.categories.path}/edit/${category!.name}`, { state: { id: categoryId } });
+    navigate(`${ROUTES.categories.path}/edit/${categoryName}`, { state: { id: categoryId } });
   };
 
   const setFormValues = React.useCallback(() => {

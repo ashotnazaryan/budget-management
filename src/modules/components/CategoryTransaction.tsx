@@ -27,13 +27,13 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
       alignItems: 'center',
       justifyContent: 'space-between',
       background: getBGColor(),
-      paddingX: { sm: 3, xs: 2 },
+      paddingX: { sm: 2, xs: 1 },
       paddingY: { sm: 2, xs: 1 },
       borderRadius: 1,
       width: '100%',
       minHeight: 40
     }}>
-      <Grid container alignItems='center' flexWrap='nowrap'>
+      <Grid container alignItems='center' flexWrap='nowrap' columnGap={1}>
         <Grid item xs='auto' display='flex'>
           {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>

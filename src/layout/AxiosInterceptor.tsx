@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { AxiosResponse } from 'axios'; // TODO: move this to core/axios
-import axios from 'core/axios';
+import axios, { AxiosResponse } from 'core/axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';

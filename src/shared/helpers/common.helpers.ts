@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
-import { Currency, DateRange, Period } from 'shared/models';
+import { Currency, DateRange, Locale, Period } from 'shared/models';
 import { RadioOption } from 'shared/components/FormRadioGroup';
 
 const getDateRangeForPeriod = (period: Period): DateRange => {
@@ -46,13 +46,44 @@ const getDateRangeForPeriod = (period: Period): DateRange => {
   }
 };
 
-export const mapNumberToCurrencyString = (value: number, currency: Currency['iso'], showDecimals = false): string => {
-  if (value === null || value === undefined) {
-    return showDecimals ? '0.00' : '0';
+export const mapLocaleToDateLocale = (locale: Locale['iso']): string => {
+  switch (locale) {
+  case 'en':
+    return 'en';
+  case 'ru':
+    return 'ru';
+  case 'pl':
+    return 'pl';
+  case 'ua':
+    return 'uk';
+  case 'am':
+    return 'hy-am';
+  default:
+    return 'en';
   }
+};
 
+export const mapCurrencyToLocale = (currency: Currency['iso']): Locale['isoIntl'] => {
+  switch (currency) {
+  case 'USD':
+    return 'en-US';
+  case 'EUR':
+    return 'fr-FR';
+  case 'UAH':
+    return 'uk-UA';
+  case 'PLN':
+    return 'pl-PL';
+  case 'AMD':
+    return 'hy-AM';
+  default:
+    throw new Error(`Unsupported currency: ${currency}`);
+  }
+};
+
+export const mapNumberToCurrencyString = (value: number, currency: Currency['iso'], showDecimals = false): string => {
   const decimals = showDecimals ? 2 : 0;
-  const currencyString = value.toLocaleString('en-US', {
+  const locale = mapCurrencyToLocale(currency);
+  const currencyString = value.toLocaleString(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
     currency,

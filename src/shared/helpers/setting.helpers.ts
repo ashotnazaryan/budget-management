@@ -15,6 +15,7 @@ export const mapSettings = (setting: SettingDTO): Setting => {
     },
     locale: {
       iso: setting.locale,
+      isoIntl: fullLocale.isoIntl,
       displayName: fullLocale.displayName
     }
   };

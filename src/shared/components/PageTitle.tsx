@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Typography, { TypographyProps } from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Box, { BoxProps } from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import BackButton from './BackButton';
 import EditButton from './EditButton';
@@ -17,7 +17,7 @@ type PageTitleProps = {
   onEditButtonClick?: () => void;
   onDeleteButtonClick?: () => void;
   onCancelButtonClick?: () => void;
-} & TypographyProps;
+} & BoxProps;
 
 const PageTitle: React.FC<PageTitleProps> = ({
   text,
@@ -58,7 +58,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
   };
 
   return (
-    <Box display='flex' alignItems='center' sx={{ marginTop: 2, marginBottom: 5 }}>
+    <Box display='flex' alignItems='center' {...props} sx={{ ...props.sx, marginTop: 2, marginBottom: 5 }}>
       {withBackButton && <BackButton onClick={onBackClick} />}
       <Typography
         color={contrastText}
@@ -67,8 +67,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
           width: '100%',
           fontSize: { sm: 22, xs: 18 },
           fontWeight: 'bold'
-        }}
-        {...props}>
+        }}>
         {text}
       </Typography>
       {withEditButton && <EditButton hidden={!withEditButton} onClick={onEditClick} />}

@@ -128,7 +128,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
       return accountName;
     }
 
-    return '';
+    return t('ACCOUNTS.EMPTY_TITLE');
   };
 
   const handleOpenDialog = (): void => {
@@ -298,9 +298,9 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle
         withBackButton
-        withEditButton={isViewMode}
-        withDeleteButton={isEditMode}
-        withCancelButton={!isViewMode}
+        withEditButton={isViewMode && !!account}
+        withDeleteButton={isEditMode && !!account}
+        withCancelButton={!isViewMode && !!account}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}

@@ -184,7 +184,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       return transactionName;
     }
 
-    return '';
+    return t('TRANSACTIONS.EMPTY_TITLE');
   };
 
   const setFormValues = React.useCallback(() => {
@@ -392,9 +392,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle
         withBackButton
-        withEditButton={isViewMode}
-        withDeleteButton={isEditMode}
-        withCancelButton={!isViewMode}
+        withEditButton={isViewMode && !!transaction}
+        withDeleteButton={isEditMode && !!transaction}
+        withCancelButton={!isViewMode && !!transaction}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}

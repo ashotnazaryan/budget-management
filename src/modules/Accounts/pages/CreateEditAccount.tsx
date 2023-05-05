@@ -59,6 +59,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const accountId = state?.id as AccountDTO['id'];
+  const accountName = account?.nameKey ? t(account.nameKey) : (account?.name || '');
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
@@ -106,7 +107,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     isCreateMode ? reset(defaultValues) : setFormValues();
 
     isEditMode
-      ? navigate(`${ROUTES.accounts.path}/view/${account!.name}`, { state: { id: accountId } })
+      ? navigate(`${ROUTES.accounts.path}/view/${accountName}`, { state: { id: accountId } })
       : navigate(ROUTES.accounts.path);
   };
 
@@ -124,7 +125,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (isCreateMode) {
       return t('ACCOUNTS.NEW_ACCOUNT');
     } else if (account && (isEditMode || isViewMode)) {
-      return account.nameKey ? t(account.nameKey) : account.name;
+      return accountName;
     }
 
     return '';
@@ -143,7 +144,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
       return;
     }
 
-    navigate(`${ROUTES.accounts.path}/edit/${account!.name}`, { state: { id: accountId } });
+    navigate(`${ROUTES.accounts.path}/edit/${accountName}`, { state: { id: accountId } });
   };
 
   const setFormValues = React.useCallback(() => {

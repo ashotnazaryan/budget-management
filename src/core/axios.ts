@@ -3,7 +3,7 @@ import axios, { CreateAxiosDefaults } from 'axios';
 const defaultConfigs: CreateAxiosDefaults = {
   baseURL: process.env.REACT_APP_BUDGET_MANAGEMENT_API,
   withCredentials: true,
-  timeout: 5000,
+  timeout: process.env.NODE_ENV === 'production' ? 5000 : undefined,
   headers: {
     'Content-Type': 'application/json',
   }
@@ -11,4 +11,5 @@ const defaultConfigs: CreateAxiosDefaults = {
 
 const instance = axios.create(defaultConfigs);
 
+export * from 'axios';
 export default instance;

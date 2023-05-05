@@ -71,6 +71,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false); const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const transactionId = state?.id as TransactionDTO['id'];
+  const transactionName = transaction?.nameKey ? t(transaction.nameKey) : (transaction?.name || '');
   const categoryType = state?.categoryType as CategoryType || CategoryType.expense;
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
@@ -147,7 +148,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
     isCreateMode
       ? navigate(ROUTES.dashboard.path)
-      : navigate(`${ROUTES.transactions.path}/view/${transaction!.name}`, { state: { id: transactionId } });
+      : navigate(`${ROUTES.transactions.path}/view/${transactionName}`, { state: { id: transactionId } });
   };
 
   const handleDeleteTransaction = (): void => {
@@ -173,14 +174,14 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       return;
     }
 
-    navigate(`${ROUTES.transactions.path}/edit/${transaction!.name}`, { state: { id: transactionId } });
+    navigate(`${ROUTES.transactions.path}/edit/${transactionName}`, { state: { id: transactionId } });
   };
 
   const getTitle = (): string => {
     if (isCreateMode) {
       return t('TRANSACTIONS.NEW_TRANSACTION');
     } else if (transaction && (isEditMode || isViewMode)) {
-      return transaction.nameKey ? t(transaction.nameKey) : transaction.name;
+      return transactionName;
     }
 
     return '';

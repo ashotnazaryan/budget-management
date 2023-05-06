@@ -1,4 +1,5 @@
 name: Build and push to budget-management-api
+
 on:
   push:
     branches:
@@ -9,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build App
+      - name: Build app
         run: npm run build
 
-      - name: Clone Destination Repository
+      - name: Clone destination repository
         uses: actions/checkout@v2
         with:
           repository: ashotnazaryan/budget-management-api
@@ -30,10 +31,10 @@ jobs:
         run: |
           rm -rf destination/client
 
-      - name: Copy Build Folder
+      - name: Copy build folder
         run: cp -R build/. destination/client
 
-      - name: Commit and Push Changes
+      - name: Commit and push changes
         working-directory: ./destination
         run: |
           git config --global user.email "ashotnazaryan45@gmail.com"

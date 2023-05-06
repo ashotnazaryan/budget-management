@@ -40,5 +40,5 @@ jobs:
           git config --global user.email "ashotnazaryan45@gmail.com"
           git config --global user.name "anazaryan"
           git add .
-          git commit -m "Deploy Build"
+          git commit --allow-empty -m "Deploy Build"
           git push origin master

@@ -68,7 +68,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
-  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false); const loading = status === 'loading';
+  const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
+  const loading = status === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const transactionId = state?.id as TransactionDTO['id'];
   const transactionName = transaction?.nameKey ? t(transaction.nameKey) : (transaction?.name || '');
@@ -182,9 +183,11 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       return t('TRANSACTIONS.NEW_TRANSACTION');
     } else if (transaction && (isEditMode || isViewMode)) {
       return transactionName;
+    } else if (currentStatus !== 'loading') {
+      return t('TRANSACTIONS.EMPTY_TITLE');
     }
 
-    return t('TRANSACTIONS.EMPTY_TITLE');
+    return '';
   };
 
   const setFormValues = React.useCallback(() => {

@@ -126,9 +126,11 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
       return t('ACCOUNTS.NEW_ACCOUNT');
     } else if (account && (isEditMode || isViewMode)) {
       return accountName;
+    } else if (currentStatus !== 'loading') {
+      return t('ACCOUNTS.EMPTY_TITLE');
     }
 
-    return t('ACCOUNTS.EMPTY_TITLE');
+    return '';
   };
 
   const handleOpenDialog = (): void => {

@@ -124,9 +124,11 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       return t('CATEGORIES.NEW_CATEGORY');
     } else if (category && (isEditMode || isViewMode)) {
       return categoryName;
+    } else if (currentStatus !== 'loading') {
+      return t('CATEGORIES.EMPTY_TITLE');
     }
 
-    return t('CATEGORIES.EMPTY_TITLE');
+    return '';
   };
 
   const handleEditButtonClick = (): void => {

@@ -2,10 +2,7 @@ import { Provider } from 'react-redux';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { render } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { RootState } from 'store/reducers/rootReducer';
 import App from 'modules/App';
-import { CURRENCIES, LOCALES } from 'shared/constants';
-import { Period } from 'shared/models';
 
 const testTheme = createTheme({
   palette: {
@@ -18,30 +15,17 @@ const testTheme = createTheme({
   },
 });
 
-describe('App', () => {
-  // TODO: move all mocks to __mocks__ folder
-  const initialState: Partial<RootState> = {
-    setting: {
-      defaultCurrency: CURRENCIES[0],
-      defaultPeriod: Period.month,
-      showDecimals: true,
-      isDarkTheme: true,
-      locale: LOCALES[0],
-      status: 'idle'
-    },
-  };
+describe('App component', () => {
   const mockStore = configureStore();
-  let store: MockStoreEnhanced<unknown>; // TODO: use RootState
+  let store: MockStoreEnhanced<unknown>;
 
   beforeEach(() => {
-    store = mockStore(initialState);
+    store = mockStore({
+      setting: { locale: { iso: '' } }
+    });
   });
 
-  test('renders App component', () => {
-    jest.mock('store/reducers/settingSlice', () => ({
-      selectSettings: jest.fn().mockReturnValue(initialState.setting),
-    }));
-
+  test('renders', () => {
     render(
       <Provider store={store}>
         <ThemeProvider theme={testTheme}>

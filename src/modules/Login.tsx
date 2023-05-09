@@ -43,19 +43,16 @@ const Login: React.FC = () => {
         >
           {t('LOGIN.TITLE')}
         </Typography>
-        <Box display='flex' flexDirection='column'
-          sx={{ rowGap: 1 }}
+        <Button
+          data-testid='google-button'
+          variant='contained'
+          capitalize={false}
+          startIcon={<Icon name={IconType.google} />}
+          onClick={googleLogin}
+          sx={{ fontSize: { sm: 17, xs: 15 } }}
         >
-          <Button
-            variant='contained'
-            capitalize={false}
-            startIcon={<Icon name={IconType.google} />}
-            onClick={googleLogin}
-            sx={{ fontSize: { sm: 17, xs: 15 } }}
-          >
-            {t('LOGIN.BUTTON_PREFIX')} Google
-          </Button>
-        </Box>
+          {t('LOGIN.BUTTON_PREFIX')} Google
+        </Button>
       </Paper >
     </Box >
   );

@@ -1,6 +1,12 @@
 module.exports = {
   roots: ['<rootDir>/src'],
   testEnvironment: 'jsdom',
+  globals: {
+    'process.env.PORT': process.env.PORT || '3000'
+  },
+  testEnvironmentOptions: {
+    url: process.env.TEST_URL || 'http://localhost:3000'
+  },
   moduleNameMapper: {
     '^modules/(.*)$': '<rootDir>/src/modules/$1',
     '^core/(.*)$': '<rootDir>/src/core/$1',

@@ -67,7 +67,7 @@ const Settings: React.FC = () => {
     dispatch(addSetting([{ isDarkTheme: !isDarkTheme }, true, false]));
   };
 
-  const handleChangeLanguage = (event: SelectChangeEvent) => {
+  const handleChangeLanguage = (event: SelectChangeEvent): void => {
     const locale = event.target.value as Locale['iso'];
 
     dispatch(addSetting([{ locale }, false, true]));
@@ -93,12 +93,13 @@ const Settings: React.FC = () => {
 
   return (
     <Box flexGrow={1}>
-      <PageTitle text={t('SETTINGS.PAGE_TITLE')} />
+      <PageTitle data-testid='page-title' text={t('SETTINGS.PAGE_TITLE')} />
       <Grid container rowGap={4}>
         <Grid item xs={12}>
           <Typography variant='subtitle1' color={contrastText}>{t('SETTINGS.DEFAULT_CURRENCY')}</Typography>
           <FormControl fullWidth>
             <Select
+              data-testid='default-currency'
               variant='outlined'
               value={iso}
               onChange={handleCurrencyChange}

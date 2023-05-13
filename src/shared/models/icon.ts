@@ -28,6 +28,7 @@ export enum IconType {
   // Other icons
   plus = 'plus',
   google = 'google',
+  facebook = 'facebook',
   arrowBack = 'arrowBack',
   edit = 'edit',
   delete = 'delete',

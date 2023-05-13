@@ -7,10 +7,10 @@ type IconComponentProps = {
   name: string;
 } & Partial<IconProps<any>>;
 
-const IconComponent: React.FC<IconComponentProps> = ({ name, ...props }) => {
-  const Icon = ALL_ICONS[name] || ALL_ICONS[IconType.default];
+const IconComponent: React.FC<IconComponentProps> = ({ name = IconType.default, fontSize = 'large', ...props }) => {
+  const Icon = ALL_ICONS[name];
 
-  return <Icon fontSize='large' {...props}></Icon>;
+  return <Icon {...props} fontSize={fontSize} sx={{ ...props.sx }}></Icon>;
 };
 
 export default IconComponent;

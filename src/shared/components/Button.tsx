@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({ loading = false, capitalize = true, ...
         '& .MuiButton-endIcon': {
           margin: 0
         },
-        ...props.sx,
+        ...props.sx
       }}
     >{!loading && props.children}</MuiButton>
   );

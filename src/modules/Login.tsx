@@ -55,9 +55,15 @@ const Login: React.FC = () => {
               data-testid='google-button'
               variant='contained'
               capitalize={false}
-              startIcon={<Icon name={IconType.google} />}
               onClick={googleLogin}
-              sx={{ fontSize: { sm: 17, xs: 15 } }}
+              // TODO: find better solution
+              sx={{
+                fontSize: { sm: 17, xs: 15 },
+                '& .MuiButton-startIcon>*:nth-of-type(1)': {
+                  fontSize: '30px !important',
+                }
+              }}
+              startIcon={<Icon name={IconType.google} />}
             >
               {t('LOGIN.BUTTON_PREFIX')} Google
             </Button>
@@ -70,7 +76,12 @@ const Login: React.FC = () => {
               capitalize={false}
               startIcon={<Icon name={IconType.facebook} />}
               onClick={facebookLogin}
-              sx={{ fontSize: { sm: 17, xs: 15 } }}
+              sx={{
+                fontSize: { sm: 17, xs: 15 },
+                '& .MuiButton-startIcon>*:nth-of-type(1)': {
+                  fontSize: '30px !important',
+                }
+              }}
             >
               {t('LOGIN.BUTTON_PREFIX')} Facebook
             </Button>

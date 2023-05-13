@@ -40,7 +40,11 @@ describe('Settings component', () => {
         },
         showDecimals: true,
         isDarkTheme: false,
-        locale: 'en',
+        locale: {
+          iso: 'en',
+          isoIntl: 'en-US',
+          displayName: 'English'
+        },
         defaultPeriod: 'month',
         defaultAccount: '',
       },

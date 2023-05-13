@@ -20,4 +20,18 @@ describe('Login component', () => {
 
     await waitFor(() => expect(openMock).toHaveBeenCalled());
   });
+
+  test('opens new window when the Facebook button clicked', async () => {
+    render(<Login />);
+
+    window.open = jest.fn();
+    const openMock = jest.spyOn(window, 'open');
+    const facebookButton = await screen.findByTestId('facebook-button');
+
+    expect(facebookButton).toBeInTheDocument();
+
+    userEvent.click(facebookButton);
+
+    await waitFor(() => expect(openMock).toHaveBeenCalled());
+  });
 });

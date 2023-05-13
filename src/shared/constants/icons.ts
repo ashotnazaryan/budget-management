@@ -19,6 +19,7 @@ import LocalMallIcon from '@mui/icons-material/LocalMall';
 import SavingsIcon from '@mui/icons-material/Savings';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import HistoryIcon from '@mui/icons-material/History';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
@@ -55,6 +56,7 @@ export const ACCOUNT_ICONS: IconTypes = {
 export const OTHER_ICONS: IconTypes = {
   [IconType.plus]: AddIcon,
   [IconType.google]: GoogleIcon,
+  [IconType.facebook]: FacebookIcon,
   [IconType.arrowBack]: ArrowBackIcon,
   [IconType.edit]: EditIcon,
   [IconType.delete]: DeleteIcon,

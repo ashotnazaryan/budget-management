@@ -42,6 +42,7 @@ const Login: React.FC = () => {
           backgroundColor: main
         }}>
         <Typography
+          data-testid='page-title'
           color={contrastText}
           fontSize={{ sm: 24, xs: 20 }}
           sx={{ textAlign: 'center' }}
@@ -56,11 +57,10 @@ const Login: React.FC = () => {
               variant='contained'
               capitalize={false}
               onClick={googleLogin}
-              // TODO: find better solution
               sx={{
                 fontSize: { sm: 17, xs: 15 },
-                '& .MuiButton-startIcon>*:nth-of-type(1)': {
-                  fontSize: '30px !important',
+                '& .MuiButton-startIcon>*': {
+                  fontSize: 32
                 }
               }}
               startIcon={<Icon name={IconType.google} />}
@@ -78,8 +78,8 @@ const Login: React.FC = () => {
               onClick={facebookLogin}
               sx={{
                 fontSize: { sm: 17, xs: 15 },
-                '& .MuiButton-startIcon>*:nth-of-type(1)': {
-                  fontSize: '30px !important',
+                '& .MuiButton-startIcon>*': {
+                  fontSize: 32
                 }
               }}
             >

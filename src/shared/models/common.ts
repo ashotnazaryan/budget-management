@@ -3,6 +3,10 @@ import { Dayjs } from 'dayjs';
 /* eslint-disable no-unused-vars */
 export type StatusState = 'idle' | 'loading' | 'succeeded' | 'failed';
 
+export type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+
 export enum ManageMode {
   create = 'create',
   view = 'view',

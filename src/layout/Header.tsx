@@ -29,13 +29,13 @@ const Header: React.FC<HeaderProps> = () => {
       <Toolbar variant='dense' sx={{ paddingX: 3 }}>
         <Grid container alignItems='center'>
           <Grid item xs={1} display='flex' justifyContent='flex-start'>
-            <IconButton edge='start' onClick={showSideBar}>
+            <IconButton data-testid='menu-icon' edge='start' onClick={showSideBar}>
               <MenuIcon sx={{ color: contrastText }} />
             </IconButton>
           </Grid>
           <Grid item xs={10} display='flex' justifyContent='center'>
             <Link to={ROUTES.dashboard.path}>
-              <Typography component='div' color={contrastText} sx={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+              <Typography data-testid='product-name' component='div' color={contrastText} sx={{ cursor: 'pointer', textTransform: 'uppercase' }}>
                 {t('PRODUCT_NAME')}
               </Typography>
             </Link>

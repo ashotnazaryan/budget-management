@@ -3,11 +3,17 @@ import userEvent from '@testing-library/user-event';
 import Login from 'modules/Login';
 
 describe('Login component', () => {
-  test('renders', () => {
-    render(<Login />);
+  test('renders form title correctly', async () => {
+    render(
+      <Login />
+    );
+
+    const pageTitle = await screen.findByTestId('page-title');
+
+    expect(pageTitle).toBeInTheDocument();
   });
 
-  test('opens new window when the Google button clicked', async () => {
+  test('opens a new window when the Google button clicked', async () => {
     render(<Login />);
 
     window.open = jest.fn();
@@ -21,7 +27,7 @@ describe('Login component', () => {
     await waitFor(() => expect(openMock).toHaveBeenCalled());
   });
 
-  test('opens new window when the Facebook button clicked', async () => {
+  test('opens a new window when the Facebook button clicked', async () => {
     render(<Login />);
 
     window.open = jest.fn();

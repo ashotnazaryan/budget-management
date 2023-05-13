@@ -1,13 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import configureStore, { MockStore } from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import { RootState } from 'store/reducers/rootReducer';
+import { Period, RecursivePartial } from 'shared/models';
 import Settings from 'modules/Settings';
 
-const mockStore = configureStore([thunk]);
+type MockRootState = RecursivePartial<RootState>;
+
+const mockStore = configureStore<MockRootState, any>([thunk]);
 
 describe('Settings component', () => {
-  let store: MockStoreEnhanced<unknown>;
+  let store: MockStore<MockRootState, any>;
 
   beforeEach(() => {
     store = mockStore({
@@ -17,20 +21,15 @@ describe('Settings component', () => {
       account: {
         accounts: [
           {
-            id: 1,
+            id: '1',
             name: 'Wallet',
-            balance: 10,
-          },
-          {
-            id: 2,
-            name: 'Card',
-            balance: 20,
-          },
+            balance: '10',
+          }
         ],
         status: 'succeeded',
       },
       user: {
-        userId: 1,
+        userId: '1',
       },
       setting: {
         defaultCurrency: {
@@ -45,13 +44,13 @@ describe('Settings component', () => {
           isoIntl: 'en-US',
           displayName: 'English'
         },
-        defaultPeriod: 'month',
+        defaultPeriod: Period.month,
         defaultAccount: '',
       },
     });
   });
 
-  test('renders the page title', async () => {
+  test('renders page title correctly', async () => {
     render(
       <Provider store={store}>
         <Settings />

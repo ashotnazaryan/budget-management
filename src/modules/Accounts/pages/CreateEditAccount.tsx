@@ -23,7 +23,7 @@ import {
 } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, AccountDTO, AccountField, Currency, IconType, ManageMode } from 'shared/models';
-import { accountHelper, mapCurrencyStringToNumber } from 'shared/helpers';
+import { accountHelper, mapCurrencyStringToInputString } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
@@ -153,7 +153,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     if (account) {
       setValue(AccountField.name, account.nameKey ? t(account.nameKey) : account.name);
       setValue(AccountField.icon, account.icon);
-      setValue(AccountField.balance, mapCurrencyStringToNumber(account.balance) as unknown as Account['balance']);
+      setValue(AccountField.balance, mapCurrencyStringToInputString(account.balance));
       setValue(AccountField.currencyIso, account.currencyIso);
     }
   }, [account, setValue, t]);

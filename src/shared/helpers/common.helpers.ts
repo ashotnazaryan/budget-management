@@ -94,11 +94,13 @@ export const mapNumberToCurrencyString = (value: number, currency: Currency['iso
 };
 
 export const mapCurrencyStringToNumber = (value: string): number => {
-  return Number(value.replace(/[^0-9.-]+/g, ''));
+  const cleanedValue = value.replace(/[^0-9.,-]/g, '').replace(',', '.');
+
+  return parseFloat(cleanedValue);
 };
 
 export const mapCurrencyStringToInputString = (value: string): string => {
-  return value.replace(/[^0-9.-]+/g, '');
+  return value.replace(/[^0-9.,-]/g, '').replace(',', '.');
 };
 
 export const isPositiveString = (value: string): boolean => {

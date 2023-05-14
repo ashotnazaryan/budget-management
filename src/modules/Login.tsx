@@ -60,7 +60,7 @@ const Login: React.FC = () => {
               sx={{
                 fontSize: { sm: 17, xs: 15 },
                 '& .MuiButton-startIcon>*': {
-                  fontSize: 32
+                  fontSize: '32px !important'
                 }
               }}
               startIcon={<Icon name={IconType.google} />}
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
               sx={{
                 fontSize: { sm: 17, xs: 15 },
                 '& .MuiButton-startIcon>*': {
-                  fontSize: 32
+                  fontSize: '32px !important'
                 }
               }}
             >

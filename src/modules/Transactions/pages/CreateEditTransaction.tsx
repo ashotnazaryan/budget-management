@@ -7,8 +7,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
@@ -28,8 +28,8 @@ import {
   deleteTransaction,
   selectTransactionError
 } from 'store/reducers';
-import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode, Transaction } from 'shared/models';
-import { CATEGORY_TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
+import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode, Transaction, IconType } from 'shared/models';
+import { TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { getAccountLabel, mapCategoryTypesWithTranslations, mapCurrencyStringToInputString, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
@@ -40,9 +40,9 @@ import FormDatePicker from 'shared/components/FormDatePicker';
 import FormSelect from 'shared/components/FormSelect';
 import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
-import Balance from 'shared/components/Balance';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
+import AccountOption from 'shared/components/AccountOption';
 
 interface CreateEditTransactionProps {
   mode: ManageMode;
@@ -50,7 +50,7 @@ interface CreateEditTransactionProps {
 
 const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
-  const categoryTabs = CATEGORY_TABS;
+  const tabs = TABS;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -109,6 +109,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     const type = Number(value) as CategoryType;
 
     setValue(TransactionField.type, type, { shouldValidate: true });
+    setValue(TransactionField.categoryId, defaultValues.categoryId as string);
+    setValue(TransactionField.icon, defaultValues.icon as IconType);
+    setValue(TransactionField.name, defaultValues.name as string);
   };
 
   const handleCategoryIconClick = ({ id, name, nameKey, icon }: CategoryModel): void => {
@@ -118,7 +121,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
 
     setValue(TransactionField.categoryId, id, { shouldValidate: true });
     setValue(TransactionField.icon, icon);
-    setValue('name', name, { shouldValidate: true });
+    setValue(TransactionField.name, name, { shouldValidate: true });
     setValue('nameKey', nameKey);
   };
 
@@ -288,7 +291,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                   message: t(helper.type.required!.message)
                 }
               }}
-              options={mapCategoryTypesWithTranslations(categoryTabs, t)}
+              options={mapCategoryTypesWithTranslations(tabs, t)}
               labelColor={contrastText}
               value={watchType}
               onRadioChange={handleCategoryTypeChange}
@@ -313,7 +316,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             />
           </Grid>
           <Grid item xs={12}>
-            {/* TODO: move this component to shared */}
             <FormSelect
               disabled={isViewMode}
               label={t('COMMON.ACCOUNT')}
@@ -330,10 +332,9 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                 <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance, currencyIso }) => (
-                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
-                  <Balance balance={balance} />
+              {accounts.map((account) => (
+                <MenuItem key={account.id} value={account.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <AccountOption data={account} />
                 </MenuItem>
               ))}
             </FormSelect>
@@ -348,7 +349,8 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
               rules={{
                 required: true,
                 validate: {
-                  maxDate: (value: string) => date(value) <= date() || t(helper.createdAt.max!.message)
+                  maxDate: (value: string) =>
+                    Promise.resolve(date(value) <= date() || t(helper.createdAt.max!.message))
                 }
               }}
               onChange={handleDatePickerChange}

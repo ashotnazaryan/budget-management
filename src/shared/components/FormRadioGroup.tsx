@@ -6,19 +6,15 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
-
-export interface RadioOption {
-  label: string;
-  value: string;
-}
+import { Option } from 'shared/models';
 
 type FormRadioGroupProps = {
   name: string;
-  options: RadioOption[];
+  options: Option[];
   labelColor?: string;
   rules?: any;
   disabled?: boolean;
-  onRadioChange: (checkedValue: RadioOption['value']) => void;
+  onRadioChange: (checkedValue: Option['value']) => void;
 } & RadioGroupProps;
 
 const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelColor, rules = {}, disabled, onRadioChange, ...props }) => {

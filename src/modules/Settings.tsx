@@ -18,7 +18,7 @@ import { getAccountLabel } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
-import Balance from 'shared/components/Balance';
+import AccountOption from 'shared/components/AccountOption';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
@@ -121,10 +121,9 @@ const Settings: React.FC = () => {
                 <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance }) => (
-                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
-                  <Balance balance={balance} />
+              {accounts.map((account) => (
+                <MenuItem key={account.id} value={account.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <AccountOption data={account} />
                 </MenuItem>
               ))}
             </Select>

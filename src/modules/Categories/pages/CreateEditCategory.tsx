@@ -18,7 +18,7 @@ import {
   selectCategoryError,
   deleteCategory
 } from 'store/reducers';
-import { CATEGORY_ICONS_LIST, CATEGORY_TABS, ROUTES } from 'shared/constants';
+import { CATEGORY_ICONS_LIST, TABS, ROUTES } from 'shared/constants';
 import { Category, CategoryDTO, CategoryField, CategoryType, IconType, ManageMode } from 'shared/models';
 import { categoryHelper, mapCategoryTypesWithTranslations } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
@@ -36,7 +36,7 @@ interface NewCategoryProps {
 }
 
 const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
-  const categoryTabs = CATEGORY_TABS;
+  const tabs = TABS;
   const icons = CATEGORY_ICONS_LIST;
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -230,7 +230,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                   message: t(helper.type.required!.message)
                 }
               }}
-              options={mapCategoryTypesWithTranslations(categoryTabs, t)}
+              options={mapCategoryTypesWithTranslations(tabs, t)}
               labelColor={contrastText}
               value={watchType}
               onRadioChange={handleCategoryTypeChange}

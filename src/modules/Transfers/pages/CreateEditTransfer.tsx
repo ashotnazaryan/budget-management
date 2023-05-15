@@ -5,9 +5,9 @@ import date, { LocalizedDate } from 'core/date';
 import { useTranslation } from 'core/i18n';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
   createTransfer,
@@ -30,11 +30,11 @@ import Button from 'shared/components/Button';
 import FormSelect from 'shared/components/FormSelect';
 import FormInput from 'shared/components/FormInput';
 import FormDatePicker from 'shared/components/FormDatePicker';
-import Balance from 'shared/components/Balance';
 import Snackbar from 'shared/components/Snackbar';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
+import AccountOption from 'shared/components/AccountOption';
 
 interface CreateEditTransferProps {
   mode: ManageMode;
@@ -228,7 +228,6 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
       <FormProvider {...methods}>
         <Grid container rowGap={6} columnSpacing={2}>
           <Grid item sm={6} xs={12}>
-            {/* TODO: move this component to shared */}
             <FormSelect
               disabled={!isCreateMode}
               label={t('ACCOUNTS.FROM_ACCOUNT')}
@@ -245,16 +244,14 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance }) => (
-                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
-                  <Balance balance={balance} />
+              {accounts.map((account) => (
+                <MenuItem key={account.id} value={account.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <AccountOption data={account} />
                 </MenuItem>
               ))}
             </FormSelect>
           </Grid>
           <Grid item sm={6} xs={12}>
-            {/* TODO: move this component to shared */}
             <FormSelect
               disabled={!isCreateMode}
               label={t('ACCOUNTS.TO_ACCOUNT')}
@@ -271,10 +268,9 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
                 <Typography>{getAccountLabel(value, accounts, t)}</Typography>
               )}
             >
-              {accounts.map(({ id, name, nameKey, balance }) => (
-                <MenuItem value={id} key={id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography>{nameKey ? t(nameKey) : name}</Typography>
-                  <Balance balance={balance} />
+              {accounts.map((account) => (
+                <MenuItem key={account.id} value={account.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <AccountOption data={account} />
                 </MenuItem>
               ))}
             </FormSelect>
@@ -307,7 +303,8 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
               rules={{
                 required: true,
                 validate: {
-                  maxDate: (value: string) => date(value) <= date() || t(helper.createdAt.max!.message)
+                  maxDate: (value: string) =>
+                    Promise.resolve(date(value) <= date() || t(helper.createdAt.max!.message))
                 }
               }}
               onChange={handleDatePickerChange}

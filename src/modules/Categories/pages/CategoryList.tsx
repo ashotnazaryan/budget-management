@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import { getCategories, selectCategory } from 'store/reducers';
-import { Category, IconType } from 'shared/models';
+import { Category, CategoryType, IconType, Option } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Tabs from 'shared/components/Tabs';
 import Skeleton from 'shared/components/Skeleton';
@@ -21,14 +21,14 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   const { categories, status } = useAppSelector(selectCategory);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [categoryType, setCategoryType] = React.useState<number>(0);
+  const [categoryType, setCategoryType] = React.useState<Option['value']>(String(CategoryType.expense));
 
   const addIconData: Category = {
     id: '',
     name: 'New category',
     nameKey: 'CATEGORIES.NEW_CATEGORY',
     icon: IconType.plus,
-    type: categoryType
+    type: Number(categoryType)
   };
 
   React.useEffect(() => {
@@ -37,7 +37,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     }
   }, [dispatch, status]);
 
-  const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
+  const handleTabChange = (event: React.SyntheticEvent, value: Option['value']): void => {
     setCategoryType(value);
   };
 
@@ -67,7 +67,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
 
     return (
       <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => type === categoryType).map((category) => (
+        {categories.filter(({ type }) => String(type) === categoryType).map((category) => (
           <Grid item key={category.id}>
             <CategoryIcon data={getCategoryData(category)} onItemClick={handleCategoryIconClick} />
           </Grid>

@@ -1,4 +1,4 @@
-import { Period, PeriodOption } from 'shared/models';
+import { Period, PeriodOption, CategoryType, Option } from 'shared/models';
 
 export const POSITIVE_NUMERIC_REGEX: RegExp = /^[1-9]\d*(\.\d+)?$|^(0\.([1-9]\d*|\d*[1-9]))$/;
 export const NUMERIC_REGEX: RegExp = /^-?\d+(\.\d+)?$/;
@@ -25,4 +25,9 @@ export const PERIOD_OPTIONS: PeriodOption[] = [
     value: Period.allTime,
     label: 'COMMON.ALL_TIME'
   }
+];
+
+export const TABS: Option[] = [
+  { value: String(CategoryType.expense), label: 'COMMON.EXPENSE' },
+  { value: String(CategoryType.income), label: 'COMMON.INCOME' }
 ];

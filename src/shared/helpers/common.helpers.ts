@@ -1,8 +1,7 @@
 import { TFunction } from 'i18next';
 import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
-import { Currency, DateRange, Locale, Period } from 'shared/models';
-import { RadioOption } from 'shared/components/FormRadioGroup';
+import { Currency, DateRange, Locale, Period, Option } from 'shared/models';
 
 const getDateRangeForPeriod = (period: Period): DateRange => {
   const now = date();
@@ -111,7 +110,7 @@ export const getCurrencySymbolByIsoCode = (currencyIso: Currency['iso']): Curren
   return CURRENCIES.find(({ iso }) => iso === currencyIso)?.symbol || CURRENCIES[0].symbol;
 };
 
-export const mapCategoryTypesWithTranslations = (categoryTabs: RadioOption[], t: TFunction): RadioOption[] => {
+export const mapCategoryTypesWithTranslations = (categoryTabs: Option[], t: TFunction): Option[] => {
   return categoryTabs.map((categoryTab) => {
     return {
       ...categoryTab,

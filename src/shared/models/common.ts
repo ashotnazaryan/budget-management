@@ -36,3 +36,8 @@ export interface PeriodOption {
   value: Period;
   label: string;
 }
+
+export interface Option {
+  value: string;
+  label: string;
+}

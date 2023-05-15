@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import { useAppDispatch, useAppSelector } from 'store';
-import { CategoryType, Period } from 'shared/models';
+import { CategoryType, Period, Option } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
@@ -14,8 +14,8 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status, activePeriodFilter } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
-  const [categoryType, setCategoryType] = React.useState<number>(0);
-  const transactions = categoryType === CategoryType.expense ? categoryExpenseTransactions : categoryIncomeTransactions;
+  const [categoryType, setCategoryType] = React.useState<Option['value']>(String(CategoryType.expense));
+  const transactions = categoryType === String(CategoryType.expense) ? categoryExpenseTransactions : categoryIncomeTransactions;
 
   React.useEffect(() => {
     if (status === 'idle') {
@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
     }
   }, [dispatch, status, activePeriodFilter]);
 
-  const handleTabChange = (event: React.SyntheticEvent, value: number): void => {
+  const handleTabChange = (event: React.SyntheticEvent, value: Option['value']): void => {
     setCategoryType(value);
   };
 

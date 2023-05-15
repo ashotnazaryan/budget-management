@@ -31,7 +31,8 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
     }
   },
   [TransactionField.icon]: {},
-  [TransactionField.note]: {}
+  [TransactionField.note]: {},
+  [TransactionField.name]: {}
 });
 
 export const accountHelper = (): { [key in AccountField]: ErrorType } => ({

@@ -2,33 +2,29 @@ import * as React from 'react';
 import { TabsProps as MuiTabsProps } from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import { useTranslation } from 'core/i18n';
+import { Option } from 'shared/models';
 import { StyledTabs } from './Tabs.styles';
 
-export interface Tab {
-  value: number;
-  label: string;
-}
-
 type TabsProps = {
-  tabs: Tab[];
-  defaultValue?: number;
-  onChange: (event: React.SyntheticEvent, value: number) => void;
+  tabs: Option[];
+  defaultValue?: Option['value'];
+  onChange: (event: React.SyntheticEvent, value: Option['value']) => void;
 } & MuiTabsProps;
 
-const Tabs: React.FC<TabsProps> = ({ tabs, defaultValue = 0, onChange, ...props }) => {
+const Tabs: React.FC<TabsProps> = ({ tabs, defaultValue = '0', onChange, ...props }) => {
   const { t } = useTranslation();
-  const [value, setValue] = React.useState<number>(defaultValue);
+  const [selectedValue, setSelectedValue] = React.useState<string>(defaultValue);
 
-  const onValueChange = (event: React.SyntheticEvent, selectedValue: number) => {
-    setValue(selectedValue);
+  const onValueChange = (event: React.SyntheticEvent, selectedValue: Option['value']): void => {
+    setSelectedValue(selectedValue);
     onChange(event, selectedValue);
   };
 
   return (
-    <StyledTabs {...props} value={value} onChange={onValueChange} >
+    <StyledTabs {...props} value={selectedValue} onChange={onValueChange}>
       {
         tabs.map(({ value, label }) => (
-          <MuiTab key={value} label={t(label)} />
+          <MuiTab value={value} key={value} label={t(label)} />
         ))
       }
     </StyledTabs>

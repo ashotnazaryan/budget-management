@@ -1,4 +1,4 @@
-import { FieldError } from 'react-hook-form';
+import { FieldError, FieldValues, RegisterOptions } from 'react-hook-form';
 
 /* eslint-disable no-unused-vars */
 export enum TransactionField {
@@ -8,7 +8,8 @@ export enum TransactionField {
   icon = 'icon',
   accountId = 'accountId',
   createdAt = 'createdAt',
-  note = 'note'
+  note = 'note',
+  name = 'name'
 }
 
 export enum AccountField {
@@ -32,5 +33,12 @@ export enum TransferField {
 }
 
 type FieldErrorType = FieldError['type'];
+type Validate<T> = {
+  [key: string]: (value: T) => boolean | string | Promise<boolean | string>;
+};
 
 export type ErrorType = Partial<{ [key in FieldErrorType]: { message: string } }>;
+
+export type FormControlRules = Omit<RegisterOptions<FieldValues, string>, 'disabled' | 'setValueAs' | 'valueAsNumber' | 'valueAsDate'> | {
+  validate?: Validate<FieldValues>;
+} | undefined;

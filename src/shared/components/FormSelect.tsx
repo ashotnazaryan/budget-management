@@ -4,6 +4,7 @@ import Select, { SelectProps } from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
+import { FormControlRules } from 'shared/models';
 
 export interface SelectOption {
   label: string;
@@ -13,7 +14,7 @@ export interface SelectOption {
 type FormSelectProps = {
   name: string;
   label: string;
-  rules?: any; // TODO: fix any type
+  rules?: FormControlRules;
 } & SelectProps<SelectOption['value']>;
 
 const FormSelect: React.FC<FormSelectProps> = ({ name, label, rules = {}, children, ...props }) => {

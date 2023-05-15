@@ -2,8 +2,8 @@
 import { IconType } from './icon';
 
 export enum CategoryType {
-  income = 1,
-  expense = 0
+  expense = 0,
+  income = 1
 }
 
 export interface CategoryDTO {

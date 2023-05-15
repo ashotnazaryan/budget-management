@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { LocalizedDate } from 'core/date';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -8,11 +7,13 @@ import { DatePicker as MuiDatePicker, DatePickerProps as MuiDatePickerProps } fr
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizedDate } from 'core/date';
+import { FormControlRules } from 'shared/models';
 
 type FormDatePickerProps = {
   name: string;
   label: string;
-  rules?: any; // TODO: fix any type
+  rules?: FormControlRules;
 } & MuiDatePickerProps<LocalizedDate>;
 
 const FormDatePicker: React.FC<FormDatePickerProps> = ({ name, label, rules = {}, ...props }) => {

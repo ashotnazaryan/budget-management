@@ -61,7 +61,6 @@ const PageTitle: React.FC<PageTitleProps> = ({
     <Box
       display='flex'
       alignItems='center'
-      justifyContent='space-between'
       {...props}
       sx={{ ...props.sx, marginTop: 2, marginBottom: 5 }}
     >
@@ -69,6 +68,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
       <Typography
         color={contrastText}
         sx={{
+          width: '100%',
           textAlign: 'center',
           fontSize: { sm: 22, xs: 18 },
           fontWeight: 'bold'

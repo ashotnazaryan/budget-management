@@ -25,27 +25,30 @@ const initialState: SettingState = {
   status: 'idle'
 };
 
-export const getSettings = createAsyncThunk('setting/getSettings', async (_, { dispatch }): Promise<Setting> => {
-  try {
-    const response = await axios.get<SettingDTO>('settings');
+export const getSettings = createAsyncThunk<Setting, void, { rejectValue: ErrorResponse }>(
+  'setting/getSettings',
+  async (_, { dispatch, rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const { data } = await axios.get<SettingDTO>('settings');
 
-    dispatch(setAppStatus('succeeded'));
-    dispatch(setActivePeriodFilter(response?.data.defaultPeriod));
-    date().setLocale(response?.data.locale);
+      dispatch(setAppStatus('succeeded'));
+      dispatch(setActivePeriodFilter(data.defaultPeriod));
+      date().setLocale(data.locale);
 
-    return mapSettings(response?.data);
-  } catch (error) {
-    console.error(error);
-    dispatch(setAppStatus('succeeded'));
-    return {} as Setting;
-  }
-});
+      return mapSettings(data);
+    } catch (error: any) {
+      console.error(error);
+      dispatch(setAppStatus('succeeded'));
+      return rejectWithValue(error);
+    }
+  });
 
 export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?, boolean?], { rejectValue: ErrorResponse }>(
   'setting/addSetting',
   async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      await axios.post<void>('settings/setting', setting);
+      await axios.post('settings/setting', setting);
 
       if (isAppLoading) {
         dispatch(setAppStatus('loading'));
@@ -61,7 +64,7 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
       }
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

@@ -27,12 +27,12 @@ const initialState: AccountState = {
 
 export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccounts', async (): Promise<Account[]> => {
   try {
-    const response = await axios.get<AccountDTO[]>('accounts');
+    const { data } = await axios.get<AccountDTO[]>('accounts');
 
-    if (response?.data) {
+    if (data) {
       const { showDecimals } = store.getState().setting;
 
-      return mapAccounts(response.data, showDecimals);
+      return mapAccounts(data, showDecimals);
     }
 
     return [];
@@ -46,12 +46,12 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
   'accounts/getAccount',
   async (id): Promise<Account> => {
     try {
-      const response = await axios.get<AccountDTO>(`accounts/${id}`);
+      const { data } = await axios.get<AccountDTO>(`accounts/${id}`);
 
-      if (response?.data) {
+      if (data) {
         const { showDecimals } = store.getState().setting;
 
-        return mapAccount(response.data, showDecimals);
+        return mapAccount(data, showDecimals);
       }
 
       return {} as Account;
@@ -65,15 +65,13 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
   'accounts/createAccount',
   async (account, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post('accounts/account', account);
+      await axios.post('accounts/account', account);
 
-      if (response?.data) {
-        dispatch(getAccounts());
-        dispatch(getSummary());
-      }
+      dispatch(getAccounts());
+      dispatch(getSummary());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -81,16 +79,14 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
   'accounts/editAccount',
   async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`accounts/${id}`, account);
+      await axios.put(`accounts/${id}`, account);
 
-      if (response?.data) {
-        dispatch(getAccounts());
-        dispatch(getSummary());
-        dispatch(getTransactions());
-      }
+      dispatch(getAccounts());
+      dispatch(getSummary());
+      dispatch(getTransactions());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -106,7 +102,7 @@ export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue
       dispatch(getTransfers());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

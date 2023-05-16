@@ -25,9 +25,9 @@ const initialState: TransferState = {
 
 export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (_, { dispatch }): Promise<Transfer[]> => {
   try {
-    const response = await axios.get<TransferDTO[]>('transfers');
+    const { data } = await axios.get<TransferDTO[]>('transfers');
 
-    if (response?.data) {
+    if (data) {
       const { showDecimals } = store.getState().setting;
       let { accounts } = store.getState().account;
 
@@ -37,7 +37,7 @@ export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTra
         accounts = store.getState().account.accounts;
       }
 
-      return mapTransfers(response.data, accounts, showDecimals);
+      return mapTransfers(data, accounts, showDecimals);
     }
 
     return [];
@@ -51,9 +51,9 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
   'transfers/getTransfer',
   async (id, { dispatch }): Promise<Transfer> => {
     try {
-      const response = await axios.get<TransferDTO>(`transfers/${id}`);
+      const { data } = await axios.get<TransferDTO>(`transfers/${id}`);
 
-      if (response?.data) {
+      if (data) {
         const { showDecimals } = store.getState().setting;
         let { accounts } = store.getState().account;
 
@@ -63,7 +63,7 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
           accounts = store.getState().account.accounts;
         }
 
-        return mapTransfer(response.data, accounts, showDecimals);
+        return mapTransfer(data, accounts, showDecimals);
       }
 
       return {} as Transfer;
@@ -77,15 +77,13 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
   'transfers/createTransfer',
   async (transfer, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post('transfers/transfer', transfer);
+      await axios.post('transfers/transfer', transfer);
 
-      if (response?.data) {
-        dispatch(getTransfers());
-        dispatch(getAccounts());
-      }
+      dispatch(getTransfers());
+      dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -93,15 +91,13 @@ export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<Transfe
   'transfers/editTransfer',
   async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`transfers/${id}`, account);
+      await axios.put(`transfers/${id}`, account);
 
-      if (response?.data) {
-        dispatch(getTransfers());
-        dispatch(getAccounts());
-      }
+      dispatch(getTransfers());
+      dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -115,7 +111,7 @@ export const deleteTransfer = createAsyncThunk<void, Transfer['id'], { rejectVal
       dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

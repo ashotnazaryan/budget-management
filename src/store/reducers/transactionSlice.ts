@@ -24,39 +24,41 @@ const initialState: TransactionState = {
   deleteStatus: 'idle'
 };
 
-export const getTransactions = createAsyncThunk('transactions/getTransactions', async (): Promise<Transaction[]> => {
-  try {
-    const response = await axios.get<TransactionDTO[]>('transactions');
+export const getTransactions = createAsyncThunk<Transaction[], void, { rejectValue: ErrorResponse }>(
+  'transactions/getTransactions',
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.get<TransactionDTO[]>('transactions');
 
-    if (response?.data) {
-      const { showDecimals } = store.getState().setting;
+      if (data) {
+        const { showDecimals } = store.getState().setting;
 
-      return mapTransactions(response.data, showDecimals);
+        return mapTransactions(data, showDecimals);
+      }
+
+      return [];
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
     }
-
-    return [];
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
+  });
 
 export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id'], { rejectValue: ErrorResponse }>(
   'transactions/getTransaction',
-  async (id): Promise<Transaction> => {
+  async (id, { rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.get<TransactionDTO>(`transactions/${id}`);
+      const { data } = await axios.get<TransactionDTO>(`transactions/${id}`);
 
-      if (response?.data) {
+      if (data) {
         const { showDecimals } = store.getState().setting;
 
-        return mapTransaction(response.data, showDecimals);
+        return mapTransaction(data, showDecimals);
       }
 
       return {} as Transaction;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      return {} as Transaction;
+      return rejectWithValue(error);
     }
   });
 
@@ -64,15 +66,13 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
   'transactions/addTransaction',
   async (transaction, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post('transactions/transaction', transaction);
+      await axios.post('transactions/transaction', transaction);
 
-      if (response?.data) {
-        dispatch(getSummary());
-        dispatch(getTransactions());
-      }
+      dispatch(getSummary());
+      dispatch(getTransactions());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -80,15 +80,13 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
   'transactions/editTransaction',
   async ([id, transaction], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`transactions/${id}`, transaction);
+      await axios.put(`transactions/${id}`, transaction);
 
-      if (response?.data) {
-        dispatch(getTransactions());
-        dispatch(getSummary());
-      }
+      dispatch(getTransactions());
+      dispatch(getSummary());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -103,7 +101,7 @@ export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rej
       dispatch(getAccounts());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

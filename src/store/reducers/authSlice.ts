@@ -18,12 +18,12 @@ const initialState: AuthState = {
 };
 
 export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {
-  const response = await axios.get<Auth>('auth/login/success');
+  const { data } = await axios.get<Auth>('auth/login/success');
 
   const auth: Auth = {
-    userId: response.data.userId,
-    accessToken: response.data.accessToken,
-    refreshToken: response.data.refreshToken
+    userId: data.userId,
+    accessToken: data.accessToken,
+    refreshToken: data.refreshToken
   };
 
   saveToLocalStorage(AUTH_KEY, auth);
@@ -33,14 +33,14 @@ export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Prom
 
 export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
   try {
-    const response = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
+    const { data } = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
     const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-    if (response?.data) {
+    if (data) {
       const newAuth: Auth = {
         userId,
-        accessToken: response.data.access_token,
-        refreshToken: response.data.refresh_token
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token
       };
 
       saveToLocalStorage(AUTH_KEY, newAuth);

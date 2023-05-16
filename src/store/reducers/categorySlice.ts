@@ -25,10 +25,10 @@ const initialState: CategoryState = {
 
 export const getCategories = createAsyncThunk<Category[], void>('categories/getCategories', async (): Promise<Category[]> => {
   try {
-    const response = await axios.get<CategoryDTO[]>('categories');
+    const { data } = await axios.get<CategoryDTO[]>('categories');
 
-    if (response?.data) {
-      return mapCategories(response.data);
+    if (data) {
+      return mapCategories(data);
     }
 
     return [];
@@ -40,18 +40,18 @@ export const getCategories = createAsyncThunk<Category[], void>('categories/getC
 
 export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejectValue: ErrorResponse }>(
   'categories/getCategory',
-  async (id): Promise<Category> => {
+  async (id, { rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.get<CategoryDTO>(`categories/${id}`);
+      const { data } = await axios.get<CategoryDTO>(`categories/${id}`);
 
-      if (response?.data) {
-        return mapCategory(response.data);
+      if (data) {
+        return mapCategory(data);
       }
 
       return {} as Category;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      return {} as Category;
+      return rejectWithValue(error);
     }
   });
 
@@ -59,14 +59,12 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
   'categories/createCategory',
   async (category, { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.post('categories/category', category);
+      await axios.post('categories/category', category);
 
-      if (response?.data) {
-        dispatch(getCategories());
-      }
+      dispatch(getCategories());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -74,16 +72,14 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
   'categories/editCategory',
   async ([id, category], { dispatch, rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.put(`categories/${id}`, category);
+      await axios.put(`categories/${id}`, category);
 
-      if (response?.data) {
-        dispatch(getCategories());
-        dispatch(getSummary());
-        dispatch(getTransactions());
-      }
+      dispatch(getCategories());
+      dispatch(getSummary());
+      dispatch(getTransactions());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 
@@ -98,7 +94,7 @@ export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectVal
       dispatch(getTransactions());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

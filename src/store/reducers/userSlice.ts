@@ -20,16 +20,16 @@ export const getUserInfo = createAsyncThunk<User, void, { rejectValue: ErrorResp
   'user/getUserInfo',
   async (_, { rejectWithValue }): Promise<any> => {
     try {
-      const response = await axios.get<UserDTO>('user');
+      const { data } = await axios.get<UserDTO>('user');
 
-      if (response?.data) {
-        return mapUser(response.data);
+      if (data) {
+        return mapUser(data);
       }
 
       return initialState;
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

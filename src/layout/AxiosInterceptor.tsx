@@ -1,5 +1,5 @@
 import * as React from 'react';
-import axios, { AxiosResponse } from 'core/axios';
+import axios from 'core/axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
 import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
@@ -7,18 +7,6 @@ import { Auth } from 'shared/models';
 import { removeUser, logout } from 'store/reducers';
 
 // let retried = false;
-
-const mapResponse = (response: AxiosResponse): AxiosResponse => {
-  if (response) {
-    if (response.data.data || response.data.data === 0) {
-      response.data = response.data.data;
-    }
-
-    return response;
-  }
-
-  throw new Error(response);
-};
 
 const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
   const dispatch = useAppDispatch();
@@ -35,7 +23,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
 
   axios.interceptors.response.use(
     (response) => {
-      return mapResponse(response);
+      return response;
     },
     async (error) => {
       if (error.response?.status === 401) {

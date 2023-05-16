@@ -58,21 +58,26 @@ const PageTitle: React.FC<PageTitleProps> = ({
   };
 
   return (
-    <Box display='flex' alignItems='center' {...props} sx={{ ...props.sx, marginTop: 2, marginBottom: 5 }}>
+    <Box
+      display='flex'
+      alignItems='center'
+      justifyContent='space-between'
+      {...props}
+      sx={{ ...props.sx, marginTop: 2, marginBottom: 5 }}
+    >
       {withBackButton && <BackButton onClick={onBackClick} />}
       <Typography
         color={contrastText}
         sx={{
           textAlign: 'center',
-          width: '100%',
           fontSize: { sm: 22, xs: 18 },
           fontWeight: 'bold'
         }}>
         {text}
       </Typography>
-      {withEditButton && <EditButton hidden={!withEditButton} onClick={onEditClick} />}
-      {withDeleteButton && <DeleteButton hidden={!withDeleteButton} onClick={onDeleteClick} />}
-      {withCancelButton && <CancelButton hidden={!withCancelButton} onClick={onCancelClick} />}
+      {withEditButton && <EditButton onClick={onEditClick} />}
+      {withDeleteButton && <DeleteButton onClick={onDeleteClick} />}
+      {withCancelButton && <CancelButton onClick={onCancelClick} />}
     </Box>
   );
 };

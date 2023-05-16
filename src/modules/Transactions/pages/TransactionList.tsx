@@ -21,7 +21,7 @@ const TransactionList: React.FC<TransactionListProps> = () => {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    if (status === 'idle') {
+    if (status === 'idle' || status === 'failed') {
       dispatch(getTransactions());
     }
   }, [dispatch, status]);

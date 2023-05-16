@@ -23,7 +23,7 @@ export const reset = createAsyncThunk<void, string, { rejectValue: ErrorResponse
       dispatch(resetApp());
     } catch (error: any) {
       console.error(error);
-      return rejectWithValue(error.error);
+      return rejectWithValue(error);
     }
   });
 

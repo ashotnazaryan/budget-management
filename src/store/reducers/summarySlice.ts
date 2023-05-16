@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { Period, StatusState, Summary, SummaryDTO } from 'shared/models';
+import { ErrorResponse, Period, StatusState, Summary, SummaryDTO } from 'shared/models';
 import { getQueryParamByPeriod, mapBalance, mapSummary } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
@@ -24,38 +24,43 @@ const initialState: SummaryState = {
   balanceStatus: 'idle'
 };
 
-export const getSummary = createAsyncThunk('summary/getSummary', async (period?: Period): Promise<Summary> => {
-  const { defaultPeriod } = store.getState().setting;
-  const { activePeriodFilter } = store.getState().summary;
-  const queryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
+export const getSummary = createAsyncThunk<Summary, Period | undefined, { rejectValue: ErrorResponse }>(
+  'summary/getSummary',
+  async (period, { rejectWithValue }) => {
+    const { defaultPeriod } = store.getState().setting;
+    const { activePeriodFilter } = store.getState().summary;
+    const queryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
 
-  try {
-    const response = await axios.get<SummaryDTO>(`summary${queryParams}`);
+    try {
+      const { data } = await axios.get<SummaryDTO>(`summary${queryParams}`);
 
-    if (response?.data) {
-      const { defaultCurrency: { iso }, showDecimals } = store.getState().setting;
+      if (data) {
+        const { defaultCurrency: { iso }, showDecimals } = store.getState().setting;
 
-      return mapSummary(response.data, iso, showDecimals);
+        return mapSummary(data, iso, showDecimals);
+      }
+
+      return {} as Summary;
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
     }
-
-    return {} as Summary;
-  } catch (error) {
-    console.error(error);
-    return {} as Summary;
   }
-});
+);
 
-export const getBalance = createAsyncThunk('summary/getBalance', async (): Promise<Summary['balance']> => {
-  try {
-    const response = await axios.get<SummaryDTO['balance']>('summary/balance');
-    const { defaultCurrency, showDecimals } = store.getState().setting;
+export const getBalance = createAsyncThunk<Summary['balance'], void, { rejectValue: ErrorResponse }>(
+  'summary/getBalance',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get<SummaryDTO['balance']>('summary/balance');
+      const { defaultCurrency, showDecimals } = store.getState().setting;
 
-    return mapBalance(response.data, defaultCurrency.iso, showDecimals) || '0';
-  } catch (error) {
-    console.error(error);
-    return '0';
-  }
-});
+      return mapBalance(data, defaultCurrency.iso, showDecimals) || '0';
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  });
 
 export const summarySlice = createSlice({
   name: 'summary',

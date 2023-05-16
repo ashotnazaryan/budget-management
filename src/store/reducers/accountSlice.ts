@@ -25,26 +25,28 @@ const initialState: AccountState = {
   deleteStatus: 'idle'
 };
 
-export const getAccounts = createAsyncThunk<Account[], void>('accounts/getAccounts', async (): Promise<Account[]> => {
-  try {
-    const { data } = await axios.get<AccountDTO[]>('accounts');
+export const getAccounts = createAsyncThunk<Account[], void, { rejectValue: ErrorResponse }>(
+  'accounts/getAccounts',
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.get<AccountDTO[]>('accounts');
 
-    if (data) {
-      const { showDecimals } = store.getState().setting;
+      if (data) {
+        const { showDecimals } = store.getState().setting;
 
-      return mapAccounts(data, showDecimals);
+        return mapAccounts(data, showDecimals);
+      }
+
+      return [];
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
     }
-
-    return [];
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
+  });
 
 export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectValue: ErrorResponse }>(
   'accounts/getAccount',
-  async (id): Promise<Account> => {
+  async (id, { rejectWithValue }): Promise<any> => {
     try {
       const { data } = await axios.get<AccountDTO>(`accounts/${id}`);
 
@@ -55,9 +57,9 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
       }
 
       return {} as Account;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      return {} as Account;
+      return rejectWithValue(error);
     }
   });
 

@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
-import { Auth, AuthDTO, StatusState } from 'shared/models';
+import { Auth, AuthDTO, ErrorResponse, StatusState } from 'shared/models';
 import { getFromLocalStorage, removeFromLocalStorage, saveToLocalStorage } from 'shared/helpers';
 import { AUTH_KEY } from 'shared/constants';
 import { resetApp } from './appSlice';
@@ -17,50 +17,63 @@ const initialState: AuthState = {
   status: 'idle'
 };
 
-export const getUserToken = createAsyncThunk('auth/getUserToken', async (): Promise<Auth> => {
-  const { data } = await axios.get<Auth>('auth/login/success');
+export const getUserToken = createAsyncThunk<Auth, void, { rejectValue: ErrorResponse }>(
+  'auth/getUserToken', async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.get<Auth>('auth/login/success');
 
-  const auth: Auth = {
-    userId: data.userId,
-    accessToken: data.accessToken,
-    refreshToken: data.refreshToken
-  };
-
-  saveToLocalStorage(AUTH_KEY, auth);
-
-  return auth;
-});
-
-export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async (refreshToken: Auth['refreshToken']): Promise<Auth> => {
-  try {
-    const { data } = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
-    const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
-
-    if (data) {
-      const newAuth: Auth = {
-        userId,
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token
+      const auth: Auth = {
+        userId: data.userId,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken
       };
 
-      saveToLocalStorage(AUTH_KEY, newAuth);
+      saveToLocalStorage(AUTH_KEY, auth);
 
-      return newAuth;
+      return auth;
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
     }
+  });
 
-    return {} as Auth;
-  } catch (error) {
-    console.error(error);
-    return {} as Auth;
-  }
-});
+export const getNewAccessToken = createAsyncThunk<Auth, Auth['refreshToken'], { rejectValue: ErrorResponse }>(
+  'auth/getNewAccessToken', async (refreshToken: Auth['refreshToken'], { rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
+      const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-export const logout = createAsyncThunk('auth/logout', async (_, { dispatch }): Promise<void> => {
-  await axios.get<void>('auth/logout');
+      if (data) {
+        const newAuth: Auth = {
+          userId,
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token
+        };
 
-  removeFromLocalStorage(AUTH_KEY);
-  dispatch(resetApp());
-});
+        saveToLocalStorage(AUTH_KEY, newAuth);
+
+        return newAuth;
+      }
+
+      return {} as Auth;
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  });
+
+export const logout = createAsyncThunk<void, void, { rejectValue: ErrorResponse }>(
+  'auth/logout', async (_, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      await axios.get<void>('auth/logout');
+
+      removeFromLocalStorage(AUTH_KEY);
+      dispatch(resetApp());
+    } catch (error: any) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  });
 
 export const authSlice = createSlice({
   name: 'auth',

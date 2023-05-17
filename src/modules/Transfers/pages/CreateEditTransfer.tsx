@@ -277,7 +277,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              InputProps={{ readOnly: isViewMode }}
               label={t('COMMON.AMOUNT')}
               type='number'
               name={TransferField.amount}
@@ -295,7 +295,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
-              disabled={isViewMode}
+              readOnly={isViewMode}
               name={TransferField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}

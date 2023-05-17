@@ -219,7 +219,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
         <Grid container rowGap={7}>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              InputProps={{ readOnly: isViewMode }}
               label={t('COMMON.NAME')}
               name={AccountField.name}
               rules={{
@@ -232,7 +232,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              InputProps={{ readOnly: isViewMode }}
               label={t('COMMON.BALANCE')}
               type='number'
               name={AccountField.balance}
@@ -250,7 +250,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormSelect
-              disabled={isViewMode}
+              inputProps={{ readOnly: isViewMode }}
               label={t('COMMON.CURRENCY')}
               name={AccountField.currencyIso}
               value={watchCurrency}
@@ -281,7 +281,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
                     {
                       icons.map(({ name }) => (
                         <Grid item key={name}>
-                          <ItemIcon selected={field.value} id={name} icon={name} size={50} disabled={isViewMode} onClick={handleAccountIconClick} />
+                          <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
                         </Grid>
                       ))
                     }

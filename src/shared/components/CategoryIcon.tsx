@@ -9,15 +9,20 @@ type CategoryIconProps = {
   data: Category;
   selected?: string;
   disabled?: boolean;
+  readonly?: boolean;
   onItemClick?: (data: Category) => void;
 } & BoxProps
 
-const CategoryIcon: React.FC<CategoryIconProps> = ({ data, selected, disabled, onItemClick, ...props }) => {
+const CategoryIcon: React.FC<CategoryIconProps> = ({ data, selected, disabled, readonly, onItemClick, ...props }) => {
   const { palette: { primary, secondary, info, action } } = useTheme();
   const { id, name, icon, type } = data;
   const categoryColor = type === CategoryType.income ? primary.main : secondary.main;
 
   const onCategoryClick = (): void => {
+    if (readonly) {
+      return;
+    }
+
     if (onItemClick) {
       onItemClick(data);
     }
@@ -54,7 +59,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ data, selected, disabled, o
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: disabled ? 'default' : 'pointer'
+          cursor: (disabled || readonly) ? 'default' : 'pointer'
         }}>
         <Icon name={icon}></Icon>
       </Box>

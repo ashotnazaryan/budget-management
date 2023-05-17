@@ -10,14 +10,21 @@ interface ItemIconProps {
   selected?: string;
   size?: number;
   disabled?: boolean;
-  onClick: ({ id }: { id: string }) => void;
+  readonly?: boolean;
+  onClick?: ({ id }: { id: string }) => void;
 }
 
-const ItemIcon: React.FC<ItemIconProps> = ({ id, selected, icon, size = 64, disabled, onClick }) => {
+const ItemIcon: React.FC<ItemIconProps> = ({ id, selected, icon, size = 64, disabled, readonly, onClick }) => {
   const { palette: { primary: { main, contrastText }, action } } = useTheme();
 
   const onItemClick = (id: string) => (): void => {
-    onClick({ id });
+    if (readonly) {
+      return;
+    }
+
+    if (onClick) {
+      onClick({ id });
+    }
   };
 
   const getColor = (): string => {
@@ -51,7 +58,7 @@ const ItemIcon: React.FC<ItemIconProps> = ({ id, selected, icon, size = 64, disa
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: disabled ? 'default' : 'pointer'
+          cursor: (disabled || readonly) ? 'default' : 'pointer'
         }}>
         <Icon name={icon}></Icon>
       </Box>

@@ -3,3 +3,5 @@ export interface Locale {
   isoIntl: Intl.LocalesArgument;
   displayName: string;
 }
+
+export type CountryCode = 'us' | 'gb' | 'ru' | 'ua' | 'pl' | 'am' | 'eu';

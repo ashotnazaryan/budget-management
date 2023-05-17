@@ -40,7 +40,7 @@ export const getCategories = createAsyncThunk<Category[], void>('categories/getC
 
 export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejectValue: ErrorResponse }>(
   'categories/getCategory',
-  async (id, { rejectWithValue }): Promise<any> => {
+  async (id, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<CategoryDTO>(`categories/${id}`);
 
@@ -57,9 +57,9 @@ export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejec
 
 export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue: ErrorResponse }>(
   'categories/createCategory',
-  async (category, { dispatch, rejectWithValue }): Promise<any> => {
+  async (category, { dispatch, rejectWithValue }) => {
     try {
-      await axios.post('categories/category', category);
+      await axios.post<void>('categories/category', category);
 
       dispatch(getCategories());
     } catch (error: any) {
@@ -70,9 +70,9 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
 
 export const editCategory = createAsyncThunk<void, [Category['id'], Omit<CategoryDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'categories/editCategory',
-  async ([id, category], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, category], { dispatch, rejectWithValue }) => {
     try {
-      await axios.put(`categories/${id}`, category);
+      await axios.put<void>(`categories/${id}`, category);
 
       dispatch(getCategories());
       dispatch(getSummary());
@@ -85,9 +85,9 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
 
 export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectValue: ErrorResponse }>(
   'categories/deleteCategory',
-  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+  async (id, { dispatch, rejectWithValue }) => {
     try {
-      await axios.delete(`categories/${id}`);
+      await axios.delete<void>(`categories/${id}`);
 
       dispatch(getCategories());
       dispatch(getSummary());

@@ -27,7 +27,7 @@ const initialState: AccountState = {
 
 export const getAccounts = createAsyncThunk<Account[], void, { rejectValue: ErrorResponse }>(
   'accounts/getAccounts',
-  async (_, { rejectWithValue }): Promise<any> => {
+  async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<AccountDTO[]>('accounts');
 
@@ -46,7 +46,7 @@ export const getAccounts = createAsyncThunk<Account[], void, { rejectValue: Erro
 
 export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectValue: ErrorResponse }>(
   'accounts/getAccount',
-  async (id, { rejectWithValue }): Promise<any> => {
+  async (id, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<AccountDTO>(`accounts/${id}`);
 
@@ -65,9 +65,9 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
 
 export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: ErrorResponse }>(
   'accounts/createAccount',
-  async (account, { dispatch, rejectWithValue }): Promise<any> => {
+  async (account, { dispatch, rejectWithValue }) => {
     try {
-      await axios.post('accounts/account', account);
+      await axios.post<void>('accounts/account', account);
 
       dispatch(getAccounts());
       dispatch(getSummary());
@@ -79,9 +79,9 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
 
 export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'accounts/editAccount',
-  async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, account], { dispatch, rejectWithValue }) => {
     try {
-      await axios.put(`accounts/${id}`, account);
+      await axios.put<void>(`accounts/${id}`, account);
 
       dispatch(getAccounts());
       dispatch(getSummary());
@@ -94,9 +94,9 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
 
 export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue: ErrorResponse }>(
   'accounts/deleteAccount',
-  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+  async (id, { dispatch, rejectWithValue }) => {
     try {
-      await axios.delete(`accounts/${id}`);
+      await axios.delete<void>(`accounts/${id}`);
 
       dispatch(getAccounts());
       dispatch(getSummary());

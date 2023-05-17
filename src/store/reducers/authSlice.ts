@@ -18,7 +18,8 @@ const initialState: AuthState = {
 };
 
 export const getUserToken = createAsyncThunk<Auth, void, { rejectValue: ErrorResponse }>(
-  'auth/getUserToken', async (_, { rejectWithValue }): Promise<any> => {
+  'auth/getUserToken',
+  async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<Auth>('auth/login/success');
 
@@ -35,10 +36,11 @@ export const getUserToken = createAsyncThunk<Auth, void, { rejectValue: ErrorRes
       console.error(error);
       return rejectWithValue(error);
     }
-  });
+  }
+);
 
 export const getNewAccessToken = createAsyncThunk<Auth, Auth['refreshToken'], { rejectValue: ErrorResponse }>(
-  'auth/getNewAccessToken', async (refreshToken: Auth['refreshToken'], { rejectWithValue }): Promise<any> => {
+  'auth/getNewAccessToken', async (refreshToken: Auth['refreshToken'], { rejectWithValue }) => {
     try {
       const { data } = await axios.post<AuthDTO>('auth/access-token', { refreshToken });
       const { userId } = getFromLocalStorage<Auth>(AUTH_KEY);
@@ -63,7 +65,7 @@ export const getNewAccessToken = createAsyncThunk<Auth, Auth['refreshToken'], { 
   });
 
 export const logout = createAsyncThunk<void, void, { rejectValue: ErrorResponse }>(
-  'auth/logout', async (_, { dispatch, rejectWithValue }): Promise<any> => {
+  'auth/logout', async (_, { dispatch, rejectWithValue }) => {
     try {
       await axios.get<void>('auth/logout');
 

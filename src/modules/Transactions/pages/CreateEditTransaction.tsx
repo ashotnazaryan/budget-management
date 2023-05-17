@@ -283,7 +283,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           <Grid item xs={12}>
             <Typography color={contrastText}>{t('COMMON.TYPE')}</Typography>
             <FormRadioGroup
-              disabled={isViewMode}
+              readonly={isViewMode}
               name={TransactionField.type}
               rules={{
                 required: {
@@ -299,7 +299,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              InputProps={{ readOnly: isViewMode }}
               label={t('COMMON.AMOUNT')}
               type='number'
               name={TransactionField.amount}
@@ -317,7 +317,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormSelect
-              disabled={isViewMode}
+              inputProps={{ readOnly: isViewMode }}
               label={t('COMMON.ACCOUNT')}
               name={TransactionField.accountId}
               value={accounts.length ? (watchAccount || defaultAccount) : ''}
@@ -341,7 +341,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
-              disabled={isViewMode}
+              readOnly={isViewMode}
               name={TransactionField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
@@ -359,7 +359,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              inputProps={{ readOnly: isViewMode }}
               label={t('COMMON.NOTE')}
               name={TransactionField.note}
             />
@@ -378,7 +378,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
                     {
                       categories.filter(({ type }) => type === Number(watchType)).map((category) => (
                         <Grid item key={category.id}>
-                          <CategoryIcon data={getCategoryData(category)} selected={field.value} disabled={isViewMode} onItemClick={handleCategoryIconClick} />
+                          <CategoryIcon data={getCategoryData(category)} selected={field.value} readonly={isViewMode} onItemClick={handleCategoryIconClick} />
                         </Grid>
                       ))
                     }

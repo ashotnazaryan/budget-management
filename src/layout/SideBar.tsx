@@ -89,7 +89,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.dashboard.path}>
-                      <Button color='secondary' fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
+                      <Button color='secondary' fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {t(ROUTES.dashboard.name)}
                       </Button>
                     </Link>
@@ -98,7 +98,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.accounts.path}>
-                      <Button color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
+                      <Button color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {t(ROUTES.accounts.name)}
                       </Button>
                     </Link>
@@ -107,7 +107,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.categories.path}>
-                      <Button color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
+                      <Button color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {t(ROUTES.categories.name)}
                       </Button>
                     </Link>
@@ -116,7 +116,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 <ListItem onClick={close} sx={{ padding: 0 }}>
                   <ListItemText>
                     <Link to={ROUTES.settings.path}>
-                      <Button color='secondary' fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start', fontWeight: 'bold' }}>
+                      <Button color='secondary' fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
                         {t(ROUTES.settings.name)}
                       </Button>
                     </Link>

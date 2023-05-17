@@ -208,7 +208,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         <Grid container rowGap={5}>
           <Grid item xs={12}>
             <FormInput
-              disabled={isViewMode}
+              InputProps={{ readOnly: isViewMode }}
               label={t('COMMON.NAME')}
               name={CategoryField.name}
               rules={{
@@ -222,7 +222,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
           <Grid item xs={12}>
             <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.TYPE')}</Typography>
             <FormRadioGroup
-              disabled={isViewMode}
+              readonly={isViewMode}
               name={CategoryField.type}
               rules={{
                 required: {
@@ -250,7 +250,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
                     {
                       icons.map(({ name }) => (
                         <Grid item key={name}>
-                          <ItemIcon selected={field.value} id={name} icon={name} size={50} disabled={isViewMode} onClick={handleAccountIconClick} />
+                          <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
                         </Grid>
                       ))
                     }

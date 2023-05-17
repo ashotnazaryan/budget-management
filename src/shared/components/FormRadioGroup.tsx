@@ -6,24 +6,33 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
-import { Option } from 'shared/models';
+import { FormControlRules, Option } from 'shared/models';
 
 type FormRadioGroupProps = {
   name: string;
   options: Option[];
   labelColor?: string;
-  rules?: any;
+  rules?: FormControlRules;
   disabled?: boolean;
+  readonly?: boolean;
   onRadioChange: (checkedValue: Option['value']) => void;
 } & RadioGroupProps;
 
-const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelColor, rules = {}, disabled, onRadioChange, ...props }) => {
+const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelColor, rules = {}, disabled, readonly, onRadioChange, ...props }) => {
   const {
     control,
     formState: { errors }
   } = useFormContext();
 
+  const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    readonly && event.preventDefault();
+  };
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    if (readonly || disabled) {
+      return;
+    }
+
     if (onRadioChange) {
       const value = event.target.value;
 
@@ -38,7 +47,7 @@ const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, options, labelCol
       rules={rules}
       render={({ field, fieldState: { error } }) => (
         <Box position='relative'>
-          <RadioGroup row {...props} {...field} value={field.value}>
+          <RadioGroup row {...props} {...field} value={field.value} onClick={onClick}>
             {options.map(({ label, value }) => (
               <FormControlLabel key={value} value={value}
                 label={

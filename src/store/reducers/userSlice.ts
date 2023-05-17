@@ -18,7 +18,7 @@ const initialState: UserState = {
 
 export const getUserInfo = createAsyncThunk<User, void, { rejectValue: ErrorResponse }>(
   'user/getUserInfo',
-  async (_, { rejectWithValue }): Promise<any> => {
+  async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<UserDTO>('user');
 

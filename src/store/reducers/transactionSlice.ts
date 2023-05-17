@@ -26,7 +26,7 @@ const initialState: TransactionState = {
 
 export const getTransactions = createAsyncThunk<Transaction[], void, { rejectValue: ErrorResponse }>(
   'transactions/getTransactions',
-  async (_, { rejectWithValue }): Promise<any> => {
+  async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<TransactionDTO[]>('transactions');
 
@@ -45,7 +45,7 @@ export const getTransactions = createAsyncThunk<Transaction[], void, { rejectVal
 
 export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id'], { rejectValue: ErrorResponse }>(
   'transactions/getTransaction',
-  async (id, { rejectWithValue }): Promise<any> => {
+  async (id, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<TransactionDTO>(`transactions/${id}`);
 
@@ -64,9 +64,9 @@ export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id']
 
 export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectValue: ErrorResponse }>(
   'transactions/addTransaction',
-  async (transaction, { dispatch, rejectWithValue }): Promise<any> => {
+  async (transaction, { dispatch, rejectWithValue }) => {
     try {
-      await axios.post('transactions/transaction', transaction);
+      await axios.post<void>('transactions/transaction', transaction);
 
       dispatch(getSummary());
       dispatch(getTransactions());
@@ -78,9 +78,9 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
 
 export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<TransactionDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'transactions/editTransaction',
-  async ([id, transaction], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, transaction], { dispatch, rejectWithValue }) => {
     try {
-      await axios.put(`transactions/${id}`, transaction);
+      await axios.put<void>(`transactions/${id}`, transaction);
 
       dispatch(getTransactions());
       dispatch(getSummary());
@@ -92,9 +92,9 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
 
 export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rejectValue: ErrorResponse }>(
   'transactions/deleteTransaction',
-  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+  async (id, { dispatch, rejectWithValue }) => {
     try {
-      await axios.delete(`transactions/${id}`);
+      await axios.delete<void>(`transactions/${id}`);
 
       dispatch(getTransactions());
       dispatch(getSummary());

@@ -14,17 +14,18 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
 import { CURRENCIES, LOCALES, PERIOD_OPTIONS } from 'shared/constants';
 import { Account, Currency, Locale, Period } from 'shared/models';
-import { getAccountLabel } from 'shared/helpers';
+import { getAccountLabel, mapCurrencyIsoToCountryCode, mapLocaleIsoToCountryCode } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
 import AccountOption from 'shared/components/AccountOption';
+import CountryFlag from 'shared/components/CountryFlag';
 
 const Settings: React.FC = () => {
   const currencies = CURRENCIES;
   const locales = LOCALES;
   const periodOptions = PERIOD_OPTIONS;
-  const { defaultCurrency: { iso }, showDecimals, isDarkTheme, locale, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
+  const { defaultCurrency, showDecimals, isDarkTheme, locale, defaultPeriod, defaultAccount = '' } = useAppSelector(selectSettings);
   const { userId } = useAppSelector(selectUser);
   const { status } = useAppSelector(selectApp);
   const { accounts, status: accountStatus } = useAppSelector(selectAccount);
@@ -101,11 +102,23 @@ const Settings: React.FC = () => {
             <Select
               data-testid='default-currency'
               variant='outlined'
-              value={iso}
+              value={defaultCurrency.iso}
               onChange={handleCurrencyChange}
+              renderValue={(value) => (
+                <Box display='flex' alignItems='center'>
+                  <CountryFlag code={mapCurrencyIsoToCountryCode(defaultCurrency.iso)} />
+                  <Typography sx={{ marginLeft: 2 }}>{defaultCurrency.nameKey ? t(defaultCurrency.nameKey) : defaultCurrency.name} ({defaultCurrency.symbol})</Typography>
+                </Box>
+              )}
             >
               {currencies.map(({ iso, name, nameKey, symbol }) => (
-                <MenuItem value={iso} key={iso}>{symbol} {nameKey ? t(nameKey) : name}</MenuItem>
+                <MenuItem
+                  value={iso}
+                  key={iso}
+                >
+                  <CountryFlag code={mapCurrencyIsoToCountryCode(iso)} />
+                  <Typography sx={{ marginLeft: 2 }}>{nameKey ? t(nameKey) : name} ({symbol})</Typography>
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -150,9 +163,21 @@ const Settings: React.FC = () => {
               variant='outlined'
               value={locale.iso || i18n.language}
               onChange={handleChangeLanguage}
+              renderValue={(value) => (
+                <Box display='flex' alignItems='center'>
+                  <CountryFlag code={mapLocaleIsoToCountryCode(value)} />
+                  <Typography sx={{ marginLeft: 2 }}>{locale.displayName}</Typography>
+                </Box>
+              )}
             >
               {locales.map(({ iso, displayName }) => (
-                <MenuItem value={iso} key={iso}>{displayName}</MenuItem>
+                <MenuItem
+                  value={iso}
+                  key={iso}
+                >
+                  <CountryFlag code={mapLocaleIsoToCountryCode(iso)} />
+                  <Typography sx={{ marginLeft: 2 }}>{displayName}</Typography>
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

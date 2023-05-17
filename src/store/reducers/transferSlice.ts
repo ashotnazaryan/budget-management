@@ -75,9 +75,9 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
 
 export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue: ErrorResponse }>(
   'transfers/createTransfer',
-  async (transfer, { dispatch, rejectWithValue }): Promise<any> => {
+  async (transfer, { dispatch, rejectWithValue }) => {
     try {
-      await axios.post('transfers/transfer', transfer);
+      await axios.post<void>('transfers/transfer', transfer);
 
       dispatch(getTransfers());
       dispatch(getAccounts());
@@ -89,9 +89,9 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
 
 export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<TransferDTO, 'id'>], { rejectValue: ErrorResponse }>(
   'transfers/editTransfer',
-  async ([id, account], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([id, account], { dispatch, rejectWithValue }) => {
     try {
-      await axios.put(`transfers/${id}`, account);
+      await axios.put<void>(`transfers/${id}`, account);
 
       dispatch(getTransfers());
       dispatch(getAccounts());
@@ -103,9 +103,9 @@ export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<Transfe
 
 export const deleteTransfer = createAsyncThunk<void, Transfer['id'], { rejectValue: ErrorResponse }>(
   'transfers/deleteTransfer',
-  async (id, { dispatch, rejectWithValue }): Promise<any> => {
+  async (id, { dispatch, rejectWithValue }) => {
     try {
-      await axios.delete(`transfers/${id}`);
+      await axios.delete<void>(`transfers/${id}`);
 
       dispatch(getTransfers());
       dispatch(getAccounts());

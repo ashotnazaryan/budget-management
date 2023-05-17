@@ -28,7 +28,7 @@ const initialState: SettingState = {
 export const getSettings = createAsyncThunk<Setting, void, { rejectValue: ErrorResponse }>(
   'setting/getSettings',
   async (_, { dispatch, rejectWithValue }
-  ): Promise<any> => {
+  ) => {
     try {
       const { data } = await axios.get<SettingDTO>('settings');
 
@@ -46,9 +46,9 @@ export const getSettings = createAsyncThunk<Setting, void, { rejectValue: ErrorR
 
 export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?, boolean?], { rejectValue: ErrorResponse }>(
   'setting/addSetting',
-  async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }): Promise<any> => {
+  async ([setting, isAppLoading, shouldFetchAllData], { dispatch, rejectWithValue }) => {
     try {
-      await axios.post('settings/setting', setting);
+      await axios.post<void>('settings/setting', setting);
 
       if (isAppLoading) {
         dispatch(setAppStatus('loading'));

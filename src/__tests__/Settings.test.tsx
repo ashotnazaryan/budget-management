@@ -16,17 +16,17 @@ describe('Settings component', () => {
   beforeEach(() => {
     store = mockStore({
       app: {
-        status: 'succeeded',
+        status: 'succeeded'
       },
       account: {
         accounts: [
           {
             id: '1',
             name: 'Wallet',
-            balance: '10',
+            balance: '10'
           }
         ],
-        status: 'succeeded',
+        status: 'succeeded'
       },
       user: {
         userId: '1',
@@ -35,7 +35,7 @@ describe('Settings component', () => {
         defaultCurrency: {
           iso: 'USD',
           name: 'US Dollar',
-          symbol: '$',
+          symbol: '$'
         },
         showDecimals: true,
         isDarkTheme: false,
@@ -45,8 +45,8 @@ describe('Settings component', () => {
           displayName: 'English'
         },
         defaultPeriod: Period.month,
-        defaultAccount: '',
-      },
+        defaultAccount: ''
+      }
     });
   });
 

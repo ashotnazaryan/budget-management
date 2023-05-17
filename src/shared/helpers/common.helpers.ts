@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
-import { Currency, DateRange, Locale, Period, Option } from 'shared/models';
+import { Currency, DateRange, Locale, Period, Option, CountryCode } from 'shared/models';
 
 const getDateRangeForPeriod = (period: Period): DateRange => {
   const now = date();
@@ -59,6 +59,40 @@ export const mapLocaleToDateLocale = (locale: Locale['iso']): string => {
     return 'hy-am';
   default:
     return 'en';
+  }
+};
+
+export const mapLocaleIsoToCountryCode = (iso: Locale['iso']): CountryCode => {
+  switch (iso) {
+  case 'en':
+    return 'gb';
+  case 'ru':
+    return 'ru';
+  case 'pl':
+    return 'pl';
+  case 'ua':
+    return 'ua';
+  case 'am':
+    return 'am';
+  default:
+    throw new Error(`Unsupported locale iso: ${iso}`);
+  }
+};
+
+export const mapCurrencyIsoToCountryCode = (iso: Currency['iso']): CountryCode => {
+  switch (iso) {
+  case 'USD':
+    return 'us';
+  case 'EUR':
+    return 'eu';
+  case 'PLN':
+    return 'pl';
+  case 'UAH':
+    return 'ua';
+  case 'AMD':
+    return 'am';
+  default:
+    throw new Error(`Unsupported currency iso: ${iso}`);
   }
 };
 

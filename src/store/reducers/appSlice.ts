@@ -16,9 +16,9 @@ const initialState: AppState = {
 
 export const reset = createAsyncThunk<void, string, { rejectValue: ErrorResponse }>(
   'app/reset',
-  async (userId, { dispatch, rejectWithValue }): Promise<any> => {
+  async (userId, { dispatch, rejectWithValue }) => {
     try {
-      await axios.delete(`settings/${userId}/reset`);
+      await axios.delete<void>(`settings/${userId}/reset`);
 
       dispatch(resetApp());
     } catch (error: any) {

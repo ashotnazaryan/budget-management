@@ -2,10 +2,10 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import configureStore, { MockStore } from 'redux-mock-store';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { RecursivePartial } from 'shared/models';
+import { Period, RecursivePartial } from 'shared/models';
 import { RootState } from 'store/reducers/rootReducer';
 import { openSideBar } from 'store/reducers';
-import { useAppDispatch } from 'store';
+import { useAppDispatch, useAppSelector } from 'store';
 import Header from 'layout/Header';
 
 type MockRootState = RecursivePartial<RootState>;
@@ -15,10 +15,11 @@ const mockStore = configureStore<MockRootState, any>([thunk]);
 jest.mock('store', () => ({
   ...jest.requireActual('store'),
   useAppDispatch: jest.fn(),
+  useAppSelector: jest.fn()
 }));
 
 jest.mock('store/reducers', () => ({
-  openSideBar: jest.fn(),
+  openSideBar: jest.fn()
 }));
 
 describe('Header component', () => {
@@ -30,11 +31,40 @@ describe('Header component', () => {
         sideBarOpened: false,
         status: 'idle'
       },
+      setting: {
+        defaultCurrency: {
+          iso: 'USD',
+          name: 'US Dollar',
+          symbol: '$'
+        },
+        showDecimals: true,
+        isDarkTheme: false,
+        locale: {
+          iso: 'en',
+          isoIntl: 'en-US',
+          displayName: 'English'
+        },
+        defaultPeriod: Period.month,
+        defaultAccount: ''
+      },
       summary: {}
     });
   });
 
   test('renders product name correctly', async () => {
+    (useAppSelector as jest.Mock).mockReturnValue({
+      defaultCurrency: {
+        iso: 'USD',
+        name: 'US Dollar',
+        symbol: '$'
+      },
+      locale: {
+        iso: 'en',
+        isoIntl: 'en-US',
+        displayName: 'English'
+      }
+    });
+
     render(
       <Provider store={store}>
         <Header />

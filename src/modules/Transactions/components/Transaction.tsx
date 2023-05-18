@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import date from 'core/date';
 import { CategoryType, Transaction as TransactionModel } from 'shared/models';
 import Icon from 'shared/components/Icon';
-import Ellipsis from 'shared/components/Ellipsis';
 import { DATE_FORMAT } from 'shared/constants';
 
 interface TransactionProps {
@@ -31,19 +31,19 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>
         <Grid item xs={3}>
-          <Ellipsis text={name} color={contrastText} />
+          <Typography noWrap color={contrastText}>{name}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={amount} color={type === CategoryType.expense ? error.main : contrastText} />
+          <Typography noWrap color={type === CategoryType.expense ? error.main : contrastText}>{amount}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={accountName} color={contrastText} />
+          <Typography noWrap color={contrastText}>{accountName}</Typography>
         </Grid>
         <Grid item xs={1} display='flex'>
           {accountIcon && <Icon name={accountIcon} color='primary' sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis text={formattedCreatedAt} color={contrastText} />
+          <Typography noWrap color={contrastText}>{formattedCreatedAt}</Typography>
         </Grid>
       </Grid>
     </Paper>

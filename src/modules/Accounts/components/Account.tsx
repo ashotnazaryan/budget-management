@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { Account as AccountModel } from 'shared/models';
 import Icon from 'shared/components/Icon';
-import Ellipsis from 'shared/components/Ellipsis';
 import Balance from 'shared/components/Balance';
 
 interface AccountProps {
@@ -24,10 +24,9 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
 
   return (
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }}>
-      <Grid container display='flex' alignItems='center' justifyContent='space-between' columnSpacing={2}
+      <Grid container display='flex' alignItems='center' justifyContent='space-between' flexGrow={1} columnSpacing={2}
         sx={{
           borderRadius: 1,
-          width: '100%',
           minHeight: 40,
           cursor: 'pointer'
         }}
@@ -36,7 +35,7 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
           {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>
         <Grid item sm={7} xs={6} display='flex'>
-          <Ellipsis color={contrastText} text={name} />
+          <Typography noWrap color={contrastText}>{name}</Typography>
         </Grid>
         <Grid item sm={4} xs={4} display='flex' justifyContent='flex-end'>
           <Balance balance={balance} positiveColor={contrastText} fontSize={{ sm: 16, xs: 14 }} />

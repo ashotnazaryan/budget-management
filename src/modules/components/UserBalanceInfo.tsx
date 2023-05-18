@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
-import Ellipsis from 'shared/components/Ellipsis';
 import Balance from 'shared/components/Balance';
 
 interface UserBalanceInfoProps {
@@ -23,10 +23,10 @@ const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, fullName = ''
       </Grid>
       <Grid item container xs={8}>
         <Grid item xs={12}>
-          <Ellipsis text={fullName} sx={{ fontSize: 18 }} />
+          <Typography noWrap fontSize={18}>{fullName}</Typography>
         </Grid>
         <Grid item xs={12} display='flex' alignItems='center'>
-          <Ellipsis text={t('COMMON.BALANCE')} sx={{ fontSize: 16, marginRight: 1 }} />
+          <Typography noWrap fontSize={16} sx={{ marginRight: 1 }}>{t('COMMON.BALANCE')}</Typography>
           <Balance balance={balance} />
         </Grid>
       </Grid>

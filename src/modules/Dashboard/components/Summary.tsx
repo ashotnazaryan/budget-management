@@ -4,11 +4,11 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { Period, Transaction } from 'shared/models';
 import Balance from 'shared/components/Balance';
-import Ellipsis from 'shared/components/Ellipsis';
 import CategoryTransaction from '../../components/CategoryTransaction';
 import PeriodFilters from './PeriodFilters';
 
@@ -45,25 +45,25 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
     >
       <Grid container>
         <Grid item xs={12}>
-          <Ellipsis text={t('DASHBOARD.SUMMARY')} color={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center', marginBottom: 4 }} />
+          <Typography noWrap color={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center', marginBottom: 4 }}>{t('DASHBOARD.SUMMARY')}</Typography>
         </Grid>
         <Grid container display='flex' justifyContent='center' sx={{ marginBottom: 2 }}>
           <PeriodFilters selectedPeriod={period} onFilter={onFilter} />
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
-            <Ellipsis text={t('DASHBOARD.TOTAL_INCOME')} color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }} />
-            <Ellipsis text={incomes} color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }} />
+            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_INCOME')}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
-            <Ellipsis text={t('DASHBOARD.TOTAL_EXPENSES')} color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }} />
-            <Ellipsis text={expenses} color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }} />
+            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_EXPENSES')}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{expenses}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Ellipsis text={t('DASHBOARD.PROFIT')} color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }} />
+            <Typography noWrap color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
             <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>

@@ -47,8 +47,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts,.tsx"
   },

@@ -21,4 +21,4 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: TEST_URL=https://budget-management.up.railway.app npm run test
+        run: TEST_URL=https://budget-management.up.railway.app npm run test:unit

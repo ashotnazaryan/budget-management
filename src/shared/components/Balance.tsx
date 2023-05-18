@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { TypographyProps } from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import { isPositiveString } from 'shared/helpers';
-import Ellipsis from 'shared/components/Ellipsis';
 
 type BalanceProps = {
   balance: string;
@@ -14,7 +13,13 @@ const Balance: React.FC<BalanceProps> = ({ balance = '0', positiveColor, ...prop
   const positiveBalanceColor = positiveColor || contrastText;
 
   return (
-    <Ellipsis text={balance} color={isPositiveString(balance) ? positiveBalanceColor : error.main} fontSize={props.fontSize} sx={{ ...props.sx }} />
+    <Typography
+      noWrap
+      color={isPositiveString(balance) ? positiveBalanceColor : error.main}
+      fontSize={props.fontSize}
+      sx={{ ...props.sx }}>
+      {balance}
+    </Typography>
   );
 };
 

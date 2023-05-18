@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { Transaction } from 'shared/models';
-import Ellipsis from 'shared/components/Ellipsis';
 import Icon from 'shared/components/Icon';
 
 interface CategoryTransactionProps {
@@ -38,13 +38,13 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
           {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={7} display='flex'>
-          <Ellipsis color={contrastText} text={name} />
+          <Typography noWrap color={contrastText}>{name}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          {showPercentage && <Ellipsis color={contrastText} text={percentValue} />}
+          {showPercentage && <Typography noWrap color={contrastText}>{percentValue}</Typography>}
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Ellipsis color={contrastText} text={amount} />
+          <Typography noWrap color={contrastText}>{amount}</Typography>
         </Grid>
       </Grid>
     </Box>

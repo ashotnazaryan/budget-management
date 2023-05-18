@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import Ellipsis from './Ellipsis';
+import Typography from '@mui/material/Typography';
 
 interface EmptyStateProps {
   text: string | null;
@@ -12,7 +12,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ text = 'No data is available' }
 
   return (
     <Box display='flex' justifyContent='center'>
-      <Ellipsis color={contrastText} text={text!} sx={{ fontSize: { sm: 18, xs: 16 } }} />
+      <Typography noWrap color={contrastText} fontSize={{ sm: 18, xs: 16 }}>{text}</Typography>
     </Box>
   );
 };

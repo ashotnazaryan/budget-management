@@ -1,20 +1,9 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import Drawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import LogoutIcon from '@mui/icons-material/Logout';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import SettingsIcon from '@mui/icons-material/Settings';
-import CategoryIcon from '@mui/icons-material/Category';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -26,13 +15,14 @@ import {
   selectSummary,
   getBalance
 } from 'store/reducers';
-import { ROUTES } from 'shared/constants';
 import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
+import SideBarSettingsPreview from './components/SideBarSettingsPreview';
+import Menu from './components/Menu';
 
 interface SideBarProps extends MuiDrawerProps { }
 
-const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
+const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
   const dispatch = useAppDispatch();
   const { sideBarOpened } = useAppSelector(selectApp);
   const user = useAppSelector(selectUser);
@@ -84,53 +74,8 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }: SideBarProps) => {
                 </IconButton>
               </Grid>
             </Grid>
-            <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: 3 }}>
-              <Box sx={{ flexGrow: 1 }}>
-                <ListItem onClick={close} sx={{ padding: 0 }}>
-                  <ListItemText>
-                    <Link to={ROUTES.dashboard.path}>
-                      <Button color='secondary' fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {t(ROUTES.dashboard.name)}
-                      </Button>
-                    </Link>
-                  </ListItemText>
-                </ListItem>
-                <ListItem onClick={close} sx={{ padding: 0 }}>
-                  <ListItemText>
-                    <Link to={ROUTES.accounts.path}>
-                      <Button color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {t(ROUTES.accounts.name)}
-                      </Button>
-                    </Link>
-                  </ListItemText>
-                </ListItem>
-                <ListItem onClick={close} sx={{ padding: 0 }}>
-                  <ListItemText>
-                    <Link to={ROUTES.categories.path}>
-                      <Button color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {t(ROUTES.categories.name)}
-                      </Button>
-                    </Link>
-                  </ListItemText>
-                </ListItem>
-                <ListItem onClick={close} sx={{ padding: 0 }}>
-                  <ListItemText>
-                    <Link to={ROUTES.settings.path}>
-                      <Button color='secondary' fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
-                        {t(ROUTES.settings.name)}
-                      </Button>
-                    </Link>
-                  </ListItemText>
-                </ListItem>
-              </Box>
-              <ListItem onClick={handleOpenDialog} sx={{ padding: 0 }}>
-                <ListItemText>
-                  <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
-                    {t('SIDEBAR.LOGOUT')}
-                  </Button>
-                </ListItemText>
-              </ListItem>
-            </List>
+            <SideBarSettingsPreview />
+            <Menu onOpenDialog={handleOpenDialog} onCloseSideBar={close} />
           </Drawer>
         </Grid>
       </Grid>

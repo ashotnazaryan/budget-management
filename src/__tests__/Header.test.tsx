@@ -5,7 +5,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Period, RecursivePartial } from 'shared/models';
 import { RootState } from 'store/reducers/rootReducer';
 import { openSideBar } from 'store/reducers';
-import { useAppDispatch, useAppSelector } from 'store';
+import { useAppDispatch } from 'store';
 import Header from 'layout/Header';
 
 type MockRootState = RecursivePartial<RootState>;
@@ -14,8 +14,7 @@ const mockStore = configureStore<MockRootState, any>([thunk]);
 
 jest.mock('store', () => ({
   ...jest.requireActual('store'),
-  useAppDispatch: jest.fn(),
-  useAppSelector: jest.fn()
+  useAppDispatch: jest.fn()
 }));
 
 jest.mock('store/reducers', () => ({
@@ -52,19 +51,6 @@ describe('Header component', () => {
   });
 
   test('renders product name correctly', async () => {
-    (useAppSelector as jest.Mock).mockReturnValue({
-      defaultCurrency: {
-        iso: 'USD',
-        name: 'US Dollar',
-        symbol: '$'
-      },
-      locale: {
-        iso: 'en',
-        isoIntl: 'en-US',
-        displayName: 'English'
-      }
-    });
-
     render(
       <Provider store={store}>
         <Header />

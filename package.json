@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test:unit": "jest",
     "test:unit:watch": "jest --watch",
     "eject": "react-scripts eject",
@@ -79,6 +79,7 @@
     "@types/redux-mock-store": "^1.0.3",
     "@types/redux-thunk": "^2.1.0",
     "@types/styled-components": "^5.1.26",
+    "cross-env": "^7.0.3",
     "jest-environment-jsdom": "^29.5.0",
     "redux-mock-store": "^1.5.4",
     "ts-jest": "^29.1.0"

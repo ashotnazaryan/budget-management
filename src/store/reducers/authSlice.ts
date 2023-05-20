@@ -33,7 +33,6 @@ export const getUserToken = createAsyncThunk<Auth, void, { rejectValue: ErrorRes
 
       return auth;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   }
@@ -59,7 +58,6 @@ export const getNewAccessToken = createAsyncThunk<Auth, Auth['refreshToken'], { 
 
       return {} as Auth;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -72,7 +70,6 @@ export const logout = createAsyncThunk<void, void, { rejectValue: ErrorResponse 
       removeFromLocalStorage(AUTH_KEY);
       dispatch(resetApp());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

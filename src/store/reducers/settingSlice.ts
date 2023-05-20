@@ -38,7 +38,6 @@ export const getSettings = createAsyncThunk<Setting, void, { rejectValue: ErrorR
 
       return mapSettings(data);
     } catch (error: any) {
-      console.error(error);
       dispatch(setAppStatus('succeeded'));
       return rejectWithValue(error);
     }
@@ -63,7 +62,6 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
         dispatch(getBalance());
       }
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

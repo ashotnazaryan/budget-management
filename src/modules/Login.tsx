@@ -52,6 +52,7 @@ const Login: React.FC = () => {
         <Grid container rowGap={2}>
           <Grid item xs={12}>
             <Button
+              aria-label='Google button'
               fullWidth
               data-testid='google-button'
               variant='contained'
@@ -70,6 +71,7 @@ const Login: React.FC = () => {
           </Grid>
           <Grid item xs={12}>
             <Button
+              aria-label='Facebook button'
               fullWidth
               data-testid='facebook-button'
               variant='contained'

@@ -45,8 +45,8 @@ const Dialog: React.FC<DialogProps> = ({ cancelButtonText, actionButtonText, wit
       </StyledDialogContent>
       {withActions && (
         <DialogActions>
-          <Button color='secondary' variant='outlined' onClick={onClose}>{t(cancelButtonText!)}</Button>
-          <Button variant='contained' loading={loading} onClick={handleOnAction} autoFocus>{t(actionButtonText!)}</Button>
+          <Button aria-label='Cancel' color='secondary' variant='outlined' onClick={onClose}>{t(cancelButtonText!)}</Button>
+          <Button aria-label='Submit' variant='contained' loading={loading} onClick={handleOnAction} autoFocus>{t(actionButtonText!)}</Button>
         </DialogActions>
       )}
     </MuiDialog>

@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = () => {
       <Toolbar variant='dense' sx={{ paddingX: 3 }}>
         <Grid container alignItems='center'>
           <Grid item xs={1} display='flex' justifyContent='flex-start'>
-            <IconButton data-testid='menu-icon' edge='start' onClick={showSideBar}>
+            <IconButton aria-label='Menu icon' data-testid='menu-icon' edge='start' onClick={showSideBar}>
               <MenuIcon sx={{ color: contrastText }} />
             </IconButton>
           </Grid>
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = () => {
           </Grid>
           <Grid item xs={1} display='flex' justifyContent='flex-end'>
             <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
-              <IconButton edge='end'>
+              <IconButton aria-label='Transactions link' edge='end'>
                 <ListAltIcon sx={{ color: contrastText }} />
               </IconButton>
             </Link>

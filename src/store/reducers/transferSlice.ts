@@ -23,33 +23,33 @@ const initialState: TransferState = {
   deleteStatus: 'idle'
 };
 
-export const getTransfers = createAsyncThunk<Transfer[], void>('transfers/getTransfers', async (_, { dispatch }): Promise<Transfer[]> => {
-  try {
-    const { data } = await axios.get<TransferDTO[]>('transfers');
+export const getTransfers = createAsyncThunk<Transfer[], void, { rejectValue: ErrorResponse }>(
+  'transfers/getTransfers', async (_, { dispatch, rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.get<TransferDTO[]>('transfers');
 
-    if (data) {
-      const { showDecimals } = store.getState().setting;
-      let { accounts } = store.getState().account;
+      if (data) {
+        const { showDecimals } = store.getState().setting;
+        let { accounts } = store.getState().account;
 
-      if (!accounts.length) {
-        await dispatch(getAccounts());
+        if (!accounts.length) {
+          await dispatch(getAccounts());
 
-        accounts = store.getState().account.accounts;
+          accounts = store.getState().account.accounts;
+        }
+
+        return mapTransfers(data, accounts, showDecimals);
       }
 
-      return mapTransfers(data, accounts, showDecimals);
+      return [];
+    } catch (error: any) {
+      return rejectWithValue(error);
     }
-
-    return [];
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
+  });
 
 export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejectValue: ErrorResponse }>(
   'transfers/getTransfer',
-  async (id, { dispatch }): Promise<Transfer> => {
+  async (id, { dispatch, rejectWithValue }): Promise<any> => {
     try {
       const { data } = await axios.get<TransferDTO>(`transfers/${id}`);
 
@@ -67,9 +67,8 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
       }
 
       return {} as Transfer;
-    } catch (error) {
-      console.error(error);
-      return {} as Transfer;
+    } catch (error: any) {
+      return rejectWithValue(error);
     }
   });
 
@@ -82,7 +81,6 @@ export const createTransfer = createAsyncThunk<void, TransferDTO, { rejectValue:
       dispatch(getTransfers());
       dispatch(getAccounts());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -96,7 +94,6 @@ export const editTransfer = createAsyncThunk<void, [Transfer['id'], Omit<Transfe
       dispatch(getTransfers());
       dispatch(getAccounts());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -110,7 +107,6 @@ export const deleteTransfer = createAsyncThunk<void, Transfer['id'], { rejectVal
       dispatch(getTransfers());
       dispatch(getAccounts());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

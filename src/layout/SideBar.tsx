@@ -69,7 +69,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
                 <UserBalanceInfo fullName={user.fullName} avatar={avatar} balance={balance} />
               </Grid>
               <Grid item xs={1}>
-                <IconButton edge='start' color='secondary' onClick={close}>
+                <IconButton aria-label='Close sidebar' edge='start' color='secondary' onClick={close}>
                   <ArrowBackIcon />
                 </IconButton>
               </Grid>

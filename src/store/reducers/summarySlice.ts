@@ -42,7 +42,6 @@ export const getSummary = createAsyncThunk<Summary, Period | undefined, { reject
 
       return {} as Summary;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   }
@@ -57,7 +56,6 @@ export const getBalance = createAsyncThunk<Summary['balance'], void, { rejectVal
 
       return mapBalance(data, defaultCurrency.iso, showDecimals) || '0';
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

@@ -169,7 +169,7 @@ const Settings: React.FC = () => {
                   value={iso}
                   key={iso}
                 >
-                  <LocaleInfoItem locale={{iso, displayName}} />
+                  <LocaleInfoItem locale={{ iso, displayName }} />
                 </MenuItem>
               ))}
             </Select>
@@ -212,7 +212,14 @@ const Settings: React.FC = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button color='secondary' variant='contained' sx={{ width: { sm: 'auto', xs: '100%' } }} onClick={handleOpenDialog}>{t('SETTINGS.RESET')}</Button>
+          <Button
+            aria-label='Reset settings'
+            color='secondary'
+            variant='contained'
+            sx={{ width: { sm: 'auto', xs: '100%' } }}
+            onClick={handleOpenDialog}>
+            {t('SETTINGS.RESET')}
+          </Button>
         </Grid>
       </Grid>
       <Dialog

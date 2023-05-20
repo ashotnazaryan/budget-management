@@ -68,7 +68,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginY: 1 }}>
-          <IconButton onClick={onAddTransaction}>
+          <IconButton aria-label='New transaction' onClick={onAddTransaction}>
             <AddIcon sx={{ color: contrastText }} fontSize='large' />
           </IconButton>
         </Grid>

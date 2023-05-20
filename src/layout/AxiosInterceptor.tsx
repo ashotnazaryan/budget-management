@@ -31,7 +31,7 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
         removeFromLocalStorage(AUTH_KEY);
         dispatch(logout());
 
-        return Promise.reject(error);
+        return Promise.reject(error.response?.data);
       }
 
       if (!error.isAxiosError) {

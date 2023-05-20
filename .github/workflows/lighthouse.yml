@@ -17,8 +17,13 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           urls: |
+            https://budget-management.up.railway.app/login
             https://budget-management.up.railway.app
             https://budget-management.up.railway.app/dashboard
+            https://budget-management.up.railway.app/transactions
+            https://budget-management.up.railway.app/accounts
+            https://budget-management.up.railway.app/categories
+            https://budget-management.up.railway.app/settings
           budgetPath: ./budget.json
           uploadArtifacts: true
           temporaryPublicStorage: true

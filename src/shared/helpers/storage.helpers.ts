@@ -12,7 +12,6 @@ export const getFromLocalStorage = <T>(key: string) => {
   try {
     return JSON.parse(data) as T;
   } catch (error) {
-    console.error(error);
     return {} as T;
   }
 };

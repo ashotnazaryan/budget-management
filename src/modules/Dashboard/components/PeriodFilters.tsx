@@ -46,6 +46,7 @@ const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter 
   const renderPeriodButton = (period: PeriodButton['period'], label: PeriodButton['label']): React.ReactElement => {
     return (
       <Button
+        aria-label='Period'
         key={period}
         variant={selectedPeriod === period ? 'contained' : 'text'}
         color='secondary'

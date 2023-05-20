@@ -36,6 +36,7 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) 
       <Grid container item display='flex' justifyContent='space-between' rowGap={2}>
         <Grid item sm={6} xs={12} display='flex' justifyContent='center'>
           <Button
+            aria-label='New transfer'
             color='secondary'
             variant='contained'
             startIcon={<Icon name={IconType.currencyExchange}></Icon>}
@@ -46,6 +47,7 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) 
         </Grid>
         <Grid item sm={6} xs={12} display='flex' justifyContent='center'>
           <Button
+            aria-label='Transfer history'
             color='secondary'
             variant='outlined'
             startIcon={<Icon name={IconType.history}></Icon>}

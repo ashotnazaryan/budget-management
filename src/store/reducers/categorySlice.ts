@@ -23,20 +23,20 @@ const initialState: CategoryState = {
   deleteStatus: 'idle'
 };
 
-export const getCategories = createAsyncThunk<Category[], void>('categories/getCategories', async (): Promise<Category[]> => {
-  try {
-    const { data } = await axios.get<CategoryDTO[]>('categories');
+export const getCategories = createAsyncThunk<Category[], void, { rejectValue: ErrorResponse }>(
+  'categories/getCategories', async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const { data } = await axios.get<CategoryDTO[]>('categories');
 
-    if (data) {
-      return mapCategories(data);
+      if (data) {
+        return mapCategories(data);
+      }
+
+      return [];
+    } catch (error: any) {
+      return rejectWithValue(error);
     }
-
-    return [];
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-});
+  });
 
 export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejectValue: ErrorResponse }>(
   'categories/getCategory',
@@ -50,7 +50,6 @@ export const getCategory = createAsyncThunk<Category, CategoryDTO['id'], { rejec
 
       return {} as Category;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -63,7 +62,6 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
 
       dispatch(getCategories());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -78,7 +76,6 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
       dispatch(getSummary());
       dispatch(getTransactions());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -93,7 +90,6 @@ export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectVal
       dispatch(getSummary());
       dispatch(getTransactions());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

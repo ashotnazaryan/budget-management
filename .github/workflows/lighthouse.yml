@@ -1,0 +1,24 @@
+name: Lighthouse Report
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://budget-management.up.railway.app
+            https://budget-management.up.railway.app/dashboard
+          budgetPath: ./budget.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

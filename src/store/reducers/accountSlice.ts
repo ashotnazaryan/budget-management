@@ -39,7 +39,6 @@ export const getAccounts = createAsyncThunk<Account[], void, { rejectValue: Erro
 
       return [];
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -58,7 +57,6 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
 
       return {} as Account;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -72,7 +70,6 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
       dispatch(getAccounts());
       dispatch(getSummary());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -87,7 +84,6 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
       dispatch(getSummary());
       dispatch(getTransactions());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -103,7 +99,6 @@ export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue
       dispatch(getTransactions());
       dispatch(getTransfers());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

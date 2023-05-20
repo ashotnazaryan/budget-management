@@ -28,7 +28,6 @@ export const getUserInfo = createAsyncThunk<User, void, { rejectValue: ErrorResp
 
       return initialState;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

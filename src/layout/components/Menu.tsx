@@ -35,7 +35,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
         <ListItem onClick={close} sx={{ padding: 0 }}>
           <ListItemText>
             <Link to={ROUTES.dashboard.path}>
-              <Button color='secondary' fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
+              <Button aria-label='Dashboard link' color='secondary' fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.dashboard.name)}
               </Button>
             </Link>
@@ -44,7 +44,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
         <ListItem onClick={close} sx={{ padding: 0 }}>
           <ListItemText>
             <Link to={ROUTES.accounts.path}>
-              <Button color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
+              <Button aria-label='Accounts link' color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.accounts.name)}
               </Button>
             </Link>
@@ -53,7 +53,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
         <ListItem onClick={close} sx={{ padding: 0 }}>
           <ListItemText>
             <Link to={ROUTES.categories.path}>
-              <Button color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
+              <Button aria-label='Categories link' color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.categories.name)}
               </Button>
             </Link>
@@ -62,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
         <ListItem onClick={close} sx={{ padding: 0 }}>
           <ListItemText>
             <Link to={ROUTES.settings.path}>
-              <Button color='secondary' fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
+              <Button aria-label='Settings link' color='secondary' fullWidth startIcon={<SettingsIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.settings.name)}
               </Button>
             </Link>
@@ -71,7 +71,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
       </Box>
       <ListItem onClick={openDialog} sx={{ padding: 0 }}>
         <ListItemText>
-          <Button fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
+          <Button aria-label='Logout' fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
             {t('SIDEBAR.LOGOUT')}
           </Button>
         </ListItemText>

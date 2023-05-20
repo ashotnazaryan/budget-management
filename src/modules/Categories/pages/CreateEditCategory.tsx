@@ -270,8 +270,8 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       <PageTitle
         withBackButton
         withEditButton={isViewMode && !!category}
-        withDeleteButton={isEditMode  && !!category}
-        withCancelButton={!isViewMode  && !!category}
+        withDeleteButton={isEditMode && !!category}
+        withCancelButton={!isViewMode && !!category}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
@@ -284,7 +284,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       {!isViewMode && (
         <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
           <Grid item sm='auto' xs={12}>
-            <Button fullWidth type='submit' variant='contained' loading={loading}
+            <Button aria-label='Save category' fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>
               {t('COMMON.SAVE')}
             </Button>

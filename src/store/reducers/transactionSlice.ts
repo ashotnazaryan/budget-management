@@ -38,7 +38,6 @@ export const getTransactions = createAsyncThunk<Transaction[], void, { rejectVal
 
       return [];
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -57,7 +56,6 @@ export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id']
 
       return {} as Transaction;
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -71,7 +69,6 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
       dispatch(getSummary());
       dispatch(getTransactions());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -85,7 +82,6 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
       dispatch(getTransactions());
       dispatch(getSummary());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });
@@ -100,7 +96,6 @@ export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rej
       dispatch(getSummary());
       dispatch(getAccounts());
     } catch (error: any) {
-      console.error(error);
       return rejectWithValue(error);
     }
   });

@@ -7,20 +7,32 @@ import { useTranslation } from 'core/i18n';
 import { lightTheme, darkTheme } from 'core/theme.config';
 import { useAppSelector } from 'store';
 import { selectSettings } from 'store/reducers';
-import { ProtectedLayout } from 'layout/ProtectedLayout';
 import { ROUTES } from 'shared/constants';
-import Login from './Login';
-import Main from './Dashboard/Main';
-import Settings from './Settings';
-import Transactions from './Transactions/Transactions';
-import Categories from './Categories/Categories';
-import Accounts from './Accounts/Accounts';
-import Transfers from './Transfers/Transfers';
+import { ProtectedLayout } from 'layout/ProtectedLayout';
+import Loading from 'layout/Loading';
 
 const App: React.FC = () => {
   const { isDarkTheme, locale: { iso } } = useAppSelector(selectSettings);
   const appTheme = isDarkTheme ? darkTheme : lightTheme;
   const { i18n } = useTranslation();
+
+  const createLazyComponent = (importFunc: any): React.ReactElement => {
+    const Component = React.lazy(importFunc);
+
+    return (
+      <React.Suspense fallback={<Loading />}>
+        <Component />
+      </React.Suspense>
+    );
+  };
+
+  const Login = createLazyComponent(() => import('./Login'));
+  const Main = createLazyComponent(() => import('./Dashboard/Main'));
+  const Settings = createLazyComponent(() => import('./Settings'));
+  const Transactions = createLazyComponent(() => import('./Transactions/Transactions'));
+  const Categories = createLazyComponent(() => import('./Categories/Categories'));
+  const Accounts = createLazyComponent(() => import('./Accounts/Accounts'));
+  const Transfers = createLazyComponent(() => import('./Transfers/Transfers'));
 
   React.useEffect(() => {
     i18n.changeLanguage(iso);
@@ -31,15 +43,15 @@ const App: React.FC = () => {
     <ThemeProvider theme={appTheme}>
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Routes>
-          <Route path={ROUTES.login.path} element={<Login />} />
+          <Route path={ROUTES.login.path} element={Login} />
           <Route path={ROUTES.home.path} element={<ProtectedLayout />}>
             <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
-            <Route path={`${ROUTES.dashboard.path}/*`} element={<Main />} />
-            <Route path={ROUTES.settings.path} element={<Settings />} />
-            <Route path={`${ROUTES.transactions.path}/*`} element={<Transactions />} />
-            <Route path={`${ROUTES.categories.path}/*`} element={<Categories />} />
-            <Route path={`${ROUTES.accounts.path}/*`} element={<Accounts />} />
-            <Route path={`${ROUTES.transfers.path}/*`} element={<Transfers />} />
+            <Route path={`${ROUTES.dashboard.path}/*`} element={Main} />
+            <Route path={ROUTES.settings.path} element={Settings} />
+            <Route path={`${ROUTES.transactions.path}/*`} element={Transactions} />
+            <Route path={`${ROUTES.categories.path}/*`} element={Categories} />
+            <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />
+            <Route path={`${ROUTES.transfers.path}/*`} element={Transfers} />
             <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
           </Route>
         </Routes>

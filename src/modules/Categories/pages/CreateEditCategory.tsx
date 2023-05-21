@@ -122,9 +122,13 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const getTitle = (): string => {
     if (isCreateMode) {
       return t('CATEGORIES.NEW_CATEGORY');
-    } else if (category && (isEditMode || isViewMode)) {
+    }
+
+    if (category && (isEditMode || isViewMode)) {
       return categoryName;
-    } else if (currentStatus !== 'loading') {
+    }
+
+    if (currentStatus !== 'loading') {
       return t('CATEGORIES.EMPTY_TITLE');
     }
 

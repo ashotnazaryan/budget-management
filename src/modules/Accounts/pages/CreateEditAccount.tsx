@@ -124,9 +124,13 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const getTitle = (): string => {
     if (isCreateMode) {
       return t('ACCOUNTS.NEW_ACCOUNT');
-    } else if (account && (isEditMode || isViewMode)) {
+    }
+
+    if (account && (isEditMode || isViewMode)) {
       return accountName;
-    } else if (currentStatus !== 'loading') {
+    }
+
+    if (currentStatus !== 'loading') {
       return t('ACCOUNTS.EMPTY_TITLE');
     }
 

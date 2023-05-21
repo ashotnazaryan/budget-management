@@ -51,7 +51,7 @@ const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter 
         variant={selectedPeriod === period ? 'contained' : 'text'}
         color='secondary'
         capitalize={false}
-        sx={{ fontSize: 13, paddingX: 1 }}
+        sx={{ fontSize: { sm: 13, xs: 11 }, paddingX: 1 }}
         onClick={() => onFilter(period)}
       >
         {label}

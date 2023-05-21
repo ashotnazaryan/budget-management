@@ -31,7 +31,7 @@ const Skeleton: React.FC<SkeletonProps> = ({ type, ...props }) => {
 
   return isCircular
     ? (
-      <Grid container columnGap={4}>
+      <Grid container columnGap={4} rowGap={4}>
         <Grid item width={100} display='flex' justifyContent='center'>
           <MuiSkeleton {...props} variant='circular' height={getSize().firstBar} width={getSize().firstBar} />
         </Grid>

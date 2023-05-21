@@ -13,9 +13,7 @@ import PageTitle from 'shared/components/PageTitle';
 import CategoryIcon from 'shared/components/CategoryIcon';
 import EmptyState from 'shared/components/EmptyState';
 
-interface CategoryListProps { }
-
-const CategoryList: React.FC<CategoryListProps> = () => {
+const CategoryList: React.FC<{}> = () => {
   const tabs = TABS;
   const dispatch = useAppDispatch();
   const { categories, status } = useAppSelector(selectCategory);
@@ -32,7 +30,7 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   };
 
   React.useEffect(() => {
-    if (status === 'idle' || status === 'failed') {
+    if (status === 'idle') {
       dispatch(getCategories());
     }
   }, [dispatch, status]);
@@ -57,25 +55,32 @@ const CategoryList: React.FC<CategoryListProps> = () => {
   };
 
   const renderContent = (): React.ReactElement => {
-    if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='circular' sx={{ marginTop: 1 }} />;
+    if (status === 'loading') {
+      return (
+        <Grid item xs={12}>
+          <Skeleton type='circular' sx={{ marginTop: 1 }} />
+        </Grid>
+      );
     }
 
-    if (!categories?.length) {
-      return <EmptyState text={t('CATEGORIES.EMPTY_TEXT')} />;
+    if ((status === 'failed' || status === 'succeeded') && !categories?.length) {
+      return (
+        <Grid item xs={12}>
+          <EmptyState text={t('CATEGORIES.EMPTY_TEXT')} />
+        </Grid>
+      );
     }
 
     return (
-      <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
-        {categories.filter(({ type }) => String(type) === categoryType).map((category) => (
-          <Grid item key={category.id}>
-            <CategoryIcon data={getCategoryData(category)} onItemClick={handleCategoryIconClick} />
-          </Grid>
-        ))}
-        <Grid item>
-          <CategoryIcon data={getCategoryData(addIconData)} onItemClick={openNewCategoryPage} />
-        </Grid>
-      </Grid>
+      <>
+        {categories
+          .filter(({ type }) => String(type) === categoryType)
+          .map((category) => (
+            <Grid item key={category.id}>
+              <CategoryIcon data={getCategoryData(category)} onItemClick={handleCategoryIconClick} />
+            </Grid>
+          ))}
+      </>
     );
   };
 
@@ -83,7 +88,12 @@ const CategoryList: React.FC<CategoryListProps> = () => {
     <Box flexGrow={1}>
       <PageTitle text={t('CATEGORIES.PAGE_TITLE')} />
       <Tabs centered defaultValue={categoryType} tabs={tabs} onChange={handleTabChange} sx={{ marginBottom: 3 }} />
-      {renderContent()}
+      <Grid container columnGap={4} rowGap={4} sx={{ marginTop: 4 }}>
+        {renderContent()}
+        <Grid item>
+          <CategoryIcon data={getCategoryData(addIconData)} onItemClick={openNewCategoryPage} />
+        </Grid>
+      </Grid>
     </Box>
   );
 };

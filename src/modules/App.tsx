@@ -10,6 +10,7 @@ import { selectSettings } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
 import Loading from 'layout/Loading';
+import Settings from './Settings';
 
 const App: React.FC = () => {
   const { isDarkTheme, locale: { iso } } = useAppSelector(selectSettings);
@@ -28,7 +29,6 @@ const App: React.FC = () => {
 
   const Login = createLazyComponent(() => import('./Login'));
   const Main = createLazyComponent(() => import('./Dashboard/Main'));
-  const Settings = createLazyComponent(() => import('./Settings'));
   const Transactions = createLazyComponent(() => import('./Transactions/Transactions'));
   const Categories = createLazyComponent(() => import('./Categories/Categories'));
   const Accounts = createLazyComponent(() => import('./Accounts/Accounts'));
@@ -47,7 +47,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.home.path} element={<ProtectedLayout />}>
             <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
             <Route path={`${ROUTES.dashboard.path}/*`} element={Main} />
-            <Route path={ROUTES.settings.path} element={Settings} />
+            <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={`${ROUTES.transactions.path}/*`} element={Transactions} />
             <Route path={`${ROUTES.categories.path}/*`} element={Categories} />
             <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />

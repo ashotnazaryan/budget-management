@@ -9,7 +9,7 @@ import { IconType } from 'shared/models';
 import Button from 'shared/components/Button';
 import Icon from 'shared/components/Icon';
 
-const Login: React.FC = () => {
+const Login: React.FC<{}> = () => {
   const { palette: { info: { main, contrastText } } } = useTheme();
   const { t } = useTranslation();
 

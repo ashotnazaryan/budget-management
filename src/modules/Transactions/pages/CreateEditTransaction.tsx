@@ -184,9 +184,13 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const getTitle = (): string => {
     if (isCreateMode) {
       return t('TRANSACTIONS.NEW_TRANSACTION');
-    } else if (transaction && (isEditMode || isViewMode)) {
+    }
+
+    if (transaction && (isEditMode || isViewMode)) {
       return transactionName;
-    } else if (currentStatus !== 'loading') {
+    }
+
+    if (currentStatus !== 'loading' && !transaction) {
       return t('TRANSACTIONS.EMPTY_TITLE');
     }
 

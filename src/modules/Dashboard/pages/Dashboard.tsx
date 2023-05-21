@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
+import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType, Period, Option } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
 import { selectSummary, getSummary, setActivePeriodFilter } from 'store/reducers';
+import EmptyState from 'shared/components/EmptyState';
 import Summary from '../components/Summary';
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC<{}> = () => {
   const tabs = TABS;
   const navigate = useNavigate();
   const { incomes, expenses, profit, categoryExpenseTransactions, categoryIncomeTransactions, status, activePeriodFilter } = useAppSelector(selectSummary);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [categoryType, setCategoryType] = React.useState<Option['value']>(String(CategoryType.expense));
   const transactions = categoryType === String(CategoryType.expense) ? categoryExpenseTransactions : categoryIncomeTransactions;
 
@@ -37,8 +40,16 @@ const Dashboard: React.FC = () => {
   };
 
   const renderContent = (): React.ReactElement => {
-    if (status === 'loading' || status !== 'succeeded') {
+    if (status === 'idle') {
+      return <></>;
+    }
+
+    if (status === 'loading') {
       return <Skeleton type='summary' />;
+    }
+
+    if (status === 'failed') {
+      return <EmptyState text={t('DASHBOARD.EMPTY_TEXT')} />;
     }
 
     return (

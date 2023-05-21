@@ -12,9 +12,7 @@ import PageTitle from 'shared/components/PageTitle';
 import EmptyState from 'shared/components/EmptyState';
 import Transfer from '../components/Transfer';
 
-interface TransferListProps { }
-
-const TransferList: React.FC<TransferListProps> = () => {
+const TransferList: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { transfers, status } = useAppSelector(selectTransfer);
   const navigate = useNavigate();
@@ -39,22 +37,30 @@ const TransferList: React.FC<TransferListProps> = () => {
   };
 
   React.useEffect(() => {
-    if (status === 'idle' || status === 'failed') {
+    if (status === 'idle') {
       dispatch(getTransfers());
     }
   }, [dispatch, status]);
 
   const renderContent = (): React.ReactElement => {
-    if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='list' />;
+    if (status === 'loading') {
+      return (
+        <Grid item xs={12}>
+          <Skeleton type='list' />
+        </Grid>
+      );
     }
 
-    if (!transfers?.length) {
-      return <EmptyState text={t('TRANSFERS.EMPTY_TEXT')} />;
+    if ((status === 'failed' || status === 'succeeded') && !transfers?.length) {
+      return (
+        <Grid item xs={12}>
+          <EmptyState text={t('TRANSFERS.EMPTY_TEXT')} />
+        </Grid>
+      );
     }
 
     return (
-      <Grid container rowGap={2}>
+      <>
         {
           transfers.map((transfer) => (
             <Grid item key={transfer.id} xs={12}>
@@ -62,14 +68,16 @@ const TransferList: React.FC<TransferListProps> = () => {
             </Grid>
           ))
         }
-      </Grid>
+      </>
     );
   };
 
   return (
     <Box flexGrow={1}>
       <PageTitle withBackButton text={t('TRANSFERS.PAGE_TITLE')} onBackButtonClick={goBack} />
-      {renderContent()}
+      <Grid container rowGap={2}>
+        {renderContent()}
+      </Grid>
     </Box>
   );
 };

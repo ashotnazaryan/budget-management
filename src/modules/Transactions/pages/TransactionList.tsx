@@ -12,16 +12,14 @@ import PageTitle from 'shared/components/PageTitle';
 import EmptyState from 'shared/components/EmptyState';
 import Transaction from '../components/Transaction';
 
-interface TransactionListProps { }
-
-const TransactionList: React.FC<TransactionListProps> = () => {
+const TransactionList: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { transactions, status } = useAppSelector(selectTransaction);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    if (status === 'idle' || status === 'failed') {
+    if (status === 'idle') {
       dispatch(getTransactions());
     }
   }, [dispatch, status]);
@@ -39,16 +37,24 @@ const TransactionList: React.FC<TransactionListProps> = () => {
   };
 
   const renderContent = (): React.ReactElement => {
-    if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='list' />;
+    if (status === 'loading') {
+      return (
+        <Grid item xs={12}>
+          <Skeleton type='list' />
+        </Grid>
+      );
     }
 
-    if (!transactions?.length) {
-      return <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT')} />;
+    if ((status === 'failed' || status === 'succeeded') && !transactions?.length) {
+      return (
+        <Grid item xs={12}>
+          <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT')} />
+        </Grid>
+      );
     }
 
     return (
-      <Grid container rowGap={2}>
+      <>
         {
           transactions.map((transaction) => (
             <Grid item key={transaction.id} xs={12}>
@@ -56,14 +62,16 @@ const TransactionList: React.FC<TransactionListProps> = () => {
             </Grid>
           ))
         }
-      </Grid>
+      </>
     );
   };
 
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('TRANSACTIONS.PAGE_TITLE')} />
-      {renderContent()}
+      <Grid container rowGap={2}>
+        {renderContent()}
+      </Grid>
     </Box>
   );
 };

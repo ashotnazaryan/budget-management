@@ -15,9 +15,7 @@ import EmptyState from 'shared/components/EmptyState';
 import Account from '../components/Account';
 import TransferButtons from '../components/TransferButtons';
 
-interface AccountListProps { }
-
-const AccountList: React.FC<AccountListProps> = () => {
+const AccountList: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { accounts, status } = useAppSelector(selectAccount);
   const { balance, balanceStatus } = useAppSelector(selectSummary);
@@ -25,7 +23,7 @@ const AccountList: React.FC<AccountListProps> = () => {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    if (status === 'idle' || status === 'failed') {
+    if (status === 'idle') {
       dispatch(getAccounts());
     }
   }, [dispatch, status]);
@@ -46,33 +44,36 @@ const AccountList: React.FC<AccountListProps> = () => {
   };
 
   React.useEffect(() => {
-    if (balanceStatus === 'idle' || balanceStatus === 'failed') {
+    if (balanceStatus === 'idle') {
       dispatch(getBalance());
     }
   }, [dispatch, balanceStatus]);
 
   const renderContent = (): React.ReactElement => {
-    if (status === 'loading' || status !== 'succeeded') {
-      return <Skeleton type='list' />;
+    if (status === 'loading') {
+      return (
+        <Grid item xs={12}>
+          <Skeleton type='list' sx={{ marginTop: 1 }} />
+        </Grid>
+      );
     }
 
-    if (!accounts?.length) {
-      return <EmptyState text={t('ACCOUNTS.EMPTY_TEXT')!} />;
+    if ((status === 'failed' || status === 'succeeded') && !accounts?.length) {
+      return (
+        <Grid item xs={12}>
+          <EmptyState text={t('ACCOUNTS.EMPTY_TEXT')} />
+        </Grid>
+      );
     }
 
     return (
-      <Grid container rowGap={2} sx={{ marginTop: 4 }}>
+      <>
         {accounts.map((account) => (
           <Grid item key={account.id} xs={12}>
             <Account data={getAccountData(account)} onClick={handleAccountItemClick} />
           </Grid>
         ))}
-        <Grid item xs={12} display='flex' justifyContent='flex-end'>
-          <IconButton color='primary' onClick={openNewAccountPage} sx={{ alignSelf: 'flex-end' }}>
-            <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
-          </IconButton>
-        </Grid>
-      </Grid>
+      </>
     );
   };
 
@@ -80,7 +81,14 @@ const AccountList: React.FC<AccountListProps> = () => {
     <Box flexGrow={1}>
       <TransferButtons balance={balance} sx={{ marginTop: 2, marginBottom: 4 }} />
       <PageTitle text={t('ACCOUNTS.PAGE_TITLE')} sx={{ marginBottom: 4 }} />
-      {renderContent()}
+      <Grid container rowGap={2} sx={{ marginTop: 4 }}>
+        {renderContent()}
+        <Grid item xs={12} display='flex' justifyContent='flex-end'>
+          <IconButton color='primary' onClick={openNewAccountPage} sx={{ alignSelf: 'flex-end' }}>
+            <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
+          </IconButton>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

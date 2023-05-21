@@ -2,7 +2,7 @@ import * as React from 'react';
 import axios from 'core/axios';
 import { useAppDispatch } from 'store';
 import { AUTH_KEY } from 'shared/constants';
-import { getFromLocalStorage, removeFromLocalStorage } from 'shared/helpers';
+import { getFromLocalStorage } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { removeUser, logout } from 'store/reducers';
 
@@ -28,7 +28,6 @@ const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children
     async (error) => {
       if (error.response?.status === 401) {
         dispatch(removeUser());
-        removeFromLocalStorage(AUTH_KEY);
         dispatch(logout());
 
         return Promise.reject(error.response?.data);

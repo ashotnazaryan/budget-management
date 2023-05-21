@@ -22,7 +22,7 @@ import AccountOption from 'shared/components/AccountOption';
 import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
 import LocaleInfoItem from 'shared/components/LocaleInfoItem';
 
-const Settings: React.FC = () => {
+const Settings: React.FC<{}> = () => {
   const currencies = CURRENCIES;
   const locales = LOCALES;
   const periodOptions = PERIOD_OPTIONS;
@@ -88,7 +88,7 @@ const Settings: React.FC = () => {
   }, [status, dispatch]);
 
   React.useEffect(() => {
-    if (accountStatus === 'idle' || accountStatus === 'failed') {
+    if (accountStatus === 'idle') {
       dispatch(getAccounts());
     }
   }, [dispatch, accountStatus]);

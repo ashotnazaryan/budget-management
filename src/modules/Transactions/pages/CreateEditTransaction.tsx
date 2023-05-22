@@ -21,16 +21,16 @@ import {
   selectSettings,
   selectCurrentTransaction,
   getTransaction,
-  resetCurrentTransaction,
   editTransaction,
   selectCategoryStatus,
   selectAccountStatus,
   deleteTransaction,
-  selectTransactionError
+  selectTransactionError,
+  resetGetTransactionStatus
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode, Transaction, IconType } from 'shared/models';
 import { TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { getAccountLabel, mapCategoryTypesWithTranslations, mapCurrencyStringToInputString, transactionHelper } from 'shared/helpers';
+import { getAccountLabel, getPageTitle, mapCategoryTypesWithTranslations, mapCurrencyStringToInputString, transactionHelper } from 'shared/helpers';
 import FormInput from 'shared/components/FormInput';
 import Button from 'shared/components/Button';
 import Snackbar from 'shared/components/Snackbar';
@@ -56,7 +56,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const { state } = useLocation();
   const { categories } = useAppSelector(selectCategory);
   const categoryStatus = useAppSelector(selectCategoryStatus);
-  const { status, currentStatus, deleteStatus } = useAppSelector(selectTransaction);
+  const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectTransaction);
   const error = useAppSelector(selectTransactionError);
   const { accounts } = useAppSelector(selectAccount);
   const accountStatus = useAppSelector(selectAccountStatus);
@@ -69,7 +69,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const loading = status === 'loading';
+  const loading = createEditStatus === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const transactionId = state?.id as TransactionDTO['id'];
   const transactionName = transaction?.nameKey ? t(transaction.nameKey) : (transaction?.name || '');
@@ -77,6 +77,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
+  const title = getPageTitle<Transaction>(mode, t, getStatus, 'TRANSACTIONS', 'NEW_TRANSACTION', 'EMPTY_TITLE', transaction);
 
   const defaultValues: Partial<Transaction> = {
     amount: '',
@@ -181,22 +182,6 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     navigate(`${ROUTES.transactions.path}/edit/${transactionName}`, { state: { id: transactionId } });
   };
 
-  const getTitle = (): string => {
-    if (isCreateMode) {
-      return t('TRANSACTIONS.NEW_TRANSACTION');
-    }
-
-    if (transaction && (isEditMode || isViewMode)) {
-      return transactionName;
-    }
-
-    if (currentStatus !== 'loading' && !transaction) {
-      return t('TRANSACTIONS.EMPTY_TITLE');
-    }
-
-    return '';
-  };
-
   const setFormValues = React.useCallback(() => {
     if (transaction) {
       setValue(TransactionField.categoryId, transaction.categoryId);
@@ -211,7 +196,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [transaction, setValue]);
 
   const resetTransaction = React.useCallback(() => {
-    dispatch(resetCurrentTransaction());
+    dispatch(resetGetTransactionStatus());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
@@ -230,16 +215,16 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [dispatch, categoryStatus, accountStatus]);
 
   React.useEffect(() => {
-    if (status === 'succeeded' && formSubmitted) {
+    if (createEditStatus === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
       dispatch(getAccounts());
     }
 
-    if (status === 'failed' && formSubmitted) {
+    if (createEditStatus === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
-  }, [dispatch, goBack, status, formSubmitted]);
+  }, [dispatch, goBack, createEditStatus, formSubmitted]);
 
   React.useEffect(() => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
@@ -253,10 +238,10 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (transactionId && currentStatus === 'idle' && !isCreateMode && !deleteClicked) {
+    if (transactionId && getStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getTransaction(transactionId));
     }
-  }, [transactionId, isCreateMode, currentStatus, dispatch, deleteClicked]);
+  }, [transactionId, isCreateMode, getStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setValue(TransactionField.accountId, defaultAccount);
@@ -273,7 +258,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [resetTransaction]);
 
   const renderContent = (): React.ReactElement => {
-    if (currentStatus === 'loading') {
+    if (getStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
@@ -404,7 +389,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
         withEditButton={isViewMode && !!transaction}
         withDeleteButton={isEditMode && !!transaction}
         withCancelButton={!isViewMode && !!transaction}
-        text={getTitle()}
+        text={title}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}

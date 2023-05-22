@@ -5,15 +5,16 @@ import { Account, AccountDTO, ErrorResponse, StatusState } from 'shared/models';
 import { mapAccount, mapAccounts } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
-import { getSummary } from './summarySlice';
-import { getTransactions } from './transactionSlice';
-import { getTransfers } from './transferSlice';
+import { resetSummaryStatus } from './summarySlice';
+import { resetTransactionsStatus } from './transactionSlice';
+import { resetTransfersStatus } from './transferSlice';
 
 export interface AccountState {
   accounts: Account[];
   status: StatusState;
+  getStatus: StatusState;
+  createEditStatus: StatusState;
   deleteStatus: StatusState;
-  currentStatus: StatusState;
   currentAccount?: Account;
   error?: ErrorResponse;
 }
@@ -21,7 +22,8 @@ export interface AccountState {
 const initialState: AccountState = {
   accounts: [],
   status: 'idle',
-  currentStatus: 'idle',
+  getStatus: 'idle',
+  createEditStatus: 'idle',
   deleteStatus: 'idle'
 };
 
@@ -67,8 +69,8 @@ export const createAccount = createAsyncThunk<void, AccountDTO, { rejectValue: E
     try {
       await axios.post<void>('accounts/account', account);
 
-      dispatch(getAccounts());
-      dispatch(getSummary());
+      dispatch(resetAccountsStatus());
+      dispatch(resetSummaryStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -80,9 +82,9 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
     try {
       await axios.put<void>(`accounts/${id}`, account);
 
-      dispatch(getAccounts());
-      dispatch(getSummary());
-      dispatch(getTransactions());
+      dispatch(resetAccountsStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetTransactionsStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -94,10 +96,10 @@ export const deleteAccount = createAsyncThunk<void, Account['id'], { rejectValue
     try {
       await axios.delete<void>(`accounts/${id}`);
 
-      dispatch(getAccounts());
-      dispatch(getSummary());
-      dispatch(getTransactions());
-      dispatch(getTransfers());
+      dispatch(resetAccountsStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetTransactionsStatus());
+      dispatch(resetTransfersStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -107,17 +109,17 @@ export const accountSlice = createSlice({
   name: 'accounts',
   initialState,
   reducers: {
-    resetCurrentAccount(state): AccountState {
-      return {
-        ...state,
-        currentAccount: initialState.currentAccount,
-        currentStatus: initialState.currentStatus
-      };
-    },
-    resetAccountStatus(state): AccountState {
+    resetAccountsStatus(state): AccountState {
       return {
         ...state,
         status: initialState.status
+      };
+    },
+    resetGetAccountStatus(state): AccountState {
+      return {
+        ...state,
+        currentAccount: initialState.currentAccount,
+        getStatus: initialState.getStatus
       };
     }
   },
@@ -145,13 +147,13 @@ export const accountSlice = createSlice({
       .addCase(getAccount.pending, (state): AccountState => {
         return {
           ...state,
-          currentStatus: 'loading'
+          getStatus: 'loading'
         };
       })
       .addCase(getAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
-          currentStatus: 'failed',
+          getStatus: 'failed',
           error: action.payload
         };
       })
@@ -159,45 +161,45 @@ export const accountSlice = createSlice({
         return {
           ...state,
           currentAccount: action.payload,
-          currentStatus: 'succeeded'
+          getStatus: 'succeeded'
         };
       })
       .addCase(createAccount.pending, (state): AccountState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(createAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
-          status: 'failed',
+          createEditStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(createAccount.fulfilled, (state): AccountState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(editAccount.pending, (state): AccountState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(editAccount.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): AccountState => {
         return {
           ...state,
-          status: 'failed',
+          createEditStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(editAccount.fulfilled, (state): AccountState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(deleteAccount.pending, (state): AccountState => {
@@ -230,5 +232,5 @@ export const selectAccountStatus = (state: RootState): AccountState['status'] =>
 export const selectAccountError = (state: RootState): AccountState['error'] => state.account.error;
 export const selectCurrentAccount = (state: RootState): AccountState['currentAccount'] => state.account.currentAccount;
 
-export const { resetCurrentAccount, resetAccountStatus } = accountSlice.actions;
+export const { resetGetAccountStatus, resetAccountsStatus } = accountSlice.actions;
 export default accountSlice.reducer;

@@ -53,7 +53,7 @@ const AccountList: React.FC<{}> = () => {
     if (status === 'loading') {
       return (
         <Grid item xs={12}>
-          <Skeleton type='list' sx={{ marginTop: 1 }} />
+          <Skeleton type='list' />
         </Grid>
       );
     }

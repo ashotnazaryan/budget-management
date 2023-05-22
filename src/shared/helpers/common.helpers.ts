@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
-import { Currency, DateRange, Locale, Period, Option, CountryCode } from 'shared/models';
+import { Currency, DateRange, Locale, Period, Option, CountryCode, ManageMode, StatusState } from 'shared/models';
 
 const getDateRangeForPeriod = (period: Period): DateRange => {
   const now = date();
@@ -157,4 +157,26 @@ export const getQueryParamByPeriod = (period: Period): string => {
   const { fromDate, toDate } = getDateRangeForPeriod(period);
 
   return `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`;
+};
+
+export const getPageTitle = <T extends { name: string, nameKey?: string }>(
+  mode: ManageMode, t: TFunction, status: StatusState, translationNameSpace: string, newItemKey: string, emptyTitleKey: string, data?: T
+): string => {
+  if (status === 'loading') {
+    return '';
+  }
+
+  if (mode === ManageMode.create) {
+    return t(`${translationNameSpace}.${newItemKey}`);
+  }
+
+  if (data && (mode === ManageMode.edit || mode === ManageMode.view)) {
+    return data?.nameKey ? t(data.nameKey) : (data?.name || '');
+  }
+
+  if (status === 'succeeded' || status === 'failed' || !data) {
+    return t(`${translationNameSpace}.${emptyTitleKey}`);
+  }
+
+  return '';
 };

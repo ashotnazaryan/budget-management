@@ -7,8 +7,8 @@ import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp, setAppStatus } from './appSlice';
 import { getBalance, resetSummaryStatus, setActivePeriodFilter } from './summarySlice';
-import { resetTransactionStatus } from './transactionSlice';
-import { resetAccountStatus } from './accountSlice';
+import { resetTransactionsStatus } from './transactionSlice';
+import { resetAccountsStatus } from './accountSlice';
 
 export interface SettingState extends Setting {
   status: StatusState;
@@ -57,8 +57,8 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
 
       if (shouldFetchAllData) {
         dispatch(resetSummaryStatus());
-        dispatch(resetTransactionStatus());
-        dispatch(resetAccountStatus());
+        dispatch(resetTransactionsStatus());
+        dispatch(resetAccountsStatus());
         dispatch(getBalance());
       }
     } catch (error: any) {

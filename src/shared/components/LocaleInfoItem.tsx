@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import { Locale } from 'shared/models';
 import { mapLocaleIsoToCountryCode } from 'shared/helpers';
 import CountryFlag from './CountryFlag';
 
-interface LocaleInfoItemProps {
+type LocaleInfoItemProps = {
   locale: Pick<Locale, 'iso' | 'displayName'>;
   color?: string;
-}
+} & TypographyProps;
 
-const LocaleInfoItem: React.FC<LocaleInfoItemProps> = ({ locale: { iso, displayName }, color }) => {
+const LocaleInfoItem: React.FC<LocaleInfoItemProps> = ({ locale: { iso, displayName }, color, ...props }) => {
   const { palette: { info: { contrastText } } } = useTheme();
   const textColor = color || contrastText;
 
   return (
-    <Grid item display='flex'>
+    <Grid item display='flex' alignItems='center'>
       <CountryFlag code={mapLocaleIsoToCountryCode(iso)} />
-      <Typography color={textColor} sx={{ marginLeft: 2 }}>{displayName}</Typography>
+      <Typography {...props} color={textColor} sx={{ ...props.sx, marginLeft: 2 }}>{displayName}</Typography>
     </Grid>
   );
 };

@@ -4,14 +4,15 @@ import { Category, CategoryDTO, ErrorResponse, StatusState } from 'shared/models
 import { mapCategories, mapCategory } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
-import { getSummary } from './summarySlice';
-import { getTransactions } from './transactionSlice';
+import { resetSummaryStatus } from './summarySlice';
+import { resetTransactionsStatus } from './transactionSlice';
 
 export interface CategoryState {
   categories: Category[];
   status: StatusState;
+  getStatus: StatusState;
+  createEditStatus: StatusState;
   deleteStatus: StatusState;
-  currentStatus: StatusState;
   currentCategory?: Category;
   error?: ErrorResponse;
 }
@@ -19,12 +20,13 @@ export interface CategoryState {
 const initialState: CategoryState = {
   categories: [],
   status: 'idle',
-  currentStatus: 'idle',
+  getStatus: 'idle',
+  createEditStatus: 'idle',
   deleteStatus: 'idle'
 };
 
 export const getCategories = createAsyncThunk<Category[], void, { rejectValue: ErrorResponse }>(
-  'categories/getCategories', async (_, { rejectWithValue }): Promise<any> => {
+  'categories/getCategories', async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<CategoryDTO[]>('categories');
 
@@ -60,7 +62,7 @@ export const createCategory = createAsyncThunk<void, CategoryDTO, { rejectValue:
     try {
       await axios.post<void>('categories/category', category);
 
-      dispatch(getCategories());
+      dispatch(resetCategoriesStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -72,9 +74,9 @@ export const editCategory = createAsyncThunk<void, [Category['id'], Omit<Categor
     try {
       await axios.put<void>(`categories/${id}`, category);
 
-      dispatch(getCategories());
-      dispatch(getSummary());
-      dispatch(getTransactions());
+      dispatch(resetCategoriesStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetTransactionsStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -86,9 +88,9 @@ export const deleteCategory = createAsyncThunk<void, Category['id'], { rejectVal
     try {
       await axios.delete<void>(`categories/${id}`);
 
-      dispatch(getCategories());
-      dispatch(getSummary());
-      dispatch(getTransactions());
+      dispatch(resetCategoriesStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetTransactionsStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -98,17 +100,17 @@ export const categorySlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    resetCurrentCategory(state): CategoryState {
-      return {
-        ...state,
-        currentCategory: initialState.currentCategory,
-        currentStatus: initialState.currentStatus
-      };
-    },
-    resetCategoryStatus(state): CategoryState {
+    resetCategoriesStatus(state): CategoryState {
       return {
         ...state,
         status: initialState.status
+      };
+    },
+    resetGetCategoryStatus(state): CategoryState {
+      return {
+        ...state,
+        currentCategory: initialState.currentCategory,
+        getStatus: initialState.getStatus
       };
     }
   },
@@ -136,13 +138,13 @@ export const categorySlice = createSlice({
       .addCase(getCategory.pending, (state): CategoryState => {
         return {
           ...state,
-          currentStatus: 'loading'
+          getStatus: 'loading'
         };
       })
       .addCase(getCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
-          currentStatus: 'failed',
+          getStatus: 'failed',
           error: action.payload
         };
       })
@@ -150,45 +152,45 @@ export const categorySlice = createSlice({
         return {
           ...state,
           currentCategory: action.payload,
-          currentStatus: 'succeeded'
+          getStatus: 'succeeded'
         };
       })
       .addCase(createCategory.pending, (state): CategoryState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(createCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
-          status: 'failed',
+          createEditStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(createCategory.fulfilled, (state): CategoryState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(editCategory.pending, (state): CategoryState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(editCategory.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): CategoryState => {
         return {
           ...state,
-          status: 'failed',
+          createEditStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(editCategory.fulfilled, (state): CategoryState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(deleteCategory.pending, (state): CategoryState => {
@@ -221,5 +223,5 @@ export const selectCategoryStatus = (state: RootState): CategoryState['status'] 
 export const selectCategoryError = (state: RootState): CategoryState['error'] => state.category.error;
 export const selectCurrentCategory = (state: RootState): CategoryState['currentCategory'] => state.category.currentCategory;
 
-export const { resetCurrentCategory, resetCategoryStatus } = categorySlice.actions;
+export const { resetGetCategoryStatus, resetCategoriesStatus } = categorySlice.actions;
 export default categorySlice.reducer;

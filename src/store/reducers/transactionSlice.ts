@@ -4,15 +4,16 @@ import { store } from 'store';
 import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
 import { mapTransaction, mapTransactions } from 'shared/helpers';
 import { RootState } from './rootReducer';
-import { getSummary } from './summarySlice';
+import { resetBalanceStatus, resetSummaryStatus } from './summarySlice';
+import { resetAccountsStatus } from './accountSlice';
 import { resetApp } from './appSlice';
-import { getAccounts } from './accountSlice';
 
 export interface TransactionState {
   transactions: Transaction[];
   status: StatusState;
+  getStatus: StatusState;
+  createEditStatus: StatusState;
   deleteStatus: StatusState;
-  currentStatus: StatusState;
   currentTransaction?: Transaction;
   error?: ErrorResponse;
 }
@@ -20,7 +21,8 @@ export interface TransactionState {
 const initialState: TransactionState = {
   transactions: [],
   status: 'idle',
-  currentStatus: 'idle',
+  getStatus: 'idle',
+  createEditStatus: 'idle',
   deleteStatus: 'idle'
 };
 
@@ -66,8 +68,9 @@ export const addTransaction = createAsyncThunk<void, TransactionDTO, { rejectVal
     try {
       await axios.post<void>('transactions/transaction', transaction);
 
-      dispatch(getSummary());
-      dispatch(getTransactions());
+      dispatch(resetTransactionsStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetBalanceStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -79,8 +82,9 @@ export const editTransaction = createAsyncThunk<void, [Transaction['id'], Omit<T
     try {
       await axios.put<void>(`transactions/${id}`, transaction);
 
-      dispatch(getTransactions());
-      dispatch(getSummary());
+      dispatch(resetTransactionsStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetBalanceStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -92,9 +96,10 @@ export const deleteTransaction = createAsyncThunk<void, Transaction['id'], { rej
     try {
       await axios.delete<void>(`transactions/${id}`);
 
-      dispatch(getTransactions());
-      dispatch(getSummary());
-      dispatch(getAccounts());
+      dispatch(resetTransactionsStatus());
+      dispatch(resetSummaryStatus());
+      dispatch(resetBalanceStatus());
+      dispatch(resetAccountsStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -104,17 +109,17 @@ export const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
-    resetCurrentTransaction(state): TransactionState {
-      return {
-        ...state,
-        currentTransaction: initialState.currentTransaction,
-        currentStatus: initialState.currentStatus
-      };
-    },
-    resetTransactionStatus(state): TransactionState {
+    resetTransactionsStatus(state): TransactionState {
       return {
         ...state,
         status: initialState.status
+      };
+    },
+    resetGetTransactionStatus(state): TransactionState {
+      return {
+        ...state,
+        currentTransaction: initialState.currentTransaction,
+        getStatus: initialState.getStatus
       };
     }
   },
@@ -142,13 +147,13 @@ export const transactionSlice = createSlice({
       .addCase(getTransaction.pending, (state): TransactionState => {
         return {
           ...state,
-          currentStatus: 'loading'
+          getStatus: 'loading'
         };
       })
       .addCase(getTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
-          currentStatus: 'failed',
+          getStatus: 'failed',
           error: action.payload
         };
       })
@@ -156,45 +161,45 @@ export const transactionSlice = createSlice({
         return {
           ...state,
           currentTransaction: action.payload,
-          currentStatus: 'succeeded'
+          getStatus: 'succeeded'
         };
       })
       .addCase(addTransaction.pending, (state): TransactionState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(addTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
           error: action.payload,
-          status: 'failed'
+          createEditStatus: 'failed'
         };
       })
       .addCase(addTransaction.fulfilled, (state): TransactionState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(editTransaction.pending, (state): TransactionState => {
         return {
           ...state,
-          status: 'loading'
+          createEditStatus: 'loading'
         };
       })
       .addCase(editTransaction.rejected, (state, action: PayloadAction<ErrorResponse | undefined>): TransactionState => {
         return {
           ...state,
-          status: 'failed',
+          createEditStatus: 'failed',
           error: action.payload
         };
       })
       .addCase(editTransaction.fulfilled, (state): TransactionState => {
         return {
           ...state,
-          status: 'succeeded'
+          createEditStatus: 'succeeded'
         };
       })
       .addCase(deleteTransaction.pending, (state): TransactionState => {
@@ -227,5 +232,5 @@ export const selectTransactionStatus = (state: RootState): TransactionState['sta
 export const selectTransactionError = (state: RootState): TransactionState['error'] => state.transaction.error;
 export const selectCurrentTransaction = (state: RootState): TransactionState['currentTransaction'] => state.transaction.currentTransaction;
 
-export const { resetCurrentTransaction, resetTransactionStatus } = transactionSlice.actions;
+export const { resetGetTransactionStatus, resetTransactionsStatus } = transactionSlice.actions;
 export default transactionSlice.reducer;

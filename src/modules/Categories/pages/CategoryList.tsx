@@ -58,7 +58,7 @@ const CategoryList: React.FC<{}> = () => {
     if (status === 'loading') {
       return (
         <Grid item xs={12}>
-          <Skeleton type='circular' sx={{ marginTop: 1 }} />
+          <Skeleton type='circular' />
         </Grid>
       );
     }

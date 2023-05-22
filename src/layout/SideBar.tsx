@@ -26,7 +26,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
   const dispatch = useAppDispatch();
   const { sideBarOpened } = useAppSelector(selectApp);
   const user = useAppSelector(selectUser);
-  const { balance } = useAppSelector(selectSummary);
+  const { balance, balanceStatus } = useAppSelector(selectSummary);
   const { palette: { secondary: { main } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { t } = useTranslation();
@@ -50,8 +50,10 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
   };
 
   React.useEffect(() => {
-    dispatch(getBalance());
-  }, [dispatch]);
+    if (balanceStatus === 'idle') {
+      dispatch(getBalance());
+    }
+  }, [dispatch, balanceStatus]);
 
   return (
     <>

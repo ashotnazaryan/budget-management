@@ -28,10 +28,10 @@ const SideBarSettingsPreview: React.FC<SideBarSettingsPreviewProps> = () => {
         <Link onClick={handleNavigation} to={ROUTES.settings.path} style={{ display: 'block' }}>
           <Grid item container columnSpacing={4}>
             <Grid item>
-              <Typography color={contrastText}>{t('SIDEBAR.CURRENCY')}:</Typography>
+              <Typography color={contrastText} sx={{ fontSize: 13 }}>{t('SIDEBAR.CURRENCY')}:</Typography>
             </Grid>
             <Grid item>
-              <CurrencyInfoItem currency={defaultCurrency} />
+              <CurrencyInfoItem currency={defaultCurrency} sx={{ fontSize: 13 }} />
             </Grid>
           </Grid>
         </Link>
@@ -40,10 +40,10 @@ const SideBarSettingsPreview: React.FC<SideBarSettingsPreviewProps> = () => {
         <Link onClick={handleNavigation} to={ROUTES.settings.path} style={{ display: 'block' }}>
           <Grid item container columnSpacing={4}>
             <Grid item>
-              <Typography color={contrastText}>{t('SIDEBAR.LANGUAGE')}:</Typography>
+              <Typography color={contrastText} sx={{ fontSize: 13 }}>{t('SIDEBAR.LANGUAGE')}:</Typography>
             </Grid>
             <Grid item>
-              <LocaleInfoItem locale={locale} />
+              <LocaleInfoItem locale={locale} sx={{ fontSize: 13 }} />
             </Grid>
           </Grid>
         </Link>

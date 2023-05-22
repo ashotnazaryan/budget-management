@@ -15,7 +15,7 @@ import {
   editTransfer,
   getAccounts,
   getTransfer,
-  resetCurrentTransfer,
+  resetGetTransferStatus,
   selectAccount,
   selectAccountStatus,
   selectCurrentTransfer,
@@ -44,7 +44,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const regex = POSITIVE_NUMERIC_REGEX;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status, currentStatus, deleteStatus } = useAppSelector(selectTransfer);
+  const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectTransfer);
   const error = useAppSelector(selectTransferError);
   const transfer = useAppSelector(selectCurrentTransfer);
   const { accounts } = useAppSelector(selectAccount);
@@ -55,7 +55,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const loading = status === 'loading';
+  const loading = createEditStatus === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
@@ -159,7 +159,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   }, [transfer, setValue]);
 
   const resetTransfer = React.useCallback(() => {
-    dispatch(resetCurrentTransfer());
+    dispatch(resetGetTransferStatus());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
@@ -177,16 +177,16 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   }, [dispatch, accountStatus]);
 
   React.useEffect(() => {
-    if (status === 'succeeded' && formSubmitted) {
+    if (createEditStatus === 'succeeded' && formSubmitted) {
       dispatch(getAccounts());
       goBack();
       setShowSnackbar(false);
     }
 
-    if (status === 'failed' && formSubmitted) {
+    if (createEditStatus === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
-  }, [dispatch, goBack, status, formSubmitted]);
+  }, [dispatch, goBack, createEditStatus, formSubmitted]);
 
   React.useEffect(() => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
@@ -200,10 +200,10 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (id && currentStatus === 'idle' && !isCreateMode && !deleteClicked) {
+    if (id && getStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getTransfer(id));
     }
-  }, [id, isCreateMode, currentStatus, dispatch, deleteClicked]);
+  }, [id, isCreateMode, getStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setFormValues();
@@ -216,7 +216,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   }, [resetTransfer]);
 
   const renderContent = (): React.ReactElement => {
-    if (currentStatus === 'loading') {
+    if (getStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 

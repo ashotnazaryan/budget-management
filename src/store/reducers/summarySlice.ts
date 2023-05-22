@@ -75,6 +75,12 @@ export const summarySlice = createSlice({
         ...state,
         status: initialState.status
       };
+    },
+    resetBalanceStatus(state): SummaryState {
+      return {
+        ...state,
+        balanceStatus: initialState.balanceStatus
+      };
     }
   },
   extraReducers(builder) {
@@ -126,5 +132,5 @@ export const summarySlice = createSlice({
 export const selectSummary = (state: RootState): SummaryState => state.summary;
 export const selectBalance = (state: RootState): SummaryState['balance'] => state.summary.balance;
 
-export const { setActivePeriodFilter, resetSummaryStatus } = summarySlice.actions;
+export const { setActivePeriodFilter, resetSummaryStatus, resetBalanceStatus } = summarySlice.actions;
 export default summarySlice.reducer;

@@ -14,13 +14,13 @@ import {
   getCategory,
   selectCategory,
   selectCurrentCategory,
-  resetCurrentCategory,
+  resetGetCategoryStatus,
   selectCategoryError,
   deleteCategory
 } from 'store/reducers';
 import { CATEGORY_ICONS_LIST, TABS, ROUTES } from 'shared/constants';
 import { Category, CategoryDTO, CategoryField, CategoryType, IconType, ManageMode } from 'shared/models';
-import { categoryHelper, mapCategoryTypesWithTranslations } from 'shared/helpers';
+import { categoryHelper, getPageTitle, mapCategoryTypesWithTranslations } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import FormInput from 'shared/components/FormInput';
@@ -41,7 +41,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
-  const { status, deleteStatus, currentStatus } = useAppSelector(selectCategory);
+  const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectCategory);
   const error = useAppSelector(selectCategoryError);
   const category = useAppSelector(selectCurrentCategory);
   const { palette: { info: { contrastText } } } = useTheme();
@@ -51,7 +51,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
-  const loading = status === 'loading';
+  const loading = createEditStatus === 'loading';
   const deleteLoading = deleteStatus === 'loading';
   const categoryId = state?.id as CategoryDTO['id'];
   const categoryName = category?.nameKey ? t(category.nameKey) : (category?.name || '');
@@ -59,6 +59,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   const isCreateMode = mode === ManageMode.create;
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
+  const title = getPageTitle<Category>(mode, t, getStatus, 'CATEGORIES', 'NEW_CATEGORY', 'EMPTY_TITLE', category);
 
   const defaultValues: Partial<Category> = {
     type: String(categoryType) as unknown as number,
@@ -119,22 +120,6 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     setDeleteClicked(false);
   };
 
-  const getTitle = (): string => {
-    if (isCreateMode) {
-      return t('CATEGORIES.NEW_CATEGORY');
-    }
-
-    if (category && (isEditMode || isViewMode)) {
-      return categoryName;
-    }
-
-    if (currentStatus !== 'loading') {
-      return t('CATEGORIES.EMPTY_TITLE');
-    }
-
-    return '';
-  };
-
   const handleEditButtonClick = (): void => {
     if (isEditMode) {
       return;
@@ -152,7 +137,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   }, [category, setValue, t]);
 
   const resetCategory = React.useCallback(() => {
-    dispatch(resetCurrentCategory());
+    dispatch(resetGetCategoryStatus());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
@@ -161,15 +146,15 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   }, [navigate, resetCategory]);
 
   React.useEffect(() => {
-    if (status === 'succeeded' && formSubmitted) {
+    if (createEditStatus === 'succeeded' && formSubmitted) {
       goBack();
       setShowSnackbar(false);
     }
 
-    if (status === 'failed' && formSubmitted) {
+    if (createEditStatus === 'failed' && formSubmitted) {
       setShowSnackbar(true);
     }
-  }, [goBack, status, formSubmitted]);
+  }, [goBack, createEditStatus, formSubmitted]);
 
   React.useEffect(() => {
     if (deleteStatus === 'succeeded' && deleteClicked) {
@@ -183,10 +168,10 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (categoryId && currentStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
+    if (categoryId && getStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
       dispatch(getCategory(categoryId));
     }
-  }, [categoryId, isEditMode, isViewMode, currentStatus, dispatch, deleteClicked]);
+  }, [categoryId, isEditMode, isViewMode, getStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     setFormValues();
@@ -199,7 +184,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   }, [resetCategory]);
 
   const renderContent = (): React.ReactElement => {
-    if (currentStatus === 'loading') {
+    if (getStatus === 'loading') {
       return <Skeleton type='form' />;
     }
 
@@ -276,7 +261,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
         withEditButton={isViewMode && !!category}
         withDeleteButton={isEditMode && !!category}
         withCancelButton={!isViewMode && !!category}
-        text={getTitle()}
+        text={title}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleOpenDialog}

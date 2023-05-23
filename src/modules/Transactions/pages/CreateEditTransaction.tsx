@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import date, { LocalizedDate } from 'core/date';
 import { useTranslation } from 'core/i18n';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { SelectChangeEvent } from '@mui/material/Select';
-import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -44,6 +43,7 @@ import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 import AccountOption from 'shared/components/AccountOption';
+import FormIcon from 'shared/components/FormIcon';
 
 interface CreateEditTransactionProps {
   mode: ManageMode;
@@ -95,7 +95,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch, reset } = methods;
+  const { setValue, handleSubmit, watch, reset } = methods;
   const watchType = watch(TransactionField.type);
   const watchAccount = watch(TransactionField.accountId);
   const watchCreatedAt = watch(TransactionField.createdAt);
@@ -361,28 +361,26 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.CATEGORY')}</Typography>
-            <Controller
-              control={control}
+            <FormIcon
               name={TransactionField.categoryId}
+              label={t('COMMON.CATEGORY')}
               rules={{
-                required: true
+                required: {
+                  value: true,
+                  message: t(helper.categoryId.required!.message)
+                }
               }}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Grid container {...field} columnGap={4} rowGap={4}>
-                    {
-                      categories.filter(({ type }) => type === Number(watchType)).map((category) => (
-                        <Grid item key={category.id}>
-                          <CategoryIcon data={getCategoryData(category)} selected={field.value} readonly={isViewMode} onItemClick={handleCategoryIconClick} />
-                        </Grid>
-                      ))
-                    }
-                  </Grid>
-                  {error && <FormHelperText error>{t(helper.categoryId[error.type]!.message)}</FormHelperText>}
-                </>
-              )}
-            />
+              render={({ field }) => (
+                <Grid container {...field} columnGap={4} rowGap={4}>
+                  {
+                    categories.filter(({ type }) => type === Number(watchType)).map((category) => (
+                      <Grid item key={category.id}>
+                        <CategoryIcon data={getCategoryData(category)} selected={field.value} readonly={isViewMode} onItemClick={handleCategoryIconClick} />
+                      </Grid>
+                    ))
+                  }
+                </Grid>
+              )} />
           </Grid>
         </Grid>
       </FormProvider>

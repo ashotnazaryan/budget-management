@@ -8,7 +8,11 @@ import { removeUser, logout } from 'store/reducers';
 
 // let retried = false;
 
-const AxiosInterceptor: React.FC<{ children: React.ReactElement }> = ({ children }: { children: React.ReactElement }) => {
+interface AxiosInterceptorProps {
+  children: React.ReactElement;
+}
+
+const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   const dispatch = useAppDispatch();
 
   axios.interceptors.request.use((config) => {

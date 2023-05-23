@@ -16,7 +16,8 @@ import {
   selectCurrentCategory,
   resetGetCategoryStatus,
   selectCategoryError,
-  deleteCategory
+  deleteCategory,
+  setGetCategoryErrorStatus
 } from 'store/reducers';
 import { CATEGORY_ICONS_LIST, TABS, ROUTES } from 'shared/constants';
 import { Category, CategoryDTO, CategoryField, CategoryType, IconType, ManageMode } from 'shared/models';
@@ -168,6 +169,12 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
+    if (!categoryId) {
+      dispatch(setGetCategoryErrorStatus());
+    }
+  }, [categoryId, dispatch]);
+
+  React.useEffect(() => {
     if (categoryId && getStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
       dispatch(getCategory(categoryId));
     }
@@ -188,7 +195,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
       return <Skeleton type='form' />;
     }
 
-    if (!isCreateMode && (!category || !categoryId)) {
+    if (!isCreateMode && (!category || !categoryId) && getStatus === 'failed') {
       return <EmptyState text={t('CATEGORIES.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 

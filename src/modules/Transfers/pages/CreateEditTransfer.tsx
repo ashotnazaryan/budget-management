@@ -20,7 +20,8 @@ import {
   selectAccountStatus,
   selectCurrentTransfer,
   selectTransfer,
-  selectTransferError
+  selectTransferError,
+  setGetTransferErrorStatus
 } from 'store/reducers';
 import { POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, ManageMode, Transfer, TransferDTO, TransferField } from 'shared/models';
@@ -200,6 +201,12 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
+    if (!id) {
+      dispatch(setGetTransferErrorStatus());
+    }
+  }, [id, dispatch]);
+
+  React.useEffect(() => {
     if (id && getStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getTransfer(id));
     }
@@ -220,7 +227,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
       return <Skeleton type='form' />;
     }
 
-    if (!isCreateMode && (!transfer || !id)) {
+    if (!isCreateMode && (!transfer || !id) && getStatus === 'failed') {
       return <EmptyState text={t('TRANSFERS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 

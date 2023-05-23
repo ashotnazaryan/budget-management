@@ -24,13 +24,13 @@ const FormDatePicker: React.FC<FormDatePickerProps> = ({ name, label, rules = {}
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer sx={{ paddingTop: 2, overflow: 'initial' }} components={['DatePicker']}>
+      <DemoContainer sx={{ ...props.sx, paddingTop: 2, overflow: 'initial' }} components={['DatePicker']}>
         <Controller
           control={control}
           name={name}
           rules={rules}
           render={({ field, fieldState: { error } }) => (
-            <Box position='relative'>
+            <Box position='relative' sx={{ width: '100%' }}>
               <InputLabel>{label}</InputLabel>
               <MuiDatePicker
                 {...field}

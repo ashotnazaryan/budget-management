@@ -26,7 +26,8 @@ import {
   selectAccountStatus,
   deleteTransaction,
   selectTransactionError,
-  resetGetTransactionStatus
+  resetGetTransactionStatus,
+  setGetTransactionErrorStatus
 } from 'store/reducers';
 import { CategoryType, Category as CategoryModel, TransactionField, TransactionDTO, Account, ManageMode, Transaction, IconType } from 'shared/models';
 import { TABS, POSITIVE_NUMERIC_REGEX, ROUTES } from 'shared/constants';
@@ -238,6 +239,12 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
+    if (!transactionId) {
+      dispatch(setGetTransactionErrorStatus());
+    }
+  }, [transactionId, dispatch]);
+
+  React.useEffect(() => {
     if (transactionId && getStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getTransaction(transactionId));
     }
@@ -262,7 +269,7 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
       return <Skeleton type='form' />;
     }
 
-    if (!isCreateMode && (!transaction || !transactionId)) {
+    if (!isCreateMode && (!transaction || !transactionId) && getStatus === 'failed') {
       return <EmptyState text={t('TRANSACTIONS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 

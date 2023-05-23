@@ -121,6 +121,12 @@ export const accountSlice = createSlice({
         currentAccount: initialState.currentAccount,
         getStatus: initialState.getStatus
       };
+    },
+    setGetAccountErrorStatus(state): AccountState {
+      return {
+        ...state,
+        getStatus: 'failed'
+      };
     }
   },
   extraReducers(builder) {
@@ -232,5 +238,5 @@ export const selectAccountStatus = (state: RootState): AccountState['status'] =>
 export const selectAccountError = (state: RootState): AccountState['error'] => state.account.error;
 export const selectCurrentAccount = (state: RootState): AccountState['currentAccount'] => state.account.currentAccount;
 
-export const { resetGetAccountStatus, resetAccountsStatus } = accountSlice.actions;
+export const { resetGetAccountStatus, resetAccountsStatus, setGetAccountErrorStatus } = accountSlice.actions;
 export default accountSlice.reducer;

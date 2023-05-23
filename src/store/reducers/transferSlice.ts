@@ -129,6 +129,12 @@ export const transferSlice = createSlice({
         currentTransfer: initialState.currentTransfer,
         getStatus: initialState.getStatus
       };
+    },
+    setGetTransferErrorStatus(state): TransferState {
+      return {
+        ...state,
+        getStatus: 'failed'
+      };
     }
   },
   extraReducers(builder) {
@@ -240,5 +246,5 @@ export const selectTransferStatus = (state: RootState): TransferState['status'] 
 export const selectTransferError = (state: RootState): TransferState['error'] => state.transfer.error;
 export const selectCurrentTransfer = (state: RootState): TransferState['currentTransfer'] => state.transfer.currentTransfer;
 
-export const { resetGetTransferStatus, resetTransfersStatus } = transferSlice.actions;
+export const { resetGetTransferStatus, resetTransfersStatus, setGetTransferErrorStatus } = transferSlice.actions;
 export default transferSlice.reducer;

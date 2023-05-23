@@ -19,7 +19,8 @@ import {
   selectAccount,
   selectAccountError,
   selectCurrentAccount,
-  selectSettings
+  selectSettings,
+  setGetAccountErrorStatus
 } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
 import { Account, AccountDTO, AccountField, Currency, IconType, ManageMode } from 'shared/models';
@@ -179,6 +180,12 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
+    if (!accountId) {
+      dispatch(setGetAccountErrorStatus());
+    }
+  }, [accountId, dispatch]);
+
+  React.useEffect(() => {
     if (accountId && getStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
       dispatch(getAccount(accountId));
     }
@@ -199,7 +206,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
       return <Skeleton type='form' />;
     }
 
-    if (!isCreateMode && (!account || !accountId)) {
+    if (!isCreateMode && (!account || !accountId) && getStatus === 'failed') {
       return <EmptyState text={t('ACCOUNTS.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 

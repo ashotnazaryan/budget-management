@@ -121,6 +121,12 @@ export const transactionSlice = createSlice({
         currentTransaction: initialState.currentTransaction,
         getStatus: initialState.getStatus
       };
+    },
+    setGetTransactionErrorStatus(state): TransactionState {
+      return {
+        ...state,
+        getStatus: 'failed'
+      };
     }
   },
   extraReducers(builder) {
@@ -232,5 +238,5 @@ export const selectTransactionStatus = (state: RootState): TransactionState['sta
 export const selectTransactionError = (state: RootState): TransactionState['error'] => state.transaction.error;
 export const selectCurrentTransaction = (state: RootState): TransactionState['currentTransaction'] => state.transaction.currentTransaction;
 
-export const { resetGetTransactionStatus, resetTransactionsStatus } = transactionSlice.actions;
+export const { resetGetTransactionStatus, resetTransactionsStatus, setGetTransactionErrorStatus } = transactionSlice.actions;
 export default transactionSlice.reducer;

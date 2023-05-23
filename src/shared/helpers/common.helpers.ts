@@ -174,7 +174,7 @@ export const getPageTitle = <T extends { name: string, nameKey?: string }>(
     return data?.nameKey ? t(data.nameKey) : (data?.name || '');
   }
 
-  if (status === 'succeeded' || status === 'failed' || !data) {
+  if ((status === 'succeeded' || status === 'failed') && !data) {
     return t(`${translationNameSpace}.${emptyTitleKey}`);
   }
 

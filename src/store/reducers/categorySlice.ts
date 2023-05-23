@@ -112,6 +112,12 @@ export const categorySlice = createSlice({
         currentCategory: initialState.currentCategory,
         getStatus: initialState.getStatus
       };
+    },
+    setGetCategoryErrorStatus(state): CategoryState {
+      return {
+        ...state,
+        getStatus: 'failed'
+      };
     }
   },
   extraReducers(builder) {
@@ -223,5 +229,5 @@ export const selectCategoryStatus = (state: RootState): CategoryState['status'] 
 export const selectCategoryError = (state: RootState): CategoryState['error'] => state.category.error;
 export const selectCurrentCategory = (state: RootState): CategoryState['currentCategory'] => state.category.currentCategory;
 
-export const { resetGetCategoryStatus, resetCategoriesStatus } = categorySlice.actions;
+export const { resetGetCategoryStatus, resetCategoriesStatus, setGetCategoryErrorStatus } = categorySlice.actions;
 export default categorySlice.reducer;

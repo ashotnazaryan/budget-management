@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
-import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
@@ -34,6 +32,7 @@ import FormSelect from 'shared/components/FormSelect';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
+import FormIcon from 'shared/components/FormIcon';
 
 interface CreateEditAccountProps {
   mode: ManageMode;
@@ -46,7 +45,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useAppDispatch();
-  const { palette: { info: { contrastText } } } = useTheme();
   const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectAccount);
   const error = useAppSelector(selectAccountError);
   const account = useAppSelector(selectCurrentAccount);
@@ -78,7 +76,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch, reset } = methods;
+  const { setValue, handleSubmit, watch, reset } = methods;
   const watchCurrency = watch(AccountField.currencyIso);
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
@@ -264,29 +262,26 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
             </FormSelect>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='subtitle1' color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-            {/* TODO: move to shared form components */}
-            <Controller
-              control={control}
+            <FormIcon
               name={AccountField.icon}
+              label={t('COMMON.ICON')}
               rules={{
-                required: true
+                required: {
+                  value: true,
+                  message: t(helper.icon.required!.message)
+                }
               }}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                    {
-                      icons.map(({ name }) => (
-                        <Grid item key={name}>
-                          <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
-                        </Grid>
-                      ))
-                    }
-                  </Grid>
-                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-                </>
-              )}
-            />
+              render={({ field }) => (
+                <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                  {
+                    icons.map(({ name }) => (
+                      <Grid item key={name}>
+                        <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
+                      </Grid>
+                    ))
+                  }
+                </Grid>
+              )} />
           </Grid>
         </Grid>
       </FormProvider>

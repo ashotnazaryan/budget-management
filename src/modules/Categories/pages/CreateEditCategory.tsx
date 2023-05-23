@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import FormHelperText from '@mui/material/FormHelperText';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -31,6 +30,7 @@ import FormRadioGroup from 'shared/components/FormRadioGroup';
 import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
+import FormIcon from 'shared/components/FormIcon';
 
 interface NewCategoryProps {
   mode: ManageMode;
@@ -73,7 +73,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { setValue, handleSubmit, control, watch, reset } = methods;
+  const { setValue, handleSubmit, watch, reset } = methods;
   const watchType = Number(watch(CategoryField.type));
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
@@ -233,28 +233,26 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography color={contrastText} sx={{ marginY: 1 }}>{t('COMMON.ICON')}</Typography>
-            <Controller
-              control={control}
+            <FormIcon
               name={CategoryField.icon}
+              label={t('COMMON.ICON')}
               rules={{
-                required: true
+                required: {
+                  value: true,
+                  message: t(helper.icon.required!.message)
+                }
               }}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
-                    {
-                      icons.map(({ name }) => (
-                        <Grid item key={name}>
-                          <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
-                        </Grid>
-                      ))
-                    }
-                  </Grid>
-                  {error && <FormHelperText error>{t(helper.icon[error.type]!.message)}</FormHelperText>}
-                </>
-              )}
-            />
+              render={({ field }) => (
+                <Grid container {...field} columnGap={1} rowGap={3} sx={{ marginTop: 2 }}>
+                  {
+                    icons.map(({ name }) => (
+                      <Grid item key={name}>
+                        <ItemIcon selected={field.value} id={name} icon={name} size={50} readonly={isViewMode} onClick={handleAccountIconClick} />
+                      </Grid>
+                    ))
+                  }
+                </Grid>
+              )} />
           </Grid>
         </Grid>
       </FormProvider>

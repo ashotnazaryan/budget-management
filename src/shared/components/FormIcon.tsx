@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useFormContext, Controller, ControllerRenderProps, ControllerFieldState } from 'react-hook-form';
 import FormHelperText from '@mui/material/FormHelperText';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import { FormControlRules } from 'shared/models';
 
@@ -24,11 +23,11 @@ const FormIcon: React.FC<FormIconProps> = ({ name, label, rules = {}, render }) 
       name={name}
       rules={rules}
       render={({ field, fieldState }) => (
-        <Box position='relative'>
+        <>
           <InputLabel sx={{ marginBottom: 2 }}>{label}</InputLabel>
           {render({ field, fieldState })}
-          {errors[name] && <FormHelperText sx={{ position: 'absolute' }} error>{fieldState.error?.message}</FormHelperText>}
-        </Box>
+          {errors[name] && <FormHelperText error>{fieldState.error?.message}</FormHelperText>}
+        </>
       )}
     />
   );

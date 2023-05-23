@@ -64,8 +64,8 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
   const { id } = useParams() as { id: string };
 
   const defaultValues: Partial<Transfer> = {
-    fromAccount: {} as Account,
-    toAccount: {} as Account,
+    fromAccount: '' as unknown as Account,
+    toAccount: '' as unknown as Account,
     amount: '',
     createdAt: isCreateMode ? date().format() : undefined,
   };
@@ -233,7 +233,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
 
     return (
       <FormProvider {...methods}>
-        <Grid container rowGap={6} columnSpacing={2}>
+        <Grid container rowGap={7} columnSpacing={2}>
           <Grid item sm={6} xs={12}>
             <FormSelect
               disabled={!isCreateMode}

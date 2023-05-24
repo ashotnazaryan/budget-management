@@ -7,6 +7,11 @@ export const LOCALES: Locale[] = [
     displayName: 'English'
   },
   {
+    iso: 'pl',
+    isoIntl: 'pl-PL',
+    displayName: 'Polski'
+  },
+  {
     iso: 'ru',
     isoIntl: 'ru',
     displayName: 'Русский'
@@ -17,9 +22,9 @@ export const LOCALES: Locale[] = [
     displayName: 'Українська'
   },
   {
-    iso: 'pl',
-    isoIntl: 'pl-PL',
-    displayName: 'Polski'
+    iso: 'by',
+    isoIntl: 'by',
+    displayName: 'Беларуская'
   },
   {
     iso: 'am',

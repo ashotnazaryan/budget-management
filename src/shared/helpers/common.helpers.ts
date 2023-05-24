@@ -57,6 +57,8 @@ export const mapLocaleToDateLocale = (locale: Locale['iso']): string => {
     return 'uk';
   case 'am':
     return 'hy-am';
+  case 'by':
+    return 'be';
   default:
     return 'en';
   }
@@ -74,6 +76,8 @@ export const mapLocaleIsoToCountryCode = (iso: Locale['iso']): CountryCode => {
     return 'ua';
   case 'am':
     return 'am';
+  case 'by':
+    return 'by';
   default:
     throw new Error(`Unsupported locale iso: ${iso}`);
   }

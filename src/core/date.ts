@@ -4,6 +4,7 @@ import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/uk';
+import 'dayjs/locale/be';
 import 'dayjs/locale/hy-am';
 import { Locale } from 'shared/models';
 import { LOCALES } from 'shared/constants';

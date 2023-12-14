@@ -7,6 +7,7 @@ export * from './auth';
 export * from './category';
 export * from './account';
 export * from './transfer';
+export * from './invoice';
 export * from './form';
 export * from './icon';
 export * from './common';

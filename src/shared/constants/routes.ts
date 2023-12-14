@@ -29,6 +29,10 @@ export const ROUTES: AppRoute = {
     name: 'ROUTES.TRANSACTIONS',
     path: '/transactions'
   },
+  invoices: {
+    name: 'ROUTES.INVOICES',
+    path: '/invoices'
+  },
   login: {
     name: 'ROUTES.LOGIN',
     path: '/login',

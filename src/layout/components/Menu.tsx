@@ -7,6 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CategoryIcon from '@mui/icons-material/Category';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'core/i18n';
@@ -55,6 +56,15 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
             <Link to={ROUTES.categories.path}>
               <Button aria-label='Categories link' color='secondary' fullWidth startIcon={<CategoryIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.categories.name)}
+              </Button>
+            </Link>
+          </ListItemText>
+        </ListItem>
+        <ListItem onClick={close} sx={{ padding: 0 }}>
+          <ListItemText>
+            <Link to={ROUTES.invoices.path}>
+              <Button aria-label='Invoices link' color='secondary' fullWidth startIcon={<ReceiptIcon />} sx={{ justifyContent: 'flex-start' }}>
+                {t(ROUTES.invoices.name)}
               </Button>
             </Link>
           </ListItemText>

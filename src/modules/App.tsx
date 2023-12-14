@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const Categories = createLazyComponent(() => import('./Categories/Categories'));
   const Accounts = createLazyComponent(() => import('./Accounts/Accounts'));
   const Transfers = createLazyComponent(() => import('./Transfers/Transfers'));
+  const Invoices = createLazyComponent(() => import('./Invoices/Invoices'));
 
   React.useEffect(() => {
     i18n.changeLanguage(iso);
@@ -52,6 +53,7 @@ const App: React.FC = () => {
             <Route path={`${ROUTES.categories.path}/*`} element={Categories} />
             <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />
             <Route path={`${ROUTES.transfers.path}/*`} element={Transfers} />
+            <Route path={`${ROUTES.invoices.path}/*`} element={Invoices} />
             <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
           </Route>
         </Routes>

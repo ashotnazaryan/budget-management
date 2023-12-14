@@ -300,7 +300,7 @@ const CreateEditCategory: React.FC<NewCategoryProps> = ({ mode }) => {
           {t('CATEGORIES.DELETE_DIALOG_CONFIRM')}
         </Typography>
       </Dialog>
-    </Box >
+    </Box>
   );
 };
 

@@ -340,7 +340,7 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
         {renderContent()}
       </Box>
       {!isViewMode && (
-        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4 }}>
+        <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4, marginBottom: 4 }}>
           <Grid item sm='auto' xs={12}>
             <Button aria-label='Save transfer' fullWidth type='submit' variant='contained' loading={loading}
               onClick={handleSubmit(handleFormSubmit)}>

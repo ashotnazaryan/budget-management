@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <AppBar position='static' sx={{ backgroundColor: main }}>
-      <Toolbar variant='dense' sx={{ paddingX: 3 }}>
+      <Toolbar variant='dense' sx={{ paddingX: 3, minHeight: { xs: '80px', sm: '64px' } }}>
         <Grid container alignItems='center'>
           <Grid item xs={1} display='flex' justifyContent='flex-start'>
             <IconButton aria-label='Menu icon' data-testid='menu-icon' edge='start' onClick={showSideBar}>

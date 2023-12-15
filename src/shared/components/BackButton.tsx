@@ -15,7 +15,7 @@ const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
         ...props.sx,
       }}
       onClick={props.onClick}>
-      <Icon name={IconType.arrowBack}></Icon>
+      <Icon name={IconType.west}></Icon>
     </IconButton>
   );
 };

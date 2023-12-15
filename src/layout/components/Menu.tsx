@@ -79,7 +79,7 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
           </ListItemText>
         </ListItem>
       </Box>
-      <ListItem onClick={openDialog} sx={{ padding: 0 }}>
+      <ListItem onClick={openDialog} sx={{ padding: 0, marginBottom: 2 }}>
         <ListItemText>
           <Button aria-label='Logout' fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
             {t('SIDEBAR.LOGOUT')}

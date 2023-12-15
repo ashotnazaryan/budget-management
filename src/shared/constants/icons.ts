@@ -25,6 +25,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import WestIcon from '@mui/icons-material/West';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const CATEGORY_ICONS: IconTypes = {
@@ -60,7 +61,8 @@ export const OTHER_ICONS: IconTypes = {
   [IconType.arrowBack]: ArrowBackIcon,
   [IconType.edit]: EditIcon,
   [IconType.delete]: DeleteIcon,
-  [IconType.cancel]: CloseIcon
+  [IconType.cancel]: CloseIcon,
+  [IconType.west]: WestIcon,
 };
 
 export const ALL_ICONS: IconTypes = {

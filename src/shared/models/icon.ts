@@ -32,7 +32,8 @@ export enum IconType {
   arrowBack = 'arrowBack',
   edit = 'edit',
   delete = 'delete',
-  cancel = 'cancel'
+  cancel = 'cancel',
+  west = 'west'
 }
 
 export interface Icon {

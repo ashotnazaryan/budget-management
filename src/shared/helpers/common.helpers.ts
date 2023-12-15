@@ -137,7 +137,9 @@ export const mapCurrencyStringToNumber = (value: string): number => {
 };
 
 export const mapCurrencyStringToInputString = (value: string): string => {
-  return value.replace(/[^0-9.,-]/g, '').replace(',', '.');
+  const cleanedString = value.replace(/[^0-9.]/g, '');
+
+  return cleanedString;
 };
 
 export const isPositiveString = (value: string): boolean => {

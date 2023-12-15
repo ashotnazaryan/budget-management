@@ -22,11 +22,6 @@ export const LOCALES: Locale[] = [
     displayName: 'Українська'
   },
   {
-    iso: 'by',
-    isoIntl: 'by',
-    displayName: 'Беларуская'
-  },
-  {
     iso: 'am',
     isoIntl: 'am',
     displayName: 'Հայերեն'

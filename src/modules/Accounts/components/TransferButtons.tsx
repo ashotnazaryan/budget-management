@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Grid, { GridProps } from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
@@ -9,10 +8,11 @@ import { ROUTES } from 'shared/constants';
 import Icon from 'shared/components/Icon';
 import Balance from 'shared/components/Balance';
 import Button from 'shared/components/Button';
+import Box, { BoxProps } from '@mui/material/Box';
 
 type TransferButtonsProps = {
   balance: Summary['balance'];
-} & GridProps
+} & BoxProps
 
 const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) => {
   const { palette: { info: { contrastText } } } = useTheme();
@@ -28,36 +28,32 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) 
   };
 
   return (
-    <Grid container rowGap={2} sx={{ ...props.sx }}>
-      <Grid item xs={12} display='flex' justifyContent='center' alignItems='center'>
+    <Box
+      sx={{ ...props.sx, display: 'flex', flexDirection: 'column', paddingBottom: 3, borderBottom: (theme) => `1px solid ${theme.palette.secondary.main}` }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 3 }}>
         <Typography noWrap color={contrastText} fontSize={18} sx={{ marginRight: 1 }}>{t('COMMON.BALANCE')}</Typography>
         <Balance balance={balance} fontSize={18} />
-      </Grid>
-      <Grid container item display='flex' justifyContent='space-between' rowGap={2}>
-        <Grid item sm={6} xs={12} display='flex' justifyContent='center'>
-          <Button
-            aria-label='New transfer'
-            color='secondary'
-            variant='contained'
-            startIcon={<Icon name={IconType.currencyExchange}></Icon>}
-            sx={{ width: { sm: 'auto', xs: '100%' }, fontSize: 14 }}
-            onClick={openAccountTransferPage}>
-            {t('TRANSFERS.NEW_TRANSFER')}
-          </Button>
-        </Grid>
-        <Grid item sm={6} xs={12} display='flex' justifyContent='center'>
-          <Button
-            aria-label='Transfer history'
-            color='secondary'
-            variant='outlined'
-            startIcon={<Icon name={IconType.history}></Icon>}
-            sx={{ width: { sm: 'auto', xs: '100%' }, fontSize: 14 }}
-            onClick={openTransferListPage}>
-            {t('TRANSFERS.TRANSFER_HISTORY')}
-          </Button>
-        </Grid>
-      </Grid>
-    </Grid>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: { sm: 'row', xs: 'column' }, alignItems: 'center', justifyContent: 'space-between', gap: 3 }}>
+        <Button
+          aria-label='New transfer'
+          color='secondary'
+          variant='contained'
+          startIcon={<Icon name={IconType.currencyExchange}></Icon>}
+          sx={{ width: { sm: 'auto', xs: '100%' }, fontSize: 14 }}
+          onClick={openAccountTransferPage}>
+          {t('TRANSFERS.NEW_TRANSFER')}
+        </Button>
+        <Button
+          aria-label='Transfer history'
+          color='secondary'
+          startIcon={<Icon name={IconType.history}></Icon>}
+          sx={{ width: { sm: 'auto', xs: '100%' }, fontSize: 14 }}
+          onClick={openTransferListPage}>
+          {t('TRANSFERS.TRANSFER_HISTORY')}
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

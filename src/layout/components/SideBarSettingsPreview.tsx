@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
-import { useTranslation } from 'core/i18n';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
 import { useAppDispatch, useAppSelector } from 'store';
 import { closeSidebar, selectSettings } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
@@ -15,40 +13,29 @@ interface SideBarSettingsPreviewProps { }
 const SideBarSettingsPreview: React.FC<SideBarSettingsPreviewProps> = () => {
   const dispatch = useAppDispatch();
   const { defaultCurrency, locale } = useAppSelector(selectSettings);
-  const { palette: { info: { contrastText }, secondary: { main } } } = useTheme();
-  const { t } = useTranslation();
 
   const handleNavigation = (): void => {
     dispatch(closeSidebar());
   };
 
   return (
-    <Grid item container sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${main}` }} rowSpacing={3}>
-      <Grid item xs={12}>
-        <Link onClick={handleNavigation} to={ROUTES.settings.path} style={{ display: 'block' }}>
-          <Grid item container columnSpacing={4} alignItems='center'>
-            <Grid item>
-              <Typography color={contrastText} sx={{ fontSize: 13 }}>{t('SIDEBAR.CURRENCY')}:</Typography>
-            </Grid>
-            <Grid item>
-              <CurrencyInfoItem currency={defaultCurrency} sx={{ fontSize: 13 }} />
-            </Grid>
-          </Grid>
-        </Link>
-      </Grid>
-      <Grid item xs={12}>
-        <Link onClick={handleNavigation} to={ROUTES.settings.path} style={{ display: 'block' }}>
-          <Grid item container columnSpacing={4} alignItems='center'>
-            <Grid item>
-              <Typography color={contrastText} sx={{ fontSize: 13 }}>{t('SIDEBAR.LANGUAGE')}:</Typography>
-            </Grid>
-            <Grid item>
-              <LocaleInfoItem locale={locale} sx={{ fontSize: 13 }} />
-            </Grid>
-          </Grid>
-        </Link>
-      </Grid>
-    </Grid>
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        paddingY: 2,
+        paddingX: 4,
+        borderBottom: (theme) => `1px solid ${theme.palette.secondary.main}`
+      }}>
+      <Link onClick={handleNavigation} to={ROUTES.settings.path}>
+        <CurrencyInfoItem currency={defaultCurrency} sx={{ fontSize: 13 }} />
+      </Link>
+      <Divider orientation='vertical' variant='fullWidth' flexItem sx={{ marginX: 2 }} />
+      <Link onClick={handleNavigation} to={ROUTES.settings.path}>
+        <LocaleInfoItem locale={locale} sx={{ fontSize: 13 }} />
+      </Link>
+    </Box>
   );
 };
 

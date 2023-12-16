@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import { PDFViewer } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
-import { ManageMode } from 'shared/models';
+import { Invoice, ManageMode } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
-import PDFDocument from '../components/PDFDocument';
+import InvoiceDocument from '../components/InvoiceDocument';
+import InvoiceForm from '../components/InvoiceForm';
 
 interface NewInvoiceProps {
   mode: ManageMode;
@@ -15,10 +17,15 @@ interface NewInvoiceProps {
 const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [invoiceData, setInvoiceData] = React.useState<Invoice>({} as Invoice);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.invoices.path}`);
   }, [navigate]);
+
+  const handleFormSubmit = (data: Invoice): void => {
+    setInvoiceData(data);
+  };
 
   return (
     <Box flexGrow={1}>
@@ -26,9 +33,16 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         withBackButton
         text={t('INVOICES.NEW_INVOICE')}
         onBackButtonClick={goBack} />
-      <PDFViewer width='100%' height='100%'>
-        <PDFDocument />
-      </PDFViewer>
+      <Grid container columnSpacing={3} rowSpacing={5}>
+        <Grid item xs={12} sm={5}>
+          <InvoiceForm onSubmit={handleFormSubmit} />
+        </Grid>
+        <Grid item xs={12} sm={7}>
+          <PDFViewer width='100%' height='100%'>
+            <InvoiceDocument data={invoiceData} />
+          </PDFViewer>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

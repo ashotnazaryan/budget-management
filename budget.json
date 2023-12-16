@@ -9,6 +9,10 @@
       {
         "metric": "first-meaningful-paint",
         "budget": 2000
+      },
+      {
+        "metric": "total-blocking-time",
+        "budget": 2000
       }
     ],
     "resourceSizes": [

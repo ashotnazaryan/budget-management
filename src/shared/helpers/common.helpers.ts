@@ -57,8 +57,6 @@ export const mapLocaleToDateLocale = (locale: Locale['iso']): string => {
     return 'uk';
   case 'am':
     return 'hy-am';
-  case 'by':
-    return 'be';
   default:
     return 'en';
   }
@@ -76,8 +74,6 @@ export const mapLocaleIsoToCountryCode = (iso: Locale['iso']): CountryCode => {
     return 'ua';
   case 'am':
     return 'am';
-  case 'by':
-    return 'by';
   default:
     throw new Error(`Unsupported locale iso: ${iso}`);
   }
@@ -136,10 +132,24 @@ export const mapCurrencyStringToNumber = (value: string): number => {
   return parseFloat(cleanedValue);
 };
 
-export const mapCurrencyStringToInputString = (value: string): string => {
-  const cleanedString = value.replace(/[^0-9.]/g, '');
+export const mapCurrencyStringToInputString = (currencyString: string): string => {
+  const numericString = currencyString.replace(/[^0-9.,-]/g, '');
+  const normalizedString = numericString.replace(/,/g, '.');
+  const hasCurrencySymbol = currencyString !== normalizedString;
+  let result = normalizedString;
 
-  return cleanedString;
+  if (hasCurrencySymbol) {
+    const currencySymbolRegex = /[^0-9.,-]/g;
+    const currencySymbolMatch = currencyString.match(currencySymbolRegex);
+    const currencySymbol = currencySymbolMatch ? currencySymbolMatch.join('') : '';
+    const symbolAtStart = currencyString.startsWith(currencySymbol);
+
+    if (symbolAtStart) {
+      result = normalizedString.replace(currencySymbol, '');
+    }
+  }
+
+  return result.trim();
 };
 
 export const isPositiveString = (value: string): boolean => {

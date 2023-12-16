@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { AccountField, CategoryField, ErrorType, TransactionField, TransferField } from 'shared/models';
+import { AccountField, CategoryField, ErrorType, InvoiceField, TransactionField, TransferField } from 'shared/models';
 
 export const transactionHelper = (): { [key in TransactionField]: ErrorType } => ({
   [TransactionField.amount]: {
@@ -99,4 +99,35 @@ export const transferHelper = (): { [key in TransferField]: ErrorType } => ({
     }
   },
   [TransferField.createdAt]: {},
+});
+
+export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
+  [InvoiceField.title]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_TITLE'
+    }
+  },
+  [InvoiceField.salary]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SALARY'
+    },
+    pattern: {
+      message: 'INVOICES.ERRORS.INVALID_SALARY'
+    }
+  },
+  [InvoiceField.currencyIso]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_CURRENCY'
+    }
+  },
+  [InvoiceField.vatIncluded]: {},
+  [InvoiceField.sellerName]: {},
+  [InvoiceField.sellerAddress]: {},
+  [InvoiceField.sellerLocation]: {},
+  [InvoiceField.sellerVatID]: {},
+  [InvoiceField.sellerAccount]: {},
+  [InvoiceField.buyerName]: {},
+  [InvoiceField.buyerAddress]: {},
+  [InvoiceField.buyerLocation]: {},
+  [InvoiceField.buyerVatID]: {}
 });

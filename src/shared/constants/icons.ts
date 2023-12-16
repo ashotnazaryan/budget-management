@@ -26,6 +26,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import WestIcon from '@mui/icons-material/West';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { IconType, IconTypes, Icon } from 'shared/models';
 
 export const CATEGORY_ICONS: IconTypes = {
@@ -63,6 +64,7 @@ export const OTHER_ICONS: IconTypes = {
   [IconType.delete]: DeleteIcon,
   [IconType.cancel]: CloseIcon,
   [IconType.west]: WestIcon,
+  [IconType.receipt]: ReceiptIcon
 };
 
 export const ALL_ICONS: IconTypes = {

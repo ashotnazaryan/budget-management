@@ -2,7 +2,7 @@ import { Account, AccountDTO } from './account';
 import { Auth } from './auth';
 import { Category, CategoryType } from './category';
 import { IconType } from './icon';
-import { Currency } from './setting';
+import { Currency } from './common';
 
 export interface TransactionDTO {
   id: string;

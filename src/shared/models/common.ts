@@ -7,6 +7,13 @@ export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
 };
 
+export interface Currency {
+  iso: 'USD' | 'EUR' | 'PLN' | 'UAH' | 'AMD';
+  name: 'US Dollar' | 'Euro' | 'Polish Zloty' | 'Ukrainian Hryvnia' | 'Armenian Dram';
+  nameKey: 'CURRENCIES.USD' | 'CURRENCIES.EUR' | 'CURRENCIES.PLN' | 'CURRENCIES.UAH' | 'CURRENCIES.AMD';
+  symbol: '$' | '€' | 'zł' | '₴' | '֏';
+}
+
 export enum ManageMode {
   create = 'create',
   view = 'view',

@@ -32,6 +32,22 @@ export enum TransferField {
   createdAt = 'createdAt'
 }
 
+export enum InvoiceField {
+  title = 'title',
+  salary = 'salary',
+  currencyIso = 'currencyIso',
+  vatIncluded = 'vatIncluded',
+  sellerName = 'sellerName',
+  sellerAddress = 'sellerAddress',
+  sellerLocation = 'sellerLocation',
+  sellerVatID = 'sellerVatID',
+  sellerAccount = 'sellerAccount',
+  buyerName = 'buyerName',
+  buyerAddress = 'buyerAddress',
+  buyerLocation = 'buyerLocation',
+  buyerVatID = 'buyerVatID'
+}
+
 type FieldErrorType = FieldError['type'];
 type Validate<T> = {
   [key: string]: (value: T) => boolean | string | Promise<boolean | string>;

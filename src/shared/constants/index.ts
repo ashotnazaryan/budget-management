@@ -6,3 +6,4 @@ export * from './icons';
 export * from './categories';
 export * from './accounts';
 export * from './locales';
+export * from './date';

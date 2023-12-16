@@ -33,7 +33,8 @@ export enum IconType {
   edit = 'edit',
   delete = 'delete',
   cancel = 'cancel',
-  west = 'west'
+  west = 'west',
+  receipt = 'receipt'
 }
 
 export interface Icon {

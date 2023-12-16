@@ -1,5 +1,5 @@
 import { IconType } from './icon';
-import { Currency } from './setting';
+import { Currency } from './common';
 
 export interface AccountDTO {
   id: string;

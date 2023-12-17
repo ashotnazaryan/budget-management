@@ -21,8 +21,8 @@ export const styles = StyleSheet.create({
   },
   heading: {
     paddingTop: 10,
-    display: 'flex', 
-    flexDirection: 'row', 
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center'
   },
   label: {
@@ -38,8 +38,8 @@ export const styles = StyleSheet.create({
     marginTop: 30
   },
   sellerBuyer: {
-    display: 'flex', 
-    flexDirection: 'row', 
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'flex-start',
     marginTop: 40
   },
@@ -48,5 +48,62 @@ export const styles = StyleSheet.create({
   },
   buyer: {
     flex: 50
+  },
+  table: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    marginTop: 40
+  },
+  headerRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#959ba1'
+  },
+  bodyRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  tableCol: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0
+  },
+  noCol: {
+    width: '5%'
+  },
+  nameCol: {
+    width: '22%'
+  },
+  unitCol: {
+    width: '5%'
+  },
+  quantityCol: {
+    width: '5%'
+  },
+  unitNetPriceCol: {
+    width: '13%'
+  },
+  netValueCol: {
+    width: '12%'
+  },
+  vatRateCol: {
+    width: '17%'
+  },
+  grossValueCol: {
+    width: '12%'
+  },
+  currencyCol: {
+    width: '9%'
+  },
+  tableCell: {
+    fontSize: 11,
+    paddingLeft: 4
   }
 });

@@ -64,6 +64,66 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             </View>
           </View>
         </View>
+        <View style={styles.table}>
+          <View style={styles.headerRow}>
+            <View style={{ ...styles.tableCol, ...styles.noCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NO')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.nameCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NAME')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.unitCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.UNIT')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.quantityCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.QUANTITY')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.UNIT_NET_PRICE')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.netValueCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NET_VALUE')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.VAT_RATE')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.GROSS_VALUE')}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.currencyCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.CURRENCY')}</Text>
+            </View>
+          </View>
+          <View style={styles.bodyRow}>
+            <View style={{ ...styles.tableCol, ...styles.noCol }}>
+              <Text style={styles.tableCell}>1</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.nameCol }}>
+              <Text style={styles.tableCell}>2 </Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.unitCol }}>
+              <Text style={styles.tableCell}>3</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.quantityCol }}>
+              <Text style={styles.tableCell}>4</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
+              <Text style={styles.tableCell}>5</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.netValueCol }}>
+              <Text style={styles.tableCell}>6</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
+              <Text style={styles.tableCell}>7</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
+              <Text style={styles.tableCell}>8</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.currencyCol }}>
+              <Text style={styles.tableCell}>9</Text>
+            </View>
+          </View>
+        </View>
       </Page>
     </Document>
   );

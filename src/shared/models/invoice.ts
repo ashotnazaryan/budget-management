@@ -11,4 +11,13 @@ export interface Invoice {
   salary: string;
   currencyIso: Currency['iso'];
   vatIncluded: boolean;
+  sellerName: string;
+  sellerAddress: string;
+  sellerLocation: string;
+  sellerVatID: string;
+  sellerAccount: string;
+  buyerName: string;
+  buyerAddress: string;
+  buyerLocation: string;
+  buyerVatID: string;
 }

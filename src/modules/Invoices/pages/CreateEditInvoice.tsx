@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { PDFViewer } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
 import { Invoice, ManageMode } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import InvoiceDocument from '../components/InvoiceDocument';
 import InvoiceForm from '../components/InvoiceForm';
+import { StyledPDFViewer } from './CreateEditInvoice.styles';
 
 interface NewInvoiceProps {
   mode: ManageMode;
@@ -34,13 +34,13 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         text={t('INVOICES.NEW_INVOICE')}
         onBackButtonClick={goBack} />
       <Grid container columnSpacing={3} rowSpacing={5}>
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={6}>
           <InvoiceForm onSubmit={handleFormSubmit} />
         </Grid>
-        <Grid item xs={12} sm={7}>
-          <PDFViewer width='100%' height='100%'>
+        <Grid item xs={12} sm={6}>
+          <StyledPDFViewer>
             <InvoiceDocument data={invoiceData} />
-          </PDFViewer>
+          </StyledPDFViewer>
         </Grid>
       </Grid>
     </Box>

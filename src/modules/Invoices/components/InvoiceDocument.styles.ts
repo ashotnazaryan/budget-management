@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   page: {
     backgroundColor: '#E4E4E4',
     fontFamily: 'SourceSansPro',
-    padding: 10
+    padding: 20
   },
   title: {
     fontSize: 15,
@@ -33,9 +33,20 @@ export const styles = StyleSheet.create({
   value: {
     fontSize: 12
   },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1
+  account: {
+    fontSize: 12,
+    marginTop: 30
+  },
+  sellerBuyer: {
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'flex-start',
+    marginTop: 40
+  },
+  seller: {
+    flex: 50
+  },
+  buyer: {
+    flex: 50
   }
 });

@@ -120,14 +120,50 @@ export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
       message: 'INVOICES.ERRORS.REQUIRED_CURRENCY'
     }
   },
+  [InvoiceField.sellerName]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SELLER_NAME'
+    },
+  },
+  [InvoiceField.sellerAddress]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SELLER_ADDRESS'
+    },
+  },
+  [InvoiceField.sellerLocation]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SELLER_LOCATION'
+    },
+  },
+  [InvoiceField.sellerVatID]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SELLER_VAT_ID'
+    },
+  },
+  [InvoiceField.sellerAccount]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_SELLER_ACCOUNT'
+    },
+  },
+  [InvoiceField.buyerName]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_BUYER_NAME'
+    },
+  },
+  [InvoiceField.buyerAddress]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_BUYER_ADDRESS'
+    },
+  },
+  [InvoiceField.buyerLocation]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_BUYER_LOCATION'
+    },
+  },
+  [InvoiceField.buyerVatID]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_BUYER_VAT_ID'
+    },
+  },
   [InvoiceField.vatIncluded]: {},
-  [InvoiceField.sellerName]: {},
-  [InvoiceField.sellerAddress]: {},
-  [InvoiceField.sellerLocation]: {},
-  [InvoiceField.sellerVatID]: {},
-  [InvoiceField.sellerAccount]: {},
-  [InvoiceField.buyerName]: {},
-  [InvoiceField.buyerAddress]: {},
-  [InvoiceField.buyerLocation]: {},
-  [InvoiceField.buyerVatID]: {}
 });

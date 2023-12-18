@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useTranslation } from 'core/i18n';
-import { Invoice, ManageMode } from 'shared/models';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getExchangeRates, selectInvoice, setAmount } from 'store/reducers';
+import { Currency, Invoice, ManageMode } from 'shared/models';
+import { getLastDateOfPreviousMonth } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import InvoiceDocument from '../components/InvoiceDocument';
@@ -17,14 +20,27 @@ interface NewInvoiceProps {
 const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { rate, amount } = useAppSelector(selectInvoice);
+  const dispatch = useAppDispatch();
   const [invoiceData, setInvoiceData] = React.useState<Invoice>({} as Invoice);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.invoices.path}`);
   }, [navigate]);
 
+  React.useEffect(() => {
+    setInvoiceData((prevInvoiceData) => ({ ...prevInvoiceData, amount }));
+  }, [amount]);
+
   const handleFormSubmit = (data: Invoice): void => {
-    setInvoiceData(data);
+    const { salary, vatIncluded } = data;
+
+    dispatch(setAmount({ rate, salary, vatIncluded }));
+    setInvoiceData({ ...data, amount });
+  };
+
+  const handleCurrencyChange = (currencyIso: Currency['iso']): void => {
+    dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
   };
 
   return (
@@ -35,7 +51,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         onBackButtonClick={goBack} />
       <Grid container columnSpacing={3} rowSpacing={5}>
         <Grid item xs={12} sm={6}>
-          <InvoiceForm onSubmit={handleFormSubmit} />
+          <InvoiceForm onSubmit={handleFormSubmit} onCurrencyChange={handleCurrencyChange} />
         </Grid>
         <Grid item xs={12} sm={6}>
           <StyledPDFViewer>

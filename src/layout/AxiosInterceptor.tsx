@@ -18,7 +18,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   axios.interceptors.request.use((config) => {
     const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
 
-    if (accessToken) {
+    if (accessToken && !config.baseURL?.includes(process.env.REACT_APP_NBP_PL_API as string)) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 

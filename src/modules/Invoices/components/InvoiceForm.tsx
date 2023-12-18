@@ -21,9 +21,10 @@ import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
 
 interface InvoiceFormProps {
   onSubmit: (formData: Invoice) => void;
+  onCurrencyChange: (currencyIso: Currency['iso']) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -62,6 +63,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit }) => {
 
     setValue(InvoiceField.currencyIso, value);
     setCurrencyIso(value);
+    onCurrencyChange(value);
   };
 
   const handleVatIncludedChange = (_: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {

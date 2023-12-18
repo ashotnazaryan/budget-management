@@ -6,13 +6,31 @@ import {
   getCurrentDate,
   getDayOfCurrentMonth,
   getFirstDateOfPreviousMonth,
-  getLastDateOfPreviousMonth
+  getLastDateOfPreviousMonth,
+  getPreviousMonthLongName
 } from 'shared/helpers';
 import { styles } from './InvoiceDocument.styles';
 
 interface InvoiceDocumentProps {
   data: Invoice;
 }
+
+export const chunkSubstring = (str: string, size: number) => {
+  const numChunks = Math.ceil(str.length / size);
+  const chunks = new Array<string>(numChunks);
+
+  for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+    chunks[i] = str.substring(o, o + size);
+  }
+
+  return chunks;
+};
+
+const textComponent = (text: string, size: number): React.ReactElement => {
+  return (
+    <Text style={styles.tableCell} hyphenationCallback={(event) => chunkSubstring(event, size)}>{text}</Text>
+  );
+};
 
 const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
   const { t } = useTranslation();
@@ -73,10 +91,10 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NAME')}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitCol }}>
-              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.UNIT')}</Text>
+              {textComponent(t('INVOICES.DOCUMENT.TABLE.UNIT'), 3)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.quantityCol }}>
-              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.QUANTITY')}</Text>
+              {textComponent(t('INVOICES.DOCUMENT.TABLE.QUANTITY'), 3)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.UNIT_NET_PRICE')}</Text>
@@ -85,12 +103,15 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NET_VALUE')}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
-              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.VAT_RATE')}</Text>
+              {textComponent(t('INVOICES.DOCUMENT.TABLE.VAT_RATE'), 3)}
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.vatAmountCol }}>
+              <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.VAT_AMOUNT')}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.GROSS_VALUE')}</Text>
             </View>
-            <View style={{ ...styles.tableCol, ...styles.currencyCol }}>
+            <View style={{ ...styles.currencyCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.CURRENCY')}</Text>
             </View>
           </View>
@@ -99,31 +120,42 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>1</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.nameCol }}>
-              <Text style={styles.tableCell}>2 </Text>
+              {textComponent(`${t('INVOICES.DOCUMENT.TABLE.PROGRAMMING_SERVICES')} ${getPreviousMonthLongName()}`, 20)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitCol }}>
-              <Text style={styles.tableCell}>3</Text>
+              <Text style={styles.tableCell}>—</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.quantityCol }}>
-              <Text style={styles.tableCell}>4</Text>
+              <Text style={styles.tableCell}>1</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
-              <Text style={styles.tableCell}>5</Text>
+              <Text style={styles.tableCell}>{data.amount?.net}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.netValueCol }}>
-              <Text style={styles.tableCell}>6</Text>
+              <Text style={styles.tableCell}>{data.amount?.net}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
-              <Text style={styles.tableCell}>7</Text>
+              <Text style={styles.tableCell}>{data.vatIncluded ? data.amount?.vatRate : '—'}</Text>
+            </View>
+            <View style={{ ...styles.tableCol, ...styles.vatAmountCol }}>
+              <Text style={styles.tableCell}>{data.vatIncluded ? data.amount?.vatAmount : '—'}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
-              <Text style={styles.tableCell}>8</Text>
+              <Text style={styles.tableCell}>{data.amount?.gross}</Text>
             </View>
-            <View style={{ ...styles.tableCol, ...styles.currencyCol }}>
-              <Text style={styles.tableCell}>9</Text>
+            <View style={{ ...styles.currencyCol }}>
+              <Text style={styles.tableCell}>PLN</Text>
             </View>
           </View>
         </View>
+        <View style={styles.total}>
+          <Text>{t('INVOICES.DOCUMENT.TABLE.TOTAL')}: {data.amount?.gross} PLN</Text>
+        </View>
+        {!data.vatIncluded && (
+          <View style={styles.vatExemption}>
+            <Text>{t('INVOICES.DOCUMENT.TABLE.VAT_EXEMPTION')}</Text>
+          </View>
+        )}
       </Page>
     </Document>
   );

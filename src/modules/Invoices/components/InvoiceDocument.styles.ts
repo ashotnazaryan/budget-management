@@ -52,10 +52,6 @@ export const styles = StyleSheet.create({
   table: {
     display: 'flex',
     flexDirection: 'column',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
     marginTop: 40
   },
   headerRow: {
@@ -67,13 +63,19 @@ export const styles = StyleSheet.create({
   bodyRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderStyle: 'solid',
+    borderTopWidth: 0,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1
   },
   tableCol: {
     borderStyle: 'solid',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0
+    borderTopWidth: 0,
+    borderRightWidth: 1,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0
   },
   noCol: {
     width: '5%'
@@ -94,7 +96,10 @@ export const styles = StyleSheet.create({
     width: '12%'
   },
   vatRateCol: {
-    width: '17%'
+    width: '5%'
+  },
+  vatAmountCol: {
+    width: '12%'
   },
   grossValueCol: {
     width: '12%'
@@ -104,6 +109,16 @@ export const styles = StyleSheet.create({
   },
   tableCell: {
     fontSize: 11,
-    paddingLeft: 4
+    margin: 4
+  },
+  total: {
+    marginTop: 20,
+    fontSize: 13,
+    fontWeight: 'bold',
+    textAlign: 'right'
+  },
+  vatExemption: {
+    marginTop: 20,
+    fontSize: 11
   }
 });

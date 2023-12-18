@@ -5,6 +5,7 @@ import settingReducer from './settingSlice';
 import categoryReducer from './categorySlice';
 import accountReducer from './accountSlice';
 import transferReducer from './transferSlice';
+import invoiceReducer from './invoiceSlice';
 import authReducer from './authSlice';
 import userReducer from './userSlice';
 import appReducer from './appSlice';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   category: categoryReducer,
   account: accountReducer,
   transfer: transferReducer,
+  invoice: invoiceReducer,
   auth: authReducer,
   user: userReducer,
   app: appReducer

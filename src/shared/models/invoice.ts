@@ -20,4 +20,20 @@ export interface Invoice {
   buyerAddress: string;
   buyerLocation: string;
   buyerVatID: string;
+  amount?: Amount;
+}
+
+export interface Amount {
+  net: string;
+  gross: string;
+  vatAmount: string;
+  vatRate: string;
+}
+
+export interface NBPResponse {
+  code: Currency['iso'];
+  rates: {
+    effectiveDate: string;
+    mid: number;
+  }[];
 }

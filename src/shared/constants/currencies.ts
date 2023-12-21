@@ -32,3 +32,5 @@ export const CURRENCIES: Currency[] = [
     symbol: '֏'
   }
 ];
+
+export const INVOICE_CURRENCIES: Currency[] = CURRENCIES.filter(({ iso }) => iso !== 'AMD');

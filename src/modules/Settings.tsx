@@ -11,10 +11,10 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import date from 'core/date';
 import { useAppDispatch, useAppSelector } from 'store';
-import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts } from 'store/reducers';
+import { addSetting, selectSettings, reset, selectApp, selectUser, selectAccount, getAccounts, getExchangeRates } from 'store/reducers';
 import { CURRENCIES, LOCALES, PERIOD_OPTIONS } from 'shared/constants';
 import { Account, Currency, Locale, Period } from 'shared/models';
-import { getAccountLabel } from 'shared/helpers';
+import { getAccountLabel, getLastDateOfPreviousMonth } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
 import Dialog from 'shared/components/Dialog';
@@ -44,9 +44,10 @@ const Settings: React.FC<{}> = () => {
   };
 
   const handleCurrencyChange = (event: SelectChangeEvent): void => {
-    const isoCode = event.target.value as Currency['iso'];
+    const currencyIso = event.target.value as Currency['iso'];
 
-    dispatch(addSetting([{ defaultCurrency: isoCode }, false, true]));
+    dispatch(addSetting([{ defaultCurrency: currencyIso }, false, true]));
+    dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
   };
 
   const handleDecimalsChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {

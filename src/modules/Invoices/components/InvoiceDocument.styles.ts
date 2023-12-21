@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
   headerRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     backgroundColor: '#959ba1'
   },
   bodyRow: {
@@ -65,18 +65,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderStyle: 'solid',
-    borderTopWidth: 0,
     borderRightWidth: 1,
     borderBottomWidth: 1,
     borderLeftWidth: 1
   },
-  tableCol: {
-    borderStyle: 'solid',
-    borderTopWidth: 0,
-    borderRightWidth: 1,
-    borderBottomWidth: 0,
-    borderLeftWidth: 0
-  },
+  tableCol: {},
   noCol: {
     width: '5%'
   },

@@ -4,14 +4,14 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectInvoice, selectSettings } from 'store/reducers';
 import { getFromLocalStorage, getLastDateOfPreviousMonth } from 'shared/helpers';
 import { Auth } from 'shared/models';
-import { AUTH_KEY, ROUTES } from 'shared/constants';
+import { AUTH_KEY, INVOICE_CURRENCIES, ROUTES } from 'shared/constants';
 import Content from './Content';
 import Loading from './Loading';
 
 export const ProtectedLayout = () => {
   const { status: authStatus } = useAppSelector(selectAuth);
   const { status: appStatus } = useAppSelector(selectApp);
-  const { defaultCurrency: {iso} } = useAppSelector(selectSettings);
+  const { defaultCurrency: { iso }, status: settingStatus } = useAppSelector(selectSettings);
   const { status: invoiceStatus } = useAppSelector(selectInvoice);
   const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const outlet = useOutlet();
@@ -31,10 +31,12 @@ export const ProtectedLayout = () => {
   }, [dispatch, accessToken]);
 
   React.useEffect(() => {
-    if (invoiceStatus === 'idle') {
-      dispatch(getExchangeRates([iso, getLastDateOfPreviousMonth()]));
+    if (invoiceStatus === 'idle' && settingStatus === 'succeeded') {
+      const currencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
+
+      dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
     }
-  }, [dispatch, iso, invoiceStatus]);
+  }, [dispatch, iso, invoiceStatus, settingStatus]);
 
   if (!accessToken && (authStatus === 'idle' || authStatus === 'loading')) {
     return <Loading />;

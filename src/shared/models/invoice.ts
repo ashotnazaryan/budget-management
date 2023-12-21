@@ -24,10 +24,10 @@ export interface Invoice {
 }
 
 export interface Amount {
-  net: string;
-  gross: string;
-  vatAmount: string;
-  vatRate: string;
+  net: number;
+  gross: number;
+  vatAmount: number;
+  vatRate: number;
 }
 
 export interface NBPResponse {

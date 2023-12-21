@@ -13,7 +13,7 @@ import { useTranslation } from 'core/i18n';
 import { Currency, Invoice, InvoiceField } from 'shared/models';
 import { invoiceHelper } from 'shared/helpers';
 import { useAppSelector } from 'store';
-import { CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
+import { INVOICE_CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
 import { selectSettings } from 'store/reducers';
 import FormInput from 'shared/components/FormInput';
 import FormSelect from 'shared/components/FormSelect';
@@ -30,14 +30,15 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
   const { palette: { info: { contrastText } } } = useTheme();
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const regex = POSITIVE_NUMERIC_REGEX;
-  const currencies = CURRENCIES;
-  const [currencyIso, setCurrencyIso] = React.useState<Currency['iso']>(iso);
+  const currencies = INVOICE_CURRENCIES;
+  const defaultCurrencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
+  const [currencyIso, setCurrencyIso] = React.useState<Currency['iso']>(defaultCurrencyIso);
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
 
   const defaultValues: Partial<Invoice> = {
     title: '',
     salary: '',
-    currencyIso: iso,
+    currencyIso: defaultCurrencyIso,
     vatIncluded: false,
     sellerName: '',
     sellerAddress: '',
@@ -81,7 +82,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
         <Grid container gap={3}>
           <Grid item container>
             <Paper elevation={1} sx={{ paddingX: 3, paddingTop: 2, paddingBottom: 6, width: '100%' }}>
-              <Typography sx={{ marginBottom: 2 }}>{t('INVOICES.MAIN_INFO')}</Typography>
+              <Typography sx={{ marginTop: 2, marginBottom: 4 }} fontSize={17}>{t('INVOICES.MAIN_INFO')}</Typography>
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput
@@ -116,7 +117,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
                   <FormSelect
                     label={t('COMMON.CURRENCY')}
                     name={InvoiceField.currencyIso}
-                    value={currencyIso || iso}
+                    value={currencyIso}
                     onChange={handleCurrencyChange}
                     rules={{
                       required: {
@@ -155,7 +156,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
           </Grid>
           <Grid item container>
             <Paper elevation={1} sx={{ paddingX: 3, paddingTop: 2, paddingBottom: 7, width: '100%' }}>
-              <Typography sx={{ marginBottom: 2 }}>{t('INVOICES.SELLER_INFO')}</Typography>
+              <Typography sx={{ marginTop: 2, marginBottom: 4 }} fontSize={17}>{t('INVOICES.SELLER_INFO')}</Typography>
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput
@@ -222,7 +223,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
           </Grid>
           <Grid item container>
             <Paper elevation={1} sx={{ paddingX: 3, paddingTop: 2, paddingBottom: 7, width: '100%' }}>
-              <Typography sx={{ marginBottom: 2 }}>{t('INVOICES.BUYER_INFO')}</Typography>
+              <Typography sx={{ marginTop: 2, marginBottom: 4 }} fontSize={17}>{t('INVOICES.BUYER_INFO')}</Typography>
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput

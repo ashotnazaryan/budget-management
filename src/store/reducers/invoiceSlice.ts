@@ -14,13 +14,20 @@ export interface InvoiceState {
 const initialState: InvoiceState = {
   salary: 0,
   rate: 1,
-  amount: {} as Amount,
+  amount: {
+    net: 0,
+    gross: 0
+  } as Amount,
   status: 'idle'
 };
 
 export const getExchangeRates = createAsyncThunk<number, [Currency['iso'], string], { rejectValue: unknown }>(
   'invoices/getExchangeRates',
   async ([currencyIso, date], { rejectWithValue }) => {
+    if (currencyIso === 'PLN') {
+      return 1;
+    }
+
     try {
       const { data: { rates } } = await axios.get<NBPResponse>(`/A/${currencyIso}/${date}`, {
         baseURL: process.env.REACT_APP_NBP_PL_API,

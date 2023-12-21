@@ -26,7 +26,7 @@ export const chunkSubstring = (str: string, size: number) => {
   return chunks;
 };
 
-const textComponent = (text: string, size: number): React.ReactElement => {
+const chunkTextComponent = (text: string, size: number): React.ReactElement => {
   return (
     <Text style={styles.tableCell} hyphenationCallback={(event) => chunkSubstring(event, size)}>{text}</Text>
   );
@@ -91,10 +91,10 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NAME')}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitCol }}>
-              {textComponent(t('INVOICES.DOCUMENT.TABLE.UNIT'), 3)}
+              {chunkTextComponent(t('INVOICES.DOCUMENT.TABLE.UNIT'), 3)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.quantityCol }}>
-              {textComponent(t('INVOICES.DOCUMENT.TABLE.QUANTITY'), 3)}
+              {chunkTextComponent(t('INVOICES.DOCUMENT.TABLE.QUANTITY'), 3)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.UNIT_NET_PRICE')}</Text>
@@ -103,7 +103,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.NET_VALUE')}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
-              {textComponent(t('INVOICES.DOCUMENT.TABLE.VAT_RATE'), 3)}
+              {chunkTextComponent(t('INVOICES.DOCUMENT.TABLE.VAT_RATE'), 3)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatAmountCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.VAT_AMOUNT')}</Text>
@@ -120,7 +120,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>1</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.nameCol }}>
-              {textComponent(`${t('INVOICES.DOCUMENT.TABLE.PROGRAMMING_SERVICES')} ${getPreviousMonthLongName()}`, 20)}
+              {chunkTextComponent(`${t('INVOICES.DOCUMENT.TABLE.PROGRAMMING_SERVICES')} ${getPreviousMonthLongName()}`, 20)}
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitCol }}>
               <Text style={styles.tableCell}>—</Text>

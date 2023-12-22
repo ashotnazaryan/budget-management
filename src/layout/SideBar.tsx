@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Drawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -19,6 +20,7 @@ import Dialog from 'shared/components/Dialog';
 import UserBalanceInfo from 'modules/components/UserBalanceInfo';
 import SideBarSettingsPreview from './components/SideBarSettingsPreview';
 import Menu from './components/Menu';
+import { ROUTES } from 'shared/constants';
 
 interface SideBarProps extends MuiDrawerProps { }
 
@@ -30,6 +32,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
   const { palette: { secondary: { main } } } = useTheme();
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const avatar = user.avatar;
 
   const close = (): void => {
@@ -47,6 +50,11 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
   const handleLogout = (): void => {
     setDialogOpened(false);
     dispatch(logout());
+  };
+
+  const handleAvatarClick = (): void => {
+    close();
+    navigate(ROUTES.profile.path);
   };
 
   React.useEffect(() => {
@@ -68,7 +76,7 @@ const SideBar: React.FC<SideBarProps> = ({ ...props }) => {
           >
             <Grid item container alignItems='center' sx={{ paddingY: 2, paddingX: 4, borderBottom: `1px solid ${main}` }} columnSpacing={2}>
               <Grid item xs={11}>
-                <UserBalanceInfo fullName={user.fullName} avatar={avatar} balance={balance} />
+                <UserBalanceInfo fullName={user.fullName} avatar={avatar} balance={balance} onAvatarClick={handleAvatarClick} />
               </Grid>
               <Grid item xs={1}>
                 <IconButton aria-label='Close sidebar' edge='start' color='secondary' onClick={close}>

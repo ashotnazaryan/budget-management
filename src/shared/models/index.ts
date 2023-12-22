@@ -1,6 +1,7 @@
 export * from './summary';
 export * from './transaction';
 export * from './setting';
+export * from './profile';
 export * from './route';
 export * from './user';
 export * from './auth';

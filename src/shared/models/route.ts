@@ -3,6 +3,7 @@ export enum RouteKey {
   home = 'home',
   dashboard = 'dashboard',
   settings = 'settings',
+  profile = 'profile',
   transactions = 'transactions',
   categories = 'categories',
   accounts = 'accounts',

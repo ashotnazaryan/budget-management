@@ -8,6 +8,7 @@ import transferReducer from './transferSlice';
 import invoiceReducer from './invoiceSlice';
 import authReducer from './authSlice';
 import userReducer from './userSlice';
+import profileReducer from './profileSlice';
 import appReducer from './appSlice';
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   invoice: invoiceReducer,
   auth: authReducer,
   user: userReducer,
+  profile: profileReducer,
   app: appReducer
 });
 

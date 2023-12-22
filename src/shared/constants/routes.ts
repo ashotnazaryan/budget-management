@@ -13,6 +13,10 @@ export const ROUTES: AppRoute = {
     name: 'ROUTES.SETTINGS',
     path: '/settings'
   },
+  profile: {
+    name: 'ROUTES.PROFILE',
+    path: '/profile'
+  },
   categories: {
     name: 'ROUTES.CATEGORIES',
     path: '/categories'

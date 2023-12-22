@@ -27,8 +27,7 @@ const initialState: SettingState = {
 
 export const getSettings = createAsyncThunk<Setting, void, { rejectValue: ErrorResponse }>(
   'setting/getSettings',
-  async (_, { dispatch, rejectWithValue }
-  ) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const { data } = await axios.get<SettingDTO>('settings');
 

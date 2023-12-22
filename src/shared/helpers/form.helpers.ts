@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { AccountField, CategoryField, ErrorType, InvoiceField, TransactionField, TransferField } from 'shared/models';
+import { AccountField, CategoryField, ErrorType, InvoiceField, ProfileField, TransactionField, TransferField } from 'shared/models';
 
 export const transactionHelper = (): { [key in TransactionField]: ErrorType } => ({
   [TransactionField.amount]: {
@@ -166,4 +166,15 @@ export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
     },
   },
   [InvoiceField.vatIncluded]: {},
+});
+
+export const profileHelper = (): { [key in ProfileField]: ErrorType } => ({
+  [ProfileField.streetAddress]: {},
+  [ProfileField.streetAddressLine]: {},
+  [ProfileField.city]: {},
+  [ProfileField.region]: {},
+  [ProfileField.zipCode]: {},
+  [ProfileField.countryCode]: {},
+  [ProfileField.taxId]: {},
+  [ProfileField.accountNumber]: {}
 });

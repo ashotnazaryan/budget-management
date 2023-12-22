@@ -10,16 +10,17 @@ interface UserBalanceInfoProps {
   fullName: string;
   balance: string;
   avatar?: string;
+  onAvatarClick?: () => void;
 }
 
-const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, fullName = '', balance = '0' }) => {
+const UserBalanceInfo: React.FC<UserBalanceInfoProps> = ({ avatar, onAvatarClick, fullName = '', balance = '0' }) => {
   const { palette: { secondary: { main } } } = useTheme();
   const { t } = useTranslation();
 
   return (
     <Grid container alignItems='center' columnSpacing={2}>
       <Grid item>
-        <Avatar alt={fullName} src={avatar} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${main}` }} />
+        <Avatar alt={fullName} src={avatar} onClick={onAvatarClick} sx={{ width: 64, height: 64, marginRight: 1, border: `1px solid ${main}`, cursor: 'pointer' }} />
       </Grid>
       <Grid item container xs={8}>
         <Grid item xs={12}>

@@ -7,4 +7,5 @@ export * from './transferSlice';
 export * from './invoiceSlice';
 export * from './authSlice';
 export * from './userSlice';
+export * from './profileSlice';
 export * from './appSlice';

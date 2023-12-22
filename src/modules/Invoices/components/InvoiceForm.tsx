@@ -2,7 +2,6 @@ import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
@@ -18,6 +17,7 @@ import { selectSettings } from 'store/reducers';
 import FormInput from 'shared/components/FormInput';
 import FormSelect from 'shared/components/FormSelect';
 import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
+import Button from 'shared/components/Button';
 
 interface InvoiceFormProps {
   onSubmit: (formData: Invoice) => void;

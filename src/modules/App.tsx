@@ -11,6 +11,7 @@ import { ROUTES } from 'shared/constants';
 import { ProtectedLayout } from 'layout/ProtectedLayout';
 import Loading from 'layout/Loading';
 import Settings from './Settings';
+import Profile from './Profile';
 
 const App: React.FC = () => {
   const { isDarkTheme, locale: { iso } } = useAppSelector(selectSettings);
@@ -49,6 +50,7 @@ const App: React.FC = () => {
             <Route path={ROUTES.home.path} element={<Navigate to={ROUTES.dashboard.path} replace />} />
             <Route path={`${ROUTES.dashboard.path}/*`} element={Main} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
+            <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={`${ROUTES.transactions.path}/*`} element={Transactions} />
             <Route path={`${ROUTES.categories.path}/*`} element={Categories} />
             <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />

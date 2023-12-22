@@ -2,7 +2,7 @@ import { Currency } from './common';
 
 export interface InvoiceDTO {
   id: string;
-  name: string;
+  title: string;
 }
 
 export interface Invoice {

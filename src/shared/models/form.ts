@@ -48,6 +48,17 @@ export enum InvoiceField {
   buyerVatID = 'buyerVatID'
 }
 
+export enum ProfileField {
+  streetAddress = 'streetAddress',
+  streetAddressLine = 'streetAddressLine',
+  city = 'city',
+  region = 'region',
+  zipCode = 'zipCode',
+  countryCode = 'countryCode',
+  taxId = 'taxId',
+  accountNumber = 'accountNumber'
+}
+
 type FieldErrorType = FieldError['type'];
 type Validate<T> = {
   [key: string]: (value: T) => boolean | string | Promise<boolean | string>;

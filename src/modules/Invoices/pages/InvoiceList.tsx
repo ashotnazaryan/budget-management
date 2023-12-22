@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
-import Button from '@mui/material/Button';
 import { useTranslation } from 'core/i18n';
 import PageTitle from 'shared/components/PageTitle';
 import { IconType } from 'shared/models';
 import { ROUTES } from 'shared/constants';
 import Icon from 'shared/components/Icon';
+import Button from 'shared/components/Button';
 
 const InvoiceList: React.FC<{}> = () => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ const InvoiceList: React.FC<{}> = () => {
       <PageTitle text={t('INVOICES.PAGE_TITLE')} />
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button
-          aria-label='New transfer'
+          aria-label='New invoice'
           color='secondary'
           variant='contained'
           startIcon={<Icon name={IconType.receipt}></Icon>}

@@ -44,8 +44,8 @@ const darkPalette: PaletteOptions = {
     main: '#ff4d4d'
   },
   info: {
-    main: '#262626',
-    light: '#333333',
+    main: '#1a1a1a',
+    light: '#262626',
     dark: '#0d0d0d',
     contrastText: '#fff'
   },

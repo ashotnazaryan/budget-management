@@ -20,11 +20,12 @@ import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
 import Button from 'shared/components/Button';
 
 interface InvoiceFormProps {
+  data: Partial<Invoice>;
   onSubmit: (formData: Invoice) => void;
   onCurrencyChange: (currencyIso: Currency['iso']) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyChange }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -58,6 +59,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onCurrencyChange })
   });
 
   const { setValue, handleSubmit } = methods;
+
+  React.useEffect(() => {
+    Object.keys(data).forEach((key) => {
+      setValue(key as keyof Invoice, data[key as keyof Invoice]);
+    });
+  }, [data, setValue]);
 
   const handleCurrencyChange = (event: SelectChangeEvent<string>): void => {
     const value = event.target.value as Currency['iso'];

@@ -12,7 +12,7 @@ import {
 import { styles } from './InvoiceDocument.styles';
 
 interface InvoiceDocumentProps {
-  data: Invoice;
+  data: Partial<Invoice>;
 }
 
 export const chunkSubstring = (str: string, size: number) => {
@@ -68,7 +68,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.value}>{data.sellerName}</Text>
               <Text style={styles.value}>{data.sellerAddress}</Text>
               <Text style={styles.value}>{data.sellerLocation}</Text>
-              <Text style={styles.value}>{data.sellerVatID}</Text>
+              <Text style={styles.value}>{t('COMMON.VAT_ID')} {data.sellerVatID}</Text>
               <Text style={styles.account}>{data.sellerAccount}</Text>
             </View>
           </View>

@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getExchangeRates, selectInvoice, setAmount } from 'store/reducers';
+import { getExchangeRates, getProfile, selectInvoice, selectProfile, selectUser, setAmount } from 'store/reducers';
 import { Currency, Invoice, ManageMode } from 'shared/models';
-import { getLastDateOfPreviousMonth } from 'shared/helpers';
+import { getLastDateOfPreviousMonth, mapUserProfileToInvoice } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import InvoiceDocument from '../components/InvoiceDocument';
@@ -21,8 +21,10 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { rate, amount } = useAppSelector(selectInvoice);
+  const { status: profileStatus, userProfile } = useAppSelector(selectProfile);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
-  const [invoiceData, setInvoiceData] = React.useState<Invoice>({} as Invoice);
+  const [invoiceData, setInvoiceData] = React.useState<Partial<Invoice>>({} as Invoice);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.invoices.path}`);
@@ -31,6 +33,18 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   React.useEffect(() => {
     setInvoiceData((prevInvoiceData) => ({ ...prevInvoiceData, amount }));
   }, [amount]);
+
+  React.useEffect(() => {
+    if (profileStatus === 'idle') {
+      dispatch(getProfile());
+    }
+
+    if (profileStatus === 'succeeded') {
+      const mappedInvoiceData = mapUserProfileToInvoice(user, userProfile);
+
+      setInvoiceData((prevInvoiceData) => ({ ...prevInvoiceData, ...mappedInvoiceData }));
+    }
+  }, [dispatch, profileStatus, user, userProfile]);
 
   const handleFormSubmit = (data: Invoice): void => {
     const { salary, vatIncluded } = data;
@@ -51,7 +65,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         onBackButtonClick={goBack} />
       <Grid container columnSpacing={3} rowSpacing={5}>
         <Grid item xs={12} sm={6}>
-          <InvoiceForm onSubmit={handleFormSubmit} onCurrencyChange={handleCurrencyChange} />
+          <InvoiceForm data={invoiceData} onSubmit={handleFormSubmit} onCurrencyChange={handleCurrencyChange} />
         </Grid>
         <Grid item xs={12} sm={6}>
           <StyledPDFViewer>

@@ -110,6 +110,13 @@ const Profile: React.FC<{}> = () => {
             <FormSelect
               label={t('PROFILE.COUNTRY')}
               name={ProfileField.countryCode}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: '200px'
+                  }
+                }
+              }}
             >
               {countries.map(({ name, code }) => (
                 <MenuItem key={code} value={code}>{name}</MenuItem>
@@ -139,7 +146,7 @@ const Profile: React.FC<{}> = () => {
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
-      <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 4, marginBottom: 4 }}>
+      <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 6, marginBottom: 4 }}>
         <Grid item sm='auto' xs={12}>
           <Button aria-label='Save profile' fullWidth type='submit' variant='contained' loading={editLoading}
             onClick={handleSubmit(handleFormSubmit)}>

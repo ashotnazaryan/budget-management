@@ -83,13 +83,13 @@ export const styles = StyleSheet.create({
     width: '5%'
   },
   unitNetPriceCol: {
-    width: '13%'
+    width: '12%'
   },
   netValueCol: {
     width: '12%'
   },
   vatRateCol: {
-    width: '5%'
+    width: '6%'
   },
   vatAmountCol: {
     width: '12%'

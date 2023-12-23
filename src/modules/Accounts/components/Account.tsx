@@ -32,13 +32,13 @@ const Account: React.FC<AccountProps> = ({ data, onClick }) => {
         }}
         onClick={onAccountClick}>
         <Grid item xs={1} display='flex'>
-          {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
+          {icon && <Icon name={icon} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={7} display='flex'>
-          <Typography noWrap color={contrastText}>{name}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
         <Grid item xs={4} display='flex' justifyContent='flex-end'>
-          <Balance balance={balance} positiveColor={contrastText} fontSize={{ sm: 16, xs: 14 }} />
+          <Balance balance={balance} positiveColor={contrastText} fontSize={{ sm: 15, xs: 13 }} />
         </Grid>
       </Grid>
     </Paper>

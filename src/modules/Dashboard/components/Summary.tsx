@@ -52,19 +52,19 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_INCOME')}</Typography>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{incomes}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 16, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_INCOME')}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 16, xs: 14 }} sx={{ textAlign: 'center' }}>{incomes}</Typography>
           </Grid>
           <Divider orientation='vertical' sx={{ backgroundColor: light }} flexItem />
           <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' paddingY={1}>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_EXPENSES')}</Typography>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 17, xs: 14 }} sx={{ textAlign: 'center' }}>{expenses}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 16, xs: 14 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.TOTAL_EXPENSES')}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 16, xs: 14 }} sx={{ textAlign: 'center' }}>{expenses}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 24, xs: 20 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
-            <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center' }} />
+            <Typography noWrap color={contrastText} fontSize={{ sm: 22, xs: 18 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
+            <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 22, xs: 18 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginY: 1 }}>

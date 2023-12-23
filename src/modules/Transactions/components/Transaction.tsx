@@ -31,19 +31,19 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>
         <Grid item xs={3}>
-          <Typography noWrap color={contrastText}>{name}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={type === CategoryType.expense ? error.main : contrastText}>{amount}</Typography>
+          <Typography noWrap color={type === CategoryType.expense ? error.main : contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={contrastText}>{accountName}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{accountName}</Typography>
         </Grid>
         <Grid item xs={1} display='flex'>
           {accountIcon && <Icon name={accountIcon} color='primary' sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={contrastText}>{formattedCreatedAt}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{formattedCreatedAt}</Typography>
         </Grid>
       </Grid>
     </Paper>

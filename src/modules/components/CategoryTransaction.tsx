@@ -15,7 +15,7 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
   const { name, icon, amount, percentValue = '' } = data;
   const { palette: { primary: { dark, light, contrastText } } } = useTheme();
 
-  const getBGColor = () => {
+  const getBGColor = (): string => {
     const percentageValue = parseInt(percentValue);
 
     return `linear-gradient(to right, ${dark} 0%, ${dark} calc(${percentageValue}%), ${light} calc(${percentageValue}%), ${light} 100%)`;
@@ -35,16 +35,16 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
     }}>
       <Grid container alignItems='center' flexWrap='nowrap' columnGap={1}>
         <Grid item xs='auto' display='flex'>
-          {icon && <Icon name={icon} sx={{ fontSize: 24, color: contrastText }}></Icon>}
+          {icon && <Icon name={icon} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}
         </Grid>
         <Grid item xs={7} display='flex'>
-          <Typography noWrap color={contrastText}>{name}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          {showPercentage && <Typography noWrap color={contrastText}>{percentValue}</Typography>}
+          {showPercentage && <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{percentValue}</Typography>}
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={contrastText}>{amount}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount}</Typography>
         </Grid>
       </Grid>
     </Box>

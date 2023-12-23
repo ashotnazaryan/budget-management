@@ -8,6 +8,7 @@ export interface InvoiceState {
   salary: number;
   rate: number;
   amount: Amount;
+  invoices: Invoice[];
   status: StatusState;
 }
 
@@ -18,6 +19,7 @@ const initialState: InvoiceState = {
     net: 0,
     gross: 0
   } as Amount,
+  invoices: [],
   status: 'idle'
 };
 

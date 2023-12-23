@@ -135,7 +135,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>{data.amount?.net}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
-              <Text style={styles.tableCell}>{data.vatIncluded ? data.amount?.vatRate : '—'}</Text>
+              <Text style={styles.tableCell}>{data.vatIncluded ? `${data.amount?.vatRate} %` : '—'}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatAmountCol }}>
               <Text style={styles.tableCell}>{data.vatIncluded ? data.amount?.vatAmount : '—'}</Text>

@@ -24,7 +24,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, defaultValue = '0', onChange, ...prop
     <StyledTabs {...props} value={selectedValue} onChange={onValueChange}>
       {
         tabs.map(({ value, label }) => (
-          <MuiTab value={value} key={value} label={t(label)} />
+          <MuiTab value={value} key={value} label={t(label)} sx={{ fontSize: { sm: 14, xs: 12 } }} />
         ))
       }
     </StyledTabs>

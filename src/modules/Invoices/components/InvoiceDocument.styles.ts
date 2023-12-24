@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
   page: {
     backgroundColor: '#E4E4E4',
     fontFamily: 'SourceSansPro',
-    padding: 20
+    padding: 20,
+    borderWidth: 0
   },
   name: {
     fontSize: 15,
@@ -20,7 +21,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   heading: {
-    paddingTop: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'

@@ -67,17 +67,27 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    const { salary, vatIncluded } = data;
-
-    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
     setInvoiceData({ ...data, amount });
     setFormSubmitted(true);
-    // TODO: fix, the amount is not updated at this point
     isEditMode ? dispatch(editInvoice([invoiceId, { ...data, amount }])) : dispatch(createInvoice({ ...data, amount }));
   };
 
   const handleCurrencyChange = (currencyIso: Currency['iso']): void => {
     dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
+  };
+
+  const handleSalaryChange = (salary: string): void => {
+    const { vatIncluded } = invoiceData;
+
+    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
+    setInvoiceData({ ...invoiceData, salary, amount });
+  };
+
+  const handleVatIncludedChange = (vatIncluded: boolean): void => {
+    const { salary = '0' } = invoiceData;
+
+    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
+    setInvoiceData({ ...invoiceData, salary, amount, vatIncluded });
   };
 
   const handleEditButtonClick = (): void => {
@@ -187,7 +197,16 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
       />
       <Grid container columnSpacing={3} rowSpacing={5}>
         <Grid item xs={12} sm={6}>
-          <InvoiceForm data={invoiceData} loading={loading} mode={mode} onPreview={handleFormPreview} onSubmit={handleFormSubmit} onCurrencyChange={handleCurrencyChange} />
+          <InvoiceForm
+            data={invoiceData}
+            loading={loading}
+            mode={mode}
+            onPreview={handleFormPreview}
+            onSubmit={handleFormSubmit}
+            onCurrencyChange={handleCurrencyChange}
+            onSalaryChange={handleSalaryChange}
+            onVatIncludedChange={handleVatIncludedChange}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <StyledPDFViewer>

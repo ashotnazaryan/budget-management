@@ -134,11 +134,11 @@ export const invoiceSlice = createSlice({
   name: 'invoices',
   initialState,
   reducers: {
-    setInvoiceAmount(state, action: PayloadAction<{ rate: number, salary: Invoice['salary'], vatIncluded: Invoice['vatIncluded'] }>): InvoiceState {
+    setInvoiceAmount(state, action: PayloadAction<{ rate: number, salary: Invoice['salary'], vatIncluded?: Invoice['vatIncluded'] }>): InvoiceState {
       const { rate, salary, vatIncluded } = action.payload;
       return {
         ...state,
-        amount: calculateAmount(rate, Number(salary), vatIncluded)
+        amount: calculateAmount(rate, Number(salary), !!vatIncluded)
       };
     },
     resetInvoicesStatus(state): InvoiceState {

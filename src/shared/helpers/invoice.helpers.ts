@@ -20,14 +20,23 @@ export const mapUserProfileToInvoice = (user: User, profile: UserProfile): Parti
 
   const country = COUNTRIES.find(({ code }) => code === profile.countryCode)?.name || '';
 
+  const sellerAddress = profile.streetAddress && profile.streetAddressLine
+    ? `${profile.streetAddress}, ${profile.streetAddressLine}`
+    : '';
+
+  const sellerLocation = profile.zipCode && profile.city && country
+    ? `${profile.zipCode} ${profile.city}, ${country}`
+    : '';
+
   return {
-    sellerName: user.fullName,
-    sellerAddress: `${profile.streetAddress}, ${profile.streetAddressLine}`,
-    sellerLocation: `${profile.zipCode} ${profile.city}, ${country}`,
-    sellerVatID: profile.taxId,
-    sellerAccount: profile.accountNumber
+    sellerName: user.fullName || '',
+    sellerAddress,
+    sellerLocation,
+    sellerVatID: profile.taxId || '',
+    sellerAccount: profile.accountNumber || ''
   };
 };
+
 
 export const mapInvoices = (invoices: InvoiceDTO[], showDecimals = false): Invoice[] => {
   return invoices.map((invoice) => {

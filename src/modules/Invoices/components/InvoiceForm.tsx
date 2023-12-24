@@ -26,9 +26,11 @@ interface InvoiceFormProps {
   onSubmit: (formData: Invoice) => void;
   onPreview: (formData: Invoice) => void;
   onCurrencyChange: (currencyIso: Currency['iso']) => void;
+  onSalaryChange: (salary: Invoice['salary']) => void;
+  onVatIncludedChange: (salary: Invoice['vatIncluded']) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit, onCurrencyChange }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit, onCurrencyChange, onSalaryChange, onVatIncludedChange }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -37,6 +39,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const currencies = INVOICE_CURRENCIES;
   const defaultCurrencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
   const [currencyIso, setCurrencyIso] = React.useState<Currency['iso']>(defaultCurrencyIso);
+  const [salary, setSalary] = React.useState<Invoice['salary']>('');
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
   const isViewMode = mode === ManageMode.view;
 
@@ -71,6 +74,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
 
     setCurrencyIso(data.currencyIso || defaultCurrencyIso);
     setVatIncluded(!!data.vatIncluded);
+    setSalary(data.salary || '');
   }, [data, setValue, defaultCurrencyIso]);
 
   const handleCurrencyChange = (event: SelectChangeEvent<string>): void => {
@@ -81,9 +85,18 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     onCurrencyChange(value);
   };
 
+  const handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+
+    setSalary(value);
+    setValue(InvoiceField.salary, value);
+    onSalaryChange(value);
+  };
+
   const handleVatIncludedChange = (_: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-    setValue(InvoiceField.vatIncluded, checked);
     setVatIncluded(checked);
+    setValue(InvoiceField.vatIncluded, checked);
+    onVatIncludedChange(checked);
   };
 
   const handleFormPreview = (data: Invoice): void => {
@@ -121,6 +134,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                     label={t('COMMON.SALARY')}
                     type='number'
                     name={InvoiceField.salary}
+                    value={salary}
+                    onChange={handleSalaryChange}
                     rules={{
                       required: {
                         value: true,
@@ -158,7 +173,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                   <FormControlLabel
                     control={
                       <Switch
-                        inputProps={{ readOnly: isViewMode }}
+                        disabled={isViewMode}
                         checked={vatIncluded}
                         onChange={handleVatIncludedChange}
                       />}
@@ -307,16 +322,20 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
               </Grid>
             </Paper>
           </Grid>
-          <Grid item xs={12}>
-            <Button aria-label='Preview invoice' fullWidth type='submit' variant='contained' onClick={handleSubmit(handleFormPreview)}>
-              {t('COMMON.PREVIEW')}
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button aria-label='Save invoice' fullWidth variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>
-              {t('COMMON.SAVE')}
-            </Button>
-          </Grid>
+          {!isViewMode && (
+            <>
+              <Grid item xs={12}>
+                <Button aria-label='Preview invoice' fullWidth type='submit' variant='contained' onClick={handleSubmit(handleFormPreview)}>
+                  {t('COMMON.PREVIEW')}
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button aria-label='Save invoice' fullWidth variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>
+                  {t('COMMON.SAVE')}
+                </Button>
+              </Grid>
+            </>
+          )}
         </Grid>
       </form>
     </FormProvider>

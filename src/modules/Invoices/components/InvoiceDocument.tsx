@@ -39,7 +39,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
     <Document>
       <Page size='A4' style={styles.page}>
         <View>
-          <Text style={styles.title}>{data.title}</Text>
+          <Text style={styles.name}>{data.name}</Text>
         </View>
         <View style={styles.heading}>
           <Text style={styles.label}>{t('INVOICES.DOCUMENT.INVOICE_NO')}.</Text>

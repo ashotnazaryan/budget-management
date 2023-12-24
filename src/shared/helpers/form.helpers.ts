@@ -102,9 +102,9 @@ export const transferHelper = (): { [key in TransferField]: ErrorType } => ({
 });
 
 export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
-  [InvoiceField.title]: {
+  [InvoiceField.name]: {
     required: {
-      message: 'INVOICES.ERRORS.REQUIRED_TITLE'
+      message: 'INVOICES.ERRORS.REQUIRED_NAME'
     }
   },
   [InvoiceField.salary]: {

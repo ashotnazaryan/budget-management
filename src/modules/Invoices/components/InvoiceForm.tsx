@@ -9,7 +9,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
-import { Currency, Invoice, InvoiceField } from 'shared/models';
+import { Currency, Invoice, InvoiceField, ManageMode } from 'shared/models';
 import { invoiceHelper } from 'shared/helpers';
 import { useAppSelector } from 'store';
 import { INVOICE_CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
@@ -21,11 +21,14 @@ import Button from 'shared/components/Button';
 
 interface InvoiceFormProps {
   data: Partial<Invoice>;
+  loading: boolean;
+  mode: ManageMode;
   onSubmit: (formData: Invoice) => void;
+  onPreview: (formData: Invoice) => void;
   onCurrencyChange: (currencyIso: Currency['iso']) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyChange }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit, onCurrencyChange }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -35,9 +38,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
   const defaultCurrencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
   const [currencyIso, setCurrencyIso] = React.useState<Currency['iso']>(defaultCurrencyIso);
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
+  const isViewMode = mode === ManageMode.view;
 
   const defaultValues: Partial<Invoice> = {
-    title: '',
+    name: '',
     salary: '',
     currencyIso: defaultCurrencyIso,
     vatIncluded: false,
@@ -64,7 +68,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
     Object.keys(data).forEach((key) => {
       setValue(key as keyof Invoice, data[key as keyof Invoice]);
     });
-  }, [data, setValue]);
+
+    setCurrencyIso(data.currencyIso || defaultCurrencyIso);
+    setVatIncluded(!!data.vatIncluded);
+  }, [data, setValue, defaultCurrencyIso]);
 
   const handleCurrencyChange = (event: SelectChangeEvent<string>): void => {
     const value = event.target.value as Currency['iso'];
@@ -77,6 +84,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
   const handleVatIncludedChange = (_: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
     setValue(InvoiceField.vatIncluded, checked);
     setVatIncluded(checked);
+  };
+
+  const handleFormPreview = (data: Invoice): void => {
+    onPreview(data);
   };
 
   const handleFormSubmit = (data: Invoice): void => {
@@ -93,18 +104,20 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput
-                    label={t('COMMON.TITLE')}
-                    name={InvoiceField.title}
+                    inputProps={{ readOnly: isViewMode }}
+                    label={t('COMMON.NAME')}
+                    name={InvoiceField.name}
                     rules={{
                       required: {
                         value: true,
-                        message: t(helper.title.required!.message)
+                        message: t(helper.name.required!.message)
                       }
                     }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.SALARY')}
                     type='number'
                     name={InvoiceField.salary}
@@ -122,6 +135,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormSelect
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.CURRENCY')}
                     name={InvoiceField.currencyIso}
                     value={currencyIso}
@@ -144,6 +158,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                   <FormControlLabel
                     control={
                       <Switch
+                        inputProps={{ readOnly: isViewMode }}
                         checked={vatIncluded}
                         onChange={handleVatIncludedChange}
                       />}
@@ -167,6 +182,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.NAME')}
                     name={InvoiceField.sellerName}
                     rules={{
@@ -179,6 +195,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.ADDRESS')}
                     name={InvoiceField.sellerAddress}
                     rules={{
@@ -191,6 +208,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.LOCATION')}
                     name={InvoiceField.sellerLocation}
                     rules={{
@@ -203,6 +221,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.VAT_ID')}
                     name={InvoiceField.sellerVatID}
                     rules={{
@@ -215,6 +234,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.ACCOUNT')}
                     name={InvoiceField.sellerAccount}
                     rules={{
@@ -234,6 +254,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
               <Grid item container gap={7}>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.NAME')}
                     name={InvoiceField.buyerName}
                     rules={{
@@ -246,6 +267,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.ADDRESS')}
                     name={InvoiceField.buyerAddress}
                     rules={{
@@ -258,6 +280,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.LOCATION')}
                     name={InvoiceField.buyerLocation}
                     rules={{
@@ -270,6 +293,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
                 </Grid>
                 <Grid item xs={12}>
                   <FormInput
+                    inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.VAT_ID')}
                     name={InvoiceField.buyerVatID}
                     rules={{
@@ -284,8 +308,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, onSubmit, onCurrencyCha
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Button aria-label='Save invoice' fullWidth type='submit' variant='contained' onClick={handleSubmit(handleFormSubmit)}>
+            <Button aria-label='Preview invoice' fullWidth type='submit' variant='contained' onClick={handleSubmit(handleFormPreview)}>
               {t('COMMON.PREVIEW')}
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button aria-label='Save invoice' fullWidth variant='contained' loading={loading} onClick={handleSubmit(handleFormSubmit)}>
+              {t('COMMON.SAVE')}
             </Button>
           </Grid>
         </Grid>

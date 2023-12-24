@@ -2,25 +2,37 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import { useTranslation } from 'core/i18n';
-import { useAppSelector } from 'store';
-import { selectInvoice } from 'store/reducers';
+import { useAppDispatch, useAppSelector } from 'store';
+import { getInvoices, selectInvoice } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
-import { IconType } from 'shared/models';
+import { IconType, Invoice as InvoiceModel } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
 import Icon from 'shared/components/Icon';
-import Button from 'shared/components/Button';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
+import Invoice from '../components/Invoice';
 
 const InvoiceList: React.FC<{}> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { invoices, status } = useAppSelector(selectInvoice);
 
   const openNewInvoicePage = (): void => {
     navigate(`${ROUTES.invoices.path}/new`);
   };
+
+  const handleInvoiceItemClick = ({ id, name }: InvoiceModel): void => {
+    navigate(`${ROUTES.invoices.path}/view/${name}`, { state: { id } });
+  };
+
+  React.useEffect(() => {
+    if (status === 'idle') {
+      dispatch(getInvoices());
+    }
+  }, [dispatch, status]);
 
   const renderContent = (): React.ReactElement => {
     if (status === 'loading') {
@@ -43,7 +55,9 @@ const InvoiceList: React.FC<{}> = () => {
       <>
         {
           invoices.map((invoice) => (
-            <Grid item key={invoice.id} xs={12}></Grid>
+            <Grid item key={invoice.id} xs={12}>
+              <Invoice data={invoice} onClick={handleInvoiceItemClick} />
+            </Grid>
           ))
         }
       </>
@@ -55,15 +69,11 @@ const InvoiceList: React.FC<{}> = () => {
       <PageTitle text={t('INVOICES.PAGE_TITLE')} />
       <Grid container rowGap={2} sx={{ marginTop: 4 }}>
         {renderContent()}
-        <Button
-          aria-label='New invoice'
-          color='secondary'
-          variant='contained'
-          startIcon={<Icon name={IconType.receipt}></Icon>}
-          sx={{ width: { sm: 'auto', xs: '100%' }, fontSize: 14 }}
-          onClick={openNewInvoicePage}>
-          {t('INVOICES.NEW_INVOICE')}
-        </Button>
+        <Grid item xs={12} display='flex' justifyContent='flex-end'>
+          <IconButton color='primary' onClick={openNewInvoicePage} sx={{ alignSelf: 'flex-end' }}>
+            <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
+          </IconButton>
+        </Grid>
       </Grid>
     </Box>
   );

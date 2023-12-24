@@ -33,7 +33,7 @@ export enum TransferField {
 }
 
 export enum InvoiceField {
-  title = 'title',
+  name = 'name',
   salary = 'salary',
   currencyIso = 'currencyIso',
   vatIncluded = 'vatIncluded',

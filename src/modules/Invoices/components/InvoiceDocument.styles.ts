@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro',
     padding: 20
   },
-  title: {
+  name: {
     fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center'

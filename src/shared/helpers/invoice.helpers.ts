@@ -1,5 +1,5 @@
 import { COUNTRIES } from 'shared/constants';
-import { Amount, Invoice, User, UserProfile } from 'shared/models';
+import { Amount, Invoice, InvoiceDTO, User, UserProfile } from 'shared/models';
 
 export const calculateAmount = (rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): Amount => {
   const amount = salary * rate;
@@ -26,5 +26,17 @@ export const mapUserProfileToInvoice = (user: User, profile: UserProfile): Parti
     sellerLocation: `${profile.zipCode} ${profile.city}, ${country}`,
     sellerVatID: profile.taxId,
     sellerAccount: profile.accountNumber
+  };
+};
+
+export const mapInvoices = (invoices: InvoiceDTO[], showDecimals = false): Invoice[] => {
+  return invoices.map((invoice) => {
+    return mapInvoice(invoice, showDecimals);
+  });
+};
+
+export const mapInvoice = (invoice: InvoiceDTO, showDecimals = false): Invoice => {
+  return {
+    ...invoice
   };
 };

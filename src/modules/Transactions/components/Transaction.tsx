@@ -30,10 +30,10 @@ const Transaction: React.FC<TransactionProps> = ({ data, onClick }) => {
         <Grid item xs={1} display='flex'>
           {icon && <Icon name={icon} sx={{ color: contrastText, fontSize: { sm: 22, xs: 18 } }}></Icon>}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.5}>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
-        <Grid item xs={2} display='flex' justifyContent='flex-end'>
+        <Grid item xs={2.5} display='flex' justifyContent='flex-end'>
           <Typography noWrap color={type === CategoryType.expense ? error.main : contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>

@@ -27,16 +27,16 @@ const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
       <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 40, cursor: 'pointer' }}>
         <Grid item xs={3}>
-          <Typography noWrap color={contrastText}>{fromAccount.name}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{fromAccount.name}</Typography>
         </Grid>
         <Grid item xs={3}>
-          <Typography noWrap color={contrastText}>{toAccount.name}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{toAccount.name}</Typography>
         </Grid>
         <Grid item xs={3}>
-          <Typography noWrap color={contrastText}>{amount}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount}</Typography>
         </Grid>
         <Grid item xs={3} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={contrastText}>{formattedCreatedAt}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{formattedCreatedAt}</Typography>
         </Grid>
       </Grid>
     </Paper>

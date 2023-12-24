@@ -22,12 +22,6 @@ const AccountList: React.FC<{}> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  React.useEffect(() => {
-    if (status === 'idle') {
-      dispatch(getAccounts());
-    }
-  }, [dispatch, status]);
-
   const openNewAccountPage = (): void => {
     navigate(`${ROUTES.accounts.path}/new`);
   };
@@ -42,6 +36,12 @@ const AccountList: React.FC<{}> = () => {
       name: data.nameKey ? t(data.nameKey) : data.name
     };
   };
+
+  React.useEffect(() => {
+    if (status === 'idle') {
+      dispatch(getAccounts());
+    }
+  }, [dispatch, status]);
 
   React.useEffect(() => {
     if (balanceStatus === 'idle') {

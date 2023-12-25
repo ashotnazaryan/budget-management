@@ -1,14 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { Amount, Currency, ErrorResponse, Invoice, InvoiceDTO, NBPResponse, StatusState } from 'shared/models';
-import { calculateAmount, mapInvoice, mapInvoices } from 'shared/helpers';
+import { Amount, ErrorResponse, Invoice, InvoiceDTO, NBPResponse, Rate, StatusState } from 'shared/models';
+import { mapInvoice, mapInvoices } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 
 export interface InvoiceState {
   salary: number;
-  rate: number;
+  rates: Rate[];
   amount: Amount;
   invoices: Invoice[];
   rateStatus: StatusState;
@@ -22,7 +22,7 @@ export interface InvoiceState {
 
 const initialState: InvoiceState = {
   salary: 0,
-  rate: 1,
+  rates: [],
   amount: {
     net: 0,
     gross: 0
@@ -35,24 +35,26 @@ const initialState: InvoiceState = {
   deleteStatus: 'idle'
 };
 
-export const getExchangeRates = createAsyncThunk<number, [Currency['iso'], string], { rejectValue: unknown }>(
+export const getExchangeRates = createAsyncThunk<Rate[], string, { rejectValue: unknown }>(
   'invoices/getExchangeRates',
-  async ([currencyIso, date], { rejectWithValue }) => {
-    if (currencyIso === 'PLN') {
-      return 1;
-    }
-
+  async (date, { rejectWithValue }) => {
     try {
-      const { data: { rates } } = await axios.get<NBPResponse>(`/A/${currencyIso}/${date}`, {
+      const { data } = await axios.get<NBPResponse[]>(`/A/${date}`, {
         baseURL: process.env.REACT_APP_NBP_PL_API,
         withCredentials: false
       });
 
-      if (rates?.length) {
-        return rates[0].mid;
+      if (data[0]) {
+        return data[0]?.rates.map((rate) => {
+          return {
+            code: rate.code,
+            currency: rate.currency,
+            rate: rate.mid
+          };
+        });
       }
 
-      return 1;
+      return [];
     } catch (error: unknown) {
       return rejectWithValue(error);
     }
@@ -134,11 +136,10 @@ export const invoiceSlice = createSlice({
   name: 'invoices',
   initialState,
   reducers: {
-    setInvoiceAmount(state, action: PayloadAction<{ rate: number, salary: Invoice['salary'], vatIncluded?: Invoice['vatIncluded'] }>): InvoiceState {
-      const { rate, salary, vatIncluded } = action.payload;
+    setInvoiceAmount(state, action: PayloadAction<Amount>): InvoiceState {
       return {
         ...state,
-        amount: calculateAmount(rate, Number(salary), !!vatIncluded)
+        amount: action.payload
       };
     },
     resetInvoicesStatus(state): InvoiceState {
@@ -175,10 +176,10 @@ export const invoiceSlice = createSlice({
           rateStatus: 'failed'
         };
       })
-      .addCase(getExchangeRates.fulfilled, (state, action: PayloadAction<number>): InvoiceState => {
+      .addCase(getExchangeRates.fulfilled, (state, action: PayloadAction<Rate[]>): InvoiceState => {
         return {
           ...state,
-          rate: action.payload,
+          rates: action.payload,
           rateStatus: 'succeeded'
         };
       })

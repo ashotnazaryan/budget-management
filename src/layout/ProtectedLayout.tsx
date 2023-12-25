@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from 'store';
 import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectInvoice, selectSettings } from 'store/reducers';
 import { getFromLocalStorage, getLastDateOfPreviousMonth } from 'shared/helpers';
 import { Auth } from 'shared/models';
-import { AUTH_KEY, INVOICE_CURRENCIES, ROUTES } from 'shared/constants';
+import { AUTH_KEY, ROUTES } from 'shared/constants';
 import Content from './Content';
 import Loading from './Loading';
 
@@ -31,10 +31,8 @@ export const ProtectedLayout = () => {
   }, [dispatch, accessToken]);
 
   React.useEffect(() => {
-    if (invoiceStatus === 'idle' && settingStatus === 'succeeded') {
-      const currencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
-
-      dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
+    if (invoiceStatus === 'idle') {
+      dispatch(getExchangeRates(getLastDateOfPreviousMonth()));
     }
   }, [dispatch, iso, invoiceStatus, settingStatus]);
 

@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
-import { SelectChangeEvent } from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
@@ -25,12 +24,9 @@ interface InvoiceFormProps {
   mode: ManageMode;
   onSubmit: (formData: Invoice) => void;
   onPreview: (formData: Invoice) => void;
-  onCurrencyChange: (currencyIso: Currency['iso']) => void;
-  onSalaryChange: (salary: Invoice['salary']) => void;
-  onVatIncludedChange: (salary: Invoice['vatIncluded']) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit, onCurrencyChange, onSalaryChange, onVatIncludedChange }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { palette: { info: { contrastText } } } = useTheme();
@@ -38,15 +34,14 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const regex = POSITIVE_NUMERIC_REGEX;
   const currencies = INVOICE_CURRENCIES;
   const defaultCurrencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
-  const [currencyIso, setCurrencyIso] = React.useState<Currency['iso']>(defaultCurrencyIso);
-  const [salary, setSalary] = React.useState<Invoice['salary']>('');
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
   const isViewMode = mode === ManageMode.view;
+  const isCreateMode = mode === ManageMode.create;
 
   const defaultValues: Partial<Invoice> = {
     name: '',
     salary: '',
-    currencyIso: defaultCurrencyIso,
+    currencyIso: isCreateMode ? defaultCurrencyIso : (data.currencyIso || '' as Currency['iso']),
     vatIncluded: false,
     sellerName: '',
     sellerAddress: '',
@@ -72,31 +67,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
       setValue(key as keyof Invoice, data[key as keyof Invoice]);
     });
 
-    setCurrencyIso(data.currencyIso || defaultCurrencyIso);
     setVatIncluded(!!data.vatIncluded);
-    setSalary(data.salary || '');
   }, [data, setValue, defaultCurrencyIso]);
 
-  const handleCurrencyChange = (event: SelectChangeEvent<string>): void => {
-    const value = event.target.value as Currency['iso'];
-
-    setValue(InvoiceField.currencyIso, value);
-    setCurrencyIso(value);
-    onCurrencyChange(value);
-  };
-
-  const handleSalaryChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = event.target.value;
-
-    setSalary(value);
-    setValue(InvoiceField.salary, value);
-    onSalaryChange(value);
-  };
-
-  const handleVatIncludedChange = (_: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
-    setVatIncluded(checked);
-    setValue(InvoiceField.vatIncluded, checked);
-    onVatIncludedChange(checked);
+  const handleVatIncludedChange = (_: React.ChangeEvent<HTMLInputElement>, value: boolean): void => {
+    setVatIncluded(value);
+    setValue(InvoiceField.vatIncluded, value);
   };
 
   const handleFormPreview = (data: Invoice): void => {
@@ -134,8 +110,6 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                     label={t('COMMON.SALARY')}
                     type='number'
                     name={InvoiceField.salary}
-                    value={salary}
-                    onChange={handleSalaryChange}
                     rules={{
                       required: {
                         value: true,
@@ -153,8 +127,6 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                     inputProps={{ readOnly: isViewMode }}
                     label={t('COMMON.CURRENCY')}
                     name={InvoiceField.currencyIso}
-                    value={currencyIso}
-                    onChange={handleCurrencyChange}
                     rules={{
                       required: {
                         value: true,

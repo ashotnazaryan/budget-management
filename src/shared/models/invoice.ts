@@ -44,9 +44,16 @@ export interface Amount {
 }
 
 export interface NBPResponse {
-  code: Currency['iso'];
+  effectiveDate: string;
   rates: {
-    effectiveDate: string;
+    code: string;
+    currency: string;
     mid: number;
   }[];
+}
+
+export interface Rate {
+  code: string;
+  currency: string;
+  rate: number;
 }

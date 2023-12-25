@@ -20,9 +20,10 @@ interface SummaryProps {
   period: Period;
   onAddTransaction: () => void;
   onFilter: (period: Period) => void;
+  onCategoryTransactionClick: (categoryId: Transaction['categoryId']) => void;
 }
 
-const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactions, period, onAddTransaction, onFilter }) => {
+const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactions, period, onAddTransaction, onFilter, onCategoryTransactionClick }) => {
   const { palette: { primary: { main, dark, light, contrastText } } } = useTheme();
   const { t } = useTranslation();
 
@@ -31,6 +32,10 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
       ...data,
       name: data.nameKey ? t(data.nameKey) : data.name
     };
+  };
+
+  const handleCategoryTransactionClick = (categoryId: Transaction['categoryId']): void => {
+    onCategoryTransactionClick(categoryId);
   };
 
   return (
@@ -76,7 +81,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
           {
             transactions.map((transaction) => (
               <Grid item key={transaction.categoryId} xs={12}>
-                <CategoryTransaction data={getCategoryTransactionData(transaction)} />
+                <CategoryTransaction data={getCategoryTransactionData(transaction)} onClick={handleCategoryTransactionClick} />
               </Grid>
             ))
           }

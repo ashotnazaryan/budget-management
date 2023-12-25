@@ -26,11 +26,12 @@ const initialState: TransactionState = {
   deleteStatus: 'idle'
 };
 
-export const getTransactions = createAsyncThunk<Transaction[], void, { rejectValue: ErrorResponse }>(
+export const getTransactions = createAsyncThunk<Transaction[], Transaction['categoryId'] | undefined, { rejectValue: ErrorResponse }>(
   'transactions/getTransactions',
-  async (_, { rejectWithValue }) => {
+  async (categoryId, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<TransactionDTO[]>('transactions');
+      const url = categoryId ? `transactions?categoryId=${categoryId}` : 'transactions';
+      const { data } = await axios.get<TransactionDTO[]>(url);
 
       if (data) {
         const { showDecimals } = store.getState().setting;

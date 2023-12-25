@@ -9,7 +9,6 @@ import {
   createInvoice,
   deleteInvoice,
   editInvoice,
-  getExchangeRates,
   getInvoice,
   getProfile,
   resetCreateEditInvoiceStatus,
@@ -22,8 +21,8 @@ import {
   selectUser,
   setInvoiceAmount
 } from 'store/reducers';
-import { Currency, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
-import { getLastDateOfPreviousMonth, getPageTitle, mapUserProfileToInvoice } from 'shared/helpers';
+import { Invoice, InvoiceDTO, ManageMode } from 'shared/models';
+import { calculateAmount, getPageTitle, mapUserProfileToInvoice } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import Snackbar from 'shared/components/Snackbar';
@@ -39,7 +38,7 @@ interface NewInvoiceProps {
 const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { rate, getStatus, createEditStatus, deleteStatus } = useAppSelector(selectInvoice);
+  const { rates, getStatus, createEditStatus, deleteStatus } = useAppSelector(selectInvoice);
   const amount = useAppSelector(selectInvoiceAmount);
   const invoice = useAppSelector(selectCurrentInvoice);
   const error = useAppSelector(selectInvoiceError);
@@ -60,34 +59,23 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const title = getPageTitle<Invoice>(mode, t, getStatus, 'INVOICES', 'NEW_INVOICE', 'EMPTY_TITLE', invoice);
 
   const handleFormPreview = (data: Invoice): void => {
-    const { salary, vatIncluded } = data;
+    const { salary, vatIncluded, currencyIso } = data;
+    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
+    const amount = calculateAmount(rate, Number(salary), vatIncluded);
 
-    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
+    dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
   };
 
   const handleFormSubmit = (data: Invoice): void => {
+    const { salary, vatIncluded, currencyIso } = data;
+    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
+    const amount = calculateAmount(rate, Number(salary), vatIncluded);
+
+    dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
     setFormSubmitted(true);
     isEditMode ? dispatch(editInvoice([invoiceId, { ...data, amount }])) : dispatch(createInvoice({ ...data, amount }));
-  };
-
-  const handleCurrencyChange = (currencyIso: Currency['iso']): void => {
-    dispatch(getExchangeRates([currencyIso, getLastDateOfPreviousMonth()]));
-  };
-
-  const handleSalaryChange = (salary: string): void => {
-    const { vatIncluded } = invoiceData;
-
-    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
-    setInvoiceData({ ...invoiceData, salary, amount });
-  };
-
-  const handleVatIncludedChange = (vatIncluded: boolean): void => {
-    const { salary = '0' } = invoiceData;
-
-    dispatch(setInvoiceAmount({ rate, salary, vatIncluded }));
-    setInvoiceData({ ...invoiceData, salary, amount, vatIncluded });
   };
 
   const handleEditButtonClick = (): void => {
@@ -203,9 +191,6 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
             mode={mode}
             onPreview={handleFormPreview}
             onSubmit={handleFormSubmit}
-            onCurrencyChange={handleCurrencyChange}
-            onSalaryChange={handleSalaryChange}
-            onVatIncludedChange={handleVatIncludedChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

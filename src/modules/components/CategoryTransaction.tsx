@@ -9,10 +9,11 @@ import Icon from 'shared/components/Icon';
 interface CategoryTransactionProps {
   data: Transaction;
   showPercentage?: boolean;
+  onClick: (categoryId: Transaction['categoryId']) => void;
 }
 
-const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPercentage = true }) => {
-  const { name, icon, amount, percentValue = '' } = data;
+const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPercentage = true, onClick }) => {
+  const { name, icon, amount, categoryId, percentValue = '' } = data;
   const { palette: { primary: { dark, light, contrastText } } } = useTheme();
 
   const getBGColor = (): string => {
@@ -21,18 +22,25 @@ const CategoryTransaction: React.FC<CategoryTransactionProps> = ({ data, showPer
     return `linear-gradient(to right, ${dark} 0%, ${dark} calc(${percentageValue}%), ${light} calc(${percentageValue}%), ${light} 100%)`;
   };
 
+  const onCategoryClick = (): void => {
+    onClick(categoryId);
+  };
+
   return (
-    <Box sx={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      background: getBGColor(),
-      paddingX: { sm: 2, xs: 1 },
-      paddingY: { sm: 2, xs: 1 },
-      borderRadius: 1,
-      width: '100%',
-      minHeight: 40
-    }}>
+    <Box
+      onClick={onCategoryClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: getBGColor(),
+        paddingX: { sm: 2, xs: 1 },
+        paddingY: { sm: 2, xs: 1 },
+        borderRadius: 1,
+        width: '100%',
+        minHeight: 40,
+        cursor: 'pointer'
+      }}>
       <Grid container alignItems='center' flexWrap='nowrap' columnGap={1}>
         <Grid item xs='auto' display='flex'>
           {icon && <Icon name={icon} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>}

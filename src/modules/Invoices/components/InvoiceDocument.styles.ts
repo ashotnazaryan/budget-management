@@ -65,6 +65,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderStyle: 'solid',
+    borderColor: '#959ba1',
     borderRightWidth: 1,
     borderBottomWidth: 1,
     borderLeftWidth: 1

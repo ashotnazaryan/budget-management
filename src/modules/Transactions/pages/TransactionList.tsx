@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
 import { useTranslation } from 'core/i18n';
@@ -16,15 +16,13 @@ const TransactionList: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { transactions, status } = useAppSelector(selectTransaction);
   const navigate = useNavigate();
-  const { state } = useLocation();
   const { t } = useTranslation();
-  const categoryId = state?.categoryId as TransactionModel['categoryId'];
 
   React.useEffect(() => {
     if (status === 'idle') {
-      dispatch(getTransactions(categoryId));
+      dispatch(getTransactions());
     }
-  }, [dispatch, status, categoryId]);
+  }, [dispatch, status]);
 
   const handleTransactionClick = ({ id, name }: TransactionModel): void => {
     navigate(`${ROUTES.transactions.path}/view/${name}`, { state: { id } });

@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
+import { Category, ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
 import { mapTransaction, mapTransactions } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetBalanceStatus, resetSummaryStatus } from './summarySlice';
@@ -15,22 +15,29 @@ export interface TransactionState {
   createEditStatus: StatusState;
   deleteStatus: StatusState;
   currentTransaction?: Transaction;
+  filters: TransactionFilters;
   error?: ErrorResponse;
+}
+
+export interface TransactionFilters {
+  categoryId?: Category['id'];
 }
 
 const initialState: TransactionState = {
   transactions: [],
+  filters: {},
   status: 'idle',
   getStatus: 'idle',
   createEditStatus: 'idle',
   deleteStatus: 'idle'
 };
 
-export const getTransactions = createAsyncThunk<Transaction[], Transaction['categoryId'] | undefined, { rejectValue: ErrorResponse }>(
+export const getTransactions = createAsyncThunk<Transaction[], void, { rejectValue: ErrorResponse }>(
   'transactions/getTransactions',
-  async (categoryId, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const url = categoryId ? `transactions?categoryId=${categoryId}` : 'transactions';
+      const { filters } = store.getState().transaction;
+      const url = filters?.categoryId ? `transactions?categoryId=${filters.categoryId}` : 'transactions';
       const { data } = await axios.get<TransactionDTO[]>(url);
 
       if (data) {
@@ -127,6 +134,18 @@ export const transactionSlice = createSlice({
       return {
         ...state,
         getStatus: 'failed'
+      };
+    },
+    setTransactionFilters(state, action: PayloadAction<TransactionFilters>): TransactionState {
+      return {
+        ...state,
+        filters: { ...state.filters, ...action.payload }
+      };
+    },
+    resetTransactionFilters(state): TransactionState {
+      return {
+        ...state,
+        filters: {}
       };
     }
   },
@@ -238,6 +257,7 @@ export const selectTransaction = (state: RootState): TransactionState => state.t
 export const selectTransactionStatus = (state: RootState): TransactionState['status'] => state.transaction.status;
 export const selectTransactionError = (state: RootState): TransactionState['error'] => state.transaction.error;
 export const selectCurrentTransaction = (state: RootState): TransactionState['currentTransaction'] => state.transaction.currentTransaction;
+export const selectTransactionsFilters = (state: RootState): TransactionState['filters'] => state.transaction.filters;
 
-export const { resetGetTransactionStatus, resetTransactionsStatus, setGetTransactionErrorStatus } = transactionSlice.actions;
+export const { resetGetTransactionStatus, resetTransactionsStatus, setGetTransactionErrorStatus, setTransactionFilters, resetTransactionFilters } = transactionSlice.actions;
 export default transactionSlice.reducer;

@@ -7,7 +7,7 @@ import { CategoryType, Period, Option, Transaction } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
-import { selectSummary, getSummary, setActivePeriodFilter, resetTransactionsStatus } from 'store/reducers';
+import { selectSummary, getSummary, setActivePeriodFilter, setTransactionFilters, resetTransactionsStatus } from 'store/reducers';
 import EmptyState from 'shared/components/EmptyState';
 import Summary from '../components/Summary';
 
@@ -40,8 +40,9 @@ const Dashboard: React.FC<{}> = () => {
   };
 
   const handleCategoryTransactionClick = (categoryId: Transaction['categoryId']): void => {
+    dispatch(setTransactionFilters({ categoryId }));
     dispatch(resetTransactionsStatus());
-    navigate(`${ROUTES.transactions.path}`, { state: { categoryId } });
+    navigate(`${ROUTES.transactions.path}`);
   };
 
   const renderContent = (): React.ReactElement => {

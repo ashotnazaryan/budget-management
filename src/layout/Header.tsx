@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,8 +9,8 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
-import { useAppDispatch } from 'store';
-import { openSideBar } from 'store/reducers';
+import { useAppDispatch, useAppSelector } from 'store';
+import { openSideBar, resetTransactionFilters, resetTransactionsStatus, selectTransaction } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
 
 interface HeaderProps { }
@@ -19,14 +19,24 @@ const Header: React.FC<HeaderProps> = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { palette: { primary: { contrastText, main } } } = useTheme();
+  const navigate = useNavigate();
+  const { filters } = useAppSelector(selectTransaction);
 
   const showSideBar = (): void => {
     dispatch(openSideBar());
   };
 
+  const handleTransactionsClick = (): void => {
+    if (filters.categoryId) {
+      dispatch(resetTransactionFilters());
+      dispatch(resetTransactionsStatus());
+    }
+    navigate(`${ROUTES.transactions.path}`);
+  };
+
   return (
     <AppBar position='sticky' sx={{ backgroundColor: main }}>
-      <Toolbar variant='dense' sx={{ paddingX: 3, minHeight: { xs: '80px', sm: '64px' } }}>
+      <Toolbar variant='dense' sx={{ paddingX: 3, minHeight: { xs: '80px' } }}>
         <Grid container alignItems='center'>
           <Grid item xs={1} display='flex' justifyContent='flex-start'>
             <IconButton aria-label='Menu icon' data-testid='menu-icon' edge='start' onClick={showSideBar}>
@@ -41,11 +51,9 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
           </Grid>
           <Grid item xs={1} display='flex' justifyContent='flex-end'>
-            <Link to={ROUTES.transactions.path} style={{ display: 'block' }}>
-              <IconButton aria-label='Transactions link' edge='end'>
-                <ListAltIcon sx={{ color: contrastText }} />
-              </IconButton>
-            </Link>
+            <IconButton aria-label='Transactions link' edge='end' onClick={handleTransactionsClick}>
+              <ListAltIcon sx={{ color: contrastText }} />
+            </IconButton>
           </Grid>
         </Grid>
       </Toolbar>

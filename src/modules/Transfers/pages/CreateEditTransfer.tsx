@@ -327,9 +327,9 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle
         withBackButton
-        withEditButton={isViewMode}
-        withDeleteButton={isEditMode}
-        withCancelButton={!isViewMode}
+        withEditButton={isViewMode  && !!transfer}
+        withDeleteButton={isEditMode  && !!transfer}
+        withCancelButton={!isViewMode  && !!transfer}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}

@@ -21,7 +21,7 @@ import {
   selectUser,
   setInvoiceAmount
 } from 'store/reducers';
-import { Invoice, InvoiceDTO, ManageMode } from 'shared/models';
+import { Amount, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
 import { calculateAmount, getPageTitle, mapUserProfileToInvoice } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
@@ -59,18 +59,14 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const title = getPageTitle<Invoice>(mode, t, getStatus, 'INVOICES', 'NEW_INVOICE', 'EMPTY_TITLE', invoice);
 
   const handleFormPreview = (data: Invoice): void => {
-    const { salary, vatIncluded, currencyIso } = data;
-    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
-    const amount = calculateAmount(rate, Number(salary), vatIncluded);
+    const amount = getAmount(data);
 
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    const { salary, vatIncluded, currencyIso } = data;
-    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
-    const amount = calculateAmount(rate, Number(salary), vatIncluded);
+    const amount = getAmount(data);
 
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
@@ -108,6 +104,12 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const handleSnackbarClose = (): void => {
     setShowSnackbar(false);
     setDeleteClicked(false);
+  };
+
+  const getAmount = (data: Invoice): Amount => {
+    const { salary, vatIncluded, currencyIso } = data;
+    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
+    return calculateAmount(rate, Number(salary), vatIncluded);
   };
 
   const resetInvoice = React.useCallback(() => {

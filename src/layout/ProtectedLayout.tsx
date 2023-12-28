@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectInvoice, selectSettings } from 'store/reducers';
+import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectInvoice } from 'store/reducers';
 import { getFromLocalStorage, getLastDateOfPreviousMonth } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
@@ -11,7 +11,6 @@ import Loading from './Loading';
 export const ProtectedLayout = () => {
   const { status: authStatus } = useAppSelector(selectAuth);
   const { status: appStatus } = useAppSelector(selectApp);
-  const { defaultCurrency: { iso }, status: settingStatus } = useAppSelector(selectSettings);
   const { status: invoiceStatus } = useAppSelector(selectInvoice);
   const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const outlet = useOutlet();
@@ -34,7 +33,7 @@ export const ProtectedLayout = () => {
     if (invoiceStatus === 'idle') {
       dispatch(getExchangeRates(getLastDateOfPreviousMonth()));
     }
-  }, [dispatch, iso, invoiceStatus, settingStatus]);
+  }, [dispatch, invoiceStatus]);
 
   if (!accessToken && (authStatus === 'idle' || authStatus === 'loading')) {
     return <Loading />;

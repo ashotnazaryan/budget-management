@@ -52,7 +52,8 @@ export const styles = StyleSheet.create({
   table: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 40
+    marginTop: 40,
+    border: '1px solid #60666c'
   },
   headerRow: {
     display: 'flex',
@@ -63,14 +64,13 @@ export const styles = StyleSheet.create({
   bodyRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    borderStyle: 'solid',
-    borderColor: '#959ba1',
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderLeftWidth: 1
+    alignItems: 'center'
   },
-  tableCol: {},
+  tableCol: {
+    borderRight: '1px solid #60666c',
+    height: '100%',
+    justifyContent: 'center'
+  },
   noCol: {
     width: '5%'
   },
@@ -114,5 +114,8 @@ export const styles = StyleSheet.create({
   vatExemption: {
     marginTop: 20,
     fontSize: 11
+  },
+  noBorder: {
+    border: 'none'
   }
 });

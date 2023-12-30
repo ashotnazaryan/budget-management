@@ -31,7 +31,7 @@ export const getTransfers = createAsyncThunk<Transfer[], void, { rejectValue: Er
       const { data } = await axios.get<TransferDTO[]>('transfers');
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
         let { accounts } = store.getState().account;
 
         if (!accounts.length) {
@@ -40,7 +40,7 @@ export const getTransfers = createAsyncThunk<Transfer[], void, { rejectValue: Er
           accounts = store.getState().account.accounts;
         }
 
-        return mapTransfers(data, accounts, showDecimals);
+        return mapTransfers(data, accounts, isoIntl, showDecimals);
       }
 
       return [];
@@ -56,7 +56,7 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
       const { data } = await axios.get<TransferDTO>(`transfers/${id}`);
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
         let { accounts } = store.getState().account;
 
         if (!accounts.length) {
@@ -65,7 +65,7 @@ export const getTransfer = createAsyncThunk<Transfer, TransferDTO['id'], { rejec
           accounts = store.getState().account.accounts;
         }
 
-        return mapTransfer(data, accounts, showDecimals);
+        return mapTransfer(data, accounts, isoIntl, showDecimals);
       }
 
       return {} as Transfer;

@@ -41,9 +41,9 @@ export const getTransactions = createAsyncThunk<Transaction[], void, { rejectVal
       const { data } = await axios.get<TransactionDTO[]>(url);
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapTransactions(data, showDecimals);
+        return mapTransactions(data, isoIntl, showDecimals);
       }
 
       return [];
@@ -59,9 +59,9 @@ export const getTransaction = createAsyncThunk<Transaction, TransactionDTO['id']
       const { data } = await axios.get<TransactionDTO>(`transactions/${id}`);
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapTransaction(data, showDecimals);
+        return mapTransaction(data, isoIntl, showDecimals);
       }
 
       return {} as Transaction;

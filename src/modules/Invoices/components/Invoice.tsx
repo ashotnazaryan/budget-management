@@ -33,10 +33,10 @@ const Invoice: React.FC<InvoiceProps> = ({ data, onClick }) => {
         <Grid item xs={1} display='flex'>
           <Icon name={IconType.receipt} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>
         </Grid>
-        <Grid item xs={6} display='flex' justifyContent='flex-start'>
+        <Grid item xs={5} display='flex' justifyContent='flex-start'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
-        <Grid item xs={3} display='flex'>
+        <Grid item xs={4} display='flex'>
           {/* TODO: remove hardcoded currency */}
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross} PLN</Typography>
         </Grid>

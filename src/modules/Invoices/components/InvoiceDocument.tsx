@@ -111,7 +111,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.GROSS_VALUE')}</Text>
             </View>
-            <View style={{ ...styles.currencyCol }}>
+            <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.CURRENCY')}</Text>
             </View>
           </View>
@@ -143,7 +143,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
               <Text style={styles.tableCell}>{data.amount?.gross}</Text>
             </View>
-            <View style={{ ...styles.currencyCol }}>
+            <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
               <Text style={styles.tableCell}>PLN</Text>
             </View>
           </View>

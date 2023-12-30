@@ -34,9 +34,9 @@ export const getAccounts = createAsyncThunk<Account[], void, { rejectValue: Erro
       const { data } = await axios.get<AccountDTO[]>('accounts');
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapAccounts(data, showDecimals);
+        return mapAccounts(data, isoIntl, showDecimals);
       }
 
       return [];
@@ -52,9 +52,9 @@ export const getAccount = createAsyncThunk<Account, AccountDTO['id'], { rejectVa
       const { data } = await axios.get<AccountDTO>(`accounts/${id}`);
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapAccount(data, showDecimals);
+        return mapAccount(data, isoIntl, showDecimals);
       }
 
       return {} as Account;

@@ -67,9 +67,9 @@ export const getInvoices = createAsyncThunk<Invoice[], void, { rejectValue: Erro
       const { data } = await axios.get<InvoiceDTO[]>('invoices');
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapInvoices(data, showDecimals);
+        return mapInvoices(data, isoIntl, showDecimals);
       }
 
       return [];
@@ -85,9 +85,9 @@ export const getInvoice = createAsyncThunk<Invoice, InvoiceDTO['id'], { rejectVa
       const { data } = await axios.get<InvoiceDTO>(`invoices/${id}`);
 
       if (data) {
-        const { showDecimals } = store.getState().setting;
+        const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapInvoice(data, showDecimals);
+        return mapInvoice(data, isoIntl, showDecimals);
       }
 
       return {} as Invoice;

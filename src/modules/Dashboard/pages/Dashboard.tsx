@@ -5,9 +5,9 @@ import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import { CategoryType, Period, Option, Transaction } from 'shared/models';
 import { ROUTES, TABS } from 'shared/constants';
+import { selectSummary, getSummary, setActivePeriodFilter, setTransactionFilters, resetTransactionsStatus } from 'store/reducers';
 import Skeleton from 'shared/components/Skeleton';
 import Tabs from 'shared/components/Tabs';
-import { selectSummary, getSummary, setActivePeriodFilter, setTransactionFilters, resetTransactionsStatus } from 'store/reducers';
 import EmptyState from 'shared/components/EmptyState';
 import Summary from '../components/Summary';
 

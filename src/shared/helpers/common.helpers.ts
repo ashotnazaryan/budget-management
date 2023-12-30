@@ -113,9 +113,8 @@ export const mapCurrencyToLocale = (currency: Currency['iso']): Locale['isoIntl'
   }
 };
 
-export const mapNumberToCurrencyString = (value: number, currency: Currency['iso'], showDecimals = false): string => {
+export const mapNumberToCurrencyString = (value: number, currency: Currency['iso'], locale: Locale['isoIntl'], showDecimals = false): string => {
   const decimals = showDecimals ? 2 : 0;
-  const locale = mapCurrencyToLocale(currency);
   const currencyString = value.toLocaleString(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,

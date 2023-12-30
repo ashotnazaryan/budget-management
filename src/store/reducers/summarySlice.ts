@@ -35,9 +35,9 @@ export const getSummary = createAsyncThunk<Summary, Period | undefined, { reject
       const { data } = await axios.get<SummaryDTO>(`summary${queryParams}`);
 
       if (data) {
-        const { defaultCurrency: { iso }, showDecimals } = store.getState().setting;
+        const { defaultCurrency: { iso }, locale: { isoIntl }, showDecimals } = store.getState().setting;
 
-        return mapSummary(data, iso, showDecimals);
+        return mapSummary(data, iso, isoIntl, showDecimals);
       }
 
       return {} as Summary;
@@ -52,9 +52,9 @@ export const getBalance = createAsyncThunk<Summary['balance'], void, { rejectVal
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<SummaryDTO['balance']>('summary/balance');
-      const { defaultCurrency, showDecimals } = store.getState().setting;
+      const { defaultCurrency: { iso }, locale: { isoIntl }, showDecimals } = store.getState().setting;
 
-      return mapBalance(data, defaultCurrency.iso, showDecimals) || '0';
+      return mapBalance(data, iso, isoIntl, showDecimals) || '0';
     } catch (error: any) {
       return rejectWithValue(error);
     }

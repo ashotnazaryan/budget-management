@@ -41,7 +41,7 @@ const darkPalette: PaletteOptions = {
     contrastText: '#fff'
   },
   error: {
-    main: '#ff4d4d'
+    main: '#ff1a1a'
   },
   info: {
     main: '#262626',

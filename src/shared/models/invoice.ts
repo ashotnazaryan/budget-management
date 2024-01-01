@@ -15,7 +15,7 @@ export interface InvoiceDTO {
   buyerAddress: string;
   buyerLocation: string;
   buyerVatID: string;
-  amount?: Amount;
+  amount?: InvoiceAmount;
 }
 
 export interface Invoice {
@@ -33,27 +33,12 @@ export interface Invoice {
   buyerAddress: string;
   buyerLocation: string;
   buyerVatID: string;
-  amount?: Amount;
+  amount?: InvoiceAmount;
 }
 
-export interface Amount {
+export interface InvoiceAmount {
   net: number;
   gross: number;
   vatAmount: number;
   vatRate: number;
-}
-
-export interface NBPResponse {
-  effectiveDate: string;
-  rates: {
-    code: string;
-    currency: string;
-    mid: number;
-  }[];
-}
-
-export interface Rate {
-  code: string;
-  currency: string;
-  rate: number;
 }

@@ -1,7 +1,7 @@
 import { COUNTRIES } from 'shared/constants';
-import { Amount, Invoice, InvoiceDTO, Locale, User, UserProfile } from 'shared/models';
+import { InvoiceAmount, Invoice, InvoiceDTO, Locale, User, UserProfile } from 'shared/models';
 
-export const calculateAmount = (rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): Amount => {
+export const calculateAmount = (rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): InvoiceAmount => {
   const amount = salary * rate;
   const vat = vatIncluded ? (amount * 23) / 100 : 0;
 

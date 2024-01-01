@@ -6,13 +6,13 @@ import {
   getCurrentDate,
   getDayOfCurrentMonth,
   getFirstDateOfPreviousMonth,
-  getLastDateOfPreviousMonth,
   getPreviousMonthLongName
 } from 'shared/helpers';
 import { styles } from './InvoiceDocument.styles';
 
 interface InvoiceDocumentProps {
   data: Partial<Invoice>;
+  saleDate: string;
 }
 
 export const chunkSubstring = (str: string, size: number) => {
@@ -32,7 +32,7 @@ const chunkTextComponent = (text: string, size: number): React.ReactElement => {
   );
 };
 
-const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
+const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, saleDate }) => {
   const { t } = useTranslation();
 
   return (
@@ -51,7 +51,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data }) => {
         </View>
         <View style={styles.heading}>
           <Text style={styles.label}>{t('INVOICES.DOCUMENT.SALE_DATE')}:</Text>
-          <Text style={styles.value}>{getLastDateOfPreviousMonth()}</Text>
+          <Text style={styles.value}>{saleDate}</Text>
         </View>
         <View style={styles.heading}>
           <Text style={styles.label}>{t('INVOICES.DOCUMENT.DUE_DATE')}:</Text>

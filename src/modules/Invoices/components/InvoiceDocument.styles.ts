@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 40,
-    border: '1px solid #60666c'
+    border: '1px solid #000'
   },
   headerRow: {
     display: 'flex',
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   tableCol: {
-    borderRight: '1px solid #60666c',
+    borderRight: '1px solid #000',
     height: '100%',
     justifyContent: 'center'
   },

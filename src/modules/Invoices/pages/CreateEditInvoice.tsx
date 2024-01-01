@@ -17,11 +17,12 @@ import {
   selectInvoice,
   selectInvoiceAmount,
   selectInvoiceError,
+  selectInvoiceRate,
   selectProfile,
   selectUser,
   setInvoiceAmount
 } from 'store/reducers';
-import { Amount, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
+import { InvoiceAmount, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
 import { calculateAmount, getPageTitle, mapUserProfileToInvoice } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
@@ -38,7 +39,8 @@ interface NewInvoiceProps {
 const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { rates, getStatus, createEditStatus, deleteStatus } = useAppSelector(selectInvoice);
+  const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectInvoice);
+  const { rates, date } = useAppSelector(selectInvoiceRate);
   const amount = useAppSelector(selectInvoiceAmount);
   const invoice = useAppSelector(selectCurrentInvoice);
   const error = useAppSelector(selectInvoiceError);
@@ -106,9 +108,10 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
     setDeleteClicked(false);
   };
 
-  const getAmount = (data: Invoice): Amount => {
+  const getAmount = (data: Invoice): InvoiceAmount => {
     const { salary, vatIncluded, currencyIso } = data;
-    const rate = rates.find((rate) => rate.code === currencyIso)?.rate || 1;
+    const rate = rates.find((rate) => rate.code === currencyIso)?.rate;
+
     return calculateAmount(rate, Number(salary), vatIncluded);
   };
 
@@ -197,7 +200,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <StyledPDFViewer>
-            <InvoiceDocument data={invoiceData} />
+            <InvoiceDocument data={invoiceData} saleDate={date} />
           </StyledPDFViewer>
         </Grid>
       </Grid>

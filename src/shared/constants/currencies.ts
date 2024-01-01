@@ -24,13 +24,5 @@ export const CURRENCIES: Currency[] = [
     name: 'Ukrainian Hryvnia',
     nameKey: 'CURRENCIES.UAH',
     symbol: '₴'
-  },
-  {
-    iso: 'AMD',
-    name: 'Armenian Dram',
-    nameKey: 'CURRENCIES.AMD',
-    symbol: '֏'
   }
 ];
-
-export const INVOICE_CURRENCIES: Currency[] = CURRENCIES.filter(({ iso }) => iso !== 'AMD');

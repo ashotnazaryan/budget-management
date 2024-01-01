@@ -1,17 +1,15 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { Amount, ErrorResponse, Invoice, InvoiceDTO, NBPResponse, Rate, StatusState } from 'shared/models';
+import { InvoiceAmount, ErrorResponse, Invoice, InvoiceDTO, StatusState } from 'shared/models';
 import { mapInvoice, mapInvoices } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 
 export interface InvoiceState {
   salary: number;
-  rates: Rate[];
-  amount: Amount;
+  amount: InvoiceAmount;
   invoices: Invoice[];
-  rateStatus: StatusState;
   status: StatusState;
   getStatus: StatusState;
   createEditStatus: StatusState;
@@ -22,43 +20,16 @@ export interface InvoiceState {
 
 const initialState: InvoiceState = {
   salary: 0,
-  rates: [],
   amount: {
     net: 0,
     gross: 0
-  } as Amount,
+  } as InvoiceAmount,
   invoices: [],
-  rateStatus: 'idle',
   status: 'idle',
   getStatus: 'idle',
   createEditStatus: 'idle',
   deleteStatus: 'idle'
 };
-
-export const getExchangeRates = createAsyncThunk<Rate[], string, { rejectValue: unknown }>(
-  'invoices/getExchangeRates',
-  async (date, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.get<NBPResponse[]>(`/A/${date}`, {
-        baseURL: process.env.REACT_APP_NBP_PL_API,
-        withCredentials: false
-      });
-
-      if (data[0]) {
-        return data[0]?.rates.map((rate) => {
-          return {
-            code: rate.code,
-            currency: rate.currency,
-            rate: rate.mid
-          };
-        });
-      }
-
-      return [];
-    } catch (error: unknown) {
-      return rejectWithValue(error);
-    }
-  });
 
 export const getInvoices = createAsyncThunk<Invoice[], void, { rejectValue: ErrorResponse }>(
   'invoices/getInvoices',
@@ -136,7 +107,7 @@ export const invoiceSlice = createSlice({
   name: 'invoices',
   initialState,
   reducers: {
-    setInvoiceAmount(state, action: PayloadAction<Amount>): InvoiceState {
+    setInvoiceAmount(state, action: PayloadAction<InvoiceAmount>): InvoiceState {
       return {
         ...state,
         amount: action.payload
@@ -164,25 +135,6 @@ export const invoiceSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getExchangeRates.pending, (state): InvoiceState => {
-        return {
-          ...state,
-          rateStatus: 'loading'
-        };
-      })
-      .addCase(getExchangeRates.rejected, (state): InvoiceState => {
-        return {
-          ...state,
-          rateStatus: 'failed'
-        };
-      })
-      .addCase(getExchangeRates.fulfilled, (state, action: PayloadAction<Rate[]>): InvoiceState => {
-        return {
-          ...state,
-          rates: action.payload,
-          rateStatus: 'succeeded'
-        };
-      })
       .addCase(getInvoices.pending, (state): InvoiceState => {
         return {
           ...state,

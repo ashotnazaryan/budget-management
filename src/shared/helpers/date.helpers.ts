@@ -1,15 +1,20 @@
-import { DATE_FORMAT_ISO } from 'shared/constants';
 import dayjs from 'dayjs';
+import { StartEndDate } from 'shared/models';
+import { DATE_FORMAT_ISO } from 'shared/constants';
 
 export const getCurrentDate = (): string => {
   return dayjs().format(DATE_FORMAT_ISO);
 };
 
-export const getLastDateOfPreviousMonth = (): string => {
+export const getLastSevenDaysOfPreviousMonth = (): StartEndDate => {
   const currentDate = dayjs();
-  const date = currentDate.subtract(1, 'month').endOf('month');
+  const lastMonthEndDate = currentDate.subtract(1, 'month').endOf('month');
+  const lastMonthStartDate = lastMonthEndDate.subtract(6, 'day');
 
-  return date.format(DATE_FORMAT_ISO);
+  return {
+    startDate: lastMonthStartDate.format(DATE_FORMAT_ISO),
+    endDate: lastMonthEndDate.format(DATE_FORMAT_ISO),
+  };
 };
 
 export const getFirstDateOfPreviousMonth = (): string => {

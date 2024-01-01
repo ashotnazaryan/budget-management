@@ -9,6 +9,7 @@ export * from './category';
 export * from './account';
 export * from './transfer';
 export * from './invoice';
+export * from './rate';
 export * from './form';
 export * from './icon';
 export * from './common';

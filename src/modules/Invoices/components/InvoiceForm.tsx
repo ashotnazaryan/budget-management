@@ -8,7 +8,7 @@ import { useTranslation } from 'core/i18n';
 import { Currency, Invoice, InvoiceField, ManageMode } from 'shared/models';
 import { invoiceHelper } from 'shared/helpers';
 import { useAppSelector } from 'store';
-import { INVOICE_CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
+import { CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
 import { selectSettings } from 'store/reducers';
 import FormInput from 'shared/components/FormInput';
 import FormSelect from 'shared/components/FormSelect';
@@ -27,11 +27,10 @@ interface InvoiceFormProps {
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
-  // const { palette: { info: { contrastText } } } = useTheme();
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const regex = POSITIVE_NUMERIC_REGEX;
-  const currencies = INVOICE_CURRENCIES;
-  const defaultCurrencyIso = INVOICE_CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
+  const currencies = CURRENCIES;
+  const defaultCurrencyIso = CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
   const isViewMode = mode === ManageMode.view;
   const isCreateMode = mode === ManageMode.create;

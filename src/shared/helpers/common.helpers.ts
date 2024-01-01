@@ -89,8 +89,6 @@ export const mapCurrencyIsoToCountryCode = (iso: Currency['iso']): CountryCode =
     return 'pl';
   case 'UAH':
     return 'ua';
-  case 'AMD':
-    return 'am';
   default:
     throw new Error(`Unsupported currency iso: ${iso}`);
   }
@@ -106,8 +104,6 @@ export const mapCurrencyToLocale = (currency: Currency['iso']): Locale['isoIntl'
     return 'uk-UA';
   case 'PLN':
     return 'pl-PL';
-  case 'AMD':
-    return 'hy-AM';
   default:
     throw new Error(`Unsupported currency: ${currency}`);
   }

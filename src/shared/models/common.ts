@@ -8,10 +8,10 @@ export type RecursivePartial<T> = {
 };
 
 export interface Currency {
-  iso: 'USD' | 'EUR' | 'PLN' | 'UAH' | 'AMD';
-  name: 'US Dollar' | 'Euro' | 'Polish Zloty' | 'Ukrainian Hryvnia' | 'Armenian Dram';
-  nameKey: 'CURRENCIES.USD' | 'CURRENCIES.EUR' | 'CURRENCIES.PLN' | 'CURRENCIES.UAH' | 'CURRENCIES.AMD';
-  symbol: '$' | '€' | 'zł' | '₴' | '֏';
+  iso: 'USD' | 'EUR' | 'PLN' | 'UAH';
+  name: 'US Dollar' | 'Euro' | 'Polish Zloty' | 'Ukrainian Hryvnia';
+  nameKey: 'CURRENCIES.USD' | 'CURRENCIES.EUR' | 'CURRENCIES.PLN' | 'CURRENCIES.UAH';
+  symbol: '$' | '€' | 'zł' | '₴';
 }
 
 export enum ManageMode {
@@ -37,6 +37,11 @@ export interface ErrorResponse {
 export interface DateRange {
   fromDate: Dayjs;
   toDate: Dayjs;
+}
+
+export interface StartEndDate {
+  startDate: string;
+  endDate: string;
 }
 
 export interface PeriodOption {

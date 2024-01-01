@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectInvoice } from 'store/reducers';
-import { getFromLocalStorage, getLastDateOfPreviousMonth } from 'shared/helpers';
+import { getSettings, getUserInfo, getUserToken, selectApp, selectAuth, getExchangeRates, selectRate, getInvoiceExchangeRates } from 'store/reducers';
+import { getFromLocalStorage, getLastSevenDaysOfPreviousMonth } from 'shared/helpers';
 import { Auth } from 'shared/models';
 import { AUTH_KEY, ROUTES } from 'shared/constants';
 import Content from './Content';
@@ -11,7 +11,7 @@ import Loading from './Loading';
 export const ProtectedLayout = () => {
   const { status: authStatus } = useAppSelector(selectAuth);
   const { status: appStatus } = useAppSelector(selectApp);
-  const { status: invoiceStatus } = useAppSelector(selectInvoice);
+  const { regularStatus, invoiceStatus } = useAppSelector(selectRate);
   const { accessToken } = getFromLocalStorage<Auth>(AUTH_KEY);
   const outlet = useOutlet();
   const dispatch = useAppDispatch();
@@ -30,8 +30,14 @@ export const ProtectedLayout = () => {
   }, [dispatch, accessToken]);
 
   React.useEffect(() => {
+    if (regularStatus === 'idle') {
+      dispatch(getExchangeRates());
+    }
+  }, [dispatch, regularStatus]);
+
+  React.useEffect(() => {
     if (invoiceStatus === 'idle') {
-      dispatch(getExchangeRates(getLastDateOfPreviousMonth()));
+      dispatch(getInvoiceExchangeRates(getLastSevenDaysOfPreviousMonth()));
     }
   }, [dispatch, invoiceStatus]);
 

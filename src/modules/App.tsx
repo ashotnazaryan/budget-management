@@ -34,6 +34,7 @@ const App: React.FC = () => {
   const Accounts = createLazyComponent(() => import('./Accounts/Accounts'));
   const Transfers = createLazyComponent(() => import('./Transfers/Transfers'));
   const Profile = createLazyComponent(() => import('./Profile'));
+  const Reports = createLazyComponent(() => import('./Reports'));
   const Invoices = createLazyComponent(() => import('./Invoices/Invoices'));
 
   React.useEffect(() => {
@@ -55,6 +56,7 @@ const App: React.FC = () => {
             <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />
             <Route path={`${ROUTES.transfers.path}/*`} element={Transfers} />
             <Route path={`${ROUTES.profile.path}/*`} element={Profile} />
+            <Route path={`${ROUTES.reports.path}/*`} element={Reports} />
             <Route path={`${ROUTES.invoices.path}/*`} element={Invoices} />
             <Route path="*" element={<Navigate to={ROUTES.dashboard.path} replace />} />
           </Route>

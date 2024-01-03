@@ -32,11 +32,17 @@ export const getDayOfCurrentMonth = (day: number): string => {
 };
 
 export const getPreviousMonthShortName = (): string => {
-  const currentDate = dayjs();
-  return currentDate.subtract(1, 'month').format('MMMM');
+  return dayjs().subtract(1, 'month').format('MMMM');
 };
 
 export const getPreviousMonthLongName = (): string => {
-  const currentDate = dayjs();
-  return currentDate.subtract(1, 'month').format('MMMM YYYY');
+  return dayjs().subtract(1, 'month').format('MMMM YYYY');
+};
+
+export const getPreviousMonthIndex = (): number => {
+  return dayjs().subtract(1, 'month').month();
+};
+
+export const getMonthShortNameByIndex = (index: number): string => {
+  return dayjs().month(index).format('MMMM');
 };

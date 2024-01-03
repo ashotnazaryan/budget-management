@@ -17,6 +17,10 @@ export const ROUTES: AppRoute = {
     name: 'ROUTES.PROFILE',
     path: '/profile'
   },
+  reports: {
+    name: 'ROUTES.REPORTS',
+    path: '/reports'
+  },
   categories: {
     name: 'ROUTES.CATEGORIES',
     path: '/categories'

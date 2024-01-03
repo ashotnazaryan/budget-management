@@ -5,10 +5,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { useTranslation } from 'core/i18n';
-import { Currency, Invoice, InvoiceField, ManageMode } from 'shared/models';
-import { invoiceHelper } from 'shared/helpers';
+import { Currency, Invoice, InvoiceDTO, InvoiceField, ManageMode } from 'shared/models';
+import { getPreviousMonthIndex, invoiceHelper } from 'shared/helpers';
 import { useAppSelector } from 'store';
-import { CURRENCIES, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
+import { CURRENCIES, MONTHS, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
 import { selectSettings } from 'store/reducers';
 import FormInput from 'shared/components/FormInput';
 import FormSelect from 'shared/components/FormSelect';
@@ -20,8 +20,8 @@ interface InvoiceFormProps {
   data: Partial<Invoice>;
   loading: boolean;
   mode: ManageMode;
-  onSubmit: (formData: Invoice) => void;
-  onPreview: (formData: Invoice) => void;
+  onSubmit: (formData: InvoiceDTO) => void;
+  onPreview: (formData: InvoiceDTO) => void;
 }
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit }) => {
@@ -30,15 +30,18 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const regex = POSITIVE_NUMERIC_REGEX;
   const currencies = CURRENCIES;
+  const months = MONTHS;
   const defaultCurrencyIso = CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
+  const defaultMonth = months.find((month) => month.index === getPreviousMonthIndex());
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
   const isViewMode = mode === ManageMode.view;
   const isCreateMode = mode === ManageMode.create;
 
   const defaultValues: Partial<Invoice> = {
-    name: '',
+    name: `${t('INVOICES.INVOICE')}_${t(defaultMonth?.nameKey || '') || defaultMonth?.name}`,
     salary: '',
     currencyIso: isCreateMode ? defaultCurrencyIso : (data.currencyIso || '' as Currency['iso']),
+    month: isCreateMode ? defaultMonth?.index : (data.month || defaultMonth?.index),
     vatIncluded: false,
     sellerName: '',
     sellerAddress: '',
@@ -73,11 +76,21 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   };
 
   const handleFormPreview = (data: Invoice): void => {
-    onPreview(data);
+    const mappedData: InvoiceDTO = {
+      ...data,
+      month: Number(data.month)
+    };
+
+    onPreview(mappedData);
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    onSubmit(data);
+    const mappedData: InvoiceDTO = {
+      ...data,
+      month: Number(data.month)
+    };
+
+    onSubmit(mappedData);
   };
 
   return (
@@ -135,6 +148,23 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                       <MenuItem value={iso} key={iso}>
                         <CurrencyInfoItem currency={{ iso, symbol, name, nameKey }} />
                       </MenuItem>
+                    ))}
+                  </FormSelect>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormSelect
+                    inputProps={{ readOnly: isViewMode }}
+                    label={t('COMMON.MONTH')}
+                    name={InvoiceField.month}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: t(helper.month.required!.message)
+                      }
+                    }}
+                  >
+                    {months.map((month) => (
+                      <MenuItem key={month.index} value={month.index}>{t(month.nameKey) || month.name}</MenuItem>
                     ))}
                   </FormSelect>
                 </Grid>

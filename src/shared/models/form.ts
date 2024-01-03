@@ -36,6 +36,7 @@ export enum InvoiceField {
   name = 'name',
   salary = 'salary',
   currencyIso = 'currencyIso',
+  month = 'month',
   vatIncluded = 'vatIncluded',
   sellerName = 'sellerName',
   sellerAddress = 'sellerAddress',

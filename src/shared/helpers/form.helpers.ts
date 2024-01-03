@@ -120,6 +120,11 @@ export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
       message: 'INVOICES.ERRORS.REQUIRED_CURRENCY'
     }
   },
+  [InvoiceField.month]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_MONTH'
+    }
+  },
   [InvoiceField.sellerName]: {
     required: {
       message: 'INVOICES.ERRORS.REQUIRED_SELLER_NAME'

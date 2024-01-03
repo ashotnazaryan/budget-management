@@ -5,6 +5,7 @@ export interface InvoiceDTO {
   name: string;
   salary: string;
   currencyIso: Currency['iso'];
+  month: number;
   vatIncluded: boolean;
   sellerName: string;
   sellerAddress: string;
@@ -23,6 +24,7 @@ export interface Invoice {
   name: string;
   salary: string;
   currencyIso: Currency['iso'];
+  month: number;
   vatIncluded: boolean;
   sellerName: string;
   sellerAddress: string;

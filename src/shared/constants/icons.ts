@@ -39,7 +39,7 @@ export const CATEGORY_ICONS: IconTypes = {
   [IconType.otherExpense]: HelpIcon,
   [IconType.default]: QuestionMarkIcon,
   [IconType.shopping]: AddShoppingCartIcon,
-  [IconType.business]: AddBusinessIcon,
+  [IconType.business]: AddBusinessIcon
 };
 
 export const ACCOUNT_ICONS: IconTypes = {

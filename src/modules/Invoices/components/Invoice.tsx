@@ -3,7 +3,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'core/i18n';
 import { IconType, Invoice as InvoiceModel } from 'shared/models';
+import { MONTHS } from 'shared/constants';
 import Icon from 'shared/components/Icon';
 
 interface InvoiceProps {
@@ -13,7 +15,9 @@ interface InvoiceProps {
 
 const Invoice: React.FC<InvoiceProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = useTheme();
-  const { name, amount, currencyIso } = data;
+  const { t } = useTranslation();
+  const { name, amount, currencyIso, month } = data;
+  const monthName = MONTHS.find(({ index }) => index === Number(month))?.nameKey || '';
 
   const onInvoiceClick = (): void => {
     if (onClick) {
@@ -33,10 +37,13 @@ const Invoice: React.FC<InvoiceProps> = ({ data, onClick }) => {
         <Grid item xs={1} display='flex'>
           <Icon name={IconType.receipt} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>
         </Grid>
-        <Grid item xs={5} display='flex' justifyContent='flex-start'>
+        <Grid item xs={4} display='flex' justifyContent='flex-start'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
-        <Grid item xs={4} display='flex'>
+        <Grid item xs={2} display='flex' justifyContent='flex-start'>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{t(monthName)}</Typography>
+        </Grid>
+        <Grid item xs={3} display='flex'>
           {/* TODO: remove hardcoded currency */}
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross} PLN</Typography>
         </Grid>

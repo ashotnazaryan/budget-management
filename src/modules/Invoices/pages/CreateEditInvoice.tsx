@@ -22,6 +22,7 @@ import {
   selectInvoiceRate,
   selectProfile,
   selectUser,
+  setGetInvoiceErrorStatus,
   setInvoiceAmount
 } from 'store/reducers';
 import { InvoiceAmount, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
@@ -172,10 +173,16 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   }, [goBack, deleteStatus, deleteClicked]);
 
   React.useEffect(() => {
-    if (invoiceId && getStatus === 'idle' && (isEditMode || isViewMode) && !deleteClicked) {
+    if (!invoiceId) {
+      dispatch(setGetInvoiceErrorStatus());
+    }
+  }, [invoiceId, dispatch]);
+
+  React.useEffect(() => {
+    if (invoiceId && getStatus === 'idle' && !isCreateMode && !deleteClicked) {
       dispatch(getInvoice(invoiceId));
     }
-  }, [invoiceId, isEditMode, isViewMode, getStatus, dispatch, deleteClicked]);
+  }, [invoiceId, isCreateMode, getStatus, dispatch, deleteClicked]);
 
   React.useEffect(() => {
     if (invoice && getStatus === 'succeeded' && (isEditMode || isViewMode)) {
@@ -188,8 +195,8 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
       return <Skeleton type='form' />;
     }
 
-    if (!isCreateMode && (!invoice?.name || !invoiceId) && getStatus === 'failed') {
-      return <EmptyState text={t('INVOICES.EMPTY_TEXT')} />;
+    if (!isCreateMode && (!invoice || !invoiceId) && getStatus === 'failed') {
+      return <EmptyState text={t('INVOICES.EMPTY_TEXT_RENDER_CONTENT')} />;
     }
 
     return (

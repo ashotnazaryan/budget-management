@@ -6,6 +6,7 @@ import categoryReducer from './categorySlice';
 import accountReducer from './accountSlice';
 import transferReducer from './transferSlice';
 import invoiceReducer from './invoiceSlice';
+import reportReducer from './reportSlice';
 import rateReducer from './rateSlice';
 import authReducer from './authSlice';
 import userReducer from './userSlice';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   account: accountReducer,
   transfer: transferReducer,
   invoice: invoiceReducer,
+  report: reportReducer,
   rate: rateReducer,
   auth: authReducer,
   user: userReducer,

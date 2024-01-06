@@ -14,17 +14,17 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <AxiosInterceptor>
-            <App />
-          </AxiosInterceptor>
-        </I18nextProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <I18nextProvider i18n={i18n}>
+        <AxiosInterceptor>
+          <App />
+        </AxiosInterceptor>
+      </I18nextProvider>
+    </BrowserRouter>
+  </Provider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

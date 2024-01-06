@@ -1,18 +1,19 @@
 import { createTheme, PaletteOptions } from '@mui/material/styles';
+import { APP_COLORS } from 'shared/constants';
 
 const lightPalette: PaletteOptions = {
   primary: {
-    main: '#2b697a',
+    main: APP_COLORS.light.primary,
     light: '#4f8392',
     dark: '#205b6b',
     contrastText: '#fff'
   },
   secondary: {
-    main: '#de5114',
+    main: APP_COLORS.light.secondary,
     contrastText: '#fff'
   },
   error: {
-    main: '#de4545'
+    main: APP_COLORS.light.error
   },
   info: {
     main: '#cccccc',
@@ -29,19 +30,19 @@ const lightPalette: PaletteOptions = {
 
 const darkPalette: PaletteOptions = {
   primary: {
-    main: '#25744d',
+    main: APP_COLORS.dark.primary,
     light: '#339966',
     dark: '#1a4c34',
     contrastText: '#fff'
   },
   secondary: {
-    main: '#996633',
+    main: APP_COLORS.dark.secondary,
     light: '#bf8040',
     dark: '#734d26',
     contrastText: '#fff'
   },
   error: {
-    main: '#ff1a1a'
+    main: APP_COLORS.light.error
   },
   info: {
     main: '#262626',

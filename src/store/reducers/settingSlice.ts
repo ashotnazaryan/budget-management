@@ -5,10 +5,11 @@ import { ErrorResponse, Period, Setting, SettingDTO, StatusState } from 'shared/
 import { CURRENCIES, LOCALES } from 'shared/constants';
 import { mapSettings } from 'shared/helpers';
 import { RootState } from './rootReducer';
-import { resetApp, setAppStatus } from './appSlice';
 import { getBalance, resetSummaryStatus, setActivePeriodFilter } from './summarySlice';
 import { resetTransactionsStatus } from './transactionSlice';
 import { resetAccountsStatus } from './accountSlice';
+import { resetRateInvoiceStatus, resetRateRegularStatus } from './rateSlice';
+import { resetApp, setAppStatus } from './appSlice';
 
 export interface SettingState extends Setting {
   status: StatusState;
@@ -58,6 +59,8 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
         dispatch(resetSummaryStatus());
         dispatch(resetTransactionsStatus());
         dispatch(resetAccountsStatus());
+        dispatch(resetRateRegularStatus());
+        dispatch(resetRateInvoiceStatus());
         dispatch(getBalance());
       }
     } catch (error: any) {

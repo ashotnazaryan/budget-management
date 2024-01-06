@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getInvoices, selectInvoice } from 'store/reducers';
+import { getInvoices, selectCurrency, selectInvoice } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
 import { IconType, Invoice as InvoiceModel } from 'shared/models';
 import PageTitle from 'shared/components/PageTitle';
@@ -19,6 +19,7 @@ const InvoiceList: React.FC<{}> = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { invoices, status } = useAppSelector(selectInvoice);
+  const defaultCurrency = useAppSelector(selectCurrency);
 
   const openNewInvoicePage = (): void => {
     navigate(`${ROUTES.invoices.path}/new`);
@@ -56,7 +57,7 @@ const InvoiceList: React.FC<{}> = () => {
         {
           invoices.map((invoice) => (
             <Grid item key={invoice.id} xs={12}>
-              <Invoice data={invoice} onClick={handleInvoiceItemClick} />
+              <Invoice data={invoice} defaultCurrency={defaultCurrency} onClick={handleInvoiceItemClick} />
             </Grid>
           ))
         }

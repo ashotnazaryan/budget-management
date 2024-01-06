@@ -118,7 +118,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
     const { salary, vatIncluded, currencyIso } = data;
     const rate = rates.find((rate) => rate.code === currencyIso)?.value;
 
-    return calculateAmount(rate, Number(salary), vatIncluded);
+    return calculateAmount(defaultCurrency.iso, rate, Number(salary), vatIncluded);
   };
 
   const resetInvoice = React.useCallback(() => {

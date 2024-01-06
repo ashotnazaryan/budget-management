@@ -1,15 +1,16 @@
 import { COUNTRIES } from 'shared/constants';
-import { InvoiceAmount, Invoice, InvoiceDTO, Locale, User, UserProfile } from 'shared/models';
+import { InvoiceAmount, Invoice, InvoiceDTO, Locale, User, UserProfile, Currency } from 'shared/models';
 
-export const calculateAmount = (rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): InvoiceAmount => {
+export const calculateAmount = (currencyIso: Currency['iso'], rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): InvoiceAmount => {
   const amount = salary * rate;
   const vat = vatIncluded ? (amount * 23) / 100 : 0;
 
   return {
+    currencyIso,
     vatAmount: Number(vat.toFixed(decimalPlaces)),
     vatRate: 23,
     net: Number(amount.toFixed(decimalPlaces)),
-    gross: Number((amount + vat).toFixed(decimalPlaces)),
+    gross: Number((amount + vat).toFixed(decimalPlaces))
   };
 };
 

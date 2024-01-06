@@ -43,4 +43,5 @@ export interface InvoiceAmount {
   gross: number;
   vatAmount: number;
   vatRate: number;
+  currencyIso: Currency['iso'];
 }

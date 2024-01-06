@@ -60,7 +60,20 @@ export const getInvoiceExchangeRates = createAsyncThunk<Rate, StartEndDate, { re
 export const rateSlice = createSlice({
   name: 'rates',
   initialState,
-  reducers: {},
+  reducers: {
+    resetRateRegularStatus(state): RateState {
+      return {
+        ...state,
+        regularStatus: initialState.regularStatus
+      };
+    },
+    resetRateInvoiceStatus(state): RateState {
+      return {
+        ...state,
+        invoiceStatus: initialState.invoiceStatus
+      };
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getExchangeRates.pending, (state): RateState => {
@@ -110,5 +123,7 @@ export const rateSlice = createSlice({
 export const selectRate = (state: RootState): RateState => state.rate;
 export const selectRegularRate = (state: RootState): RateState['regular'] => state.rate.regular;
 export const selectInvoiceRate = (state: RootState): RateState['invoice'] => state.rate.invoice;
+
+export const { resetRateRegularStatus, resetRateInvoiceStatus } = rateSlice.actions;
 
 export default rateSlice.reducer;

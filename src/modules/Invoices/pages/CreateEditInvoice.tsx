@@ -13,6 +13,8 @@ import {
   getProfile,
   resetCreateEditInvoiceStatus,
   resetGetInvoiceStatus,
+  resetInvoiceAmount,
+  selectCurrency,
   selectCurrentInvoice,
   selectInvoice,
   selectInvoiceAmount,
@@ -31,6 +33,8 @@ import Dialog from 'shared/components/Dialog';
 import InvoiceDocument from '../components/InvoiceDocument';
 import InvoiceForm from '../components/InvoiceForm';
 import { StyledPDFViewer } from './CreateEditInvoice.styles';
+import Skeleton from 'shared/components/Skeleton';
+import EmptyState from 'shared/components/EmptyState';
 
 interface NewInvoiceProps {
   mode: ManageMode;
@@ -46,6 +50,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const error = useAppSelector(selectInvoiceError);
   const { status: profileStatus, userProfile } = useAppSelector(selectProfile);
   const user = useAppSelector(selectUser);
+  const defaultCurrency = useAppSelector(selectCurrency);
   const dispatch = useAppDispatch();
   const { state } = useLocation();
   const invoiceId = state?.id as InvoiceDTO['id'];
@@ -53,6 +58,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const deleteLoading = deleteStatus === 'loading';
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
+  const isCreateMode = mode === ManageMode.create;
   const [invoiceData, setInvoiceData] = React.useState<Partial<InvoiceDTO>>({} as InvoiceDTO);
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
@@ -110,18 +116,20 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
 
   const getAmount = (data: Invoice): InvoiceAmount => {
     const { salary, vatIncluded, currencyIso } = data;
-    const rate = rates.find((rate) => rate.code === currencyIso)?.rate;
+    const rate = rates.find((rate) => rate.code === currencyIso)?.value;
 
     return calculateAmount(rate, Number(salary), vatIncluded);
   };
 
   const resetInvoice = React.useCallback(() => {
     dispatch(resetGetInvoiceStatus());
+    dispatch(resetInvoiceAmount());
   }, [dispatch]);
 
   const goBack = React.useCallback(() => {
     navigate(`${ROUTES.invoices.path}`);
     resetInvoice();
+    setInvoiceData({});
   }, [navigate, resetInvoice]);
 
   React.useEffect(() => {
@@ -175,6 +183,35 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
     }
   }, [invoice, isEditMode, isViewMode, getStatus, dispatch]);
 
+  const renderContent = (): React.ReactElement => {
+    if (getStatus === 'loading') {
+      return <Skeleton type='form' />;
+    }
+
+    if (!isCreateMode && (!invoice?.name || !invoiceId) && getStatus === 'failed') {
+      return <EmptyState text={t('INVOICES.EMPTY_TEXT')} />;
+    }
+
+    return (
+      <Grid container columnSpacing={3} rowSpacing={5}>
+        <Grid item xs={12} sm={6}>
+          <InvoiceForm
+            data={invoiceData}
+            loading={loading}
+            mode={mode}
+            onPreview={handleFormPreview}
+            onSubmit={handleFormSubmit}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <StyledPDFViewer>
+            <InvoiceDocument data={invoiceData} saleDate={date} defaultCurrency={defaultCurrency} />
+          </StyledPDFViewer>
+        </Grid>
+      </Grid>
+    );
+  };
+
   return (
     <Box flexGrow={1}>
       <PageTitle
@@ -188,22 +225,7 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         onDeleteButtonClick={handleOpenDialog}
         onCancelButtonClick={handleCancelButtonClick}
       />
-      <Grid container columnSpacing={3} rowSpacing={5}>
-        <Grid item xs={12} sm={6}>
-          <InvoiceForm
-            data={invoiceData}
-            loading={loading}
-            mode={mode}
-            onPreview={handleFormPreview}
-            onSubmit={handleFormSubmit}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <StyledPDFViewer>
-            <InvoiceDocument data={invoiceData} saleDate={date} />
-          </StyledPDFViewer>
-        </Grid>
-      </Grid>
+      {renderContent()}
       <Snackbar type='error' open={showSnackbar} text={error?.messageKey ? t(error.messageKey) : error?.message || ''} onClose={handleSnackbarClose} />
       <Dialog
         fullWidth

@@ -29,9 +29,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const helper = invoiceHelper();
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
   const regex = POSITIVE_NUMERIC_REGEX;
-  const currencies = CURRENCIES;
+  const currencies = CURRENCIES.filter((currency) => currency.iso !== iso);
   const months = MONTHS;
-  const defaultCurrencyIso = CURRENCIES.some((currency) => currency.iso === iso) ? iso : 'USD';
   const defaultMonth = months.find((month) => month.index === getPreviousMonthIndex());
   const [vatIncluded, setVatIncluded] = React.useState<boolean>(false);
   const isViewMode = mode === ManageMode.view;
@@ -40,7 +39,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const defaultValues: Partial<Invoice> = {
     name: `${t('INVOICES.INVOICE')}_${t(defaultMonth?.nameKey || '') || defaultMonth?.name}`,
     salary: '',
-    currencyIso: isCreateMode ? defaultCurrencyIso : (data.currencyIso || '' as Currency['iso']),
+    currencyIso: isCreateMode ? 'USD' : data.currencyIso || '' as Currency['iso'],
     month: isCreateMode ? defaultMonth?.index : (data.month || defaultMonth?.index),
     vatIncluded: false,
     sellerName: '',
@@ -68,7 +67,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     });
 
     setVatIncluded(!!data.vatIncluded);
-  }, [data, setValue, defaultCurrencyIso]);
+  }, [data, setValue]);
 
   const handleVatIncludedChange = (checked: boolean): void => {
     setVatIncluded(checked);

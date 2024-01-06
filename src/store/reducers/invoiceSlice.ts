@@ -113,6 +113,12 @@ export const invoiceSlice = createSlice({
         amount: action.payload
       };
     },
+    resetInvoiceAmount(state): InvoiceState {
+      return {
+        ...state,
+        amount: initialState.amount
+      };
+    },
     resetInvoicesStatus(state): InvoiceState {
       return {
         ...state,
@@ -243,6 +249,6 @@ export const selectInvoiceStatus = (state: RootState): InvoiceState['status'] =>
 export const selectCurrentInvoice = (state: RootState): InvoiceState['currentInvoice'] => state.invoice.currentInvoice;
 export const selectInvoiceError = (state: RootState): InvoiceState['error'] => state.invoice.error;
 
-export const { setInvoiceAmount, resetInvoicesStatus, resetGetInvoiceStatus, resetCreateEditInvoiceStatus } = invoiceSlice.actions;
+export const { setInvoiceAmount, resetInvoiceAmount, resetInvoicesStatus, resetGetInvoiceStatus, resetCreateEditInvoiceStatus } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Document, Page, Text, View } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
-import { Invoice } from 'shared/models';
+import { Currency, Invoice } from 'shared/models';
 import {
   getCurrentDate,
   getDayOfCurrentMonth,
@@ -12,6 +12,7 @@ import { styles } from './InvoiceDocument.styles';
 
 interface InvoiceDocumentProps {
   data: Partial<Invoice>;
+  defaultCurrency: Currency;
   saleDate: string;
 }
 
@@ -32,7 +33,7 @@ const chunkTextComponent = (text: string, size: number): React.ReactElement => {
   );
 };
 
-const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, saleDate }) => {
+const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency, saleDate }) => {
   const { t } = useTranslation();
 
   return (
@@ -144,12 +145,12 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, saleDate }) => 
               <Text style={styles.tableCell}>{data.amount?.gross}</Text>
             </View>
             <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
-              <Text style={styles.tableCell}>PLN</Text>
+              <Text style={styles.tableCell}>{defaultCurrency.iso}</Text>
             </View>
           </View>
         </View>
         <View style={styles.total}>
-          <Text>{t('INVOICES.DOCUMENT.TABLE.TOTAL')}: {data.amount?.gross} PLN</Text>
+          <Text>{t('INVOICES.DOCUMENT.TABLE.TOTAL')}: {data.amount?.gross} {defaultCurrency.iso}</Text>
         </View>
         {!data.vatIncluded && (
           <View style={styles.vatExemption}>

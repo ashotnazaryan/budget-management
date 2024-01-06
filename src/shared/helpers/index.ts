@@ -10,4 +10,5 @@ export * from './setting.helpers';
 export * from './profile.helpers';
 export * from './date.helpers';
 export * from './invoice.helpers';
+export * from './report.helpers';
 export * from './common.helpers';

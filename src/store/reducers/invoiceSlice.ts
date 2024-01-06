@@ -4,6 +4,7 @@ import { store } from 'store';
 import { InvoiceAmount, ErrorResponse, Invoice, InvoiceDTO, StatusState } from 'shared/models';
 import { mapInvoice, mapInvoices } from 'shared/helpers';
 import { RootState } from './rootReducer';
+import { resetReportsStatus } from './reportSlice';
 import { resetApp } from './appSlice';
 
 export interface InvoiceState {
@@ -33,12 +34,14 @@ const initialState: InvoiceState = {
 
 export const getInvoices = createAsyncThunk<Invoice[], void, { rejectValue: ErrorResponse }>(
   'invoices/getInvoices',
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const { data } = await axios.get<InvoiceDTO[]>('invoices');
 
       if (data) {
         const { showDecimals, locale: { isoIntl } } = store.getState().setting;
+
+        dispatch(resetReportsStatus());
 
         return mapInvoices(data, isoIntl, showDecimals);
       }
@@ -130,6 +133,12 @@ export const invoiceSlice = createSlice({
         ...state,
         currentInvoice: initialState.currentInvoice,
         getStatus: initialState.getStatus
+      };
+    },
+    setGetInvoiceErrorStatus(state): InvoiceState {
+      return {
+        ...state,
+        getStatus: 'failed'
       };
     },
     resetCreateEditInvoiceStatus(state): InvoiceState {
@@ -249,6 +258,6 @@ export const selectInvoiceStatus = (state: RootState): InvoiceState['status'] =>
 export const selectCurrentInvoice = (state: RootState): InvoiceState['currentInvoice'] => state.invoice.currentInvoice;
 export const selectInvoiceError = (state: RootState): InvoiceState['error'] => state.invoice.error;
 
-export const { setInvoiceAmount, resetInvoiceAmount, resetInvoicesStatus, resetGetInvoiceStatus, resetCreateEditInvoiceStatus } = invoiceSlice.actions;
+export const { setInvoiceAmount, resetInvoiceAmount, resetInvoicesStatus, resetGetInvoiceStatus, resetCreateEditInvoiceStatus, setGetInvoiceErrorStatus } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

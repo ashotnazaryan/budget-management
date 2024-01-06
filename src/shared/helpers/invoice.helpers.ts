@@ -38,7 +38,6 @@ export const mapUserProfileToInvoice = (user: User, profile: UserProfile): Parti
   };
 };
 
-
 export const mapInvoices = (invoices: InvoiceDTO[], locale: Locale['isoIntl'], showDecimals = false): Invoice[] => {
   return invoices.map((invoice) => {
     return mapInvoice(invoice, locale, showDecimals);

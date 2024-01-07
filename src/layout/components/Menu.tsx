@@ -32,8 +32,8 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
   };
 
   return (
-    <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: 3 }}>
-      <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <List sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: 3 }}>
         <ListItem onClick={close} sx={{ padding: 0 }}>
           <ListItemText>
             <Link to={ROUTES.dashboard.path}>
@@ -88,15 +88,20 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
             </Link>
           </ListItemText>
         </ListItem>
+      </List>
+      <Box sx={{ marginBottom: 3, padding: 3 }}>
+        <Button
+          aria-label='Logout'
+          fullWidth
+          color='secondary'
+          variant='contained'
+          endIcon={<LogoutIcon />}
+          onClick={openDialog}
+        >
+          {t('SIDEBAR.LOGOUT')}
+        </Button>
       </Box>
-      <ListItem onClick={openDialog} sx={{ padding: 0, marginBottom: 2 }}>
-        <ListItemText>
-          <Button aria-label='Logout' fullWidth color='secondary' variant='contained' endIcon={<LogoutIcon />}>
-            {t('SIDEBAR.LOGOUT')}
-          </Button>
-        </ListItemText>
-      </ListItem>
-    </List>
+    </Box>
   );
 };
 

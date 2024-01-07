@@ -1,13 +1,11 @@
 import { Locale, Report, ReportDTO } from 'shared/models';
-
-export const mapReports = (reports: ReportDTO[], locale: Locale['isoIntl'], showDecimals = false): Report[] => {
-  return reports.map((report) => {
-    return mapReport(report, locale, showDecimals);
-  });
-};
+import { mapNumberToCurrencyString } from './common.helpers';
 
 export const mapReport = (report: ReportDTO, locale: Locale['isoIntl'], showDecimals = false): Report => {
   return {
-    ...report
+    ...report,
+    // TODO: use generic rule for currencyIso
+    total: mapNumberToCurrencyString(report.total, report.reports[0].currencyIso, locale, showDecimals),
+    limit: report.limit ? mapNumberToCurrencyString(report.limit, report.reports[0].currencyIso, locale, showDecimals) : ''
   };
 };

@@ -9,6 +9,7 @@ const CountryFlag: React.FC<CountryFlagProps> = ({ code, ...props }) => {
     <ReactCountryFlag
       {...props}
       svg
+      alt={code}
       countryCode={code}
       style={{
         fontSize: 24,

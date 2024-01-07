@@ -35,12 +35,12 @@ export const APP_COLORS = {
   light: {
     primary: '#2b697a',
     secondary: '#de5114',
-    error: '#de4545'
+    error: '#e05252'
   },
   dark: {
     primary: '#25744d',
     secondary: '#996633',
-    error: '#ff1a1a'
+    error: '#ff9999'
   }
 };
 

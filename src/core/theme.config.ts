@@ -4,8 +4,8 @@ import { APP_COLORS } from 'shared/constants';
 const lightPalette: PaletteOptions = {
   primary: {
     main: APP_COLORS.light.primary,
-    light: '#4f8392',
-    dark: '#205b6b',
+    light: '#358297',
+    dark: '#21515e',
     contrastText: '#fff'
   },
   secondary: {
@@ -42,7 +42,7 @@ const darkPalette: PaletteOptions = {
     contrastText: '#fff'
   },
   error: {
-    main: APP_COLORS.light.error
+    main: APP_COLORS.dark.error
   },
   info: {
     main: '#262626',

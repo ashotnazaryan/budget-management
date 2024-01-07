@@ -52,7 +52,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
         <Grid item xs={12}>
           <Typography noWrap color={contrastText} fontSize={{ sm: 26, xs: 22 }} sx={{ textAlign: 'center', marginBottom: 4 }}>{t('DASHBOARD.SUMMARY')}</Typography>
         </Grid>
-        <Grid container display='flex' justifyContent='center' sx={{ marginBottom: 2 }}>
+        <Grid item xs={12} display='flex' justifyContent='center' sx={{ marginBottom: 2 }}>
           <PeriodFilters selectedPeriod={period} onFilter={onFilter} />
         </Grid>
         <Grid container flexWrap='nowrap' sx={{ backgroundColor: dark, borderTopLeftRadius: (theme) => theme.spacing(1), borderTopRightRadius: (theme) => theme.spacing(1) }}>
@@ -67,9 +67,10 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ backgroundColor: light, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 22, xs: 18 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
-            <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 22, xs: 18 }} sx={{ textAlign: 'center' }} />
+          <Divider sx={{ backgroundColor: light }} flexItem />
+          <Box sx={{ backgroundColor: dark, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 20, xs: 16 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
+            <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 20, xs: 16 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>
         <Grid item display='flex' justifyContent='flex-end' xs={12} sx={{ marginY: 1 }}>

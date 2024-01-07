@@ -1,35 +1,37 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { ErrorResponse, StatusState, Report, ReportDTO } from 'shared/models';
-import { mapReports } from 'shared/helpers';
+import { ErrorResponse, StatusState, Report, ReportDTO, ReportItem } from 'shared/models';
+import { mapReport } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetApp } from './appSlice';
 
 export interface ReportState {
-  reports: Report[];
+  report: Report;
   status: StatusState;
   error?: ErrorResponse;
 }
 
 const initialState: ReportState = {
-  reports: [],
+  report: {
+    reports: [] as ReportItem[]
+  } as Report,
   status: 'idle'
 };
 
-export const getReports = createAsyncThunk<Report[], void, { rejectValue: ErrorResponse }>(
-  'reports/getReports',
+export const getReport = createAsyncThunk<Report, void, { rejectValue: ErrorResponse }>(
+  'reports/getReport',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<ReportDTO[]>('reports');
+      const { data } = await axios.get<ReportDTO>('reports');
 
-      if (data) {
+      if (data.id) {
         const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        return mapReports(data, isoIntl, showDecimals);
+        return mapReport(data, isoIntl, showDecimals);
       }
 
-      return [];
+      return initialState.report;
     } catch (error: any) {
       return rejectWithValue(error);
     }
@@ -39,7 +41,7 @@ export const reportSlice = createSlice({
   name: 'reports',
   initialState,
   reducers: {
-    resetReportsStatus(state): ReportState {
+    resetReportStatus(state): ReportState {
       return {
         ...state,
         status: initialState.status
@@ -48,22 +50,22 @@ export const reportSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getReports.pending, (state): ReportState => {
+      .addCase(getReport.pending, (state): ReportState => {
         return {
           ...state,
           status: 'loading'
         };
       })
-      .addCase(getReports.rejected, (state): ReportState => {
+      .addCase(getReport.rejected, (state): ReportState => {
         return {
           ...state,
           status: 'failed'
         };
       })
-      .addCase(getReports.fulfilled, (state, action: PayloadAction<Report[]>): ReportState => {
+      .addCase(getReport.fulfilled, (state, action: PayloadAction<Report>): ReportState => {
         return {
           ...state,
-          reports: action.payload,
+          report: action.payload,
           status: 'succeeded'
         };
       })
@@ -75,6 +77,6 @@ export const reportSlice = createSlice({
 
 export const selectReport = (state: RootState): ReportState => state.report;
 
-export const { resetReportsStatus } = reportSlice.actions;
+export const { resetReportStatus } = reportSlice.actions;
 
 export default reportSlice.reducer;

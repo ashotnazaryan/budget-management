@@ -4,7 +4,7 @@ import { store } from 'store';
 import { InvoiceAmount, ErrorResponse, Invoice, InvoiceDTO, StatusState } from 'shared/models';
 import { mapInvoice, mapInvoices } from 'shared/helpers';
 import { RootState } from './rootReducer';
-import { resetReportsStatus } from './reportSlice';
+import { resetReportStatus } from './reportSlice';
 import { resetApp } from './appSlice';
 
 export interface InvoiceState {
@@ -41,7 +41,7 @@ export const getInvoices = createAsyncThunk<Invoice[], void, { rejectValue: Erro
       if (data) {
         const { showDecimals, locale: { isoIntl } } = store.getState().setting;
 
-        dispatch(resetReportsStatus());
+        dispatch(resetReportStatus());
 
         return mapInvoices(data, isoIntl, showDecimals);
       }

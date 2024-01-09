@@ -84,7 +84,7 @@ const AccountList: React.FC<{}> = () => {
       <Grid container rowGap={2} sx={{ marginTop: 4 }}>
         {renderContent()}
         <Grid item xs={12} display='flex' justifyContent='flex-end'>
-          <IconButton color='primary' onClick={openNewAccountPage} sx={{ alignSelf: 'flex-end' }}>
+          <IconButton aria-label='Add account' color='primary' onClick={openNewAccountPage} sx={{ alignSelf: 'flex-end' }}>
             <Icon name={IconType.plus} sx={{ fontSize: 40 }}></Icon>
           </IconButton>
         </Grid>

@@ -85,6 +85,7 @@ export const editAccount = createAsyncThunk<void, [Account['id'], Omit<AccountDT
       dispatch(resetAccountsStatus());
       dispatch(resetSummaryStatus());
       dispatch(resetTransactionsStatus());
+      dispatch(resetTransfersStatus());
     } catch (error: any) {
       return rejectWithValue(error);
     }

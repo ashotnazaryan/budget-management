@@ -9,6 +9,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ ...props }) => {
   return (
     <IconButton
       {...props}
+      aria-label='Delete button'
       color='secondary'
       size='small'
       sx={{

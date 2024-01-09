@@ -22,6 +22,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import HistoryIcon from '@mui/icons-material/History';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
@@ -60,6 +61,7 @@ export const OTHER_ICONS: IconTypes = {
   [IconType.google]: GoogleIcon,
   [IconType.facebook]: FacebookIcon,
   [IconType.arrowBack]: ArrowBackIcon,
+  [IconType.arrowForward]: ArrowForwardIcon,
   [IconType.edit]: EditIcon,
   [IconType.delete]: DeleteIcon,
   [IconType.cancel]: CloseIcon,

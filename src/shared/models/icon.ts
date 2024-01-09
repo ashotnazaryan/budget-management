@@ -30,6 +30,7 @@ export enum IconType {
   google = 'google',
   facebook = 'facebook',
   arrowBack = 'arrowBack',
+  arrowForward = 'arrowForward',
   edit = 'edit',
   delete = 'delete',
   cancel = 'cancel',

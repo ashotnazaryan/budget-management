@@ -9,6 +9,7 @@ const BackButton: React.FC<BackButtonProps> = ({ ...props }) => {
   return (
     <IconButton
       {...props}
+      aria-label='Back button'
       color='primary'
       size='small'
       sx={{

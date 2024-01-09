@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
 import {
@@ -32,21 +31,17 @@ import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import Snackbar from 'shared/components/Snackbar';
 import Dialog from 'shared/components/Dialog';
-import InvoiceDocument from '../components/InvoiceDocument';
-import InvoiceForm from '../components/InvoiceForm';
-import { StyledPDFViewer } from './CreateEditInvoice.styles';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 import Device from 'shared/components/Device';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import Loading from 'layout/Loading';
-import Button from 'shared/components/Button';
+import InvoiceForm from '../components/InvoiceForm';
+import PDFViewer from '../components/PDFViewer';
 
-interface NewInvoiceProps {
+interface CreateEditInvoiceProps {
   mode: ManageMode;
 }
 
-const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
+const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { getStatus, createEditStatus, deleteStatus } = useAppSelector(selectInvoice);
@@ -59,7 +54,6 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
   const defaultCurrency = useAppSelector(selectCurrency);
   const dispatch = useAppDispatch();
   const { state } = useLocation();
-  const { palette: { info: { contrastText } } } = useTheme();
   const invoiceId = state?.id as InvoiceDTO['id'];
   const loading = createEditStatus === 'loading';
   const deleteLoading = deleteStatus === 'loading';
@@ -218,43 +212,9 @@ const CreateEditInvoice: React.FC<NewInvoiceProps> = ({ mode }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Device>
-            {({ isAndroid }) => {
-              if (isAndroid) {
-                return (
-                  <PDFDownloadLink
-                    document={<InvoiceDocument data={invoiceData} saleDate={date} defaultCurrency={defaultCurrency} />}
-                    fileName={invoiceData.name}
-                  >
-                    {({ loading }) =>
-                      loading
-                        ? <Loading />
-                        : (
-                          <Box sx={{ marginY: 2 }}>
-                            <Typography variant='subtitle1' color={contrastText}>
-                              {t('INVOICES.DOCUMENT.UNSUPPORTED_DEVICE')}
-                            </Typography>
-                            <Button
-                              aria-label='Download'
-                              fullWidth
-                              color='secondary'
-                              variant='contained'
-                              sx={{ marginTop: 2 }}
-                            >
-                              {t('COMMON.DOWNLOAD')}
-                            </Button>
-                          </Box>
-                        )
-                    }
-                  </PDFDownloadLink>
-                );
-              }
-
-              return (
-                <StyledPDFViewer style={{ width: '100%', height: '100vh' }}>
-                  <InvoiceDocument data={invoiceData} saleDate={date} defaultCurrency={defaultCurrency} />
-                </StyledPDFViewer>
-              );
-            }}
+            {({ isAndroid }) => (
+              <PDFViewer isAndroid={isAndroid} invoiceData={invoiceData} date={date} defaultCurrency={defaultCurrency} />
+            )}
           </Device>
         </Grid>
       </Grid>

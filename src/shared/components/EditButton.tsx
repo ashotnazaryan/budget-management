@@ -9,6 +9,7 @@ const EditButton: React.FC<EditButtonProps> = ({ ...props }) => {
   return (
     <IconButton
       {...props}
+      aria-label='Edit button'
       color='primary'
       size='small'
       sx={{

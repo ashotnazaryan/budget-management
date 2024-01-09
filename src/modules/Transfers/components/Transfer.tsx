@@ -4,8 +4,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import date from 'core/date';
-import { Transfer as TransferModel } from 'shared/models';
+import { IconType, Transfer as TransferModel } from 'shared/models';
 import { DATE_FORMAT } from 'shared/constants';
+import Icon from 'shared/components/Icon';
 
 interface TransferProps {
   data: TransferModel;
@@ -26,10 +27,9 @@ const Transfer: React.FC<TransferProps> = ({ data, onClick }) => {
   return (
     <Paper elevation={1} sx={{ paddingX: 2, backgroundColor: main }} onClick={onTransactionClick}>
       <Grid container columnSpacing={2} alignItems='center' sx={{ minHeight: 40, cursor: 'pointer' }}>
-        <Grid item xs={3}>
+        <Grid item container xs={6} columnGap={2} display='flex' alignItems='center'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{fromAccount.name}</Typography>
-        </Grid>
-        <Grid item xs={3}>
+          <Icon name={IconType.arrowForward} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{toAccount.name}</Typography>
         </Grid>
         <Grid item xs={3}>

@@ -31,7 +31,7 @@ const TransferButtons: React.FC<TransferButtonsProps> = ({ balance, ...props }) 
     <Box
       sx={{ ...props.sx, display: 'flex', flexDirection: 'column', paddingBottom: 3, borderBottom: (theme) => `1px solid ${theme.palette.secondary.main}` }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 3 }}>
-        <Typography noWrap color={contrastText} fontSize={18} sx={{ marginRight: 1 }}>{t('COMMON.BALANCE')}:</Typography>
+        <Typography noWrap color={contrastText} fontSize={18} sx={{ marginRight: 1 }}>{t('COMMON.BALANCE')}</Typography>
         <Balance balance={balance} fontSize={18} />
       </Box>
       <Box sx={{ display: 'flex', flexDirection: { sm: 'row', xs: 'column' }, alignItems: 'center', justifyContent: 'space-between', gap: 3 }}>

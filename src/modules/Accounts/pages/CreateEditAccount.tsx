@@ -4,7 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -21,7 +20,7 @@ import {
   setGetAccountErrorStatus
 } from 'store/reducers';
 import { CURRENCIES, ACCOUNT_ICONS_LIST, NUMERIC_REGEX, ROUTES } from 'shared/constants';
-import { Account, AccountDTO, AccountField, Currency, IconType, ManageMode } from 'shared/models';
+import { Account, AccountDTO, AccountField, IconType, ManageMode } from 'shared/models';
 import { accountHelper, getPageTitle, mapCurrencyStringToInputString } from 'shared/helpers';
 import PageTitle from 'shared/components/PageTitle';
 import Button from 'shared/components/Button';
@@ -33,6 +32,7 @@ import Dialog from 'shared/components/Dialog';
 import Skeleton from 'shared/components/Skeleton';
 import EmptyState from 'shared/components/EmptyState';
 import FormIcon from 'shared/components/FormIcon';
+import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
 
 interface CreateEditAccountProps {
   mode: ManageMode;
@@ -76,8 +76,7 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     defaultValues
   });
 
-  const { setValue, handleSubmit, watch, reset } = methods;
-  const watchCurrency = watch(AccountField.currencyIso);
+  const { setValue, handleSubmit, reset } = methods;
 
   const handleAccountIconClick = ({ id }: { id: string }): void => {
     if (isViewMode) {
@@ -85,12 +84,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
     }
 
     setValue(AccountField.icon, id as IconType, { shouldValidate: true });
-  };
-
-  const handleCurrencyChange = (event: SelectChangeEvent): void => {
-    const iso = event.target.value as Currency['iso'];
-
-    setValue(AccountField.currencyIso, iso, { shouldValidate: true });
   };
 
   const handleFormSubmit = (data: Account): void => {
@@ -247,8 +240,6 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
               inputProps={{ readOnly: isViewMode }}
               label={t('COMMON.CURRENCY')}
               name={AccountField.currencyIso}
-              value={watchCurrency}
-              onChange={handleCurrencyChange}
               rules={{
                 required: {
                   value: true,
@@ -257,7 +248,9 @@ const CreateEditAccount: React.FC<CreateEditAccountProps> = ({ mode }) => {
               }}
             >
               {currencies.map(({ iso, name, nameKey, symbol }) => (
-                <MenuItem value={iso} key={iso}>{symbol} {nameKey ? t(nameKey) : name}</MenuItem>
+                <MenuItem value={iso} key={iso}>
+                  <CurrencyInfoItem currency={{ iso, symbol, name, nameKey }} />
+                </MenuItem>
               ))}
             </FormSelect>
           </Grid>

@@ -6,6 +6,10 @@ export const getCurrentDate = (): string => {
   return dayjs().format(DATE_FORMAT_ISO);
 };
 
+export const getDate = (date: string): string => {
+  return dayjs(date).format(DATE_FORMAT_ISO);
+};
+
 export const getLastSevenDaysOfPreviousMonth = (): StartEndDate => {
   const currentDate = dayjs();
   const lastMonthEndDate = currentDate.subtract(1, 'month').endOf('month');

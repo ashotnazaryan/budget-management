@@ -14,19 +14,19 @@ import {
   resetCreateEditInvoiceStatus,
   resetGetInvoiceStatus,
   resetInvoiceAmount,
-  selectCurrency,
   selectCurrentInvoice,
   selectInvoice,
   selectInvoiceAmount,
   selectInvoiceError,
   selectInvoiceRate,
   selectProfile,
+  selectSettings,
   selectUser,
   setGetInvoiceErrorStatus,
   setInvoiceAmount
 } from 'store/reducers';
 import { InvoiceAmount, Invoice, InvoiceDTO, ManageMode } from 'shared/models';
-import { calculateAmount, getPageTitle, mapUserProfileToInvoice } from 'shared/helpers';
+import { calculateAmount, getPageTitle, mapInvoiceAmountDTO, mapInvoiceDTO, mapUserProfileToInvoice } from 'shared/helpers';
 import { ROUTES } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import Snackbar from 'shared/components/Snackbar';
@@ -51,7 +51,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const error = useAppSelector(selectInvoiceError);
   const { status: profileStatus, userProfile } = useAppSelector(selectProfile);
   const user = useAppSelector(selectUser);
-  const defaultCurrency = useAppSelector(selectCurrency);
+  const { defaultCurrency } = useAppSelector(selectSettings);
   const dispatch = useAppDispatch();
   const { state } = useLocation();
   const invoiceId = state?.id as InvoiceDTO['id'];
@@ -60,7 +60,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const isEditMode = mode === ManageMode.edit;
   const isViewMode = mode === ManageMode.view;
   const isCreateMode = mode === ManageMode.create;
-  const [invoiceData, setInvoiceData] = React.useState<Partial<InvoiceDTO>>({} as InvoiceDTO);
+  const [invoiceData, setInvoiceData] = React.useState<Partial<Invoice>>({});
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [deleteClicked, setDeleteClicked] = React.useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
@@ -68,19 +68,24 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const title = getPageTitle<Invoice>(mode, t, getStatus, 'INVOICES', 'NEW_INVOICE', 'EMPTY_TITLE', invoice);
 
   const handleFormPreview = (data: Invoice): void => {
-    const amount = getAmount(data);
+    const mappedData = mapInvoiceDTO(data);
+    const amount = getAmount(mappedData);
 
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    const amount = getAmount(data);
+    const mappedData = mapInvoiceDTO(data);
+    const amount = getAmount(mappedData);
+    const amountDTO = mapInvoiceAmountDTO(amount);
 
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
     setFormSubmitted(true);
-    isEditMode ? dispatch(editInvoice([invoiceId, { ...data, amount }])) : dispatch(createInvoice({ ...data, amount }));
+    isEditMode
+      ? dispatch(editInvoice([invoiceId, { ...mappedData, amount: amountDTO }]))
+      : dispatch(createInvoice({ ...mappedData, amount: amountDTO }));
   };
 
   const handleEditButtonClick = (): void => {
@@ -115,7 +120,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
     setDeleteClicked(false);
   };
 
-  const getAmount = (data: Invoice): InvoiceAmount => {
+  const getAmount = (data: InvoiceDTO): InvoiceAmount => {
     const { salary, vatIncluded, currencyIso } = data;
     const rate = rates.find((rate) => rate.code === currencyIso)?.value;
 

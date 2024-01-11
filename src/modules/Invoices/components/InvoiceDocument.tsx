@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Document, Page, Text, View } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
-import { Currency, Invoice } from 'shared/models';
+import { Currency, Invoice, InvoiceAmount } from 'shared/models';
 import {
-  getCurrentDate,
+  getDate,
   getDayOfCurrentMonth,
   getFirstDateOfPreviousMonth,
-  getPreviousMonthLongName
+  getPreviousMonthLongName,
+  mapInvoiceAmountToLocaleString
 } from 'shared/helpers';
 import { styles } from './InvoiceDocument.styles';
 
@@ -35,6 +36,7 @@ const chunkTextComponent = (text: string, size: number): React.ReactElement => {
 
 const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency, saleDate }) => {
   const { t } = useTranslation();
+  const amount = data.amount ? mapInvoiceAmountToLocaleString(data.amount) : {} as InvoiceAmount;
 
   return (
     <Document>
@@ -48,7 +50,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency
         </View>
         <View style={styles.heading}>
           <Text style={styles.label}>{t('INVOICES.DOCUMENT.ISSUE_DATE')}:</Text>
-          <Text style={styles.value}>{getCurrentDate()}</Text>
+          <Text style={styles.value}>{getDate(data.createdAt!)}</Text>
         </View>
         <View style={styles.heading}>
           <Text style={styles.label}>{t('INVOICES.DOCUMENT.SALE_DATE')}:</Text>
@@ -130,19 +132,19 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency
               <Text style={styles.tableCell}>1</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.unitNetPriceCol }}>
-              <Text style={styles.tableCell}>{data.amount?.net}</Text>
+              <Text style={styles.tableCell}>{amount?.net}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.netValueCol }}>
-              <Text style={styles.tableCell}>{data.amount?.net}</Text>
+              <Text style={styles.tableCell}>{amount?.net}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatRateCol }}>
-              <Text style={styles.tableCell}>{data.vatIncluded ? `${data.amount?.vatRate}%` : '—'}</Text>
+              <Text style={styles.tableCell}>{data.vatIncluded ? `${amount?.vatRate}%` : '—'}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.vatAmountCol }}>
-              <Text style={styles.tableCell}>{data.vatIncluded ? data.amount?.vatAmount : '—'}</Text>
+              <Text style={styles.tableCell}>{data.vatIncluded ? amount?.vatAmount : '—'}</Text>
             </View>
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
-              <Text style={styles.tableCell}>{data.amount?.gross}</Text>
+              <Text style={styles.tableCell}>{amount?.gross}</Text>
             </View>
             <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
               <Text style={styles.tableCell}>{defaultCurrency.iso}</Text>
@@ -150,7 +152,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency
           </View>
         </View>
         <View style={styles.total}>
-          <Text>{t('INVOICES.DOCUMENT.TABLE.TOTAL')}: {data.amount?.gross} {defaultCurrency.iso}</Text>
+          <Text>{t('INVOICES.DOCUMENT.TABLE.TOTAL')}: {amount?.gross} {defaultCurrency.iso}</Text>
         </View>
         {!data.vatIncluded && (
           <View style={styles.vatExemption}>

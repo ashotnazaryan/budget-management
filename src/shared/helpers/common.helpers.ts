@@ -127,6 +127,13 @@ export const mapCurrencyStringToNumber = (value: string): number => {
   return parseFloat(cleanedValue);
 };
 
+export const mapCurrencyToLocaleString = (currencyString: string): string => {
+  const numericString = currencyString.replace(/[^\d.-]/g, '');
+  const amount = parseFloat(numericString);
+
+  return amount.toLocaleString();
+};
+
 export const mapCurrencyStringToInputString = (currencyString: string): string => {
   const numericString = currencyString.replace(/[^0-9.,-]/g, '');
   const normalizedString = numericString.replace(/,/g, '.');

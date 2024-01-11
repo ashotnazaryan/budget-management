@@ -125,6 +125,11 @@ export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
       message: 'INVOICES.ERRORS.REQUIRED_MONTH'
     }
   },
+  [InvoiceField.createdAt]: {
+    required: {
+      message: 'INVOICES.ERRORS.REQUIRED_DATE'
+    }
+  },
   [InvoiceField.sellerName]: {
     required: {
       message: 'INVOICES.ERRORS.REQUIRED_SELLER_NAME'

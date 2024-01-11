@@ -24,7 +24,10 @@ jobs:
             https://budget-management.up.railway.app/accounts
             https://budget-management.up.railway.app/categories
             https://budget-management.up.railway.app/settings
+            https://budget-management.up.railway.app/profile
             https://budget-management.up.railway.app/transfers
+            https://budget-management.up.railway.app/invoices
+            https://budget-management.up.railway.app/reports
           budgetPath: ./budget.json
           uploadArtifacts: true
           temporaryPublicStorage: true

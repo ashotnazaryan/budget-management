@@ -45,7 +45,7 @@ const Invoice: React.FC<InvoiceProps> = ({ data, defaultCurrency, onClick }) => 
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{t(monthName)}</Typography>
         </Grid>
         <Grid item xs={3} display='flex'>
-          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross} {amount?.currencyIso}</Typography>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-end'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{salary} {currencyIso}</Typography>

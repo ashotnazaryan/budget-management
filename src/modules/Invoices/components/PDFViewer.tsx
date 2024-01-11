@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
-import { Currency, InvoiceDTO } from 'shared/models';
+import { Currency, Invoice } from 'shared/models';
 import Loading from 'layout/Loading';
 import Button from 'shared/components/Button';
 import { StyledPDFViewer } from './PDFViewer.styles';
@@ -13,7 +13,7 @@ import InvoiceDocument from './InvoiceDocument';
 
 interface PDFViewerProps {
   isAndroid: boolean;
-  invoiceData: Partial<InvoiceDTO>;
+  invoiceData: Partial<Invoice>;
   date: string;
   defaultCurrency: Currency;
 }

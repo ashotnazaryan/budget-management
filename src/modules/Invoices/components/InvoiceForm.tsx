@@ -5,9 +5,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { useTranslation } from 'core/i18n';
-import { Currency, Invoice, InvoiceDTO, InvoiceField, ManageMode } from 'shared/models';
-import { getPreviousMonthIndex, invoiceHelper } from 'shared/helpers';
+import date, { LocalizedDate } from 'core/date';
 import { useAppSelector } from 'store';
+import { Currency, Invoice, InvoiceField, ManageMode } from 'shared/models';
+import { getPreviousMonthIndex, invoiceHelper } from 'shared/helpers';
 import { CURRENCIES, MONTHS, POSITIVE_NUMERIC_REGEX } from 'shared/constants';
 import { selectSettings } from 'store/reducers';
 import FormInput from 'shared/components/FormInput';
@@ -15,13 +16,14 @@ import FormSelect from 'shared/components/FormSelect';
 import CurrencyInfoItem from 'shared/components/CurrencyInfoItem';
 import Button from 'shared/components/Button';
 import FormSwitch from 'shared/components/FormSwitch';
+import FormDatePicker from 'shared/components/FormDatePicker';
 
 interface InvoiceFormProps {
   data: Partial<Invoice>;
   loading: boolean;
   mode: ManageMode;
-  onSubmit: (formData: InvoiceDTO) => void;
-  onPreview: (formData: InvoiceDTO) => void;
+  onSubmit: (formData: Invoice) => void;
+  onPreview: (formData: Invoice) => void;
 }
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit }) => {
@@ -41,6 +43,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     salary: '',
     currencyIso: isCreateMode ? 'USD' : data.currencyIso || '' as Currency['iso'],
     month: isCreateMode ? defaultMonth?.index : (data.month || defaultMonth?.index),
+    createdAt: isCreateMode ? date().format() : data.createdAt,
     vatIncluded: false,
     sellerName: '',
     sellerAddress: '',
@@ -59,11 +62,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     defaultValues
   });
 
-  const { setValue, handleSubmit } = methods;
+  const { setValue, handleSubmit, watch } = methods;
+
+  const watchCreatedAt = watch(InvoiceField.createdAt);
 
   React.useEffect(() => {
     Object.keys(data).forEach((key) => {
-      setValue(key as keyof Invoice, data[key as keyof Invoice]);
+      setValue(key as keyof Invoice, (data as Invoice)[key as keyof Invoice]);
     });
 
     setVatIncluded(!!data.vatIncluded);
@@ -74,22 +79,16 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     setValue(InvoiceField.vatIncluded, checked);
   };
 
-  const handleFormPreview = (data: Invoice): void => {
-    const mappedData: InvoiceDTO = {
-      ...data,
-      month: Number(data.month)
-    };
+  const handleDatePickerChange = (value: LocalizedDate | null): void => {
+    setValue(InvoiceField.createdAt, value!.format(), { shouldValidate: true });
+  };
 
-    onPreview(mappedData);
+  const handleFormPreview = (data: Invoice): void => {
+    onPreview(data);
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    const mappedData: InvoiceDTO = {
-      ...data,
-      month: Number(data.month)
-    };
-
-    onSubmit(mappedData);
+    onSubmit(data);
   };
 
   return (
@@ -166,6 +165,22 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                       <MenuItem key={month.index} value={month.index}>{t(month.nameKey) || month.name}</MenuItem>
                     ))}
                   </FormSelect>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormDatePicker
+                    readOnly={isViewMode}
+                    name={InvoiceField.createdAt}
+                    label={t('COMMON.DATE')}
+                    value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: t(helper.createdAt.required!.message)
+                      }
+                    }}
+                    onChange={handleDatePickerChange}
+                    sx={{ width: '100%' }}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <FormSwitch

@@ -22,8 +22,8 @@ export interface InvoiceState {
 const initialState: InvoiceState = {
   salary: 0,
   amount: {
-    net: 0,
-    gross: 0
+    net: '0',
+    gross: '0'
   } as InvoiceAmount,
   invoices: [],
   status: 'idle',

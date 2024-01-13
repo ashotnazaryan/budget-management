@@ -67,9 +67,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const watchCreatedAt = watch(InvoiceField.createdAt);
 
   React.useEffect(() => {
-    Object.keys(data).forEach((key) => {
-      setValue(key as keyof Invoice, (data as Invoice)[key as keyof Invoice]);
-    });
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        setValue(key as keyof Invoice, (data as Invoice)[key as keyof Invoice]);
+      });
+    }
 
     setVatIncluded(!!data.vatIncluded);
   }, [data, setValue]);
@@ -168,6 +170,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                 </Grid>
                 <Grid item xs={12}>
                   <FormDatePicker
+                    disableFuture
                     readOnly={isViewMode}
                     name={InvoiceField.createdAt}
                     label={t('COMMON.DATE')}
@@ -175,7 +178,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
                     rules={{
                       required: {
                         value: true,
-                        message: t(helper.createdAt.required!.message)
+                        message: t(helper.createdAt.required!.message),
+                      },
+                      validate: {
+                        maxDate: (value: string) =>
+                          Promise.resolve(date(value) <= date() || t(helper.createdAt.max!.message)),
                       }
                     }}
                     onChange={handleDatePickerChange}

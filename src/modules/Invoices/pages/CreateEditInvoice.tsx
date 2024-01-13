@@ -68,16 +68,15 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const title = getPageTitle<Invoice>(mode, t, getStatus, 'INVOICES', 'NEW_INVOICE', 'EMPTY_TITLE', invoice);
 
   const handleFormPreview = (data: Invoice): void => {
-    const mappedData = mapInvoiceDTO(data);
-    const amount = getAmount(mappedData);
+    const amount = getAmount(data);
 
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
   };
 
   const handleFormSubmit = (data: Invoice): void => {
-    const mappedData = mapInvoiceDTO(data);
-    const amount = getAmount(mappedData);
+    const amount = getAmount(data);
+    const mappedData = mapInvoiceDTO({ ...data, amount });
     const amountDTO = mapInvoiceAmountDTO(amount);
 
     dispatch(setInvoiceAmount(amount));
@@ -120,7 +119,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
     setDeleteClicked(false);
   };
 
-  const getAmount = (data: InvoiceDTO): InvoiceAmount => {
+  const getAmount = (data: Invoice): InvoiceAmount => {
     const { salary, vatIncluded, currencyIso } = data;
     const rate = rates.find((rate) => rate.code === currencyIso)?.value;
 

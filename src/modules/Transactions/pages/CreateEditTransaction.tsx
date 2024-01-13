@@ -337,13 +337,16 @@ const CreateEditTransaction: React.FC<CreateEditTransactionProps> = ({ mode }) =
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
+              disableFuture
               readOnly={isViewMode}
               name={TransactionField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
-              maxDate={date()}
               rules={{
-                required: true,
+                required: {
+                  value: true,
+                  message: t(helper.createdAt.required!.message),
+                },
                 validate: {
                   maxDate: (value: string) =>
                     Promise.resolve(date(value) <= date() || t(helper.createdAt.max!.message))

@@ -1,7 +1,7 @@
 import date from 'core/date';
 import { COUNTRIES } from 'shared/constants';
 import { InvoiceAmount, Invoice, InvoiceDTO, Locale, User, UserProfile, Currency, InvoiceAmountDTO } from 'shared/models';
-import { mapCurrencyStringToNumber, mapCurrencyToLocaleString, mapNumberToCurrencyString } from './common.helpers';
+import { mapCurrencyStringToNumber, mapCurrencyStringToLocaleString, mapNumberToCurrencyString } from './common.helpers';
 
 export const calculateAmount = (currencyIso: Currency['iso'], rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): InvoiceAmount => {
   const amount = salary * rate;
@@ -82,6 +82,7 @@ export const mapInvoiceAmountDTO = (amount: InvoiceAmount): InvoiceAmountDTO => 
   };
 };
 
+// TODO: use decimalPlaces from settings
 export const mapInvoiceAmountToLocaleString = (amount: InvoiceAmount): InvoiceAmount => {
   if (!amount?.gross || !amount.net || !amount.currencyIso) {
     return {} as InvoiceAmount;
@@ -89,8 +90,8 @@ export const mapInvoiceAmountToLocaleString = (amount: InvoiceAmount): InvoiceAm
 
   return {
     ...amount,
-    gross: mapCurrencyToLocaleString(amount.gross),
-    net: mapCurrencyToLocaleString(amount.net),
-    vatAmount: mapCurrencyToLocaleString(amount.vatAmount)
+    gross: mapCurrencyStringToLocaleString(amount.gross),
+    net: mapCurrencyStringToLocaleString(amount.net),
+    vatAmount: mapCurrencyStringToLocaleString(amount.vatAmount)
   };
 };

@@ -122,16 +122,18 @@ export const mapNumberToCurrencyString = (value: number, currency: Currency['iso
 };
 
 export const mapCurrencyStringToNumber = (value: string): number => {
-  const cleanedValue = value.replace(/[^0-9.,-]/g, '').replace(',', '.');
+  const cleanedValue = value.replace(/[^0-9.,-]/g, '');
+  const numberValue = parseFloat(cleanedValue.replace(',', '.'));
 
-  return parseFloat(cleanedValue);
+  return numberValue;
 };
 
-export const mapCurrencyToLocaleString = (currencyString: string): string => {
-  const numericString = currencyString.replace(/[^\d.-]/g, '');
-  const amount = parseFloat(numericString);
+export const mapCurrencyStringToLocaleString = (currencyString: string): string => {
+  const cleanedString = currencyString.replace(/[^0-9.,-]/g, '').replace(',', '.');
+  const numberValue = parseFloat(cleanedString);
+  const formattedCurrency = numberValue.toLocaleString();
 
-  return amount.toLocaleString();
+  return formattedCurrency;
 };
 
 export const mapCurrencyStringToInputString = (currencyString: string): string => {

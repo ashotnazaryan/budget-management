@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { Document, Page, Text, View } from '@react-pdf/renderer';
 import { useTranslation } from 'core/i18n';
-import { Currency, Invoice, InvoiceAmount } from 'shared/models';
+import {
+  Currency,
+  Invoice,
+  InvoiceAmount
+} from 'shared/models';
 import {
   getDate,
   getDayOfCurrentMonth,
@@ -114,7 +118,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.GROSS_VALUE')}</Text>
             </View>
-            <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
+            <View style={{ ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
               <Text style={styles.tableCell}>{t('INVOICES.DOCUMENT.TABLE.CURRENCY')}</Text>
             </View>
           </View>
@@ -146,7 +150,7 @@ const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency
             <View style={{ ...styles.tableCol, ...styles.grossValueCol }}>
               <Text style={styles.tableCell}>{amount?.gross}</Text>
             </View>
-            <View style={{  ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
+            <View style={{ ...styles.tableCol, ...styles.noBorder, ...styles.currencyCol }}>
               <Text style={styles.tableCell}>{defaultCurrency.iso}</Text>
             </View>
           </View>

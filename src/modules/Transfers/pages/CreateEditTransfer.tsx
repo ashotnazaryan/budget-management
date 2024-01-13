@@ -302,13 +302,17 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
           </Grid>
           <Grid item xs={12}>
             <FormDatePicker
+              disableFuture
               readOnly={isViewMode}
               name={TransferField.createdAt}
               label={t('COMMON.DATE')}
               value={date(watchCreatedAt).isValid() ? date(watchCreatedAt) : null}
               maxDate={date()}
               rules={{
-                required: true,
+                required: {
+                  value: true,
+                  message: t(helper.createdAt.required!.message),
+                },
                 validate: {
                   maxDate: (value: string) =>
                     Promise.resolve(date(value) <= date() || t(helper.createdAt.max!.message))
@@ -327,9 +331,9 @@ const CreateEditTransfer: React.FC<CreateEditTransferProps> = ({ mode }) => {
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
       <PageTitle
         withBackButton
-        withEditButton={isViewMode  && !!transfer}
-        withDeleteButton={isEditMode  && !!transfer}
-        withCancelButton={!isViewMode  && !!transfer}
+        withEditButton={isViewMode && !!transfer}
+        withDeleteButton={isEditMode && !!transfer}
+        withCancelButton={!isViewMode && !!transfer}
         text={getTitle()}
         onBackButtonClick={goBack}
         onEditButtonClick={handleEditButtonClick}

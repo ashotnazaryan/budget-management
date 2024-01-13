@@ -10,6 +10,7 @@ import { resetTransactionsStatus } from './transactionSlice';
 import { resetAccountsStatus } from './accountSlice';
 import { resetRateInvoiceStatus, resetRateRegularStatus } from './rateSlice';
 import { resetReportStatus } from './reportSlice';
+import { resetInvoicesStatus } from './invoiceSlice';
 import { resetApp, setAppStatus } from './appSlice';
 
 export interface SettingState extends Setting {
@@ -64,6 +65,7 @@ export const addSetting = createAsyncThunk<void, [Partial<SettingDTO>, boolean?,
         dispatch(resetRateInvoiceStatus());
         dispatch(resetReportStatus());
         dispatch(resetBalanceStatus());
+        dispatch(resetInvoicesStatus());
       }
     } catch (error: any) {
       return rejectWithValue(error);

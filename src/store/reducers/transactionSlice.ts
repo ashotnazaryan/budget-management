@@ -1,8 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'core/axios';
 import { store } from 'store';
-import { Category, ErrorResponse, StatusState, Transaction, TransactionDTO } from 'shared/models';
-import { mapTransaction, mapTransactions } from 'shared/helpers';
+import { Category, ErrorResponse, Period, StatusState, Transaction, TransactionDTO } from 'shared/models';
+import { getQueryParamByPeriod, mapTransaction, mapTransactions } from 'shared/helpers';
 import { RootState } from './rootReducer';
 import { resetBalanceStatus, resetSummaryStatus } from './summarySlice';
 import { resetAccountsStatus } from './accountSlice';
@@ -32,12 +32,16 @@ const initialState: TransactionState = {
   deleteStatus: 'idle'
 };
 
-export const getTransactions = createAsyncThunk<Transaction[], void, { rejectValue: ErrorResponse }>(
+export const getTransactions = createAsyncThunk<Transaction[], Period | undefined, { rejectValue: ErrorResponse }>(
   'transactions/getTransactions',
-  async (_, { rejectWithValue }) => {
+  async (period, { rejectWithValue }) => {
+    const { defaultPeriod } = store.getState().setting;
+    const { activePeriodFilter } = store.getState().summary;
+    const periodQueryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
+
     try {
       const { filters } = store.getState().transaction;
-      const url = filters?.categoryId ? `transactions?categoryId=${filters.categoryId}` : 'transactions';
+      const url = filters?.categoryId ? `transactions?categoryId=${filters.categoryId}&${periodQueryParams}` : `transactions?${periodQueryParams}`;
       const { data } = await axios.get<TransactionDTO[]>(url);
 
       if (data) {

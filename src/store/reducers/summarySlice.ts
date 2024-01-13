@@ -32,7 +32,7 @@ export const getSummary = createAsyncThunk<Summary, Period | undefined, { reject
     const queryParams = getQueryParamByPeriod(period || activePeriodFilter || defaultPeriod);
 
     try {
-      const { data } = await axios.get<SummaryDTO>(`summary${queryParams}`);
+      const { data } = await axios.get<SummaryDTO>(`summary?${queryParams}`);
 
       if (data) {
         const { defaultCurrency: { iso }, locale: { isoIntl }, showDecimals } = store.getState().setting;

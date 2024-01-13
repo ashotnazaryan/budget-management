@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
-import { openSideBar, resetTransactionFilters, resetTransactionsStatus, selectTransaction } from 'store/reducers';
+import { openSideBar, resetTransactionFilters, resetTransactionsStatus, selectSettings, selectSummary, selectTransaction } from 'store/reducers';
 import { ROUTES } from 'shared/constants';
 
 interface HeaderProps { }
@@ -20,17 +20,20 @@ const Header: React.FC<HeaderProps> = () => {
   const { t } = useTranslation();
   const { palette: { primary: { contrastText, main } } } = useTheme();
   const navigate = useNavigate();
-  const { filters } = useAppSelector(selectTransaction);
+  const { filters: transactionFilters } = useAppSelector(selectTransaction);
+  const { activePeriodFilter } = useAppSelector(selectSummary);
+  const { defaultPeriod } = useAppSelector(selectSettings);
 
   const showSideBar = (): void => {
     dispatch(openSideBar());
   };
 
   const handleTransactionsClick = (): void => {
-    if (filters.categoryId) {
+    if (transactionFilters.categoryId || (activePeriodFilter !== defaultPeriod)) {
       dispatch(resetTransactionFilters());
       dispatch(resetTransactionsStatus());
     }
+
     navigate(`${ROUTES.transactions.path}`);
   };
 

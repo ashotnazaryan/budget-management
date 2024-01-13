@@ -2,11 +2,13 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/system/Box';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'core/i18n';
 import { useAppDispatch, useAppSelector } from 'store';
-import { getTransactions, selectTransaction } from 'store/reducers';
-import { Transaction as TransactionModel } from 'shared/models';
-import { ROUTES } from 'shared/constants';
+import { getTransactions, resetSummaryStatus, resetTransactionsStatus, selectSettings, selectSummary, selectTransaction, setActivePeriodFilter } from 'store/reducers';
+import { Period, Transaction as TransactionModel } from 'shared/models';
+import { PERIOD_OPTIONS, ROUTES } from 'shared/constants';
 import Skeleton from 'shared/components/Skeleton';
 import PageTitle from 'shared/components/PageTitle';
 import EmptyState from 'shared/components/EmptyState';
@@ -15,17 +17,28 @@ import Transaction from '../components/Transaction';
 const TransactionList: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { transactions, status } = useAppSelector(selectTransaction);
+  const { activePeriodFilter } = useAppSelector(selectSummary);
+  const { defaultPeriod } = useAppSelector(selectSettings);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const periodOptions = PERIOD_OPTIONS;
 
   React.useEffect(() => {
     if (status === 'idle') {
-      dispatch(getTransactions());
+      dispatch(getTransactions(activePeriodFilter));
     }
-  }, [dispatch, status]);
+  }, [dispatch, status, activePeriodFilter]);
 
   const handleTransactionClick = ({ id, name }: TransactionModel): void => {
     navigate(`${ROUTES.transactions.path}/view/${name}`, { state: { id } });
+  };
+
+  const handlePeriodChange = (event: SelectChangeEvent): void => {
+    const period = event.target.value as Period;
+
+    dispatch(setActivePeriodFilter(period));
+    dispatch(resetTransactionsStatus());
+    dispatch(resetSummaryStatus());
   };
 
   const getTransactionData = (data: TransactionModel): TransactionModel => {
@@ -69,6 +82,17 @@ const TransactionList: React.FC<{}> = () => {
   return (
     <Box flexGrow={1}>
       <PageTitle text={t('TRANSACTIONS.PAGE_TITLE')} />
+      <Box sx={{ marginBottom: 3, display: 'flex', justifyContent: 'flex-end' }}>
+        <Select
+          variant='outlined'
+          value={activePeriodFilter || defaultPeriod}
+          onChange={handlePeriodChange}
+        >
+          {periodOptions.map(({ value, label }) => (
+            <MenuItem value={value} key={value}>{t(label)}</MenuItem>
+          ))}
+        </Select>
+      </Box>
       <Grid container rowGap={2}>
         {renderContent()}
       </Grid>

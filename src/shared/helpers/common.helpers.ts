@@ -176,7 +176,7 @@ export const mapCategoryTypesWithTranslations = (categoryTabs: Option[], t: TFun
 export const getQueryParamByPeriod = (period: Period): string => {
   const { fromDate, toDate } = getDateRangeForPeriod(period);
 
-  return `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`;
+  return `fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`;
 };
 
 export const getPageTitle = <T extends { name: string, nameKey?: string }>(

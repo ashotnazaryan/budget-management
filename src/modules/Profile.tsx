@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -19,6 +20,7 @@ const Profile: React.FC<{}> = () => {
   const { t } = useTranslation();
   const { status, editStatus, userProfile } = useAppSelector(selectProfile);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const loading = status === 'loading';
   const editLoading = editStatus === 'loading';
 
@@ -39,20 +41,24 @@ const Profile: React.FC<{}> = () => {
     defaultValues
   });
 
-  const { handleSubmit, setValue } = methods;
+  const { handleSubmit, setValue, reset, formState: { isDirty } } = methods;
+
+  const resetForm = React.useCallback(() => {
+    reset(userProfile, { keepDirty: false });
+  }, [reset, userProfile]);
 
   const setFormValues = React.useCallback(() => {
     if (userProfile) {
-      setValue(ProfileField.streetAddress, userProfile.streetAddress);
-      setValue(ProfileField.streetAddressLine, userProfile.streetAddressLine);
-      setValue(ProfileField.city, userProfile.city);
-      setValue(ProfileField.region, userProfile.region);
-      setValue(ProfileField.zipCode, userProfile.zipCode);
-      setValue(ProfileField.countryCode, userProfile.countryCode);
-      setValue(ProfileField.taxId, userProfile.taxId);
-      setValue(ProfileField.accountNumber, userProfile.accountNumber);
+      Object.keys(userProfile).forEach((key) => {
+        setValue(key as keyof UserProfile, userProfile[key as keyof UserProfile], { shouldDirty: false });
+      });
     }
   }, [userProfile, setValue]);
+
+  const goBack = React.useCallback(() => {
+    navigate(-1);
+    resetForm();
+  }, [navigate, resetForm]);
 
   React.useEffect(() => {
     if (status === 'idle') {
@@ -63,6 +69,10 @@ const Profile: React.FC<{}> = () => {
   React.useEffect(() => {
     setFormValues();
   }, [setFormValues]);
+
+  const handleCancelButtonClick = (): void => {
+    resetForm();
+  };
 
   const handleFormSubmit = (data: UserProfile): void => {
     dispatch(editProfile(data));
@@ -142,14 +152,28 @@ const Profile: React.FC<{}> = () => {
 
   return (
     <Box component='form' display='flex' flexDirection='column' flexGrow={1} onSubmit={handleSubmit(handleFormSubmit)}>
-      <PageTitle data-testid='page-title' text={t('PROFILE.PAGE_TITLE')} />
+      <PageTitle
+        withBackButton
+        withCancelButton={isDirty}
+        data-testid='page-title'
+        text={t('PROFILE.PAGE_TITLE')}
+        onBackButtonClick={goBack}
+        onCancelButtonClick={handleCancelButtonClick}
+      />
       <Box flexGrow={1}>
         {renderContent()}
       </Box>
       <Grid container display='flex' justifyContent='flex-end' rowGap={2} columnGap={2} sx={{ marginTop: 6, marginBottom: 4 }}>
         <Grid item sm='auto' xs={12}>
-          <Button aria-label='Save profile' fullWidth type='submit' variant='contained' loading={editLoading}
-            onClick={handleSubmit(handleFormSubmit)}>
+          <Button
+            fullWidth
+            aria-label='Save profile'
+            type='submit'
+            variant='contained'
+            loading={editLoading}
+            disabled={!isDirty}
+            onClick={handleSubmit(handleFormSubmit)}
+          >
             {t('COMMON.SAVE')}
           </Button>
         </Grid>

@@ -26,8 +26,11 @@ export const transactionHelper = (): { [key in TransactionField]: ErrorType } =>
     }
   },
   [TransactionField.createdAt]: {
+    required: {
+      message: 'COMMON.ERRORS.REQUIRED_DATE'
+    },
     max: {
-      message: 'TRANSACTIONS.ERRORS.FUTURE_DATE'
+      message: 'COMMON.ERRORS.FUTURE_DATE'
     }
   },
   [TransactionField.icon]: {},
@@ -98,7 +101,14 @@ export const transferHelper = (): { [key in TransferField]: ErrorType } => ({
       message: 'TRANSFERS.ERRORS.INVALID_AMOUNT'
     }
   },
-  [TransferField.createdAt]: {},
+  [TransferField.createdAt]: {
+    required: {
+      message: 'COMMON.ERRORS.REQUIRED_DATE'
+    },
+    max: {
+      message: 'COMMON.ERRORS.FUTURE_DATE'
+    }
+  },
 });
 
 export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
@@ -127,7 +137,10 @@ export const invoiceHelper = (): { [key in InvoiceField]: ErrorType } => ({
   },
   [InvoiceField.createdAt]: {
     required: {
-      message: 'INVOICES.ERRORS.REQUIRED_DATE'
+      message: 'COMMON.ERRORS.REQUIRED_DATE'
+    },
+    max: {
+      message: 'COMMON.ERRORS.FUTURE_DATE'
     }
   },
   [InvoiceField.sellerName]: {

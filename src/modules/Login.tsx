@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { IconType } from 'shared/models';
@@ -15,10 +14,6 @@ const Login: React.FC<{}> = () => {
 
   const googleLogin = (): void => {
     window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/google`, '_self');
-  };
-
-  const facebookLogin = (): void => {
-    window.open(`${process.env.REACT_APP_BUDGET_MANAGEMENT_API}/auth/facebook`, '_self');
   };
 
   return (
@@ -49,48 +44,25 @@ const Login: React.FC<{}> = () => {
         >
           {t('LOGIN.TITLE')}
         </Typography>
-        <Grid container rowGap={2}>
-          <Grid item xs={12}>
-            <Button
-              aria-label='Google button'
-              fullWidth
-              data-testid='google-button'
-              variant='contained'
-              capitalize={false}
-              onClick={googleLogin}
-              sx={{
-                fontSize: { sm: 17, xs: 15 },
-                '& .MuiButton-startIcon>*': {
-                  fontSize: '32px !important'
-                }
-              }}
-              startIcon={<Icon name={IconType.google} />}
-            >
-              {t('LOGIN.BUTTON_PREFIX')} Google
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              aria-label='Facebook button'
-              fullWidth
-              data-testid='facebook-button'
-              variant='contained'
-              capitalize={false}
-              startIcon={<Icon name={IconType.facebook} />}
-              onClick={facebookLogin}
-              sx={{
-                fontSize: { sm: 17, xs: 15 },
-                '& .MuiButton-startIcon>*': {
-                  fontSize: '32px !important'
-                }
-              }}
-            >
-              {t('LOGIN.BUTTON_PREFIX')} Facebook
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper >
-    </Box >
+        <Button
+          aria-label='Google button'
+          fullWidth
+          data-testid='google-button'
+          variant='contained'
+          capitalize={false}
+          onClick={googleLogin}
+          sx={{
+            fontSize: { sm: 17, xs: 15 },
+            '& .MuiButton-startIcon>*': {
+              fontSize: '32px !important'
+            }
+          }}
+          startIcon={<Icon name={IconType.google} />}
+        >
+          {t('LOGIN.BUTTON_PREFIX')} Google
+        </Button>
+      </Paper>
+    </Box>
   );
 };
 

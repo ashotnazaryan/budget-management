@@ -10,6 +10,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'core/i18n';
 import { ROUTES } from 'shared/constants';
@@ -48,6 +49,15 @@ const Menu: React.FC<MenuProps> = ({ onOpenDialog, onCloseSideBar }) => {
             <Link to={ROUTES.accounts.path}>
               <Button aria-label='Accounts link' color='secondary' fullWidth startIcon={<AccountBalanceWalletIcon />} sx={{ justifyContent: 'flex-start' }}>
                 {t(ROUTES.accounts.name)}
+              </Button>
+            </Link>
+          </ListItemText>
+        </ListItem>
+        <ListItem onClick={close} sx={{ padding: 0 }}>
+          <ListItemText>
+            <Link to={ROUTES.charts.path}>
+              <Button aria-label='Charts link' color='secondary' fullWidth startIcon={<BarChartIcon />} sx={{ justifyContent: 'flex-start' }}>
+                {t(ROUTES.charts.name)}
               </Button>
             </Link>
           </ListItemText>

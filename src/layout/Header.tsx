@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = () => {
   };
 
   const handleTransactionsClick = (): void => {
+    // TODO: fix the second condition
     if (transactionFilters.categoryId || (activePeriodFilter !== defaultPeriod)) {
       dispatch(resetTransactionFilters());
       dispatch(resetTransactionsStatus());

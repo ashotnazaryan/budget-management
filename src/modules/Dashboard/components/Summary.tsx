@@ -9,8 +9,8 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { Period, Transaction } from 'shared/models';
 import Balance from 'shared/components/Balance';
+import PeriodFilters from 'shared/components/PeriodFilters';
 import CategoryTransaction from '../../components/CategoryTransaction';
-import PeriodFilters from './PeriodFilters';
 
 interface SummaryProps {
   incomes: string;
@@ -69,7 +69,7 @@ const Summary: React.FC<SummaryProps> = ({ incomes, expenses, profit, transactio
         <Grid item xs={12}>
           <Divider sx={{ backgroundColor: light }} flexItem />
           <Box sx={{ backgroundColor: dark, paddingY: 2, borderBottomLeftRadius: (theme) => theme.spacing(1), borderBottomRightRadius: (theme) => theme.spacing(1) }}>
-            <Typography noWrap color={contrastText} fontSize={{ sm: 20, xs: 16 }} sx={{ textAlign: 'center' }}>{t('DASHBOARD.PROFIT')}</Typography>
+            <Typography noWrap color={contrastText} fontSize={{ sm: 20, xs: 16 }} sx={{ textAlign: 'center' }}>{t('COMMON.PROFIT')}</Typography>
             <Balance balance={profit} positiveColor={contrastText} fontSize={{ sm: 20, xs: 16 }} sx={{ textAlign: 'center' }} />
           </Box>
         </Grid>

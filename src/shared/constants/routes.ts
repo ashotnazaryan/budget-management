@@ -29,6 +29,10 @@ export const ROUTES: AppRoute = {
     name: 'ROUTES.ACCOUNTS',
     path: '/accounts'
   },
+  charts: {
+    name: 'ROUTES.CHARTS',
+    path: '/charts'
+  },
   transfers: {
     name: 'ROUTES.TRANSFERS',
     path: '/transfers'

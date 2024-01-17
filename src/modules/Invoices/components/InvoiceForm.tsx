@@ -24,9 +24,10 @@ interface InvoiceFormProps {
   mode: ManageMode;
   onSubmit: (formData: Invoice) => void;
   onPreview: (formData: Invoice) => void;
+  passResetFormFunc: (cb: Function) => void;
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit }) => {
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPreview, onSubmit, passResetFormFunc }) => {
   const { t } = useTranslation();
   const helper = invoiceHelper();
   const { defaultCurrency: { iso } } = useAppSelector(selectSettings);
@@ -62,7 +63,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
     defaultValues
   });
 
-  const { setValue, handleSubmit, watch } = methods;
+  const { setValue, handleSubmit, watch, reset } = methods;
 
   const watchCreatedAt = watch(InvoiceField.createdAt);
 
@@ -92,6 +93,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ data, loading, mode, onPrevie
   const handleFormSubmit = (data: Invoice): void => {
     onSubmit(data);
   };
+
+  const clearState = (): void => {
+    isCreateMode ? reset(defaultValues) : reset(data);
+  };
+
+  passResetFormFunc(clearState);
 
   return (
     <FormProvider {...methods}>

@@ -1,22 +1,23 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
 import { Period } from 'shared/models';
 import Button from 'shared/components/Button';
 
-interface PeriodFiltersProps {
+type PeriodFiltersProps = {
   selectedPeriod: Period;
+  transparentBackground?: boolean;
   onFilter: (period: Period) => void;
-}
+} & BoxProps;
 
 interface PeriodButton {
   period: Period;
   label: string;
 }
 
-const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter }) => {
+const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, transparentBackground = false, onFilter, ...props }) => {
   const { palette: { primary: { dark } } } = useTheme();
   const { t } = useTranslation();
 
@@ -60,7 +61,13 @@ const PeriodFilters: React.FC<PeriodFiltersProps> = ({ selectedPeriod, onFilter 
   };
 
   return (
-    <Box display='flex' justifyContent='center' flexGrow={1} sx={{ backgroundColor: dark, borderRadius: 1 }}>
+    <Box
+      {...props}
+      sx={{
+        ...props.sx,
+        backgroundColor: transparentBackground ? 'transparent' : dark,
+        borderRadius: 1
+      }} display='flex' justifyContent='center' flexGrow={1}>
       <ButtonGroup variant='text'>
         {periodButtons.map(({ period, label }) => (
           renderPeriodButton(period, label)

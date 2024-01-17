@@ -3,7 +3,7 @@ import date from 'core/date';
 import { CURRENCIES } from 'shared/constants';
 import { Currency, DateRange, Locale, Period, Option, CountryCode, ManageMode, StatusState } from 'shared/models';
 
-const getDateRangeForPeriod = (period: Period): DateRange => {
+export const getDateRangeForPeriod = (period: Period): DateRange => {
   const now = date();
 
   switch (period) {

@@ -6,7 +6,7 @@ import { useTranslation } from 'core/i18n';
 import Button from './Button';
 import { StyledDialogTitle, StyledDialogContent } from './Dialog.styles';
 
-type DialogProps<T = any> = {
+type DialogProps<T = unknown> = {
   cancelButtonText?: string;
   actionButtonText?: string;
   children?: React.ReactNode;

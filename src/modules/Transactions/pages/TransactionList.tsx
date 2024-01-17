@@ -87,6 +87,7 @@ const TransactionList: React.FC<{}> = () => {
           variant='outlined'
           value={activePeriodFilter || defaultPeriod}
           onChange={handlePeriodChange}
+          style={{ height: '40px' }} 
         >
           {periodOptions.map(({ value, label }) => (
             <MenuItem value={value} key={value}>{t(label)}</MenuItem>

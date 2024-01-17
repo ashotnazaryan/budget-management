@@ -66,6 +66,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   const [dialogOpened, setDialogOpened] = React.useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = React.useState<boolean>(false);
   const title = getPageTitle<Invoice>(mode, t, getStatus, 'INVOICES', 'NEW_INVOICE', 'EMPTY_TITLE', invoice);
+  let resetForm: Function = () => null;
 
   const handleFormPreview = (data: Invoice): void => {
     const amount = getAmount(data);
@@ -82,9 +83,14 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
     dispatch(setInvoiceAmount(amount));
     setInvoiceData({ ...data, amount });
     setFormSubmitted(true);
+
     isEditMode
       ? dispatch(editInvoice([invoiceId, { ...mappedData, amount: amountDTO }]))
       : dispatch(createInvoice({ ...mappedData, amount: amountDTO }));
+  };
+
+  const assignResetForm = (resetFormFunc: Function): void => {
+    resetForm = resetFormFunc;
   };
 
   const handleEditButtonClick = (): void => {
@@ -96,9 +102,12 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
   };
 
   const handleCancelButtonClick = (): void => {
-    isEditMode
-      ? navigate(`${ROUTES.invoices.path}/view/${invoice?.name}`, { state: { id: invoiceId } })
-      : navigate(ROUTES.invoices.path);
+    isCreateMode ? setInvoiceData({}) : setInvoiceData(invoiceData);
+    resetForm();
+
+    isCreateMode
+      ? navigate(ROUTES.invoices.path)
+      : navigate(`${ROUTES.invoices.path}/view/${invoice?.name}`, { state: { id: invoiceId } });
   };
 
   const handleOpenDialog = (): void => {
@@ -212,6 +221,7 @@ const CreateEditInvoice: React.FC<CreateEditInvoiceProps> = ({ mode }) => {
             mode={mode}
             onPreview={handleFormPreview}
             onSubmit={handleFormSubmit}
+            passResetFormFunc={assignResetForm}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

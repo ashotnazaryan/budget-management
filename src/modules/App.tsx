@@ -32,6 +32,7 @@ const App: React.FC = () => {
   const Transactions = createLazyComponent(() => import('./Transactions/Transactions'));
   const Categories = createLazyComponent(() => import('./Categories/Categories'));
   const Accounts = createLazyComponent(() => import('./Accounts/Accounts'));
+  const Charts = createLazyComponent(() => import('./Charts'));
   const Transfers = createLazyComponent(() => import('./Transfers/Transfers'));
   const Profile = createLazyComponent(() => import('./Profile'));
   const Reports = createLazyComponent(() => import('./Reports'));
@@ -54,6 +55,7 @@ const App: React.FC = () => {
             <Route path={`${ROUTES.transactions.path}/*`} element={Transactions} />
             <Route path={`${ROUTES.categories.path}/*`} element={Categories} />
             <Route path={`${ROUTES.accounts.path}/*`} element={Accounts} />
+            <Route path={`${ROUTES.charts.path}/*`} element={Charts} />
             <Route path={`${ROUTES.transfers.path}/*`} element={Transfers} />
             <Route path={`${ROUTES.profile.path}/*`} element={Profile} />
             <Route path={`${ROUTES.reports.path}/*`} element={Reports} />

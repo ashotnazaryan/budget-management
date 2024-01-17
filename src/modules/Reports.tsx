@@ -3,6 +3,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'store';
@@ -11,7 +12,6 @@ import { getReport, selectReport } from 'store/reducers';
 import { CHART_COLOR_SCHEME, MONTHS } from 'shared/constants';
 import PageTitle from 'shared/components/PageTitle';
 import Skeleton from 'shared/components/Skeleton';
-import Grid from '@mui/material/Grid';
 import EmptyState from 'shared/components/EmptyState';
 
 ChartJS.register(ArcElement, Tooltip, Legend);

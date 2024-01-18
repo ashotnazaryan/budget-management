@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = () => {
   const { t } = useTranslation();
   const { palette: { primary: { contrastText, main } } } = useTheme();
   const navigate = useNavigate();
-  const { filters: transactionFilters } = useAppSelector(selectTransaction);
+  const { filters: { categoryId } } = useAppSelector(selectTransaction);
   const { activePeriodFilter } = useAppSelector(selectSummary);
   const { defaultPeriod } = useAppSelector(selectSettings);
 
@@ -29,8 +29,7 @@ const Header: React.FC<HeaderProps> = () => {
   };
 
   const handleTransactionsClick = (): void => {
-    // TODO: fix the second condition
-    if (transactionFilters.categoryId || (activePeriodFilter !== defaultPeriod)) {
+    if (categoryId || (activePeriodFilter !== defaultPeriod)) {
       dispatch(resetTransactionFilters());
       dispatch(resetTransactionsStatus());
     }

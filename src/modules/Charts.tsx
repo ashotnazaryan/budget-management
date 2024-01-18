@@ -99,6 +99,12 @@ const Charts: React.FC<{}> = () => {
     ],
   };
 
+  React.useEffect(() => {
+    if (status === 'idle') {
+      dispatch(getSummary(activePeriodFilter));
+    }
+  }, [dispatch, status, activePeriodFilter]);
+
   const handleFilter = (period: Period): void => {
     dispatch(getSummary(period));
     dispatch(setActivePeriodFilter(period));

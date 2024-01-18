@@ -1,7 +1,7 @@
 import date from 'core/date';
 import { COUNTRIES } from 'shared/constants';
 import { InvoiceAmount, Invoice, InvoiceDTO, Locale, User, UserProfile, Currency, InvoiceAmountDTO } from 'shared/models';
-import { mapCurrencyStringToNumber, mapCurrencyStringToLocaleString, mapNumberToCurrencyString } from './common.helpers';
+import { mapCurrencyStringToNumber, mapNumberToCurrencyString } from './common.helpers';
 
 export const calculateAmount = (currencyIso: Currency['iso'], rate = 1, salary = 0, vatIncluded = false, decimalPlaces = 2): InvoiceAmount => {
   const amount = salary * rate;
@@ -64,12 +64,7 @@ export const mapInvoiceDTO = (invoice: Invoice): InvoiceDTO => {
     ...invoice,
     month: Number(invoice.month),
     createdAt: date(invoice.createdAt).toDate(),
-    amount: {
-      ...invoice.amount,
-      gross: mapCurrencyStringToNumber(invoice.amount.gross),
-      net: mapCurrencyStringToNumber(invoice.amount.net),
-      vatAmount: mapCurrencyStringToNumber(invoice.amount.vatAmount)
-    }
+    amount: mapInvoiceAmountDTO(invoice.amount)
   };
 };
 
@@ -79,19 +74,5 @@ export const mapInvoiceAmountDTO = (amount: InvoiceAmount): InvoiceAmountDTO => 
     gross: mapCurrencyStringToNumber(amount.gross),
     net: mapCurrencyStringToNumber(amount.net),
     vatAmount: mapCurrencyStringToNumber(amount.vatAmount)
-  };
-};
-
-// TODO: use decimalPlaces from settings
-export const mapInvoiceAmountToLocaleString = (amount: InvoiceAmount): InvoiceAmount => {
-  if (!amount?.gross || !amount.net || !amount.currencyIso) {
-    return {} as InvoiceAmount;
-  }
-
-  return {
-    ...amount,
-    gross: mapCurrencyStringToLocaleString(amount.gross),
-    net: mapCurrencyStringToLocaleString(amount.net),
-    vatAmount: mapCurrencyStringToLocaleString(amount.vatAmount)
   };
 };

@@ -4,20 +4,19 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'core/i18n';
-import { Currency, IconType, Invoice as InvoiceModel } from 'shared/models';
+import { IconType, Invoice as InvoiceModel } from 'shared/models';
 import { MONTHS } from 'shared/constants';
 import Icon from 'shared/components/Icon';
 
 interface InvoiceProps {
   data: InvoiceModel;
-  defaultCurrency: Currency;
   onClick?: (data: InvoiceModel) => void;
 }
 
-const Invoice: React.FC<InvoiceProps> = ({ data, defaultCurrency, onClick }) => {
+const Invoice: React.FC<InvoiceProps> = ({ data, onClick }) => {
   const { palette: { primary: { main, contrastText } } } = useTheme();
   const { t } = useTranslation();
-  const { name, salary, amount, currencyIso, month } = data;
+  const { name, amount, month, buyerName } = data;
   const monthName = MONTHS.find(({ index }) => index === Number(month))?.nameKey || '';
 
   const onInvoiceClick = (): void => {
@@ -38,17 +37,17 @@ const Invoice: React.FC<InvoiceProps> = ({ data, defaultCurrency, onClick }) => 
         <Grid item xs={1} display='flex'>
           <Icon name={IconType.receipt} sx={{ fontSize: { sm: 22, xs: 18 }, color: contrastText }}></Icon>
         </Grid>
-        <Grid item xs={4} display='flex' justifyContent='flex-start'>
+        <Grid item xs={3} display='flex' justifyContent='flex-start'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{name}</Typography>
         </Grid>
         <Grid item xs={2} display='flex' justifyContent='flex-start'>
           <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{t(monthName)}</Typography>
         </Grid>
-        <Grid item xs={3} display='flex'>
-          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross}</Typography>
+        <Grid item xs={3} display='flex' justifyContent='flex-start'>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{buyerName}</Typography>
         </Grid>
-        <Grid item xs={2} display='flex' justifyContent='flex-end'>
-          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{salary} {currencyIso}</Typography>
+        <Grid item xs={3} display='flex' justifyContent='flex-end'>
+          <Typography noWrap color={contrastText} sx={{ fontSize: { sm: 15, xs: 13 } }}>{amount?.gross}</Typography>
         </Grid>
       </Grid>
     </Paper>

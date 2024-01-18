@@ -11,7 +11,7 @@ import {
   getDayOfCurrentMonth,
   getFirstDateOfPreviousMonth,
   getPreviousMonthLongName,
-  mapInvoiceAmountToLocaleString
+  mapInvoiceAmountDTO
 } from 'shared/helpers';
 import { styles } from './InvoiceDocument.styles';
 
@@ -40,7 +40,7 @@ const chunkTextComponent = (text: string, size: number): React.ReactElement => {
 
 const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({ data, defaultCurrency, saleDate }) => {
   const { t } = useTranslation();
-  const amount = data.amount ? mapInvoiceAmountToLocaleString(data.amount) : {} as InvoiceAmount;
+  const amount = data.amount ? mapInvoiceAmountDTO(data.amount) : {} as InvoiceAmount;
 
   return (
     <Document>

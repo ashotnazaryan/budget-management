@@ -121,9 +121,13 @@ export const mapNumberToCurrencyString = (value: number, currency: Currency['iso
   return currencyString;
 };
 
-export const mapCurrencyStringToNumber = (value: string): number => {
-  const cleanedValue = value.replace(/[^0-9.,-]/g, '');
-  const numberValue = parseFloat(cleanedValue.replace(',', '.'));
+export const mapCurrencyStringToNumber = (currencyString: string): number => {
+  if (!currencyString) {
+    return 0;
+  }
+  
+  const cleanedValue = currencyString.replace(/[^0-9.,-]/g, '');
+  const numberValue = parseFloat(cleanedValue.replace(',', ''));
 
   return numberValue;
 };

@@ -1,8 +1,12 @@
+@use "@fontsource/roboto/scss/mixins" as Roboto;
+
 @import-normalize;
-@import '@fontsource/roboto/100.css';
 @import '@fontsource/roboto/400.css';
 @import '@fontsource/roboto/700.css';
 
+@include Roboto.faces(
+  $display: 'swap'
+);
 
 html, body, #root {
   height: 100%;
@@ -27,7 +31,7 @@ a {
   text-decoration: none;
   color: #000;
 
-  &:visited
+  &:visited,
   &:focus {
     color: #000;
   }

@@ -48,7 +48,14 @@ const Header: React.FC<HeaderProps> = () => {
           </Grid>
           <Grid item xs={10} display='flex' justifyContent='center'>
             <Link to={ROUTES.dashboard.path}>
-              <Typography data-testid='product-name' color={contrastText} sx={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+              <Typography
+                data-testid='product-name'
+                color={contrastText}
+                sx={{
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
+                }}
+              >
                 {t('PRODUCT_NAME')}
               </Typography>
             </Link>
